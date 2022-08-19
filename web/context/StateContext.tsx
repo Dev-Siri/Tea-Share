@@ -1,5 +1,4 @@
 import React, { useState, useContext, createContext } from "react";
-
 import { FirebaseUserType } from "../types";
 
 const StateContext = createContext({

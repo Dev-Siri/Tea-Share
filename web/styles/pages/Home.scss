@@ -5,6 +5,22 @@
 
   &-main {
     width: 82%;
+
+    &_show-more {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
+
+      &__button {
+        color: white;
+        padding: 14px;
+        border: none;
+        border-radius: 5px;
+        width: 140px;
+        font-family: $font;
+        cursor: pointer;
+      }
+    }
   }
 }
 

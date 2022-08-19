@@ -9,7 +9,8 @@ import { fetchPosts } from "../api";
 
 const Home: FC<HomeProps> = ({ posts = null }) => {
   const [reactivePosts, setReactivePosts] = useState<PostType[] | null | undefined>(posts);
-  const { searchTerm, user, themeMode } = useStateContext();
+  const [postLimit, setPostLimit] = useState(9);
+  const { searchTerm, user, themeMode, themeColor } = useStateContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -17,6 +18,15 @@ const Home: FC<HomeProps> = ({ posts = null }) => {
 
     if (!user) router.replace("/auth");
   }, []);
+
+  useEffect(() => {
+    const fetchMorePosts = async () => {
+      const { data: posts } = await fetchPosts(postLimit);
+      setReactivePosts(posts);
+    }
+
+    fetchMorePosts();
+  }, [postLimit]);
 
   const search = () => {
     if (!searchTerm) return setReactivePosts(posts);
@@ -38,6 +48,13 @@ const Home: FC<HomeProps> = ({ posts = null }) => {
           {reactivePosts?.map((post: PostType) => (
             <Post key={post._id} post={post} />
           ))}
+          {postLimit < (reactivePosts?.length as number) && (
+            <div className="home__container-main_show-more">
+              <button onClick={() => setPostLimit(prevPostLimit => prevPostLimit + 9)} style={{ backgroundColor: themeColor }} type="button" className="home__container-main_show-more__button">
+                Show more
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -45,7 +62,7 @@ const Home: FC<HomeProps> = ({ posts = null }) => {
 };
 
 export async function getServerSideProps() {
-  const { data } = await fetchPosts();
+  const { data } = await fetchPosts(9);
 
   return {
     props: { posts: data },

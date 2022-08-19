@@ -11,7 +11,7 @@ interface FirebaseConfigType {
   appId: string | undefined;
 }
 
-type FetchPostsType = () => Promise<AxiosResponse<any, any>>;
+type FetchPostsType = (limit?: number) => Promise<AxiosResponse<any, any>>;
 type FetchItemByQuery = (query: string, user?: boolean) => Promise<AxiosResponse<any, any>>;
 type CreatePostType = (formdata: PostFormDataType) => Promise<AxiosResponse<any, any>>;
 type LikePostType = (id: string, name: string, image: string) => Promise<AxiosResponse<any, any>>;

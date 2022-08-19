@@ -1,8 +1,16 @@
 import UserModel from "../models/usersModel.js";
 
 export const getUsers = async (req, res) => {
+  const { limit } = req.query;
+
   try {
-    const users = await UserModel.find();
+    let users;
+
+    if(limit) {
+      users =  await UserModel.find().limit(parseInt(limit));
+    } else {
+      users = await UserModel.find()
+    }
 
     res.status(200).json(users);
   } catch (error) {

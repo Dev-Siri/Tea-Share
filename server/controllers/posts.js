@@ -1,11 +1,17 @@
 import mongoose from 'mongoose';
 import PostModel from '../models/postsModel.js';
-import { ref, uploadString, uploadBytes } from 'firebase/storage';
-import { storage } from '../firebase.js';
 
 export const getPosts = async (req, res) => {
+  const { limit } = req.query;
+  
   try {
-    const posts = await PostModel.find();
+    let posts;
+
+    if(limit) {
+      posts = await PostModel.find().limit(parseInt(limit));
+    } else {
+      posts = await PostModel.find();
+    }
 
     res.status(200).json(posts);
   } catch (error) {

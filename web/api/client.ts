@@ -1,9 +1,10 @@
 import axios from "axios";
 import type { FetchItemByQuery, FetchPostsType, CreatePostType, LikePostType, CreateUserType, FetchUsersType } from "../types";
+import { useStateContext } from "../context/StateContext";
 
 const API = axios.create({ baseURL: process.env.NEXT_PUBLIC_BACKEND_URL });
 
-export const fetchPosts: FetchPostsType = () => API.get("/posts");
+export const fetchPosts: FetchPostsType = (limit) => API.get(`/posts?limit=${limit}`);
 export const fetchUsers: FetchUsersType = () => API.get("/users");
 export const fetchPostBySearchTerm: FetchItemByQuery = (query, user = true) => API.get(`/posts/search?query=${query}&user=${user}`);
 export const fetchUserBySearchTerm: FetchItemByQuery = (query) => API.get(`/users/search?query=${query}`);
