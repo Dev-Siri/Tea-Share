@@ -8,7 +8,7 @@ import { Sidebar, Post } from '../../components';
 import { useStateContext } from '../../context/StateContext';
 
 const Profile: NextPage<ProfileProps> = ({ user, posts }) => {
-  const { username, image } = user[0];
+  const { username, image } = user;
 
   const { themeMode } = useStateContext();
 
