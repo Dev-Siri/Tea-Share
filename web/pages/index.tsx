@@ -48,13 +48,11 @@ const Home: FC<HomeProps> = ({ posts = null }) => {
           {reactivePosts?.map((post: PostType) => (
             <Post key={post._id} post={post} />
           ))}
-          {postLimit < (reactivePosts?.length as number) && (
-            <div className="home__container-main_show-more">
-              <button onClick={() => setPostLimit(prevPostLimit => prevPostLimit + 9)} style={{ backgroundColor: themeColor }} type="button" className="home__container-main_show-more__button">
-                Show more
-              </button>
-            </div>
-          )}
+        </div>
+        <div className="home__container-main_show-more">
+          <button onClick={() => setPostLimit(prevPostLimit => prevPostLimit + 9)} style={{ backgroundColor: themeColor }} type="button" className="home__container-main_show-more__button">
+            Show more
+          </button>
         </div>
       </div>
     </div>

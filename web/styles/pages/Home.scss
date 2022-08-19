@@ -10,6 +10,8 @@
       display: flex;
       justify-content: center;
       margin-bottom: 40px;
+      margin-top: 7px;
+      background: transparent;
 
       &__button {
         color: white;
@@ -29,7 +31,7 @@
   flex-wrap: wrap;
   padding: 30px;
   padding-bottom: 100px;
-  height: 100vh;
+  height: 76vh;
   overflow-y: auto;
   width: 100%;
   justify-content: space-around;
@@ -52,9 +54,7 @@
   }
 
   &__card-media {
-    div {
-      padding-left: 25px;
-    }
+    div { padding-left: 25px; }
 
     &_title {
       font-family: $font;
