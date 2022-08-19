@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import { SidePost } from "./";
 import { useStateContext } from '../context/StateContext';
-import { fetchPostBySearchTerm as fetchPostsByQuery } from '../api';
+import { fetchPostByQuery } from '../api';
 import type { UserSideViewProps, PostType } from '../types';
 
 const UserPreview: FC<UserSideViewProps> = ({ closeMenu, user }) => {
@@ -13,7 +13,7 @@ const UserPreview: FC<UserSideViewProps> = ({ closeMenu, user }) => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const { data: posts } = await fetchPostsByQuery(user?.username as string);
+      const { data: posts } = await fetchPostByQuery(user?.username as string);
       setPosts(posts);
     }
 
