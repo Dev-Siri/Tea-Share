@@ -4,6 +4,7 @@ import { IoIosCreate } from "react-icons/io";
 import { FaUserCircle, FaUserFriends } from "react-icons/fa";
 import { BsFilePost, BsFillPeopleFill } from "react-icons/bs";
 import Link from "next/link";
+import Image from "next/image";
 
 import { SidebarOption } from "./";
 import { SidebarProps } from "../types/sidebar";
@@ -16,12 +17,27 @@ const Sidebar: FC<SidebarProps> = ({ isActive, isOnPostInfo }) => {
   return (
     <div className={`sidebar ${themeMode === "dark" && "dark-bar"}`}>
       <Link href="/" className="sidebar__logo-container">
-        <img src={Logo.src} alt="logo" className="sidebar__logo" style={{ backgroundColor: themeColor }} />
+        <picture className="sidebar__logo-container">
+          <img
+            src={Logo.src}
+            alt="logo"
+            className="sidebar__logo"
+            style={{ backgroundColor: themeColor }}
+          />
+        </picture>
       </Link>
       {!isOnPostInfo?.visible && (
         <>
           <div className="sidebar__user-wrapper" style={{ backgroundColor: themeColor }} />
-          <img src={user?.photoURL} alt={user?.displayName} className="sidebar__user-wrapper_image" />
+          <div className="sidebar__user-wrapper_image">
+            <Image
+              src={user?.photoURL}
+              alt={user?.displayName}
+              height={100}
+              width={100}
+              style={{ borderRadius: '100%' }}
+            />
+          </div>
           <p className="sidebar__user-wrapper_title" style={{ marginTop: isOnPostInfo?.visible ? "110px" : "0px" }}>
             {user?.displayName.length > 15 ? `${user?.displayName.slice(0, 15)}...` : user?.displayName}
           </p>
@@ -45,7 +61,7 @@ const Sidebar: FC<SidebarProps> = ({ isActive, isOnPostInfo }) => {
               key={isOnPostInfo.title}
             />
             <SidebarOption
-              href={`/post/author/${isOnPostInfo.postedBy}?post=${isOnPostInfo._id ? isOnPostInfo._id : isOnPostInfo.title}`}
+              href={`/post/author/${isOnPostInfo.postedBy}?post=${isOnPostInfo._id}`}
               title={isOnPostInfo.postedBy}
               icon={<FaUserFriends />}
               isActive={isActive === "post-author-info"}

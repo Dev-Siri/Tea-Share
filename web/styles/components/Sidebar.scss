@@ -20,7 +20,10 @@
         cursor: pointer;
         padding: 20px;
         height: 140px;
+        width: 100%;
         border-top-right-radius: 10px;
+
+        &-container { height: 140px; }
     }
 
     &__user-wrapper {
@@ -29,7 +32,7 @@
         &_image {
             border-radius: 100%;
             position: absolute;
-            height: 100px;
+            height: 105px;
             align-self: center;
             margin-top: 140px;
             border: 2px solid gray;
@@ -40,7 +43,7 @@
         &_title {
             align-self: center;
             font-weight: bold;
-            margin-top: 50px;
+            padding-top: 55px;
             font-size: 22px;
         }
     }

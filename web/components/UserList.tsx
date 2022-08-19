@@ -20,6 +20,7 @@ const UserList: FC<UserListProps> = ({ users, itemClick }) => {
         >
           <Image
             src={user?.image}
+            alt={user?.username}
             height={35}
             width={35}
             style={{ borderRadius: "100%" }}

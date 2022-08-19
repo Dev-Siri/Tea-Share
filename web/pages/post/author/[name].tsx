@@ -15,7 +15,7 @@ const Author: FC<PostAuthorProps> = ({ user, posts }) => {
 
   return (
     <div className={`profile ${themeMode === "dark" && "dark-page"}`}>
-      <Sidebar isActive="post-author-info" isOnPostInfo={{ visible: true, title: post as string, href: `/post/${post}`, postedBy: username }} />
+      <Sidebar isActive="post-author-info" isOnPostInfo={{ visible: true, title: 'View Post', href: `/post/${post}`, postedBy: username }} />
       <div className="profile__main">
         <div className="profile__spacer" />
         <div className="profile__main-container">
@@ -23,9 +23,9 @@ const Author: FC<PostAuthorProps> = ({ user, posts }) => {
             <img src={image} alt={username} height="100px" width="100px" style={{ borderRadius: "75px" }} />
           </picture>
           <h1 className="profile__main-container_name">
-            {username} ({posts?.length})
+            {username}
           </h1>
-          <h3>Posts by {username}</h3>
+          <h3>Posts by {username} ({posts?.length})</h3>
           <div className="profile__main-container_post-container">
             {posts?.map((post: PostType) => (
               <Post key={post._id} post={post} />
@@ -40,7 +40,7 @@ const Author: FC<PostAuthorProps> = ({ user, posts }) => {
 export async function getServerSideProps(context: any) {
   const { name } = context.params;
 
-  const { data: posts } = await fetchPostBySearchTerm(name, false);
+  const { data: posts } = await fetchPostBySearchTerm(name);
   const { data: user } = await fetchUserBySearchTerm(name);
 
   return {

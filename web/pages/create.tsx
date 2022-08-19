@@ -50,6 +50,7 @@ const Create: FC = () => {
               marginRight: "50px",
               borderRadius: "10px",
             }}
+            alt="selected-image"
             height={300}
             width={600}
           />
