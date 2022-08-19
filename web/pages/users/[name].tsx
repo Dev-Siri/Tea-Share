@@ -3,7 +3,7 @@ import type { ProfileProps } from '../../types';
 import type { NextPage } from 'next';
 import Image from 'next/image';
 
-import { fetchPostBySearchTerm, fetchUserBySearchTerm } from '../../api';
+import { fetchPostByQuery, fetchUserByQuery } from '../../api';
 import { Sidebar, Post } from '../../components';
 import { useStateContext } from '../../context/StateContext';
 
@@ -44,8 +44,8 @@ const Profile: NextPage<ProfileProps> = ({ user, posts }) => {
 export async function getServerSideProps(context: any) {
   const { name } = context.params;
 
-  const { data: posts } = await fetchPostBySearchTerm(name);
-  const { data: user } = await fetchUserBySearchTerm(name);
+  const { data: posts } = await fetchPostByQuery(name);
+  const { data: user } = await fetchUserByQuery(name);
 
   return {
     props: { user, posts },

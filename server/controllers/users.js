@@ -33,14 +33,12 @@ export const createUser = async (req, res) => {
 };
 
 export const getUserBySearchTerm = async (req, res) => {
-  const { searchQuery } = req.query;
+  const { query } = req.query;
 
   try {
-    const query = new RegExp(searchQuery);
+    const user = await UserModel.find({ username: query });
 
-    const users = await UserModel.find({ username: query });
-
-    res.json(users);
+    res.json(user[0]);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }

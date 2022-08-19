@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { useRouter } from "next/router";
 
-import { fetchUserBySearchTerm, fetchPostBySearchTerm } from "../../../api";
+import { fetchUserByQuery, fetchPostByQuery } from "../../../api";
 import { useStateContext } from "../../../context/StateContext";
 import { Sidebar, Post } from "../../../components";
 import { PostType, PostAuthorProps } from "../../../types";
@@ -11,7 +11,7 @@ const Author: FC<PostAuthorProps> = ({ user, posts }) => {
   const { post } = router.query;
 
   const { themeMode } = useStateContext();
-  const { image, username } = user[0];
+  const { image, username } = user;
 
   return (
     <div className={`profile ${themeMode === "dark" && "dark-page"}`}>
@@ -40,8 +40,8 @@ const Author: FC<PostAuthorProps> = ({ user, posts }) => {
 export async function getServerSideProps(context: any) {
   const { name } = context.params;
 
-  const { data: posts } = await fetchPostBySearchTerm(name);
-  const { data: user } = await fetchUserBySearchTerm(name);
+  const { data: posts } = await fetchPostByQuery(name);
+  const { data: user } = await fetchUserByQuery(name);
 
   return {
     props: { user, posts },

@@ -1,4 +1,21 @@
-import { createPost, fetchPostBySearchTerm, fetchPosts, fetchUserBySearchTerm, LikePost, createUser, fetchUsers } from "./client";
+import {
+  createPost,
+  fetchPostByQuery,
+  fetchPosts,
+  fetchUserByQuery,
+  LikePost,
+  createUser,
+  fetchUsers
+} from "./client";
 import auth from "./firebase";
 
-export { createPost, fetchPostBySearchTerm, fetchPosts, fetchUserBySearchTerm, LikePost, createUser, fetchUsers, auth };
+export {
+  createPost,
+  fetchPostByQuery,
+  fetchPosts,
+  fetchUserByQuery,
+  LikePost,
+  createUser,
+  fetchUsers,
+  auth
+};

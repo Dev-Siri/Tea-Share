@@ -7,8 +7,8 @@ import { useStateContext } from "../context/StateContext";
 import { Sidebar, Post, SearchBar } from "../components";
 import { fetchPosts } from "../api";
 
-const Home: FC<HomeProps> = ({ posts = null }) => {
-  const [reactivePosts, setReactivePosts] = useState<PostType[] | null | undefined>(posts);
+const Home: FC<HomeProps> = ({ posts }) => {
+  const [reactivePosts, setReactivePosts] = useState<PostType[] | undefined>(posts);
   const [postLimit, setPostLimit] = useState(9);
   const { searchTerm, user, themeMode, themeColor } = useStateContext();
   const router = useRouter();
@@ -44,15 +44,13 @@ const Home: FC<HomeProps> = ({ posts = null }) => {
       <Sidebar isActive="home" />
       <div className="home__container-main">
         <SearchBar handleSearch={search} />
+        <button onClick={() => setPostLimit(prevPostLimit => prevPostLimit + 9)} style={{ backgroundColor: themeColor }} type="button" className="home__container-main__button">
+          Show more
+        </button>
         <div className="post__container">
           {reactivePosts?.map((post: PostType) => (
             <Post key={post._id} post={post} />
           ))}
-        </div>
-        <div className="home__container-main_show-more">
-          <button onClick={() => setPostLimit(prevPostLimit => prevPostLimit + 9)} style={{ backgroundColor: themeColor }} type="button" className="home__container-main_show-more__button">
-            Show more
-          </button>
         </div>
       </div>
     </div>

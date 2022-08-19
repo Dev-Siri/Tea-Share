@@ -36,7 +36,7 @@ interface ProfileProps {
 }
 
 interface PostAuthorProps {
-  user: MongoDBUserType[];
+  user: MongoDBUserType;
   posts: PostType[];
 }
 

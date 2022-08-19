@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import { useStateContext } from "../../context/StateContext";
 import { PostInfoProps } from "../../types";
-import { fetchPostBySearchTerm } from "../../api";
+import { fetchPostByQuery } from "../../api";
 import { Sidebar } from "../../components";
 
 const PostInfo: FC<PostInfoProps> = ({ post }) => {
@@ -63,7 +63,7 @@ const PostInfo: FC<PostInfoProps> = ({ post }) => {
 export async function getServerSideProps(context: any) {
   const { name } = context.params;
 
-  const { data } = await fetchPostBySearchTerm(name, false);
+  const { data } = await fetchPostByQuery(name, false);
 
   return {
     props: { post: data[0] },
