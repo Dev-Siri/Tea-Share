@@ -1,0 +1,60 @@
+@import "../Utils";
+
+.post-info {
+  display: flex;
+
+  &__container {
+    padding-left: 60px;
+    padding-top: 30px;
+    display: flex;
+
+    @mixin textStyle($margin) {
+      margin-left: $margin;
+      font-family: $font;
+      font-weight: normal;
+    }
+
+    &_title {
+      @include textStyle(0px);
+    }
+
+    &_desc {
+      @include textStyle(5px);
+    }
+
+    &_image {
+      height: 450px;
+      width: 100%;
+      margin-left: 24px;
+      border-radius: 5px;
+      border: 2px solid $primary-color;
+
+      &-wrapper {
+        width: 460px;
+      }
+    }
+
+    &_divider {
+      width: 400px;
+      height: 1px;
+      background-color: $semi-gray;
+    }
+
+    &_author-container {
+      display: flex;
+      align-items: center;
+    }
+
+    &_author-image {
+      margin-left: 10px;
+      height: 30px;
+      border-radius: 100%;
+    }
+
+    .seperator {
+      height: 1px;
+      width: 500px;
+      background: $semi-gray;
+    }
+  }
+}

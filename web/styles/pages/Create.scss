@@ -1,0 +1,69 @@
+@import "../Utils";
+
+.create {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 82%;
+    z-index: 50;
+
+    &-title {
+      text-align: center;
+      font-family: $font;
+      line-height: 1px;
+      margin-top: 50px;
+    }
+
+    &_form {
+      height: 420px;
+      width: 950px;
+      box-shadow: $dark-shadow;
+      padding: 20px;
+      border-radius: 20px;
+      display: flex;
+
+      &__inner {
+        width: 70%;
+      }
+
+      .seperator {
+        background: $semi-gray;
+        height: 100%;
+        width: 5px;
+        border-radius: 25px;
+        margin-left: 20px;
+        margin-right: 20px;
+      }
+
+      &-btn {
+        width: 98%;
+        margin-top: 50px;
+        margin-left: 5px;
+        background: $primary-color;
+        border: none;
+        padding: 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 250ms ease;
+        color: white;
+        font-family: $font;
+
+        &:hover {
+          background: $hover-color;
+        }
+      }
+
+      &-input {
+        @include InputStyles;
+        &_container {
+          width: 98%;
+        }
+      }
+    }
+  }
+}

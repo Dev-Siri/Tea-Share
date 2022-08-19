@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+$primary-color: hsl(257, 39%, 42%);
+$hover-color: hsl(257, 46%, 31%);
+$dark-gray: hsl(0, 0%, 7%);
+$semi-gray: hsl(0, 0%, 20%);
+$font: "Inter", sans-serif;
+$dark-shadow: -3px 10px 35px 0px hsla(0, 0%, 0%, 0.75);
+$light-shadow: -22px 10px 300px -97px hsl(0, 0%, 100%);
+$custom-gray: hsl(0, 0%, 90%);
+
+@mixin InputStyles {
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 5px;
+  margin-left: 5px;
+  width: 100%;
+  outline: none;
+  border: 1px solid $custom-gray;
+  font-family: $font;
+  transition: 250ms;
+
+  &:focus { border-color: $primary-color; }
+}
+
+@mixin noScrollBar {
+  &::-webkit-scrollbar { display: none; }
+
+  scrollbar-width: none;
+}

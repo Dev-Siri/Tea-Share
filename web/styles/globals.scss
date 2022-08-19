@@ -1,0 +1,70 @@
+// Page styles
+@import "pages/Auth";
+@import "pages/Home";
+@import "pages/Settings";
+@import "pages/Profile";
+@import "pages/PostInfo";
+@import "pages/Create";
+@import "pages/Users";
+
+// Component styles
+@import "components/Sidebar";
+@import "components/Navbar";
+
+// Miscellaneous
+@import "Utils";
+
+// Boilerplate styles
+html, body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, $font;
+  overflow-y: hidden;
+}
+
+* { box-sizing: border-box; }
+
+// Dark mode declaration
+.dark-page {
+  background-color: black;
+  color: white;
+  
+  .user-side-dark-view {
+    background: $semi-gray;
+    color: white;
+    border-color: $dark-gray;
+
+    .user-side-view__header { border-bottom-color: $dark-gray; }
+  }
+  
+  .dark-list {
+    background-color: $dark-gray;
+    border-color: $semi-gray;
+    
+    &__item {
+      border-color: $semi-gray;
+
+      &:hover { background-color: $semi-gray; }
+    }
+  }
+
+  .dark-shadow { box-shadow: $light-shadow; }
+
+  .dark-bar {
+    box-shadow: $light-shadow;
+
+    .dark-option:hover { background-color: $dark-gray; }
+  }
+
+  .dark-form { box-shadow: $light-shadow; }
+  .dark-input {
+    background: $semi-gray;
+    border-color: $semi-gray;
+    color: white;
+  }
+}
+
+.toast {
+  background: black;
+  color: white;
+}

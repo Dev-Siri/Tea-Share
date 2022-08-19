@@ -1,0 +1,30 @@
+{
+  "name": "tea_share_web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "firebase": "^9.9.2",
+    "moment": "^2.29.3",
+    "next": "^12.2.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-file-base64": "^1.0.3",
+    "react-hot-toast": "^2.3.0",
+    "react-icons": "^4.4.0",
+    "sass": "^1.54.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.4",
+    "@types/react": "^18.0.17",
+    "eslint": "^8.22.0",
+    "eslint-config-next": "^12.2.5",
+    "typescript": "^4.7.4"
+  }
+}
