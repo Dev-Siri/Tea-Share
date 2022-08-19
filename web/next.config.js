@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['firebasestorage.googleapis.com', 'localhost']
+    domains: ['firebasestorage.googleapis.com', 'localhost', 'lh3.googleusercontent.com']
   },
   i18n: {
     locales: ["en"],

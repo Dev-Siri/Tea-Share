@@ -2,12 +2,13 @@ import React, { FC, useState } from 'react';
 import Image from 'next/image';
 import FileBase64 from 'react-file-base64';
 
+import { GoogleLogin } from './';
 import { useStateContext } from '../context/StateContext';
 import { FormProps } from '../types';
 import PurpleLogo from '../assets/DarkLogo.png';
 import WhiteLogo from '../assets/LightLogo.png';
 
-const Form:FC<FormProps> = ({ handleAuth, isSignup, setIsSignup }) => {
+const Form:FC<FormProps> = ({ handleAuth, isSignup, setIsSignup, handleGoogleLogin }) => {
 
   const [formData, setFormData] = useState({ username: '', email: '', password: '', photoURL: '' });
 
@@ -52,6 +53,7 @@ const Form:FC<FormProps> = ({ handleAuth, isSignup, setIsSignup }) => {
               <span className='form__toggleText-interactive' onClick={changeAuthMode}>{isSignup ? 'Login' : 'Signup'}</span>
             </p>
           </div>
+          <GoogleLogin handleClick={handleGoogleLogin} />
         </form>
       </div>
     </div>

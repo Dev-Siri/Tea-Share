@@ -21,6 +21,7 @@ const SearchBar: FC<SearchBarProps> = ({ handleSearch }) => {
         className='navbar__submit'
         style={{ backgroundColor: themeColor }}
         onClick={handleSearch}
+        aria-label='Search Button'
       >
         <IoSearch size={22} />
       </button>

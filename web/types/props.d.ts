@@ -1,62 +1,47 @@
 import React from 'react';
 import { PostType, MongoDBUserType } from './';
 
-interface HomeProps {
-  posts: PostType[];
-}
-
-interface PostProps {
-  post: PostType;
-}
-
-interface PostInfoProps {
-  post: PostType;
-}
-
-interface SearchBarProps {
-  handleSearch: () => void;
-}
-
-interface LogoutButtonProps {
-  handleLogout: () => void;
-}
-
-interface LayoutProps {
+export interface HomeProps { posts: PostType[]; }
+export interface PostProps { post: PostType; }
+export interface PostInfoProps { post: PostType; }
+export interface SearchBarProps { handleSearch: () => void; }
+export interface LogoutButtonProps { handleLogout: () => void; }
+export interface SpinnerProps { title?: string; }
+export interface AllUsersViewProps { users: MongoDBUserType[]; }
+export interface GoogleLoginProps { handleClick: () => Promise<void> }
+export interface LayoutProps {
   children: Array<ReactElement<ChildProps, JSXElementConstructor<ChildType>>>;
   [key: string]: any;
 }
 
-interface SpinnerProps {
-  title?: string;
-}
-
-interface ProfileProps {
+export interface ProfileProps {
   user: MongoDBUserType[0];
   posts: PostType[];
 }
 
-interface PostAuthorProps {
+export interface PostAuthorProps {
   user: MongoDBUserType;
   posts: PostType[];
 }
 
-interface ThemeOptionProps {
+export interface ThemeOptionProps {
   title: string;
   handleClick: () => void;
 }
 
-interface FormProps {
+export interface FormProps {
   handleAuth: (displayName: string, email: string, password: string, photoURL: string, event: any) => void;
   isSignup: boolean;
   setIsSignup: React.Dispatch<React.SetStateAction<boolean>>;
+  handleGoogleLogin: () => Promise<void>;
 }
 
-interface ColorInputProps {
+export interface ColorInputProps {
   color: string;
   handleClick: () => void;
 }
 
-interface UserListProps {
+export interface UserListProps {
   users: MongoDBUserType[];
   itemClick: {
     changeShowingUserInfo: () => void;
@@ -64,30 +49,7 @@ interface UserListProps {
   };
 }
 
-interface AllUsersViewProps {
-  users: MongoDBUserType[];
-}
-
-interface UserSideViewProps {
+export interface UserSideViewProps {
   closeMenu: () => void;
   user: MongoDBUserType | null;
 }
-
-export type {
-  HomeProps,
-  PostProps,
-  PostInfoProps,
-  SearchBarProps,
-  LogoutButtonProps,
-  LayoutProps,
-  SpinnerProps,
-  ProfileProps,
-  PostAuthorProps,
-  ThemeOptionProps,
-  FormProps,
-  ColorInputProps,
-  SpinnerProps,
-  UserListProps,
-  AllUsersViewProps,
-  UserSideViewProps,
-};

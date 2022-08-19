@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from "react";
+import React, { FC } from "react";
 import Link from "next/link";
 
 import { useStateContext } from "../context/StateContext";

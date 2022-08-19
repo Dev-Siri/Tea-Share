@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, User } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, User, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
@@ -55,12 +55,32 @@ const Auth: NextPage = () => {
     }
   };
 
+  const handleSignInWithGoogle = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+
+      await signInWithPopup(auth, provider);
+
+      await createUser({
+        email: auth?.currentUser?.email as string,
+        username: auth?.currentUser?.displayName as string,
+        image: auth?.currentUser?.photoURL as string,
+      });
+      localStorage.setItem('user', JSON.stringify(auth.currentUser));
+
+      router.replace('/');
+    } catch (error: any) {
+      toast.error(`Could not sign in with Google, ${error.message}`);
+    }
+  }
+
   return (
     <div className={`auth ${themeMode === "dark" && "dark-page"}`}>
       <Form
         handleAuth={handleAuth}
         isSignup={isSignup}
         setIsSignup={setIsSignup}
+        handleGoogleLogin={handleSignInWithGoogle}
       />
       <Image
         src={Banner}

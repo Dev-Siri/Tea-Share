@@ -10,3 +10,4 @@ export { default as SidebarOption } from "./SidebarOption";
 export { default as UserList } from "./UserList";
 export { default as UserView } from "./UserView";
 export { default as SidePost } from "./SidePost";
+export { default as GoogleLogin } from "./GoogleLogin";
