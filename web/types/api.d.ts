@@ -1,5 +1,5 @@
-import type { PostFormDataType } from './post';
-import type { UserFormDataType } from './user';
+import type { PostFormData } from './post';
+import type { UserFormData } from './user';
 
 interface FirebaseConfigType {
   apiKey: string | undefined;
@@ -13,9 +13,9 @@ interface FirebaseConfigType {
 
 type FetchPostsType = (limit?: number) => Promise<AxiosResponse<any, any>>;
 type FetchItemByQuery = (query: string, user?: boolean) => Promise<AxiosResponse<any, any>>;
-type CreatePostType = (formdata: PostFormDataType) => Promise<AxiosResponse<any, any>>;
+type CreatePostType = (formdata: PostFormData) => Promise<AxiosResponse<any, any>>;
 type LikePostType = (id: string, name: string, image: string) => Promise<AxiosResponse<any, any>>;
-type CreateUserType = (formdata: UserFormDataType) => Promise<AxiosResponse<any, any>>;
+type CreateUserType = (formdata: UserFormData) => Promise<AxiosResponse<any, any>>;
 type FetchUsersType = () => Promise<AxiosResponse<any, any>>;
 
 export type { FetchPostsType, FetchItemByQuery, CreatePostType, LikePostType, CreateUserType, FirebaseConfigType, FetchUsersType };

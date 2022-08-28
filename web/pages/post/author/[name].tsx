@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { fetchUserByQuery, fetchPostByQuery } from "../../../api";
 import { useStateContext } from "../../../context/StateContext";
 import { Sidebar, Post } from "../../../components";
-import { PostType, PostAuthorProps } from "../../../types";
+import { PostAuthorProps } from "../../../types";
 
 const Author: FC<PostAuthorProps> = ({ user, posts }) => {
   const router = useRouter();
@@ -27,9 +27,7 @@ const Author: FC<PostAuthorProps> = ({ user, posts }) => {
           </h1>
           <h3>Posts by {username} ({posts?.length})</h3>
           <div className="profile__main-container_post-container">
-            {posts?.map((post: PostType) => (
-              <Post key={post._id} post={post} />
-            ))}
+            {posts?.map(post => <Post key={post._id} post={post} />)}
           </div>
         </div>
       </div>

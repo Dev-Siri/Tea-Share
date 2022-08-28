@@ -1,3 +1,4 @@
+import { getStorage } from "@firebase/storage";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { FirebaseConfigType } from "../types";
@@ -13,6 +14,5 @@ const firebaseConfig: FirebaseConfigType = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-export default auth;
+export const auth = getAuth(app);
+export const storage = getStorage(app, process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);

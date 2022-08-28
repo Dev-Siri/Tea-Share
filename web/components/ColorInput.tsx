@@ -10,9 +10,9 @@ const ColorInput:FC<ColorInputProps> = ({ color, handleClick }) => {
   
   return (
     <button
-        className="color-input"
-        style={{ backgroundColor: color }}
-        onClick={handleClick}
+      className="color-input"
+      style={{ backgroundColor: color }}
+      onClick={handleClick}
     >
       {themeColor === color && <TiTick color="white" fontSize={14} />}
     </button>

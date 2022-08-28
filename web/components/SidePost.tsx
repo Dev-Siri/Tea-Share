@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import Image from 'next/image';
 
-import type { PostProps } from "../types";
+import type { PostProps } from '../types';
 
 const SidePost: FC<PostProps> = ({ post }) => {
   const { title, image } = post;

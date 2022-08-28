@@ -7,7 +7,7 @@ import {
   createUser,
   fetchUsers
 } from "./client";
-import auth from "./firebase";
+import { auth, storage } from "./firebase";
 
 export {
   createPost,
@@ -17,5 +17,6 @@ export {
   LikePost,
   createUser,
   fetchUsers,
-  auth
+  auth,
+  storage
 };

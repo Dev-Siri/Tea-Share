@@ -1,0 +1,46 @@
+.post {
+  margin-left: 40px;
+  border-radius: 15px;
+  box-shadow: $dark-shadow;
+  height: 390px;
+  margin-bottom: 40px;
+
+  &__img-container {
+    border: 5px;
+    height: 200px;
+    width: 300px;
+  }
+
+  &__card-media {
+    div { padding-left: 25px; }
+
+    &_title {
+      font-family: $font;
+      font-size: 22px;
+      line-height: 1px;
+      margin-top: 40px;
+    }
+
+    &_desc {
+      color: gray;
+      font-family: $font;
+      margin-top: 30px;
+      padding-bottom: 20px;
+      overflow-wrap: break-word;
+      overflow-y: auto;
+      width: 257px;
+      height: 65px;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar { display: none; }
+    }
+  }
+
+  &__card-interactions {
+    display: flex;
+    padding-bottom: 10px;
+
+    &_like { @include InteractiveButtonStyles('like'); }
+    &_view-more { @include InteractiveButtonStyles('view-more'); }
+  }
+}

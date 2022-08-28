@@ -7,9 +7,10 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { SidebarOption } from "./";
-import { SidebarProps } from "../types/sidebar";
+import { SidebarProps } from "../types";
 import { useStateContext } from "../context/StateContext";
 import Logo from "../assets/LightLogo.png";
+import Cup from '../assets/Cup.png';
 
 const Sidebar: FC<SidebarProps> = ({ isActive, isOnPostInfo }) => {
   const { themeColor, themeMode, user } = useStateContext();
@@ -19,7 +20,7 @@ const Sidebar: FC<SidebarProps> = ({ isActive, isOnPostInfo }) => {
       <Link href="/" className="sidebar__logo-container">
         <picture className="sidebar__logo-container">
           <img
-            src={Logo.src}
+            src={window.innerWidth === 940 ? Cup.src : Logo.src}
             alt="logo"
             className="sidebar__logo"
             style={{ backgroundColor: themeColor }}

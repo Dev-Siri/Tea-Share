@@ -20,6 +20,10 @@ export const getUsers = async (req, res) => {
 
 export const createUser = async (req, res) => {
   const user = req.body;
+  
+  const userExists = UserModel.findOne({ username: user.username });
+
+  if(userExists) return res.status(204).json({ message: 'User already exists' });
 
   const newUser = new UserModel({ ...user });
 

@@ -19,7 +19,9 @@ const SidebarOption: FC<SidebarOptionProps> = ({ href, title, icon, isActive }) 
       >
         {isActive && <div className="sidebar__option-active_indicator" style={{ borderRightColor: themeColor }} />}
         {icon} <div className="sidebar__option-spacer" />
-        {title?.length > 15 ? `${title.slice(0, 15)}...` : title}
+        <div className='sidebar__option-title'>
+          {title?.length > 15 ? `${title.slice(0, 15)}...` : title}
+        </div>
       </div>
     </Link>
   );

@@ -5,7 +5,7 @@ import { getUsers, createUser, getUserBySearchTerm } from '../controllers/users.
 const router = express.Router();
 
 router.get('/', getUsers);
-router.post('/create', createUser);
+router.post('/', createUser);
 router.get('/search', getUserBySearchTerm);
 
 export default router;

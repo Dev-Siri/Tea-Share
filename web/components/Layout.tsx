@@ -9,7 +9,7 @@ const usePageTitle = () => {
 
   switch (window.location.pathname) {
     case '/auth':
-      return 'Tea Share - A brand new social networking platform';
+      return 'Tea Share - A Brand New Social Networking Platform';
     case '/':
       return 'Tea Share - Home';
     case '/settings':
@@ -50,7 +50,9 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         <link rel="icon" href="/favicon.png" />
         <title>{title}</title>
       </Head>
-      <main>{children}</main>
+      <main>
+        {children}
+      </main>
     </div>
   );
 };

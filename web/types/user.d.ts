@@ -1,20 +1,19 @@
-interface FirebaseUserType {
+import type { NextRouter } from "next/router";
+
+export interface FirebaseUser {
   displayName: string;
   photoURL: string;
+  email: string;
 }
 
-interface MongoDBUserType {
+export interface MongoDBUser {
   username: string;
   image: string;
   _id: string;
 }
 
-interface UserFormDataType {
+export interface UserFormData {
   username: string;
   image: string;
   email: string;
 }
-
-type AuthHandlerType = (displayName: string, email: string, password: string, photoURL: string, event: any) => Promise<void>;
-
-export type { FirebaseUserType, MongoDBUserType, UserFormDataType, AuthHandlerType };

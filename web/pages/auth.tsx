@@ -1,19 +1,24 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, User, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import { toast } from "react-hot-toast";
+import Image from 'next/image';
+import FileBase64 from 'react-file-base64';
 import { useRouter } from "next/router";
 import type { NextPage } from "next";
 
 import { useStateContext } from "../context/StateContext";
-import { AuthHandlerType } from "../types";
-import { Form } from "../components";
 import Banner from "../assets/banner.svg";
-import { auth, createUser } from "../api";
+import { GoogleAuth, MailAuth } from "../utils";
+import { GoogleLogin } from '../components';
+import PurpleLogo from '../assets/DarkLogo.png';
+import WhiteLogo from '../assets/LightLogo.png';
 
 const Auth: NextPage = () => {
   const [isSignup, setIsSignup] = useState(true);
   const router = useRouter();
+
+  const [formData, setFormData] = useState({ username: '', email: '', password: '', photoURL: '' });
+  
+  const handleChange = (event: any) => setFormData({ ...formData, [event.target.name]: event.target.value });
+  const changeAuthMode = () => setIsSignup((prevSignup) => !prevSignup);
 
   const { themeMode, user } = useStateContext();
 
@@ -21,74 +26,42 @@ const Auth: NextPage = () => {
     if (user) router.replace("/");
   }, []);
 
-  const handleAuth: AuthHandlerType = async (displayName, email, password, photoURL, event) => {
-    event.preventDefault();
-
-    toast.loading(isSignup ? "Creating your account..." : "Logging you in...", { id: 'loading' });
-    if (isSignup) {
-      try {
-        await createUser({ username: displayName, email, image: photoURL });
-        await createUserWithEmailAndPassword(auth, email, password)
-        await updateProfile(auth.currentUser as User, { displayName, photoURL })
-        await createUser({ username: displayName, image: photoURL, email });
-        localStorage.setItem("user", JSON.stringify(auth.currentUser));
-        router.replace("/");
-      } catch (error: any) {
-        toast.remove('loading');
-        toast.error(`Failed to create your account, ${error.message}`);
-      }
-    } else {
-      try {
-        await signInWithEmailAndPassword(auth, email, password)
-        localStorage.setItem("user", JSON.stringify(auth.currentUser));
-        router.replace("/");
-      } catch (error: any) {
-        toast.remove('loading');
-        toast.error(`Failed to login, ${error.message ===
-          'Firebase: Error (auth/invalid-email).'
-          ? 'Invalid email' :
-          error.message === 'Error (auth/wrong-password).'
-          ? 'Invalid password'
-          : error.message
-        }`);
-      }
-    }
-  };
-
-  const handleSignInWithGoogle = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-
-      await signInWithPopup(auth, provider);
-
-      await createUser({
-        email: auth?.currentUser?.email as string,
-        username: auth?.currentUser?.displayName as string,
-        image: auth?.currentUser?.photoURL as string,
-      });
-      localStorage.setItem('user', JSON.stringify(auth.currentUser));
-
-      router.replace('/');
-    } catch (error: any) {
-      toast.error(`Could not sign in with Google, ${error.message}`);
-    }
-  }
-
   return (
     <div className={`auth ${themeMode === "dark" && "dark-page"}`}>
-      <Form
-        handleAuth={handleAuth}
-        isSignup={isSignup}
-        setIsSignup={setIsSignup}
-        handleGoogleLogin={handleSignInWithGoogle}
-      />
-      <Image
-        src={Banner}
-        alt="tea share, the brand new social networking application."
-        height={944}
-        width={1100}
-        priority
-      />
+      <div className={`form ${themeMode === 'dark' && 'dark-page'}`}>
+        <Image src={themeMode === 'dark' ? WhiteLogo : PurpleLogo} alt="logo" height="100px" width="200px" loading="lazy" />
+        <h1>{isSignup ? 'Signup for' : 'Login to'} Tea share</h1>
+        <div className='form__spacer' />
+        <div>
+          <form className='form__form'>
+            <div>
+              {isSignup && <input className={`form__form-input ${themeMode === 'dark' && 'dark-input'}`} value={formData.username} placeholder='Username' name='username' onChange={handleChange} />}
+              <input className={`form__form-input ${themeMode === 'dark' && 'dark-input'}`} value={formData.email} placeholder='Email' type='email' name='email' onChange={handleChange} />
+              <input className={`form__form-input ${themeMode === 'dark' && 'dark-input'}`} value={formData.password} placeholder='Password' type='password' name='password' onChange={handleChange} />
+              {isSignup &&
+                <div className={`form__form-input ${themeMode === 'dark' && 'dark-input'}`}>
+                  <label htmlFor="file-input" hidden>File Input</label>
+                  <FileBase64 id="file-input" multiple={false} onDone={({ base64 }) => setFormData({ ...formData, photoURL: base64 })} />
+                </div>}
+            </div>
+            <div className='form__button-container'>
+              <button
+                type='submit'
+                onClick={(event) => MailAuth(formData.username, formData.email, formData.password, formData.photoURL, event, router, isSignup)}
+                className='form__button'
+              >
+                {isSignup ? 'Signup' : 'Login'}
+              </button>
+              <p className='form__toggleText'>
+                {isSignup ? 'Already an user? ' : 'Don\'t have an account? '}
+                <span className='form__toggleText-interactive' onClick={changeAuthMode}>{isSignup ? 'Login' : 'Signup'}</span>
+              </p>
+            </div>
+            <GoogleLogin onClick={GoogleAuth} />
+          </form>
+        </div>
+      </div>
+      <Image src={Banner} alt="tea share, the brand new social networking application." height={944} width={1100} priority />
     </div>
   );
 };

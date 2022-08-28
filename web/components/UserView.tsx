@@ -5,10 +5,10 @@ import Image from 'next/image';
 import { SidePost } from "./";
 import { useStateContext } from '../context/StateContext';
 import { fetchPostByQuery } from '../api';
-import type { UserSideViewProps, PostType } from '../types';
+import type { UserSideViewProps, Post } from '../types';
 
 const UserPreview: FC<UserSideViewProps> = ({ closeMenu, user }) => {
-  const [posts, setPosts] = useState<PostType[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const { themeMode } = useStateContext();
 
   useEffect(() => {

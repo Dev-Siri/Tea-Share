@@ -1,5 +1,5 @@
 import React, { useState, useContext, createContext } from "react";
-import { FirebaseUserType } from "../types";
+import { FirebaseUser } from "../types";
 
 const StateContext = createContext({
   searchTerm: "" as string,
@@ -9,7 +9,7 @@ const StateContext = createContext({
   switchMode: (mode: string): void => {},
   switchColor: (color: string): void => {},
   themeColor: "",
-  user: { displayName: "", photoURL: "" } as FirebaseUserType,
+  user: { displayName: "", photoURL: "" } as FirebaseUser,
 });
 
 export const ContextProvider = ({ children }: any) => {

@@ -1,12 +1,15 @@
+import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { GoogleLoginProps } from '../types';
 
-const GoogleLogin: FC<GoogleLoginProps> = ({ handleClick }) => {
+const GoogleLogin: FC<GoogleLoginProps> = ({ onClick }) => {
+  const router = useRouter();
+  
   return (
     <button
       type="button"
-      onClick={handleClick}
+      onClick={() => onClick(router)}
       className='google-btn'
     >
       <FcGoogle size={24}/>

@@ -1,7 +1,9 @@
-type CreatePostSubmitHandlerType = (event: any) => Promise<void>;
-type ChangeHandlerType = (event: any) => void;
+import React from "react";
+import type { NextRouter } from "next/router";
 
-interface PostFormDataType {
+export type ChangeHandler = (event: any) => void;
+
+export interface PostFormData {
   title: string;
   description: string;
   image: string;
@@ -9,7 +11,7 @@ interface PostFormDataType {
   authorImage: string;
 }
 
-interface PostType {
+export interface Post {
   _id: string;
   title: string;
   description: string;
@@ -20,5 +22,3 @@ interface PostType {
   people: string[];
   peopleImage: string[];
 }
-
-export type { CreatePostSubmitHandlerType, ChangeHandlerType, PostFormDataType, PostType };

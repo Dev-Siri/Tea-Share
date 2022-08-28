@@ -1,27 +1,24 @@
 import React from 'react';
-import { PostType, MongoDBUserType } from './';
+import { Post, MongoDBUserType, GoogleAuthHandler } from './';
 
-export interface HomeProps { posts: PostType[]; }
-export interface PostProps { post: PostType; }
-export interface PostInfoProps { post: PostType; }
+export interface HomeProps { posts: Post[]; }
+export interface PostProps { post: Post; }
+export interface PostInfoProps { post: Post; }
 export interface SearchBarProps { handleSearch: () => void; }
 export interface LogoutButtonProps { handleLogout: () => void; }
 export interface SpinnerProps { title?: string; }
 export interface AllUsersViewProps { users: MongoDBUserType[]; }
-export interface GoogleLoginProps { handleClick: () => Promise<void> }
-export interface LayoutProps {
-  children: Array<ReactElement<ChildProps, JSXElementConstructor<ChildType>>>;
-  [key: string]: any;
-}
+export interface GoogleLoginProps { onClick: GoogleAuthHandler; }
+export interface LayoutProps { children: Array<ReactElement<ChildProps, JSXElementConstructor<ChildType>>>; }
 
 export interface ProfileProps {
   user: MongoDBUserType[0];
-  posts: PostType[];
+  posts: Post[];
 }
 
 export interface PostAuthorProps {
   user: MongoDBUserType;
-  posts: PostType[];
+  posts: Post[];
 }
 
 export interface ThemeOptionProps {
@@ -30,10 +27,8 @@ export interface ThemeOptionProps {
 }
 
 export interface FormProps {
-  handleAuth: (displayName: string, email: string, password: string, photoURL: string, event: any) => void;
   isSignup: boolean;
   setIsSignup: React.Dispatch<React.SetStateAction<boolean>>;
-  handleGoogleLogin: () => Promise<void>;
 }
 
 export interface ColorInputProps {
@@ -52,4 +47,22 @@ export interface UserListProps {
 export interface UserSideViewProps {
   closeMenu: () => void;
   user: MongoDBUserType | null;
+}
+
+export interface SidebarProps {
+  isActive: string;
+  isOnPostInfo?: {
+    visible: boolean;
+    title: string;
+    _id?: string;
+    href: string;
+    postedBy: string;
+  };
+}
+
+export interface SidebarOptionProps {
+  href: any;
+  title: string;
+  icon: JSX.Element;
+  isActive: boolean;
 }

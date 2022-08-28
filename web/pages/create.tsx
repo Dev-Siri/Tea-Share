@@ -1,49 +1,30 @@
 import React, { FC, useState } from "react";
 import FileBase64 from "react-file-base64";
-import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import type { NextPage } from "next";
 
+import { CreatePost } from "../utils";
 import SelectImageLight from "../assets/SelectLight.png";
 import SelectImageDark from "../assets/Select.png";
-import { CreatePostSubmitHandlerType, ChangeHandlerType, PostFormDataType } from "../types";
-import { createPost } from "../api";
+import { ChangeHandler, PostFormData } from "../types";
 import { useStateContext } from "../context/StateContext";
 import { Sidebar } from "../components";
 
-const Create: FC = () => {
+const Create: NextPage = () => {
   const { themeColor, themeMode, user } = useStateContext();
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState<PostFormDataType>({
-    title: "",
-    description: "",
-    image: "",
-    author: user?.displayName,
-    authorImage: user?.photoURL,
-  });
+  const [formData, setFormData] = useState<PostFormData>({ title: "", description: "", image: "", author: user?.displayName, authorImage: user?.photoURL });
 
-  const handleSubmit: CreatePostSubmitHandlerType = async (event) => {
-    event.preventDefault();
-
-    if (!formData.title || (!formData.image && formData.title.length > 3) || loading) return;
-
-    toast.loading("Creating post...", { id: "creating-post-toast" });
-
-    await createPost(formData);
-    toast.remove("creating-post-toast");
-    toast.success("Post created successfully");
-    router.push("/");
-  };
-
-  const handleChange: ChangeHandlerType = (event) => setFormData({ ...formData, [event.target.name]: event.target.value });
+  const handleChange: ChangeHandler = (event) => setFormData({ ...formData, [event.target.name]: event.target.value });
 
   return (
     <div className={`create ${themeMode === "dark" && "dark-page"}`}>
       <Sidebar isActive="create" />
       <div className="create__container">
-        <form className={`create__container_form ${themeMode === "dark" && "dark-form"}`} onSubmit={handleSubmit}>
+        <form className={`create__container_form ${themeMode === "dark" && "dark-form"}`} onSubmit={(event) => CreatePost(event, formData, setFormData, router, loading)}>
           <Image
             src={!formData.image || loading ? (themeMode === "dark" ? SelectImageDark : SelectImageLight) : formData.image}
             style={{
@@ -73,12 +54,10 @@ const Create: FC = () => {
                 onChange={handleChange}
               />
               <div className={`create__container_form-input ${themeMode === "dark" && "dark-input"}`}>
-                <FileBase64
-                  onDone={({ base64 }: any) => {
-                    setFormData({ ...formData, image: base64 });
-                    setLoading(false);
-                  }}
-                />
+                <FileBase64 onDone={({ base64 }: any) => {
+                  setFormData({ ...formData, image: base64 });
+                  setLoading(false);
+                }} />
               </div>
             </div>
             <button type="submit" className="create__container_form-btn" style={{ backgroundColor: themeColor }}>

@@ -1,19 +1,8 @@
-declare module "*.png" {
-    export default "" as any;
-}
-
-declare module "*.jpg" {
-    export default "" as any;
-}
-
-declare module "*.gif" {
-    export default "" as any;
-}
-
-declare module "*.svg" {
-    export default "" as any;
-}
-
 declare module "react-file-base64" {
-    export default "" as any;
+  const FileBase64: React.FC<{
+    id?: string;
+    multiple?: boolean;
+    onDone: ({ base64 }: { base64: string; }) => void;
+  }>;
+  export default FileBase64;
 }
