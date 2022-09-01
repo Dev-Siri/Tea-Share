@@ -18,12 +18,14 @@ it will be available in this repository.
 
 ## Technologies Used
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png" height="50px">
-<img src="https://seeklogo.com/images/N/nodejs-logo-FBE122E377-seeklogo.com.png" height="50px" style="margin-left: 20px;">
-<img src="https://www.svgrepo.com/show/331488/mongodb.svg" height="50px" style="margin-left: 20px;">
-<img src="https://sass-lang.com/assets/img/styleguide/seal-color-aef0354c.png" height="50px" style="margin-left: 20px;">
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/1200px-Typescript_logo_2020.svg.png" height="50px" style="margin-left: 20px;">
-<img src="https://miro.medium.com/max/300/1*R4c8lHBHuH5qyqOtZb3h-w.png" height="50px" style="margin-left: 20px;">
+<div style="display: flex;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.sv1200px-React-icon.svg.png" height="50px">
+  <img src="https://seeklogo.com/images/N/nodejs-logo-FBE122E377-seeklogo.com.png" height="50px" style="margin-left: 20px;">
+  <img src="https://www.svgrepo.com/show/331488/mongodb.svg" height="50px"style="margin-left: 20px;">
+  <img src="https://sass-lang.com/assets/img/styleguide/seal-color-aef0354c.png" height="50px" style="margin-left: 20px;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_202svg/1200px-Typescript_logo_2020.svg.png" height="50px" style="margin-left: 20px;">
+  <img src="https://miro.medium.com/max/300/1*R4c8lHBHuH5qyqOtZb3h-w.png" height="50px" style="margin-left: 20px;">
+</div>
 
 ## Getting started
 
