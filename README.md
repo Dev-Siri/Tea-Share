@@ -16,8 +16,6 @@ it will be available in this repository.
 
 > NOTE: The Mobile version of the app is currently migrating to Vanilla React Native WITHOUT Expo. It is currently not available but it is still being worked on and will be available by next month.
 
-## Technologies Used
-
 ## Getting started
 
 ### Dependencies
