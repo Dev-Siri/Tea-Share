@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { FetchItemByQuery, FetchPostsAPI, CreatePostAPI, LikePostAPI, CreateUserAPI, FetchUsersAPI, UpdateProfileAPI } from "../types";
 
-const API = axios.create({ baseURL: /*process.env.NEXT_PUBLIC_BACKEND_URL*/'http://localhost:5000' });
+const API = axios.create({ baseURL: process.env.NEXT_PUBLIC_BACKEND_URL });
 
 export const fetchPosts: FetchPostsAPI = (limit) => API.get(`/posts?limit=${limit}`);
 export const fetchUsers: FetchUsersAPI = () => API.get("/users");
