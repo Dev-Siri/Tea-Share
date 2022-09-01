@@ -26,3 +26,6 @@ html, body {
 }
 
 * { box-sizing: border-box; }
+
+::-moz-selection { background: $selection-color; }
+::selection { background: $selection-color; }

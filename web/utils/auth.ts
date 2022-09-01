@@ -1,19 +1,36 @@
+import { type User, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider, updateEmail } from "firebase/auth";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { toast } from "react-hot-toast";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, User, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
-import { createUser, auth } from "../api";
-import type { AuthHandler, GoogleAuthHandler, LogoutHandler } from "../types";
+import { createUser, auth, storage, updateProfile as updateProfileAPI } from "../api";
+import type { AuthHandler, GoogleAuthHandler, LogoutHandler, UpdateProfileHandler } from "../types";
 
 export const MailAuth: AuthHandler = async (displayName, email, password, photoURL, event, router, isSignup) => {
   event.preventDefault();
 
   toast.loading(isSignup ? "Creating your account..." : "Logging you in...", { id: 'loading' });
+  
   if (isSignup) {
     try {
-      await createUser({ username: displayName, email, image: photoURL });
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+      let imageName = '';
+    
+      for (let i = 0; i < characters.length; i++) {
+        imageName += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+
+      const imageRef = ref(storage, `users/${imageName}.jpg`);
+
+      await uploadString(imageRef, photoURL, 'data_url');
+    
+      const imageLink: string = await getDownloadURL(imageRef);
+
+      console.log(imageLink);
+
+      await createUser({ username: displayName, email, image: imageLink });
       await createUserWithEmailAndPassword(auth, email, password)
-      await updateProfile(auth.currentUser as User, { displayName, photoURL })
-      await createUser({ username: displayName, image: photoURL, email });
+      await updateProfile(auth.currentUser as User, { displayName, photoURL: imageLink })
+      await createUser({ username: displayName, image: imageLink, email });
       localStorage.setItem("user", JSON.stringify(auth.currentUser));
       router.replace("/");
     } catch (error: any) {
@@ -33,7 +50,7 @@ export const MailAuth: AuthHandler = async (displayName, email, password, photoU
         error.message === 'Error (auth/wrong-password).'
           ? 'Invalid password'
           : error.message
-        }`);
+      }`);
     }
   }
 };
@@ -56,11 +73,38 @@ export const GoogleAuth: GoogleAuthHandler = async (router) => {
 }
 
 export const Logout: LogoutHandler = async (router) => {
-  await auth.signOut();
-  localStorage.removeItem('user');
-  router.replace('/auth');
+  try {
+    await auth.signOut();
+    localStorage.removeItem('user');
+    router.replace('/auth');
+  } catch (error: any) {
+    toast.error(`Failed to log you out, ${error.message}`);
+  }
 }
 
-export const UpdateProfile = async () => {
-    
+export const UpdateProfile: UpdateProfileHandler = async (email, username, image, id, event) => {
+  try {
+    event.preventDefault();
+    toast.loading('Updating your profile...', { id: 'update-profile' });
+    await updateProfile(auth.currentUser as User, {
+      displayName: username,
+      photoURL: image
+    });
+
+    await updateEmail(auth.currentUser as User, email);
+
+    await updateProfileAPI(id, {
+      _id: id,
+      image,
+      username,
+      email
+    });
+
+    localStorage.setItem('user', JSON.stringify(auth.currentUser));
+    toast.remove('update-profile');
+    toast.success('Successfully updated your profile.');
+    window.location.reload();
+  } catch (error: any) {
+    toast.error(`Failed to update your profile, ${error.message}`);
+  }
 }

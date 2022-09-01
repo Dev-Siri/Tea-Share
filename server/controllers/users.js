@@ -9,7 +9,7 @@ export const getUsers = async (req, res) => {
     if(limit) {
       users =  await UserModel.find().limit(parseInt(limit));
     } else {
-      users = await UserModel.find()
+      users = await UserModel.find();
     }
 
     res.status(200).json(users);
@@ -20,8 +20,8 @@ export const getUsers = async (req, res) => {
 
 export const createUser = async (req, res) => {
   const user = req.body;
-  
-  const userExists = UserModel.findOne({ username: user.username });
+
+  const userExists = (await UserModel.find({ username: user.username })).length;
 
   if(userExists) return res.status(204).json({ message: 'User already exists' });
 
@@ -47,3 +47,16 @@ export const getUserBySearchTerm = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+export const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const user = req.body;
+
+  try {
+    await UserModel.findByIdAndUpdate(id, { ...user, id }, { new: true });
+  
+    res.status(204).json({ message: 'User updated successfully' });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}

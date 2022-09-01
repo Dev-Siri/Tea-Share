@@ -10,6 +10,7 @@ export interface MongoDBUser {
   username: string;
   image: string;
   _id: string;
+  email: string;
 }
 
 export interface UserFormData {

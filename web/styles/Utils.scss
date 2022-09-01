@@ -8,6 +8,7 @@ $font: "Inter", sans-serif;
 $dark-shadow: -3px 10px 35px 0px hsla(0, 0%, 0%, 0.75);
 $light-shadow: -22px 10px 300px -97px hsl(0, 0%, 100%);
 $custom-gray: hsl(0, 0%, 90%);
+$selection-color: hsla(187, 100%, 50%, 0.484);
 
 @mixin InputStyles {
   padding: 15px;

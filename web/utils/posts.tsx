@@ -15,15 +15,17 @@ export const CreatePost: CreatePostSubmitHandler = async (event, formData, setFo
   const characters: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
   let imgName: string = '';
 
-  for (let i = 0; i < characters.length; i++) imgName += characters.charAt(Math.floor(Math.random() * characters.length));
+  for (let i = 0; i < characters.length; i++) {
+    imgName += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
 
-  const imgRef = ref(storage, `posts/${imgName}.jpg`);
+  const imageRef = ref(storage, `posts/${imgName}.jpg`);
 
-  await uploadString(imgRef, formData.image, 'data_url');
+  await uploadString(imageRef, formData.image, 'data_url');
 
-  const imgLink = await getDownloadURL(imgRef);
+  const imageLink = await getDownloadURL(imageRef);
 
-  setFormData({ ...formData, image: imgLink });
+  setFormData({ ...formData, image: imageLink });
 
   await createPost(formData);
 

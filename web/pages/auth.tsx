@@ -12,11 +12,11 @@ import PurpleLogo from '../assets/DarkLogo.png';
 import WhiteLogo from '../assets/LightLogo.png';
 
 const Auth: NextPage = () => {
-  const [isSignup, setIsSignup] = useState(true);
+  const [isSignup, setIsSignup] = useState(false);
   const router = useRouter();
 
   const [formData, setFormData] = useState({ username: '', email: '', password: '', photoURL: '' });
-  
+
   const handleChange = (event: any) => setFormData({ ...formData, [event.target.name]: event.target.value });
   const changeAuthMode = () => setIsSignup((prevSignup) => !prevSignup);
 
@@ -24,6 +24,7 @@ const Auth: NextPage = () => {
 
   useEffect(() => {
     if (user) router.replace("/");
+    setIsSignup(true);
   }, []);
 
   return (
@@ -61,7 +62,13 @@ const Auth: NextPage = () => {
           </form>
         </div>
       </div>
-      <Image src={Banner} alt="tea share, the brand new social networking application." height={944} width={1100} priority />
+      <Image
+        src={Banner}
+        alt="tea share, the brand new social networking application."
+        height={944}
+        width={1100}
+        priority
+      />
     </div>
   );
 };

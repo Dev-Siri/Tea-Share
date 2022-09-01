@@ -1,21 +1,21 @@
 import React, { useState, FC } from 'react';
 import { BsFillPeopleFill } from 'react-icons/bs';
 
-import { AllUsersViewProps, MongoDBUserType } from '../../types';
+import { AllUsersViewProps, MongoDBUser } from '../../types';
 import { fetchUsers } from '../../api';
 import { useStateContext } from '../../context/StateContext';
 import { Sidebar, SearchBar, UserList, UserView } from '../../components';
 
 const AllUsersView: FC<AllUsersViewProps> = ({ users }) => {
   const { themeMode, searchTerm } = useStateContext();
-  const [reactiveUsers, setReactiveUsers] = useState<MongoDBUserType[]>(users);
+  const [reactiveUsers, setReactiveUsers] = useState<MongoDBUser[]>(users);
   const [showUserInfo, setShowUserInfo] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<MongoDBUserType | null>(null);
+  const [selectedUser, setSelectedUser] = useState<MongoDBUser | null>(null);
 
   const handleSearch = () => {
     if (!searchTerm) return setReactiveUsers(users);
 
-    const searchedUsers = users.filter((user: MongoDBUserType) => user?.username.toLowerCase().includes(searchTerm.toLowerCase()));
+    const searchedUsers = users.filter(user => user?.username.toLowerCase().includes(searchTerm.toLowerCase()));
     setReactiveUsers(searchedUsers);
   };
 
@@ -44,7 +44,9 @@ const AllUsersView: FC<AllUsersViewProps> = ({ users }) => {
 export async function getServerSideProps() {
   const { data: users } = await fetchUsers();
 
-  return { props: { users } };
+  return {
+    props: { users }
+  };
 }
 
 export default AllUsersView;

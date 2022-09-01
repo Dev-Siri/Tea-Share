@@ -10,13 +10,14 @@ const StateContext = createContext({
   switchColor: (color: string): void => {},
   themeColor: "",
   user: { displayName: "", photoURL: "" } as FirebaseUser,
+  setUser: "" as any
 });
 
 export const ContextProvider = ({ children }: any) => {
   const themeColorType = localStorage.getItem("color");
   const themeModeType = localStorage.getItem("mode");
 
-  const user = JSON.parse(localStorage.getItem("user") as string);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user") as string));
 
   const [searchTerm, setSearchTerm] = useState("");
   const [themeMode, setThemeMode] = useState(themeModeType || "light");
@@ -43,6 +44,7 @@ export const ContextProvider = ({ children }: any) => {
         switchColor,
         themeColor,
         user,
+        setUser
       }}
     >
       {children}

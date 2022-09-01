@@ -20,6 +20,7 @@
 
     &_desc {
       @include textStyle(5px);
+      max-width: 500px;
     }
 
     &_image {

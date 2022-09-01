@@ -9,10 +9,17 @@ export type AuthHandler = (
   event: any,
   router: NextRouter,
   isSignup: boolean
-) => Promise<void>;
-
+  ) => Promise<void>;
+  
 export type GoogleAuthHandler = (router: NextRouter) => Promise<void>;
 export type LogoutHandler = (router: NextRouter) => Promise<void>;
+export type UpdateProfileHandler = (
+  email: string,
+  username: string,
+  image: string,
+  id: string,
+  event: React.FormEvent<HTMLFormElement>
+) => Promise<void>;
 
 export type CreatePostSubmitHandler = (
   event: any,
