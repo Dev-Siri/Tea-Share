@@ -4,7 +4,7 @@ The platform for sharing images.
 
 ## Description
 
-Tea share is a Typescript based online image sharing platform for Android, IOS and the Web. It provides a smoothless UI to interact and scroll through posts and allows you to
+Tea share is a Typescript based online image sharing platform for Android, IOS and the Web. It provides a smooth UI to interact and scroll through posts and allows you to
 create posts easily with the click of a button. It is built with React native on the Expo framework. It uses **Mongodb** as the
 database, **Node.js** as the server side runtime and [Firebase](https://firebase.google.com) for authentication and storage for all the user generated data.
 
@@ -14,13 +14,23 @@ Although there is a Desktop version in development which will be built with Elec
 Currently the IOS version is not available but it will be soon. After the IOS version is ready,
 it will be available in this repository.
 
+> NOTE: The Mobile version of the app is currently migrating to Vanilla React Native WITHOUT Expo. It is currently not available but it is still being worked on and will be available by next month.
+
+## Technologies Used
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png" height="50px">
+<img src="https://seeklogo.com/images/N/nodejs-logo-FBE122E377-seeklogo.com.png" height="50px" style="margin-left: 20px;">
+<img src="https://www.svgrepo.com/show/331488/mongodb.svg" height="50px" style="margin-left: 20px;">
+<img src="https://sass-lang.com/assets/img/styleguide/seal-color-aef0354c.png" height="50px" style="margin-left: 20px;">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/1200px-Typescript_logo_2020.svg.png" height="50px" style="margin-left: 20px;">
+<img src="https://miro.medium.com/max/300/1*R4c8lHBHuH5qyqOtZb3h-w.png" height="50px" style="margin-left: 20px;">
+
 ## Getting started
 
 ### Dependencies
 
 - React native (+ React additional dependencies)
 - Expo (+ additional expo dependencies)
-- Sanity CLI
 - Firebase
 - React Navigation
 - Typescript
@@ -30,14 +40,6 @@ it will be available in this repository.
 - Sass
 
 ### Installation
-
-If you want to download the '.apk' file or launch it on your phone without any apk downloads then:
-
-- For apk download, you can download it from [HERE](https://expo.dev/artifacts/3800a8ac-6290-4199-bebf-9b93b2369c9b)
-- Else if you want to launch the app from Expo Go then you can get it [HERE](https://expo.dev/@aarushdev/Tea_Share?serviceType=classic&distribution=expo-go)
-- You can also get the Expo Go link from the Landing page [HERE](https://teashare.netlify.app)
-
-Else if you want to clone the project, then:
 
 - Run this command to clone the project
 
