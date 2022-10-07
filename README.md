@@ -34,13 +34,13 @@ it will be available in this repository.
 
 - Run this command to clone the project
 
-```
+```sh
 $ git clone https://github.com/Dev-Siri/Tea-share.git
 ```
 
 - Make sure to run npm/yarn install to install the dependencies before running the project
 
-```
+```sh
 $ npm install
     # OR
 $ yarn install
@@ -48,7 +48,7 @@ $ yarn install
 
 - Then run npm/expo start to run the project locally
 
-```
+```sh
 $ npm start
     # OR
 $ expo start
@@ -57,7 +57,7 @@ $ expo start
 If your project doesn't start with `expo start` then you might not have the `expo-cli` installed.
 You can download the `expo cli` by running the following command:
 
-```
+```sh
 $ npm install -g expo-cli
 ```
 
