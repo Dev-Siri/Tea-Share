@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
-const UserSchema = mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   username: String,
   email: String,
-  image: String,
+  image: String
 });
 
 const UserModel = mongoose.model("registeredUsers", UserSchema);

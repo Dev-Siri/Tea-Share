@@ -1,14 +1,14 @@
-import mongoose from 'mongoose';
-import PostModel from '../models/postsModel.js';
+import mongoose from "mongoose";
+import PostModel from "../models/postsModel";
 
 export const getPosts = async (req, res) => {
   const { limit } = req.query;
-  
+
   try {
     let posts;
 
-    if(limit) {
-      posts = await PostModel.find().limit(parseInt(limit));
+    if (limit) {
+      posts = await PostModel.find().limit(parseInt(`${limit}`));
     } else {
       posts = await PostModel.find();
     }
@@ -23,8 +23,7 @@ export const getPostsBySearchTerm = async (req, res) => {
   const { query, user } = req.query;
 
   try {
-
-    const findObject = user === 'true' ? [{ author: query }] : [{ _id: query }];
+    const findObject = user === "true" ? [{ author: query }] : [{ _id: query }];
 
     const posts = await PostModel.find({ $or: findObject });
 
@@ -39,7 +38,7 @@ export const createPost = async (req, res) => {
 
   const newPost = new PostModel({
     ...post,
-    createdAt: new Date().toISOString(),
+    createdAt: new Date().toISOString()
   });
 
   try {
@@ -55,19 +54,19 @@ export const likePost = async (req, res) => {
   const { id } = req.params;
   const { name, image } = req.query;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No posts with that ID');
+  if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send("No posts with that ID");
 
   const post = await PostModel.findById(id);
 
-  const alreadyLiked = post?.people?.includes(name);
+  const alreadyLiked = post?.people?.includes(`${name}`);
 
   if (alreadyLiked) return res.status(304);
 
-  post?.people?.push(name);
-  post?.peopleImage?.push(image);
+  post?.people?.push(`${name}`);
+  post?.peopleImage?.push(`${image}`);
 
   const updatedPost = await PostModel.findByIdAndUpdate(id, post, {
-    new: true,
+    new: true
   });
 
   res.json(updatedPost);

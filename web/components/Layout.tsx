@@ -8,20 +8,20 @@ const usePageTitle = () => {
   const { user } = useStateContext();
 
   switch (window.location.pathname) {
-    case '/auth':
-      return 'Tea Share - A Brand New Social Networking Platform';
-    case '/':
-      return 'Tea Share - Home';
-    case '/settings':
-      return 'Tea Share - Settings';
-    case '/users':
-      return 'Tea Share - Users';
+    case "/auth":
+      return "Tea Share - A Brand New Social Networking Platform";
+    case "/":
+      return "Tea Share - Home";
+    case "/settings":
+      return "Tea Share - Settings";
+    case "/users":
+      return "Tea Share - Users";
     case `/users/${user.displayName}`:
       return `Tea Share - ${user.displayName}`;
     default:
-      return 'Tea Share';
+      return "Tea Share";
   }
-}
+};
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   const title = usePageTitle();
@@ -47,12 +47,11 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         <meta name="twitter:site" content="https://tea-share-web.vercel.app" />
         <meta name="twitter:creator" content="Dev-Siri" />
         <link rel="canonical" href="https://tea-share-web.vercel.app" />
+        <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION_TOKEN} />
         <link rel="icon" href="/favicon.png" />
         <title>{title}</title>
       </Head>
-      <main>
-        {children}
-      </main>
+      <main>{children}</main>
     </div>
   );
 };

@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "description": "The backend made with Node.js for tea-share",
   "main": "index.js",
-  "type": "module",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
+  "os": [
+    "linux",
+    "windows"
+  ],
   "keywords": [
     "backend",
     "node",

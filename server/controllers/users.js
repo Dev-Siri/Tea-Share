@@ -1,4 +1,4 @@
-import UserModel from "../models/usersModel.js";
+import UserModel from "../models/usersModel";
 
 export const getUsers = async (req, res) => {
   const { limit } = req.query;
@@ -6,8 +6,8 @@ export const getUsers = async (req, res) => {
   try {
     let users;
 
-    if(limit) {
-      users =  await UserModel.find().limit(parseInt(limit));
+    if (limit) {
+      users = await UserModel.find().limit(parseInt(`${limit}`));
     } else {
       users = await UserModel.find();
     }
@@ -23,7 +23,7 @@ export const createUser = async (req, res) => {
 
   const userExists = (await UserModel.find({ username: user.username })).length;
 
-  if(userExists) return res.status(204).json({ message: 'User already exists' });
+  if (userExists) return res.status(204).json({ message: "User already exists" });
 
   const newUser = new UserModel({ ...user });
 
@@ -54,9 +54,9 @@ export const updateUser = async (req, res) => {
 
   try {
     await UserModel.findByIdAndUpdate(id, { ...user, id }, { new: true });
-  
-    res.status(204).json({ message: 'User updated successfully' });
+
+    res.status(204).json({ message: "User updated successfully" });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-}
+};
