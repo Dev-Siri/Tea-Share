@@ -21,11 +21,15 @@ $selection-color: hsla(187, 100%, 50%, 0.484);
   font-family: $font;
   transition: 250ms;
 
-  &:focus { border-color: $primary-color; }
+  &:focus {
+    border-color: $primary-color;
+  }
 }
 
 @mixin noScrollBar {
-  &::-webkit-scrollbar { display: none; }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   scrollbar-width: none;
 }
@@ -49,7 +53,7 @@ $selection-color: hsla(187, 100%, 50%, 0.484);
 @mixin InteractiveButtonStyles($type) {
   height: 30px;
 
-  @if $type == 'like' {
+  @if $type == "like" {
     color: $primary-color;
     width: 165px;
   } @else {
@@ -64,7 +68,9 @@ $selection-color: hsla(187, 100%, 50%, 0.484);
   align-items: center;
   font-size: 12px;
 
-  &-text { font-family: $font; }
+  &-text {
+    font-family: $font;
+  }
 }
 
 @mixin rightRoundedContainer {

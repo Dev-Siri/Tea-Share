@@ -1,17 +1,11 @@
-import mongoose from "mongoose";
+import { Types } from "mongoose";
 import PostModel from "../models/postsModel";
 
 export const getPosts = async (req, res) => {
   const { limit } = req.query;
 
   try {
-    let posts;
-
-    if (limit) {
-      posts = await PostModel.find().limit(parseInt(`${limit}`));
-    } else {
-      posts = await PostModel.find();
-    }
+    const posts = limit ? await PostModel.find().limit(parseInt(limit)) : await PostModel.find();
 
     res.status(200).json(posts);
   } catch (error) {
@@ -54,16 +48,16 @@ export const likePost = async (req, res) => {
   const { id } = req.params;
   const { name, image } = req.query;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send("No posts with that ID");
+  if (!Types.ObjectId.isValid(id)) return res.status(404).send("No posts with that ID");
 
   const post = await PostModel.findById(id);
 
-  const alreadyLiked = post?.people?.includes(`${name}`);
+  const alreadyLiked = post?.people?.includes(name);
 
   if (alreadyLiked) return res.status(304);
 
-  post?.people?.push(`${name}`);
-  post?.peopleImage?.push(`${image}`);
+  post?.people?.push(name);
+  post?.peopleImage?.push(image);
 
   const updatedPost = await PostModel.findByIdAndUpdate(id, post, {
     new: true

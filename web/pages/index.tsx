@@ -1,11 +1,15 @@
-import React, { useEffect, useState, FC } from "react";
+import { type FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import { toast } from "react-hot-toast";
 
 import type { Post as PostType, HomeProps } from "../types";
 import { useStateContext } from "../context/StateContext";
-import { Sidebar, Post, SearchBar } from "../components";
 import { fetchPosts } from "../api";
+
+import Sidebar from "../components/Sidebar";
+const Post = dynamic(() => import("../components/Post"));
+const SearchBar = dynamic(() => import("../components/SearchBar"));
 
 const Home: FC<HomeProps> = ({ posts }) => {
   const [reactivePosts, setReactivePosts] = useState<PostType[] | undefined>(posts);
@@ -23,7 +27,7 @@ const Home: FC<HomeProps> = ({ posts }) => {
     const fetchMorePosts = async () => {
       const { data: posts } = await fetchPosts(postLimit);
       setReactivePosts(posts);
-    }
+    };
 
     fetchMorePosts();
   }, [postLimit]);
@@ -45,7 +49,9 @@ const Home: FC<HomeProps> = ({ posts }) => {
           Show more
         </button>
         <div className="post__container">
-          {reactivePosts?.map((post: PostType) => <Post key={post._id} post={post} />)}
+          {reactivePosts?.map((post: PostType) => (
+            <Post key={post._id} post={post} />
+          ))}
         </div>
       </div>
     </div>
@@ -58,6 +64,6 @@ export const getServerSideProps = async () => {
   return {
     props: { posts: data },
   };
-}
+};
 
 export default Home;

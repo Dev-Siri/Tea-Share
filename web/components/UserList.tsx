@@ -1,15 +1,17 @@
-import React, { FC } from "react";
-import Image from "next/image";
+import React, { type FC } from "react";
+import dynamic from "next/dynamic";
 
+import type { UserListProps } from "../types";
 import { useStateContext } from "../context/StateContext";
-import { UserListProps } from "../types";
+
+const Image = dynamic(() => import("next/image"));
 
 const UserList: FC<UserListProps> = ({ users, itemClick }) => {
   const { themeMode } = useStateContext();
 
   return (
     <div className={`user-list ${themeMode === "dark" && "dark-list"}`}>
-      {users.map((user) => (
+      {users.map(user => (
         <div
           onClick={() => {
             itemClick.changeShowingUserInfo();
@@ -18,13 +20,7 @@ const UserList: FC<UserListProps> = ({ users, itemClick }) => {
           className={`user-list__item ${themeMode === "dark" && "dark-list__item"}`}
           key={user?._id}
         >
-          <Image
-            src={user?.image}
-            alt={user?.username}
-            height={35}
-            width={35}
-            style={{ borderRadius: "100%" }}
-          />
+          <Image src={user?.image} alt={user?.username} height={35} width={35} style={{ borderRadius: "100%" }} />
           <p className="user-list__item_username">{user.username}</p>
         </div>
       ))}

@@ -1,5 +1,5 @@
 import express from "express";
-import mongoose from "mongoose";
+import { connect } from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import compression from "compression";
@@ -24,6 +24,6 @@ app.use("/users", userRoutes);
 const CONNECTION_URL = `${process.env.NODE_PRIVATE_MONGO_DB_CONNECTION_URL}`;
 const PORT = `${process.env.PORT}` || 5000;
 
-await mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+await connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.listen(PORT, () => console.log(`Server running on Port: ${PORT}`));

@@ -1,11 +1,13 @@
-import React, { FC, useState } from "react";
-import Image from "next/image";
+import React, { type FC, useState } from "react";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import dynamic from "next/dynamic";
 
 import { LikedPeoples, LikePost } from "../utils";
-import { PostProps } from "../types";
+import type { PostProps } from "../types";
 import { useStateContext } from "../context/StateContext";
-import Link from "next/link";
+
+const Link = dynamic(() => import("next/link"));
+const Image = dynamic(() => import("next/image"));
 
 const Post: FC<PostProps> = ({ post }) => {
   const { themeColor, themeMode, user } = useStateContext();

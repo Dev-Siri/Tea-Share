@@ -11,7 +11,7 @@
   },
   "os": [
     "linux",
-    "windows"
+    "win32"
   ],
   "keywords": [
     "backend",

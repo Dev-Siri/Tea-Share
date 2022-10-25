@@ -1,7 +1,7 @@
-import express from "express";
-import { getUsers, createUser, getUserBySearchTerm, updateUser } from "../controllers/users";
+import { Router } from "express";
+import { getUsers, createUser, getUserBySearchTerm, updateUser } from "../controllers/users.js";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/", getUsers);
 router.post("/", createUser);

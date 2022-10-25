@@ -1,8 +1,10 @@
-import React, { FC } from "react";
-import Link from "next/link";
+import React, { type FC } from "react";
+import dynamic from "next/dynamic";
 
 import { useStateContext } from "../context/StateContext";
-import { SidebarOptionProps } from "../types";
+import type { SidebarOptionProps } from "../types";
+
+const Link = dynamic(() => import("next/link"));
 
 const SidebarOption: FC<SidebarOptionProps> = ({ href, title, icon, isActive }) => {
   const { themeColor, themeMode } = useStateContext();
@@ -19,9 +21,7 @@ const SidebarOption: FC<SidebarOptionProps> = ({ href, title, icon, isActive }) 
       >
         {isActive && <div className="sidebar__option-active_indicator" style={{ borderRightColor: themeColor }} />}
         {icon} <div className="sidebar__option-spacer" />
-        <div className='sidebar__option-title'>
-          {title?.length > 15 ? `${title.slice(0, 15)}...` : title}
-        </div>
+        <div className="sidebar__option-title">{title?.length > 15 ? `${title.slice(0, 15)}...` : title}</div>
       </div>
     </Link>
   );

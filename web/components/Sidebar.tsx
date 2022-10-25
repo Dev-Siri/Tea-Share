@@ -1,16 +1,18 @@
-import React, { FC } from "react";
+import React, { type FC } from "react";
 import { IoHomeSharp, IoSettingsSharp } from "react-icons/io5";
 import { IoIosCreate } from "react-icons/io";
 import { FaUserCircle, FaUserFriends } from "react-icons/fa";
 import { BsFilePost, BsFillPeopleFill } from "react-icons/bs";
-import Link from "next/link";
-import Image from "next/image";
+import dynamic from "next/dynamic";
 
-import { SidebarOption } from "./";
-import { SidebarProps } from "../types";
+import type { SidebarProps } from "../types";
 import { useStateContext } from "../context/StateContext";
 import Logo from "../assets/LightLogo.png";
-import Cup from '../assets/Cup.png';
+import Cup from "../assets/Cup.png";
+
+import SidebarOption from "./SidebarOption";
+const Link = dynamic(() => import("next/link"));
+const Image = dynamic(() => import("next/image"));
 
 const Sidebar: FC<SidebarProps> = ({ isActive, isOnPostInfo }) => {
   const { themeColor, themeMode, user } = useStateContext();
@@ -19,25 +21,14 @@ const Sidebar: FC<SidebarProps> = ({ isActive, isOnPostInfo }) => {
     <div className={`sidebar ${themeMode === "dark" && "dark-bar"}`}>
       <Link href="/" className="sidebar__logo-container">
         <picture className="sidebar__logo-container">
-          <img
-            src={window.innerWidth === 940 ? Cup.src : Logo.src}
-            alt="logo"
-            className="sidebar__logo"
-            style={{ backgroundColor: themeColor }}
-          />
+          <img src={window.innerWidth === 940 ? Cup.src : Logo.src} alt="logo" className="sidebar__logo" style={{ backgroundColor: themeColor }} />
         </picture>
       </Link>
       {!isOnPostInfo?.visible && (
         <>
           <div className="sidebar__user-wrapper" style={{ backgroundColor: themeColor }} />
           <div className="sidebar__user-wrapper_image">
-            <Image
-              src={user?.photoURL}
-              alt={user?.displayName}
-              height={100}
-              width={100}
-              style={{ borderRadius: '100%' }}
-            />
+            <Image src={user?.photoURL} alt={user?.displayName} height={100} width={100} style={{ borderRadius: "100%" }} />
           </div>
           <p className="sidebar__user-wrapper_title" style={{ marginTop: isOnPostInfo?.visible ? "110px" : "0px" }}>
             {user?.displayName.length > 15 ? `${user?.displayName.slice(0, 15)}...` : user?.displayName}
@@ -54,20 +45,8 @@ const Sidebar: FC<SidebarProps> = ({ isActive, isOnPostInfo }) => {
         {isOnPostInfo?.visible && (
           <>
             <p>POST INFO</p>
-            <SidebarOption
-              href={isOnPostInfo.href}
-              title={isOnPostInfo.title}
-              icon={<BsFilePost />}
-              isActive={isActive === "post-info"}
-              key={isOnPostInfo.title}
-            />
-            <SidebarOption
-              href={`/post/author/${isOnPostInfo.postedBy}?post=${isOnPostInfo._id}`}
-              title={isOnPostInfo.postedBy}
-              icon={<FaUserFriends />}
-              isActive={isActive === "post-author-info"}
-              key={isOnPostInfo.title}
-            />
+            <SidebarOption href={isOnPostInfo.href} title={isOnPostInfo.title} icon={<BsFilePost />} isActive={isActive === "post-info"} key={isOnPostInfo.title} />
+            <SidebarOption href={`/post/author/${isOnPostInfo.postedBy}?post=${isOnPostInfo._id}`} title={isOnPostInfo.postedBy} icon={<FaUserFriends />} isActive={isActive === "post-author-info"} key={isOnPostInfo.title} />
           </>
         )}
       </div>

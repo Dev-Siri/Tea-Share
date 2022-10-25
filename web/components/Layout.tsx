@@ -1,27 +1,9 @@
-import React, { FC } from "react";
+import React, { type FC } from "react";
 import Head from "next/head";
 
-import { useStateContext } from "../context/StateContext";
 import type { LayoutProps } from "../types";
 
-const usePageTitle = () => {
-  const { user } = useStateContext();
-
-  switch (window.location.pathname) {
-    case "/auth":
-      return "Tea Share - A Brand New Social Networking Platform";
-    case "/":
-      return "Tea Share - Home";
-    case "/settings":
-      return "Tea Share - Settings";
-    case "/users":
-      return "Tea Share - Users";
-    case `/users/${user.displayName}`:
-      return `Tea Share - ${user.displayName}`;
-    default:
-      return "Tea Share";
-  }
-};
+import usePageTitle from "../hooks/usePageTitle";
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   const title = usePageTitle();

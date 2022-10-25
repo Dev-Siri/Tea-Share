@@ -4,31 +4,31 @@ The platform for sharing images.
 
 ## Description
 
-Tea share is a Typescript based online image sharing platform for Android, IOS and the Web. It provides a smooth UI to interact and scroll through posts and allows you to
-create posts easily with the click of a button. It is built with React native on the Expo framework. It uses **Mongodb** as the
-database, **Node.js** as the server side runtime and [Firebase](https://firebase.google.com) for authentication and storage for all the user generated data.
+Tea share is an online image sharing platform for Android and the Web. It provides UI to interact and scroll through posts and allows you to
+create posts easily with the click of a button. It is built with React native for mobile (iOS/Android) and **[Next.js](https://nextjs.org)** for the web version. It uses **[MongoDB](https://www.mongodb.com)** as the
+database, **[Node.js](https://nodejs.org)** as the server side runtime and **[Firebase](https://firebase.google.com)** for authentication and storage for all the user generated data.
 
-The web version is a younger version of the App. It was released for more users for desktop,
-Although there is a Desktop version in development which will be built with Electron.
+The web version is a younger version of the App.
+It was released for more users on desktop.
 
 Currently the IOS version is not available but it will be soon. After the IOS version is ready,
 it will be available in this repository.
 
-> NOTE: The Mobile version of the app is currently migrating to Vanilla React Native WITHOUT Expo. It is currently not available but it is still being worked on and will be available by next month.
+> NOTE: The Mobile version of the app is currently migrating from React Native to Flutter. It is currently not available but it is still being worked on.
 
-## Getting started
+## Technologies
 
-### Dependencies
-
-- React native (+ React additional dependencies)
-- Expo (+ additional expo dependencies)
-- Firebase
-- React Navigation
+- Flutter
+- Dart
 - Typescript
-- React Native Dotenv
 - React.js
 - Next.js
 - Sass
+- Node.js
+- MongoDB
+- Firebase
+
+# Getting started
 
 ### Installation
 
@@ -38,7 +38,17 @@ it will be available in this repository.
 $ git clone https://github.com/Dev-Siri/Tea-share.git
 ```
 
-- Make sure to run npm/yarn install to install the dependencies before running the project
+Now enter the directory like (web or server) to start
+
+```sh
+$ cd web
+    # OR
+$ cd server
+    # OR
+$ cd mobile
+```
+
+- Make sure to run npm/yarn install to install the dependencies for the **Web and Server** only, before running the project
 
 ```sh
 $ npm install
@@ -46,21 +56,18 @@ $ npm install
 $ yarn install
 ```
 
-- Then run npm/expo start to run the project locally
+- Then run npm/yarn start to run the project locally
+
+> Warning: The project is currently undergoing a migration from react native to flutter. Recommended to not use the mobile version for now.
 
 ```sh
-$ npm start
-    # OR
-$ expo start
-```
+# For mobile version
+$ flutter run
 
-If your project doesn't start with `expo start` then you might not have the `expo-cli` installed.
-You can download the `expo cli` by running the following command:
-
-```sh
-$ npm install -g expo-cli
+# For web version
+$ npm run dev
 ```
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE.md file for details
+This project MIT Licensed - see the LICENSE.md file for details

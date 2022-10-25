@@ -1,10 +1,15 @@
-import React, { useState, FC } from 'react';
-import { BsFillPeopleFill } from 'react-icons/bs';
+import React, { type FC, useState } from "react";
+import { BsFillPeopleFill } from "react-icons/bs";
+import dynamic from "next/dynamic";
 
-import { AllUsersViewProps, MongoDBUser } from '../../types';
-import { fetchUsers } from '../../api';
-import { useStateContext } from '../../context/StateContext';
-import { Sidebar, SearchBar, UserList, UserView } from '../../components';
+import type { AllUsersViewProps, MongoDBUser } from "../../types";
+import { fetchUsers } from "../../api";
+import { useStateContext } from "../../context/StateContext";
+
+const Sidebar = dynamic(() => import("../../components/Sidebar"));
+const SearchBar = dynamic(() => import("../../components/SearchBar"));
+const UserList = dynamic(() => import("../../components/UserList"));
+const UserView = dynamic(() => import("../../components/UserView"));
 
 const AllUsersView: FC<AllUsersViewProps> = ({ users }) => {
   const { themeMode, searchTerm } = useStateContext();
@@ -20,7 +25,7 @@ const AllUsersView: FC<AllUsersViewProps> = ({ users }) => {
   };
 
   return (
-    <div className={`show-all-user ${themeMode === 'dark' && 'dark-page'}`}>
+    <div className={`show-all-user ${themeMode === "dark" && "dark-page"}`}>
       <Sidebar isActive="users" />
       <div className="show-all-user__container">
         <div className="show-all-user__container_header">
@@ -34,9 +39,7 @@ const AllUsersView: FC<AllUsersViewProps> = ({ users }) => {
         </div>
         <UserList users={reactiveUsers} itemClick={{ changeShowingUserInfo: () => setShowUserInfo(true), setSelectedUser }} />
       </div>
-      {showUserInfo && (
-        <UserView user={selectedUser} closeMenu={() => setShowUserInfo(false)} />
-      )}
+      {showUserInfo && <UserView user={selectedUser} closeMenu={() => setShowUserInfo(false)} />}
     </div>
   );
 };
@@ -45,7 +48,7 @@ export async function getServerSideProps() {
   const { data: users } = await fetchUsers();
 
   return {
-    props: { users }
+    props: { users },
   };
 }
 

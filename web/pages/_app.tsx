@@ -1,11 +1,12 @@
 import "../styles/globals.scss";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import type { AppProps } from "next/app";
-import type { NextPage } from 'next';
+import type { NextPage } from "next";
+import dynamic from "next/dynamic";
 import { Toaster } from "react-hot-toast";
 
-import { Layout } from "../components";
 import { ContextProvider } from "../context/StateContext";
+const Layout = dynamic(() => import("../components/Layout"));
 
 const App: NextPage<AppProps> = ({ Component, pageProps }) => {
   const [isSSR, setIsSSR] = useState(true);
@@ -17,12 +18,14 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
   if (isSSR) return null;
 
   return (
-    <ContextProvider>
-      <Layout>
-        <Toaster />
-        <Component {...pageProps} />
-      </Layout>
-    </ContextProvider>
+    <Suspense fallback={<div />}>
+      <ContextProvider>
+        <Layout>
+          <Toaster />
+          <Component {...pageProps} />
+        </Layout>
+      </ContextProvider>
+    </Suspense>
   );
 };
 
