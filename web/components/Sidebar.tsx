@@ -21,7 +21,7 @@ const Sidebar: FC<SidebarProps> = ({ isActive, isOnPostInfo }) => {
     <div className={`sidebar ${themeMode === "dark" && "dark-bar"}`}>
       <Link href="/" className="sidebar__logo-container">
         <picture className="sidebar__logo-container">
-          <img src={window?.innerWidth ?? 1080 < 940 ? Cup.src : Logo.src} alt="logo" className="sidebar__logo" style={{ backgroundColor: themeColor }} />
+          <img src={window ? (window.innerWidth ?? 1080 < 940 ? Cup.src : Logo.src) : Logo.src} alt="logo" className="sidebar__logo" style={{ backgroundColor: themeColor }} />
         </picture>
       </Link>
       {!isOnPostInfo?.visible && (
@@ -31,7 +31,7 @@ const Sidebar: FC<SidebarProps> = ({ isActive, isOnPostInfo }) => {
             <Image src={user?.photoURL ?? "https://via.placeholder.com/150x150"} alt={user?.displayName ?? "User Image"} height={100} width={100} style={{ borderRadius: "100%" }} />
           </div>
           <p className="sidebar__user-wrapper_title" style={{ marginTop: isOnPostInfo?.visible ? "110px" : "0px" }}>
-            {(user?.displayName.length > 15 ? `${user?.displayName.slice(0, 15)}...` : user?.displayName) ?? "Loading..."}
+            {user ? (user.displayName.length > 15 ? `${user.displayName.slice(0, 15)}...` : user.displayName) : "Loading..."}
           </p>
         </>
       )}
