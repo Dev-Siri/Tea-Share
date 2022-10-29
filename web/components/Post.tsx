@@ -19,7 +19,7 @@ const Post: FC<PostProps> = ({ post }) => {
   return (
     <div className={`post ${themeMode === "dark" && "dark-shadow"}`}>
       <div className="post__img-container">
-        <Image src={image} alt={title} height="200px" width="300px" style={{ borderRadius: "10px", objectFit: "cover" }} />
+        <Image src={image} alt={title} height={200} width={300} style={{ borderRadius: "10px", objectFit: "cover" }} />
       </div>
       <div className="post__card-media">
         <div>
@@ -33,10 +33,8 @@ const Post: FC<PostProps> = ({ post }) => {
               &nbsp;{likes}
             </span>
           </button>
-          <Link href={`/post/${_id}`}>
-            <div className="post__card-interactions_view-more">
-              <span className="post__card-interactions_view-more-text">View more</span>
-            </div>
+          <Link href={`/post/${_id}`} className="post__card-interactions_view-more">
+            <span className="post__card-interactions_view-more-text">View more</span>
           </Link>
         </div>
       </div>

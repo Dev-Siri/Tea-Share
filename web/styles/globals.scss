@@ -18,14 +18,26 @@
 @import "Theme";
 
 // Boilerplate styles
-html, body {
+html,
+body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, $font, sans-serif;
   overflow-y: hidden;
 }
 
-* { box-sizing: border-box; }
+a {
+  text-decoration: none;
+}
 
-::-moz-selection { background: $selection-color; }
-::selection { background: $selection-color; }
+* {
+  box-sizing: border-box;
+}
+
+::-moz-selection {
+  background: $selection-color;
+}
+
+::selection {
+  background: $selection-color;
+}

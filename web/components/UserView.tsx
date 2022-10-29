@@ -27,7 +27,7 @@ const UserPreview: FC<UserSideViewProps> = ({ closeMenu, user }) => {
       <MdCancel size={33} style={{ margin: "10px", cursor: "pointer" }} onClick={closeMenu} />
       <div className="user-side-view__container">
         <div className="user-side-view__container__image">
-          <Image src={user?.image as string} alt={user?.username} height={200} width={200} style={{ borderRadius: "100%" }} />
+          <Image src={user?.image} alt={user?.username} height={200} width={200} style={{ borderRadius: "100%" }} />
         </div>
         <div>
           <h1>Posts by {user?.username}</h1>

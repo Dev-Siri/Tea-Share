@@ -1,5 +1,5 @@
-import React, { useState, useContext, createContext } from "react";
-import { FirebaseUser } from "../types";
+import React, { useState, useContext, createContext, useEffect } from "react";
+import type { FirebaseUser } from "../types";
 
 const StateContext = createContext({
   searchTerm: "" as string,
@@ -10,18 +10,23 @@ const StateContext = createContext({
   switchColor: (color: string): void => {},
   themeColor: "",
   user: { displayName: "", photoURL: "" } as FirebaseUser,
-  setUser: "" as any
+  setUser: "" as any,
 });
 
 export const ContextProvider = ({ children }: any) => {
-  const themeColorType = localStorage.getItem("color");
-  const themeModeType = localStorage.getItem("mode");
-
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user") as string));
-
+  const [user, setUser] = useState<FirebaseUser>({} as FirebaseUser);
   const [searchTerm, setSearchTerm] = useState("");
-  const [themeMode, setThemeMode] = useState(themeModeType || "light");
-  const [themeColor, setThemeColor] = useState(themeColorType || "#594194");
+
+  const [themeMode, setThemeMode] = useState("light");
+  const [themeColor, setThemeColor] = useState("#594194");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    setUser(JSON.parse(localStorage.getItem("user") as string) as FirebaseUser);
+    setThemeColor(localStorage.getItem("color") || "light");
+    setThemeMode(localStorage.getItem("mode") || "#594194");
+  }, []);
 
   const switchMode = (mode: string) => {
     localStorage.setItem("mode", mode);
@@ -44,7 +49,7 @@ export const ContextProvider = ({ children }: any) => {
         switchColor,
         themeColor,
         user,
-        setUser
+        setUser,
       }}
     >
       {children}

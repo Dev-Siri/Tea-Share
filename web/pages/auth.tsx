@@ -42,7 +42,7 @@ const Auth: NextPage = () => {
   return (
     <div className={`auth ${themeMode === "dark" && "dark-page"}`}>
       <div className={`form ${themeMode === "dark" && "dark-page"}`}>
-        <Image src={themeMode === "dark" ? WhiteLogo : PurpleLogo} alt="logo" height="100px" width="200px" loading="lazy" />
+        <Image src={themeMode === "dark" ? WhiteLogo : PurpleLogo} alt="logo" height={100} width={200} loading="lazy" />
         <h1>{isSignup ? "Signup for" : "Login to"} Tea share</h1>
         <div className="form__spacer" />
         <div>
@@ -75,7 +75,7 @@ const Auth: NextPage = () => {
           </form>
         </div>
       </div>
-      <Image src={Banner} alt="tea share, the brand new social networking application." height={944} width={1100} priority />
+      <Image src={Banner} alt="Tea Share, The brand new social networking application." height={944} width={1100} priority />
     </div>
   );
 };

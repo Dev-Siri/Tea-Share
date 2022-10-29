@@ -21,7 +21,7 @@ const Profile: NextPage<ProfileProps> = ({ user, posts }) => {
       <div className="profile__main">
         <div className="profile__main-container">
           <div className="profile__main-container_img">
-            <Image src={image} alt={username} height="100px" width="100px" style={{ borderRadius: "75px" }} />
+            <Image src={image} alt={username} height={100} width={100} style={{ borderRadius: "75px" }} />
           </div>
           <h1 className="profile__main-container_name">{username}</h1>
           <h3>
@@ -38,7 +38,7 @@ const Profile: NextPage<ProfileProps> = ({ user, posts }) => {
   );
 };
 
-export async function getServerSideProps(context: any) {
+export const getServerSideProps = async (context: any) => {
   const { name } = context.params;
 
   const { data: posts } = await fetchPostByQuery(name);
@@ -47,6 +47,6 @@ export async function getServerSideProps(context: any) {
   return {
     props: { user, posts },
   };
-}
+};
 
 export default Profile;

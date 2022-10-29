@@ -6,7 +6,7 @@ import type { AllUsersViewProps, MongoDBUser } from "../../types";
 import { fetchUsers } from "../../api";
 import { useStateContext } from "../../context/StateContext";
 
-const Sidebar = dynamic(() => import("../../components/Sidebar"));
+import Sidebar from "../../components/Sidebar";
 const SearchBar = dynamic(() => import("../../components/SearchBar"));
 const UserList = dynamic(() => import("../../components/UserList"));
 const UserView = dynamic(() => import("../../components/UserView"));

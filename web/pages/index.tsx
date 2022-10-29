@@ -1,4 +1,4 @@
-import { type FC, useEffect, useState } from "react";
+import { type FC, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { toast } from "react-hot-toast";
@@ -14,8 +14,10 @@ const SearchBar = dynamic(() => import("../components/SearchBar"));
 const Home: FC<HomeProps> = ({ posts }) => {
   const [reactivePosts, setReactivePosts] = useState<PostType[] | undefined>(posts);
   const [postLimit, setPostLimit] = useState(18);
+
   const { searchTerm, user, themeMode, themeColor } = useStateContext();
   const router = useRouter();
+  const postObserver = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     toast.remove();
@@ -52,6 +54,7 @@ const Home: FC<HomeProps> = ({ posts }) => {
           {reactivePosts?.map((post: PostType) => (
             <Post key={post._id} post={post} />
           ))}
+          <div ref={postObserver} />
         </div>
       </div>
     </div>

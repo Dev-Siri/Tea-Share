@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import React, { type FC, useState, useEffect } from "react";
 import { IoHomeSharp, IoSettingsSharp } from "react-icons/io5";
 import { IoIosCreate } from "react-icons/io";
 import { FaUserCircle, FaUserFriends } from "react-icons/fa";
@@ -16,6 +16,13 @@ const Image = dynamic(() => import("next/image"));
 
 const Sidebar: FC<SidebarProps> = ({ isActive, isOnPostInfo }) => {
   const { themeColor, themeMode, user } = useStateContext();
+  const [isSSR, setIsSSR] = useState(true);
+
+  useEffect(() => {
+    setIsSSR(false);
+  }, []);
+
+  if (isSSR) return null;
 
   return (
     <div className={`sidebar ${themeMode === "dark" && "dark-bar"}`}>
