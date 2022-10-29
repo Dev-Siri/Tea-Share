@@ -6,6 +6,8 @@ const usePageTitle = (): string => {
   const [pageTitle, setPageTitle] = useState("");
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     switch (window.location.pathname) {
       case "/auth":
         setPageTitle("Tea Share - A Brand New Social Networking Platform");
