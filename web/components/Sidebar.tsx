@@ -16,22 +16,29 @@ const Image = dynamic(() => import("next/image"));
 
 const Sidebar: FC<SidebarProps> = ({ isActive, isOnPostInfo }) => {
   const { themeColor, themeMode, user } = useStateContext();
+  const [isSSR, setIsSSR] = useState(true);
+
+  useEffect(() => {
+    setIsSSR(false);
+  }, []);
 
   return (
     <div className={`sidebar ${themeMode === "dark" && "dark-bar"}`}>
-      <Link href="/" className="sidebar__logo-container">
-        <picture className="sidebar__logo-container">
-          <img src={window ? (window.innerWidth ?? 1080 < 940 ? Cup.src : Logo.src) : Logo.src} alt="logo" className="sidebar__logo" style={{ backgroundColor: themeColor }} />
-        </picture>
-      </Link>
-      {!isOnPostInfo?.visible && (
+      {!isSSR && (
+        <Link href="/" className="sidebar__logo-container">
+          <picture className="sidebar__logo-container">
+            <img src={window.innerWidth === 940 ? Cup.src : Logo.src} alt="logo" className="sidebar__logo" style={{ backgroundColor: themeColor }} />
+          </picture>
+        </Link>
+      )}
+      {!isOnPostInfo?.visible && !isSSR && (
         <>
           <div className="sidebar__user-wrapper" style={{ backgroundColor: themeColor }} />
           <div className="sidebar__user-wrapper_image">
-            <Image src={user?.photoURL ?? "https://via.placeholder.com/150x150"} alt={user?.displayName ?? "User Image"} height={100} width={100} style={{ borderRadius: "100%" }} />
+            <Image src={user?.photoURL} alt={user?.displayName} height={100} width={100} style={{ borderRadius: "100%" }} />
           </div>
           <p className="sidebar__user-wrapper_title" style={{ marginTop: isOnPostInfo?.visible ? "110px" : "0px" }}>
-            {user ? (user.displayName.length > 15 ? `${user.displayName.slice(0, 15)}...` : user.displayName) : "Loading..."}
+            {user?.displayName.length > 15 ? `${user?.displayName.slice(0, 15)}...` : user?.displayName}
           </p>
         </>
       )}
