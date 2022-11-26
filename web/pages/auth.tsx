@@ -44,7 +44,7 @@ const Auth: NextPage = () => {
   return (
     <section className="flex h-screen w-screen dark:bg-black dark:text-white">
       <article className="mr-[60px] h-fit w-[350px] pt-[10px] pl-5 duration-[250ms]">
-        <Image src={themeMode === "dark" ? WhiteLogo : PurpleLogo} alt="Logo" height={100} width={200} loading="lazy" />
+        <Image src={themeMode === "dark" ? WhiteLogo : PurpleLogo} alt="Logo" height={100} width={200} priority />
         <h1 className={`mt-3 mb-7 h-px w-[310px] text-3xl font-bold ${isSignup ? "text-center" : "ml-2"}`}>
           {isSignup ? "Signup for" : "Login to"} Tea share
         </h1>
@@ -102,7 +102,7 @@ const Auth: NextPage = () => {
           <GoogleLogin onClick={() => handleAuth(null, "google")} />
         </form>
       </article>
-      <Image src={Banner} alt="Tea Share, The brand new social networking application." height={944} width={1100} className="h-full" priority />
+      <Image src={Banner} alt="Tea Share, The brand new social networking application." height={944} width={1100} className="h-full" loading="lazy" />
     </section>
   );
 };
