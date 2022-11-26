@@ -2,14 +2,18 @@ import React, { type FC } from "react";
 import { TiTick } from "react-icons/ti";
 
 import type { ColorInputProps } from "../types";
-import { useStateContext } from "../context/StateContext";
+import useStateContext from "../hooks/useStateContext";
 
 const ColorInput: FC<ColorInputProps> = ({ color, handleClick }) => {
   const { themeColor } = useStateContext();
 
   return (
-    <button className="color-input" style={{ backgroundColor: color }} onClick={handleClick}>
-      {themeColor === color && <TiTick color="white" fontSize={14} />}
+    <button
+      className="mt-5 ml-10 flex h-[60px] w-[60px] cursor-pointer items-center rounded-full border-none"
+      style={{ backgroundColor: color }}
+      onClick={handleClick}
+    >
+      <span className="ml-6">{themeColor === color && <TiTick color="white" fontSize={14} />}</span>
     </button>
   );
 };

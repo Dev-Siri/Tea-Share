@@ -1,10 +1,12 @@
-import { type FC, useEffect, useState, useRef } from "react";
+import { type FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { toast } from "react-hot-toast";
 
 import type { Post as PostType, HomeProps } from "../types";
-import { useStateContext } from "../context/StateContext";
+import type { GetStaticProps } from "next";
+
+import useStateContext from "../hooks/useStateContext";
 import { fetchPosts } from "../api";
 
 import Sidebar from "../components/Sidebar";
@@ -12,23 +14,26 @@ const Post = dynamic(() => import("../components/Post"));
 const SearchBar = dynamic(() => import("../components/SearchBar"));
 
 const Home: FC<HomeProps> = ({ posts }) => {
-  const [reactivePosts, setReactivePosts] = useState<PostType[] | undefined>(posts);
-  const [postLimit, setPostLimit] = useState(18);
+  const [reactivePosts, setReactivePosts] = useState<PostType[]>(posts);
+  const [postLimit, setPostLimit] = useState<number>(18);
+  const [loading, setLoading] = useState(false);
 
-  const { searchTerm, user, themeMode, themeColor } = useStateContext();
+  const { searchTerm, themeColor } = useStateContext();
   const router = useRouter();
-  const postObserver = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     toast.remove();
 
-    if (!user) router.replace("/auth");
+    if (!JSON.parse(localStorage.getItem("user") as string)) router.replace("/auth");
   }, []);
 
   useEffect(() => {
     const fetchMorePosts = async () => {
+      setLoading(true);
       const { data: posts } = await fetchPosts(postLimit);
+
       setReactivePosts(posts);
+      setLoading(false);
     };
 
     fetchMorePosts();
@@ -37,35 +42,42 @@ const Home: FC<HomeProps> = ({ posts }) => {
   const search = () => {
     if (!searchTerm) return setReactivePosts(posts);
 
-    const searchedPosts = posts?.filter(post => post?.title.toLowerCase().includes(searchTerm.toLowerCase()) || post?.description.toLowerCase().includes(searchTerm.toLowerCase()));
+    const searchedPosts = posts?.filter(
+      post => post?.title.toLowerCase().includes(searchTerm.toLowerCase()) || post?.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     setReactivePosts(searchedPosts);
   };
 
   return (
-    <div className={`home__container ${themeMode === "dark" && "dark-page"}`}>
-      <Sidebar isActive="home" />
-      <div className="home__container-main">
-        <SearchBar handleSearch={search} />
-        <button onClick={() => setPostLimit(prevPostLimit => prevPostLimit + 9)} style={{ backgroundColor: themeColor }} type="button" className="home__container-main__button">
-          Show more
+    <section className="flex dark:bg-black dark:text-white">
+      <Sidebar route="home" />
+      <article className="w-[82%]">
+        <SearchBar onSearch={search} />
+        <button
+          onClick={() => setPostLimit(prevPostLimit => prevPostLimit + 9)}
+          style={{ backgroundColor: themeColor }}
+          type="button"
+          className="absolute z-[1] ml-[32%] mt-[75vh] flex w-[190px] cursor-pointer justify-center rounded-md border-none p-[14px] text-white"
+        >
+          {loading ? "Loading..." : "Show more"}
         </button>
-        <div className="post__container">
-          {reactivePosts?.map((post: PostType) => (
+        <div className="flex h-screen w-full flex-wrap justify-around overflow-y-auto p-[30px] pb-[100px]">
+          {reactivePosts?.map(post => (
             <Post key={post._id} post={post} />
           ))}
-          <div ref={postObserver} />
         </div>
-      </div>
-    </div>
+      </article>
+    </section>
   );
 };
 
-export const getServerSideProps = async () => {
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const { data } = await fetchPosts(6);
 
   return {
     props: { posts: data },
+    revalidate: 10,
   };
 };
 

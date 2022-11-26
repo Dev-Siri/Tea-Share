@@ -1,8 +1,8 @@
-import type { AxiosResponse } from 'axios';
-import type { PostFormData } from './post';
-import type { MongoDBUser, UserFormData } from './user';
+import type { AxiosResponse } from "axios";
+import type { PostFormData } from "./post";
+import type { MongoDBUser, UserFormData } from "./user";
 
-export interface FirebaseConfigType {
+export interface FirebaseConfig {
   apiKey: string | undefined;
   authDomain: string | undefined;
   databaseURL: string | undefined;

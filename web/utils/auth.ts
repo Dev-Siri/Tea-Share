@@ -1,21 +1,21 @@
 import { type User } from "firebase/auth";
 
 import { createUser, auth, storage, updateProfile as updateProfileAPI } from "../api";
-import type { AuthHandler, GoogleAuthHandler, LogoutHandler, UpdateProfileHandler } from "../types";
+import type { MailAuthHandler, GoogleAuthHandler, LogoutHandler, UpdateProfileHandler } from "../types";
 
-export const MailAuth: AuthHandler = async (displayName, email, password, photoURL, event, router, isSignup) => {
-  const { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } = await import("firebase/auth");
-  const { getDownloadURL, ref, uploadString } = await import("firebase/storage");
+export const MailAuth: MailAuthHandler = async (displayName, email, password, photoURL, router, isSignup) => {
   const { toast } = await import("react-hot-toast");
-
-  event.preventDefault();
+  const { default: Errors } = await import("./errors");
 
   toast.loading(isSignup ? "Creating your account..." : "Logging you in...", { id: "loading" });
 
   if (isSignup) {
+    const { createUserWithEmailAndPassword, updateProfile } = await import("firebase/auth");
+    const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
+
     try {
-      const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-      let imageName = "";
+      const characters: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" as const;
+      let imageName: string = "";
 
       for (let i = 0; i < characters.length; i++) {
         imageName += characters.charAt(Math.floor(Math.random() * characters.length));
@@ -23,11 +23,9 @@ export const MailAuth: AuthHandler = async (displayName, email, password, photoU
 
       const imageRef = ref(storage, `users/${imageName}.jpg`);
 
-      await uploadString(imageRef, photoURL, "data_url");
+      await uploadBytes(imageRef, photoURL as File);
 
       const imageLink: string = await getDownloadURL(imageRef);
-
-      console.log(imageLink);
 
       await createUser({ username: displayName, email, image: imageLink });
       await createUserWithEmailAndPassword(auth, email, password);
@@ -36,38 +34,44 @@ export const MailAuth: AuthHandler = async (displayName, email, password, photoU
       localStorage.setItem("user", JSON.stringify(auth.currentUser));
       router.replace("/");
     } catch (error: any) {
+      const errorMessage = Errors.mailAuth(error.message);
       toast.remove("loading");
-      toast.error(`Failed to create your account, ${error.message}`);
+      toast.error(`Failed to create your account, ${errorMessage}`);
     }
   } else {
+    const { signInWithEmailAndPassword } = await import("firebase/auth");
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
       localStorage.setItem("user", JSON.stringify(auth.currentUser));
       router.replace("/");
     } catch (error: any) {
+      const errorMessage = Errors.mailAuth(error.message);
       toast.remove("loading");
-      toast.error(`Failed to login, ${error.message}`);
+      toast.error(`Failed to login, ${errorMessage}`);
     }
   }
 };
 
 export const GoogleAuth: GoogleAuthHandler = async router => {
   const { signInWithPopup, GoogleAuthProvider } = await import("firebase/auth");
+  const { default: Errors } = await import("./errors");
   const { toast } = await import("react-hot-toast");
 
   try {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
     await createUser({
-      email: auth?.currentUser?.email as string,
-      username: auth?.currentUser?.displayName as string,
-      image: auth?.currentUser?.photoURL as string,
+      email: `${auth?.currentUser?.email}`,
+      username: `${auth?.currentUser?.displayName}`,
+      image: `${auth?.currentUser?.photoURL}`,
     });
     localStorage.setItem("user", JSON.stringify(auth.currentUser));
 
     router.replace("/");
   } catch (error: any) {
-    toast.error(`Could not sign in with Google, ${error.message}`);
+    const errorMessage = Errors.googleAuth(error.message);
+    toast.error(`Could not sign in with Google, ${errorMessage}`);
   }
 };
 
@@ -77,32 +81,40 @@ export const Logout: LogoutHandler = async router => {
   try {
     await auth.signOut();
     localStorage.removeItem("user");
-    router.replace("/auth");
+    router.replace("/");
   } catch (error: any) {
     toast.error(`Failed to log you out, ${error.message}`);
   }
 };
 
-export const UpdateProfile: UpdateProfileHandler = async (email, username, image, id, event) => {
+export const UpdateProfile: UpdateProfileHandler = async (email, username, image, id) => {
   const { updateEmail, updateProfile } = await import("firebase/auth");
+  const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
   const { toast } = await import("react-hot-toast");
 
   try {
-    event.preventDefault();
+    const characters: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" as const;
+    let imgName: string = "";
+
+    for (let i = 0; i < characters.length; i++) {
+      imgName += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    const imageRef = ref(storage, `posts/${imgName}.jpg`);
+
+    await uploadBytes(imageRef, new Blob([image as File]));
+
+    const uploadedImage = await getDownloadURL(imageRef);
+
     toast.loading("Updating your profile...", { id: "update-profile" });
     await updateProfile(auth.currentUser as User, {
       displayName: username,
-      photoURL: image,
+      photoURL: uploadedImage,
     });
 
     await updateEmail(auth.currentUser as User, email);
 
-    await updateProfileAPI(id, {
-      _id: id,
-      image,
-      username,
-      email,
-    });
+    await updateProfileAPI(id, { _id: id, image: uploadedImage, username, email });
 
     localStorage.setItem("user", JSON.stringify(auth.currentUser));
     toast.remove("update-profile");

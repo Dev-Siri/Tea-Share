@@ -15,11 +15,6 @@
     "jsx": "preserve",
     "moduleResolution": "node"
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "./types/globals.d.ts"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

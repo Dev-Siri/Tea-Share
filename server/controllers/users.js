@@ -1,4 +1,4 @@
-import UserModel from "../models/usersModel";
+import UserModel from "../models/usersModel.js";
 
 export const getUsers = async (req, res) => {
   const { limit } = req.query;

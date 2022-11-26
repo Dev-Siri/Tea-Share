@@ -2,13 +2,10 @@ import React, { type FC } from "react";
 import { AiOutlineLogout } from "react-icons/ai";
 
 import type { LogoutButtonProps } from "../types";
-import { useStateContext } from "../context/StateContext";
 
 const LogoutButton: FC<LogoutButtonProps> = ({ handleLogout }) => {
-  const { themeMode } = useStateContext();
-
   return (
-    <button onClick={handleLogout} type="button" className={`logout-btn ${themeMode === "dark" && "dark-shadow"}`}>
+    <button onClick={handleLogout} type="button" className="ml-auto mr-10 cursor-pointer rounded-full border-none bg-white p-[10px] shadow-dark dark:shadow-light">
       <AiOutlineLogout color="red" size={23} />
     </button>
   );

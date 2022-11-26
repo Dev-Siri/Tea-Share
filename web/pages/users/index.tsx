@@ -2,9 +2,11 @@ import React, { type FC, useState } from "react";
 import { BsFillPeopleFill } from "react-icons/bs";
 import dynamic from "next/dynamic";
 
+import type { GetServerSideProps } from "next";
 import type { AllUsersViewProps, MongoDBUser } from "../../types";
+
 import { fetchUsers } from "../../api";
-import { useStateContext } from "../../context/StateContext";
+import useStateContext from "../../hooks/useStateContext";
 
 import Sidebar from "../../components/Sidebar";
 const SearchBar = dynamic(() => import("../../components/SearchBar"));
@@ -12,9 +14,9 @@ const UserList = dynamic(() => import("../../components/UserList"));
 const UserView = dynamic(() => import("../../components/UserView"));
 
 const AllUsersView: FC<AllUsersViewProps> = ({ users }) => {
-  const { themeMode, searchTerm } = useStateContext();
+  const { searchTerm } = useStateContext();
   const [reactiveUsers, setReactiveUsers] = useState<MongoDBUser[]>(users);
-  const [showUserInfo, setShowUserInfo] = useState(false);
+  const [showUserInfo, setShowUserInfo] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<MongoDBUser | null>(null);
 
   const handleSearch = () => {
@@ -25,31 +27,29 @@ const AllUsersView: FC<AllUsersViewProps> = ({ users }) => {
   };
 
   return (
-    <div className={`show-all-user ${themeMode === "dark" && "dark-page"}`}>
-      <Sidebar isActive="users" />
-      <div className="show-all-user__container">
-        <div className="show-all-user__container_header">
-          <div className="show-all-user__container_header-large_container">
-            <h1 className="show-all-user__container_header-title">Users</h1>
+    <article className="flex dark:bg-black dark:text-white">
+      <Sidebar route="users" />
+      <div className="w-[80%]">
+        <div className="mt-5 flex flex-col justify-center pl-[50px]">
+          <div className="flex items-center">
+            <h1 className="mr-[10px] text-3xl font-bold leading-[1px]">Users</h1>
             <BsFillPeopleFill size={40} />
           </div>
         </div>
-        <div>
-          <SearchBar handleSearch={handleSearch} />
-        </div>
+        <SearchBar onSearch={handleSearch} />
         <UserList users={reactiveUsers} itemClick={{ changeShowingUserInfo: () => setShowUserInfo(true), setSelectedUser }} />
       </div>
       {showUserInfo && <UserView user={selectedUser} closeMenu={() => setShowUserInfo(false)} />}
-    </div>
+    </article>
   );
 };
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps<AllUsersViewProps> = async () => {
   const { data: users } = await fetchUsers();
 
   return {
     props: { users },
   };
-}
+};
 
 export default AllUsersView;

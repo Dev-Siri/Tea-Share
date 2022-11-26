@@ -1,15 +1,15 @@
-import "../styles/globals.scss";
-import { Suspense } from "react";
+import "../styles/globals.css";
+import React, { Suspense } from "react";
 import type { AppProps } from "next/app";
 import type { NextPage } from "next";
 import dynamic from "next/dynamic";
-import { Toaster } from "react-hot-toast";
 
-import { ContextProvider } from "../context/StateContext";
+const Toaster = dynamic(() => import("react-hot-toast").then(({ Toaster }) => Toaster));
+const ContextProvider = dynamic(() => import("../context/ContextProvider"));
 const Layout = dynamic(() => import("../components/Layout"));
 
 const App: NextPage<AppProps> = ({ Component, pageProps }) => (
-  <Suspense fallback={<div />}>
+  <Suspense>
     <ContextProvider>
       <Layout>
         <Toaster />

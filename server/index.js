@@ -14,9 +14,14 @@ const app = express();
 app.use(compression());
 app.use(express.json({ limit: "30mb" }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.NODE_PRIVATE_FRONTEND_WEB_URL,
+    methods: ["GET", "POST", "PATCH"],
+  })
+);
 
-app.get("/", (req, res) => res.status(200).send("Fast response 🔥🔥🔥"));
+app.get("/", (_, res) => res.status(200).send());
 
 app.use("/posts", postRoutes);
 app.use("/users", userRoutes);

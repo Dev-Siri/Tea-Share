@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import PostModel from "../models/postsModel";
+import PostModel from "../models/postsModel.js";
 
 export const getPosts = async (req, res) => {
   const { limit } = req.query;
@@ -17,7 +17,7 @@ export const getPostsBySearchTerm = async (req, res) => {
   const { query, user } = req.query;
 
   try {
-    const findObject = user === "true" ? [{ author: query }] : [{ _id: query }];
+    const findObject = Boolean(user) ? [{ author: query }] : [{ _id: query }];
 
     const posts = await PostModel.find({ $or: findObject });
 
@@ -32,7 +32,7 @@ export const createPost = async (req, res) => {
 
   const newPost = new PostModel({
     ...post,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   });
 
   try {
@@ -60,7 +60,7 @@ export const likePost = async (req, res) => {
   post?.peopleImage?.push(image);
 
   const updatedPost = await PostModel.findByIdAndUpdate(id, post, {
-    new: true
+    new: true,
   });
 
   res.json(updatedPost);

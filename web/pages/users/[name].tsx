@@ -1,10 +1,10 @@
-import React from "react";
-import type { ProfileProps } from "../../types";
-import type { NextPage } from "next";
+import React, { useEffect } from "react";
+import type { ProfileProps, Post } from "../../types";
+import type { NextPage, GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 import { fetchPostByQuery, fetchUserByQuery } from "../../api";
-import { useStateContext } from "../../context/StateContext";
 
 import Sidebar from "../../components/Sidebar";
 const Post = dynamic(() => import("../../components/Post"));
@@ -13,36 +13,49 @@ const Image = dynamic(() => import("next/image"));
 const Profile: NextPage<ProfileProps> = ({ user, posts }) => {
   const { username, image } = user;
 
-  const { themeMode } = useStateContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    const localUser = JSON.parse(localStorage.getItem("user") as string);
+
+    if (!user) router.push(`/users/${localUser?.displayName}`);
+  }, []);
 
   return (
-    <div className={`profile ${themeMode === "dark" && "dark-page"}`}>
-      <Sidebar isActive="profile" />
-      <div className="profile__main">
-        <div className="profile__main-container">
-          <div className="profile__main-container_img">
-            <Image src={image} alt={username} height={100} width={100} style={{ borderRadius: "75px" }} />
+    <section className="flex h-screen dark:bg-black dark:text-white">
+      <Sidebar route="profile" />
+      <article className="h-full w-[82%] overflow-y-auto">
+        <div className="flex flex-col items-center">
+          <div className="mt-[50px] flex rounded-md bg-light-gray p-12 dark:bg-dark-gray">
+            {user ? (
+              <>
+                <Image src={image} alt={username} height={130} width={130} className="rounded-full" />
+                <div className="ml-8 mr-40">
+                  <h1 className="text-3xl font-bold">{username}</h1>
+                  <h2 className="text-xl text-gray-500">@{username?.toLowerCase()?.split(" ")?.join("-")}</h2>
+                  <h3 className="mt-2 text-xl">
+                    Posts by {username} ({posts?.length})
+                  </h3>
+                </div>
+              </>
+            ) : (
+              <h1 className="text-3xl font-bold">Loading user...</h1>
+            )}
           </div>
-          <h1 className="profile__main-container_name">{username}</h1>
-          <h3>
-            Posts by {username} ({posts?.length})
-          </h3>
-          <div className="profile__main-container_post-container">
+          <aside className="mt-6 grid grid-cols-2 place-items-center">
             {posts?.map(post => (
               <Post key={post._id} post={post} />
             ))}
-          </div>
+          </aside>
         </div>
-      </div>
-    </div>
+      </article>
+    </section>
   );
 };
 
-export const getServerSideProps = async (context: any) => {
-  const { name } = context.params;
-
-  const { data: posts } = await fetchPostByQuery(name);
-  const { data: user } = await fetchUserByQuery(name);
+export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({ params }) => {
+  const { data: posts } = await fetchPostByQuery(`${params?.name}`);
+  const { data: user } = await fetchUserByQuery(`${params?.name}`);
 
   return {
     props: { user, posts },

@@ -1,56 +1,75 @@
-import React from 'react';
-import { Post, MongoDBUserType, GoogleAuthHandler } from './';
+import type { ReactElement, SetStateAction, Dispatch, JSXElementConstructor } from "react";
+import type { Post, MongoDBUser } from "./";
 
-export interface HomeProps { posts: Post[]; }
-export interface PostProps { post: Post; }
-export interface PostInfoProps { post: Post; }
-export interface SearchBarProps { handleSearch: () => void; }
-export interface LogoutButtonProps { handleLogout: () => void; }
-export interface SpinnerProps { title?: string; }
-export interface AllUsersViewProps { users: MongoDBUserType[]; }
-export interface GoogleLoginProps { onClick: GoogleAuthHandler; }
-export interface LayoutProps { children: Array<ReactElement<ChildProps, JSXElementConstructor<ChildType>>>; }
+interface WithPost {
+  post: Post;
+}
 
-export interface ProfileProps {
-  user: MongoDBUserType[0];
+interface WithPosts {
   posts: Post[];
 }
 
-export interface PostAuthorProps {
-  user: MongoDBUserType;
-  posts: Post[];
+interface WithUser<T = MongoDBUser> {
+  user: MongoDBUser | T;
+}
+
+interface WithUsers {
+  users: MongoDBUser[];
+}
+
+interface WithChildren {
+  children: ReactElement<any, JSXElementConstructor<any>>[] | ReactElement<any, JSXElementConstructor<any>>;
+}
+
+export interface PostProps extends WithPost {}
+export interface HomeProps extends WithPosts {}
+export interface PostInfoProps extends WithPost {}
+export interface LayoutProps extends WithChildren {}
+export interface ContextProps extends WithChildren {}
+export interface AllUsersViewProps extends WithUsers {}
+export interface ProfileProps extends WithPosts, WithUser {}
+export interface PostAuthorProps extends WithPosts, WithUser {}
+
+export interface SearchBarProps {
+  onSearch(): void;
+}
+
+export interface LogoutButtonProps {
+  handleLogout(): void;
+}
+
+export interface GoogleLoginProps {
+  onClick(): void;
 }
 
 export interface ThemeOptionProps {
   title: string;
-  handleClick: () => void;
+  onClick(): void;
 }
 
 export interface FormProps {
   isSignup: boolean;
-  setIsSignup: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSignup: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface ColorInputProps {
   color: string;
-  handleClick: () => void;
+  handleClick(): void;
 }
 
-export interface UserListProps {
-  users: MongoDBUserType[];
+export interface UserListProps extends WithUsers {
   itemClick: {
-    changeShowingUserInfo: () => void;
-    setSelectedUser: React.Dispatch<React.SetStateAction<MongoDBUserType | null>>;
+    changeShowingUserInfo(): void;
+    setSelectedUser: Dispatch<SetStateAction<MongoDBUser | null>>;
   };
 }
 
-export interface UserSideViewProps {
-  closeMenu: () => void;
-  user: MongoDBUserType | null;
+export interface UserSideViewProps extends WithUser<null> {
+  closeMenu(): void;
 }
 
 export interface SidebarProps {
-  isActive: string;
+  route: string;
   isOnPostInfo?: {
     visible: boolean;
     title: string;
@@ -63,6 +82,6 @@ export interface SidebarProps {
 export interface SidebarOptionProps {
   href: any;
   title: string;
-  icon: JSX.Element;
+  icon: ReactElement;
   isActive: boolean;
 }

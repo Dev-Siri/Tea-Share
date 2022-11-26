@@ -1,40 +1,31 @@
-import { NextRouter } from "next/router";
-import { FirebaseUser } from "./";
+import type { Dispatch, SetStateAction, FormEvent } from "react";
+import type { NextRouter } from "next/router";
+import type { User as FirebaseUser } from "firebase/auth";
+import type { PostFormData } from "./post";
 
-export type AuthHandler = (
+export type AuthHandler = (event: FormEvent<HTMLFormElement> | null, type: "mail" | "google") => Promise<void>;
+export type MailAuthHandler = (
   displayName: string,
   email: string,
   password: string,
-  photoURL: string,
-  event: any,
+  photoURL: File | string | undefined | null,
   router: NextRouter,
   isSignup: boolean
-  ) => Promise<void>;
-  
+) => Promise<void>;
+
 export type GoogleAuthHandler = (router: NextRouter) => Promise<void>;
 export type LogoutHandler = (router: NextRouter) => Promise<void>;
-export type UpdateProfileHandler = (
-  email: string,
-  username: string,
-  image: string,
-  id: string,
-  event: React.FormEvent<HTMLFormElement>
-) => Promise<void>;
+export type UpdateProfileHandler = (email: string, username: string, image: File | string | undefined | null, id: string) => Promise<void>;
 
-export type CreatePostSubmitHandler = (
-  event: any,
-  formData: PostFormData,
-  setFormData: React.Dispatch<React.SetStateAction<PostFormData>>,
-  router: NextRouter,
-  loading: boolean
-) => Promise<void>;
+export type CreatePostSubmitHandler = (formData: PostFormData, router: NextRouter, loading: boolean) => Promise<void>;
 
-export type LikedPeople = (people: string[], user: FirebaseUser) => string;
+export type LikedPeople = (people: string[], user: FirebaseUser | null) => string;
 export type LikePostHandler = (
-  setLikes: React.Dispatch<React.SetStateAction<string>>,
-  setLikeBTN: React.Dispatch<React.SetStateAction<JSX.Element>>,
+  setLikes: Dispatch<SetStateAction<string>>,
+  setLikeBTN: Dispatch<SetStateAction<JSX.Element>>,
   people: string[],
   themeColor: string,
-  user: FirebaseUser,
+  user: FirebaseUser | null,
   _id: string
 ) => Promise<void>;
+export type PostTimeCalculator = (createdAt: string) => string;

@@ -1,12 +1,9 @@
-import React from "react";
-import type { NextRouter } from "next/router";
-
 export type ChangeHandler = (event: any) => void;
 
 export interface PostFormData {
   title: string;
   description: string;
-  image: string;
+  image: File | string | undefined | null;
   author: string;
   authorImage: string;
 }
