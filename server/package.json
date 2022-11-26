@@ -9,10 +9,6 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "os": [
-    "linux",
-    "win32"
-  ],
   "keywords": [
     "backend",
     "node",
