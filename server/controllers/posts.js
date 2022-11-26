@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
 import PostModel from "../models/postsModel.js";
+// import dayjs from "dayjs";
 
 export const getPosts = async (req, res) => {
   const { limit } = req.query;
@@ -7,7 +8,9 @@ export const getPosts = async (req, res) => {
   try {
     const posts = limit ? await PostModel.find().limit(parseInt(limit)) : await PostModel.find();
 
-    res.status(200).json(posts);
+    const postsByDateCreated = posts.sort((prevPost, nextPost) => new Date(nextPost.createdAt) - new Date(prevPost.createdAt));
+
+    res.status(200).json(postsByDateCreated);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }

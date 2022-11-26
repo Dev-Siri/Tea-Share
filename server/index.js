@@ -32,5 +32,3 @@ const PORT = process.env.PORT || 5000;
 await connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.listen(PORT, () => console.log(`Server running on Port: ${PORT}`));
-
-// https://tea-share-backend.onrender.com/users
