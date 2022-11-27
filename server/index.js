@@ -1,34 +1,41 @@
-import express from "express";
+import Fastify from "fastify";
 import { connect } from "mongoose";
-import cors from "cors";
-import dotenv from "dotenv";
-import compression from "compression";
+import { config as configureEnv } from "dotenv";
+import cors from "@fastify/cors";
+import compression from "@fastify/compress";
 
 import postRoutes from "./routes/posts.js";
 import userRoutes from "./routes/user.js";
 
-dotenv.config();
-
-const app = express();
-
-app.use(compression());
-app.use(express.json({ limit: "30mb" }));
-app.use(express.urlencoded({ limit: "30mb", extended: true }));
-app.use(
-  cors({
-    origin: process.env.NODE_ENV === "development" ? "http://localhost:3000" : process.env.NODE_PRIVATE_FRONTEND_WEB_URL,
-    methods: ["GET", "POST", "PATCH"],
-  })
-);
-
-app.get("/", (_, res) => res.status(200).send());
-
-app.use("/posts", postRoutes);
-app.use("/users", userRoutes);
+configureEnv();
 
 const CONNECTION_URL = process.env.NODE_PRIVATE_MONGO_DB_CONNECTION_URL;
 const PORT = process.env.PORT || 5000;
+const HOST = process.env.NODE_ENV === "development" ? "localhost" : "0.0.0.0";
+const ORIGIN = process.env.NODE_ENV === "development" ? "http://localhost:3000" : process.env.NODE_PRIVATE_FRONTEND_WEB_URL;
+
+const fastify = Fastify({ logger: false });
+
+await fastify.register(compression, {
+  encodings: ["gzip", "br", "deflate"],
+});
+await fastify.register(cors, {
+  origin: ORIGIN,
+  methods: ["GET", "POST", "PATCH"],
+});
+
+fastify.get("/", (_, res) => res.status(200).send());
+
+await fastify.register(postRoutes);
+await fastify.register(userRoutes);
 
 await connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
-app.listen(PORT, () => console.log(`Server running on Port: ${PORT}`));
+fastify.listen({ port: PORT, host: HOST }, (error, address) => {
+  if (error) {
+    console.error(error);
+    process.exit(1);
+  }
+
+  console.log(`Server running on: ${address}`);
+});

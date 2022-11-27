@@ -12,9 +12,11 @@ export const getUsers = async (req, res) => {
       users = await UserModel.find();
     }
 
-    res.status(200).json(users);
+    res.code(200);
+    return users;
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.code(404);
+    return { message: error.message };
   }
 };
 
@@ -25,14 +27,17 @@ export const createUser = async (req, res) => {
 
   if (userExists) return res.status(204).json({ message: "User already exists" });
 
-  const newUser = new UserModel({ ...user });
+  const newUser = new UserModel(user);
 
   try {
     newUser.save();
 
-    res.status(201).json(newUser);
+    res.code(201);
+
+    return newUser;
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.code(500);
+    return { message: error.message };
   }
 };
 
@@ -42,9 +47,10 @@ export const getUserBySearchTerm = async (req, res) => {
   try {
     const user = await UserModel.find({ username: query });
 
-    res.json(user[0]);
+    return user[0];
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.code(404);
+    return { message: error.message };
   }
 };
 
@@ -55,8 +61,10 @@ export const updateUser = async (req, res) => {
   try {
     await UserModel.findByIdAndUpdate(id, { ...user, id }, { new: true });
 
-    res.status(204).json({ message: "User updated successfully" });
+    res.code(204);
+    return { message: "User updated successfully" };
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.code(400);
+    return { message: error.message };
   }
 };

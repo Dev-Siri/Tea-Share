@@ -1,11 +1,10 @@
-import { Router } from "express";
 import { getPosts, getPostsBySearchTerm, createPost, likePost } from "../controllers/posts.js";
 
-const router = Router();
+const postRoutes = async fastify => {
+  fastify.get("/posts", getPosts);
+  fastify.post("/posts", createPost);
+  fastify.get("/posts/search", getPostsBySearchTerm);
+  fastify.patch("/posts/:id/like", likePost);
+};
 
-router.get("/", getPosts);
-router.post("/", createPost);
-router.get("/search", getPostsBySearchTerm);
-router.patch("/:id/like", likePost);
-
-export default router;
+export default postRoutes;

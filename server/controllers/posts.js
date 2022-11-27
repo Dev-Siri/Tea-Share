@@ -1,6 +1,5 @@
 import { Types } from "mongoose";
 import PostModel from "../models/postsModel.js";
-// import dayjs from "dayjs";
 
 export const getPosts = async (req, res) => {
   const { limit } = req.query;
@@ -10,9 +9,11 @@ export const getPosts = async (req, res) => {
 
     const postsByDateCreated = posts.sort((prevPost, nextPost) => new Date(nextPost.createdAt) - new Date(prevPost.createdAt));
 
-    res.status(200).json(postsByDateCreated);
+    res.code(200);
+    return postsByDateCreated;
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.code(404);
+    return { message: error.message };
   }
 };
 
@@ -24,9 +25,10 @@ export const getPostsBySearchTerm = async (req, res) => {
 
     const posts = await PostModel.find({ $or: findObject });
 
-    res.json(posts);
+    return posts;
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.code(404);
+    return { message: error.message };
   }
 };
 
@@ -41,9 +43,11 @@ export const createPost = async (req, res) => {
   try {
     await newPost.save();
 
-    res.status(201).json(newPost);
+    res.code(201);
+    return newPost;
   } catch (error) {
-    res.status(409).json({ message: error.message });
+    res.code(409);
+    return { message: error.message };
   }
 };
 
@@ -51,7 +55,10 @@ export const likePost = async (req, res) => {
   const { id } = req.params;
   const { name, image } = req.query;
 
-  if (!Types.ObjectId.isValid(id)) return res.status(404).send("No posts with that ID");
+  if (!Types.ObjectId.isValid(id)) {
+    res.code(404);
+    return "No posts with that ID";
+  }
 
   const post = await PostModel.findById(id);
 
@@ -66,5 +73,5 @@ export const likePost = async (req, res) => {
     new: true,
   });
 
-  res.json(updatedPost);
+  return updatedPost;
 };
