@@ -10,6 +10,7 @@ import useStateContext from "../hooks/useStateContext";
 import { fetchPosts } from "../api";
 
 import Sidebar from "../components/Sidebar";
+import { brotliDecompress } from "zlib";
 const Post = dynamic(() => import("../components/Post"));
 const SearchBar = dynamic(() => import("../components/SearchBar"));
 

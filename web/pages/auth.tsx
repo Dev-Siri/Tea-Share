@@ -7,7 +7,7 @@ import type { AuthHandler, UserSubmitFormData } from "../types";
 
 import useStateContext from "../hooks/useStateContext";
 
-import Banner from "../assets/banner.svg";
+import Banner from "../assets/banner.png";
 import PurpleLogo from "../assets/DarkLogo.png";
 import WhiteLogo from "../assets/LightLogo.png";
 
