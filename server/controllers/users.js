@@ -25,7 +25,11 @@ export const createUser = async (req, res) => {
 
   const userExists = (await UserModel.find({ username: user.username })).length;
 
-  if (userExists) return res.status(204).json({ message: "User already exists" });
+  if (userExists) {
+    res.code(204);
+
+    return { message: "User already exists" };
+  }
 
   const newUser = new UserModel(user);
 

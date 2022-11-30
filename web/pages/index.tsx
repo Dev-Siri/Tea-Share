@@ -62,11 +62,11 @@ const Home: FC<HomeProps> = ({ posts }) => {
         >
           {loading ? "Loading..." : "Show more"}
         </button>
-        <div className="flex h-screen w-full flex-wrap justify-around overflow-y-auto p-[30px] pb-[100px]">
-          {reactivePosts?.map(post => (
+        <aside className="flex h-screen w-full flex-wrap justify-around overflow-y-auto p-[30px] pb-[100px]">
+          {reactivePosts?.map?.(post => (
             <Post key={post._id} post={post} />
           ))}
-        </div>
+        </aside>
       </article>
     </section>
   );

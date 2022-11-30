@@ -12,7 +12,7 @@ const usePageTitle: PageTitleHook = () => {
     const calculatePageTitle = () => {
       if (typeof window === "undefined") return;
 
-      switch (window.location.pathname) {
+      switch (location.pathname) {
         case "/auth":
           setPageTitle("Tea Share - A Brand New Social Networking Platform");
         case "/":

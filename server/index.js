@@ -1,8 +1,9 @@
 import Fastify from "fastify";
-import { connect } from "mongoose";
-import { config as configureEnv } from "dotenv";
 import cors from "@fastify/cors";
 import compression from "@fastify/compress";
+
+import { connect as connectDatabase } from "mongoose";
+import { config as configureEnv } from "dotenv";
 
 import postRoutes from "./routes/posts.js";
 import userRoutes from "./routes/user.js";
@@ -29,7 +30,7 @@ fastify.get("/", (_, res) => res.status(200).send());
 await fastify.register(postRoutes);
 await fastify.register(userRoutes);
 
-await connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+await connectDatabase(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 fastify.listen({ port: PORT, host: HOST }, (error, address) => {
   if (error) {

@@ -7,6 +7,7 @@ import useStateContext from "../hooks/useStateContext";
 import useRoutes from "../hooks/useRoutes";
 
 import type { SidebarProps } from "../types";
+import type { User as FirebaseUser } from "firebase/auth";
 
 import Logo from "../assets/LightLogo.png";
 import Cup from "../assets/Cup.png";
@@ -16,13 +17,16 @@ const Image = dynamic(() => import("next/image"));
 const SidebarOption = dynamic(() => import("./SidebarOption"));
 
 const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo }) => {
-  const { themeColor, user } = useStateContext();
+  const { themeColor } = useStateContext();
   const [isSSR, setIsSSR] = useState<boolean>(true);
+  const [user, setUser] = useState<FirebaseUser | null>(null);
 
   const routes = useMemo(() => useRoutes(`${user?.displayName}`, route), [route]);
 
   useEffect(() => {
     setIsSSR(false);
+
+    setUser(JSON.parse(localStorage.getItem("user") as string));
 
     if (!isSSR && !user) window.location.reload();
   }, []);

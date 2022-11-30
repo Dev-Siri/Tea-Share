@@ -1,10 +1,11 @@
 import { type User } from "firebase/auth";
 
-import { createUser, auth, storage, updateProfile as updateProfileAPI } from "../api";
+import { auth, storage } from "../api";
 import type { MailAuthHandler, GoogleAuthHandler, LogoutHandler, UpdateProfileHandler } from "../types";
 
 export const MailAuth: MailAuthHandler = async (displayName, email, password, photoURL, router, isSignup) => {
   const { toast } = await import("react-hot-toast");
+  const { createUser } = await import("../api");
   const { default: Errors } = await import("./errors");
 
   toast.loading(isSignup ? "Creating your account..." : "Logging you in...", { id: "loading" });
@@ -55,21 +56,25 @@ export const MailAuth: MailAuthHandler = async (displayName, email, password, ph
 
 export const GoogleAuth: GoogleAuthHandler = async router => {
   const { signInWithPopup, GoogleAuthProvider } = await import("firebase/auth");
-  const { default: Errors } = await import("./errors");
   const { toast } = await import("react-hot-toast");
+  const { createUser } = await import("../api");
 
   try {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
-    await createUser({
-      email: `${auth?.currentUser?.email}`,
-      username: `${auth?.currentUser?.displayName}`,
-      image: `${auth?.currentUser?.photoURL}`,
-    });
-    localStorage.setItem("user", JSON.stringify(auth.currentUser));
 
+    if (!auth.currentUser) return;
+
+    await createUser({
+      email: `${auth.currentUser?.email}`,
+      username: `${auth.currentUser?.displayName}`,
+      image: `${auth.currentUser?.photoURL}`,
+    });
+
+    localStorage.setItem("user", JSON.stringify(auth.currentUser));
     router.replace("/");
   } catch (error: any) {
+    const { default: Errors } = await import("./errors");
     const errorMessage = Errors.googleAuth(error.message);
     toast.error(`Could not sign in with Google, ${errorMessage}`);
   }
@@ -90,6 +95,7 @@ export const Logout: LogoutHandler = async router => {
 export const UpdateProfile: UpdateProfileHandler = async (email, username, image, id) => {
   const { updateEmail, updateProfile } = await import("firebase/auth");
   const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
+  const { updateProfile: updateProfileAPI } = await import("../api/client");
   const { toast } = await import("react-hot-toast");
 
   try {
@@ -119,7 +125,7 @@ export const UpdateProfile: UpdateProfileHandler = async (email, username, image
     localStorage.setItem("user", JSON.stringify(auth.currentUser));
     toast.remove("update-profile");
     toast.success("Successfully updated your profile.");
-    window.location.reload();
+    location.reload();
   } catch (error: any) {
     toast.error(`Failed to update your profile, ${error.message}`);
   }
