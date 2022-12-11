@@ -9,7 +9,7 @@ const ColorInput: FC<ColorInputProps> = ({ color, handleClick }) => {
 
   return (
     <button
-      className="mt-5 ml-10 flex h-[60px] w-[60px] cursor-pointer items-center rounded-full border-none"
+      className="mt-5 flex h-[60px] w-[60px] cursor-pointer items-center rounded-full border-none"
       style={{ backgroundColor: color }}
       onClick={handleClick}
     >

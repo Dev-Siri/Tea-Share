@@ -24,7 +24,7 @@ const SidebarOption: FC<SidebarOptionProps> = ({ href, title, icon, isActive }) 
         />
       )}
       {icon}
-      <h3 className="ml-[5px]">{title?.length > 15 ? `${title.slice(0, 15)}...` : title}</h3>
+      <h3 className="ml-[5px] hidden md:block">{title?.length > 15 ? `${title.slice(0, 15)}...` : title}</h3>
     </Link>
   );
 };

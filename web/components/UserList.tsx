@@ -12,11 +12,11 @@ const UserList: FC<UserListProps> = ({ users, itemClick }) => {
   };
 
   return (
-    <section className="h-[500px] w-[101.1%] self-center overflow-y-auto rounded-tl-[10px] rounded-tr-[10px] border-t-[1px] border-t-gray-400 bg-white dark:border-semi-gray dark:bg-dark-gray">
+    <section className="h-screen w-[101.1%] self-center overflow-y-scroll rounded-tl-[10px] rounded-tr-[10px] border-t-[1px] border-t-gray-400 bg-white pb-40 dark:border-semi-gray dark:bg-dark-gray">
       {users.map(user => (
         <button
           onClick={() => handleItemClick(user)}
-          className="border-gray m-5 flex w-[97%] cursor-pointer items-center rounded-md border-[1px] p-5 duration-[250ms] hover:bg-gray-400 dark:border-semi-gray dark:hover:bg-semi-gray"
+          className="border-gray m-5 flex w-[330px] cursor-pointer items-center rounded-md border-[1px] p-5 duration-[250ms] hover:bg-gray-400 dark:border-semi-gray dark:hover:bg-semi-gray sm:w-[97%]"
           key={user?._id}
         >
           <Image src={user?.image} alt={user?.username} height={35} width={35} className="rounded-full" />

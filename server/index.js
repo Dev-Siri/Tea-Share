@@ -15,11 +15,9 @@ const PORT = process.env.PORT || 5000;
 const HOST = process.env.NODE_ENV === "development" ? "localhost" : "0.0.0.0";
 const ORIGIN = process.env.NODE_ENV === "development" ? "http://localhost:3000" : process.env.NODE_PRIVATE_FRONTEND_WEB_URL;
 
-const fastify = Fastify({ logger: false });
+const fastify = Fastify();
 
-await fastify.register(compression, {
-  encodings: ["gzip", "br", "deflate"],
-});
+await fastify.register(compression, { encodings: ["gzip", "br", "deflate"] });
 await fastify.register(cors, {
   origin: ORIGIN,
   methods: ["GET", "POST", "PATCH"],

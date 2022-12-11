@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 
 import type { PageTitleHook } from "../types";
-
-import useStateContext from "./useStateContext";
+import type { User as FirebaseUser } from "firebase/auth";
 
 const usePageTitle: PageTitleHook = () => {
-  const { user } = useStateContext();
+  const [user, setUser] = useState<FirebaseUser | null>(null);
   const [pageTitle, setPageTitle] = useState<string>("");
 
   useEffect(() => {
     const calculatePageTitle = () => {
-      if (typeof window === "undefined") return;
+      setUser(JSON.parse(localStorage.getItem("user") as string));
 
       switch (location.pathname) {
         case "/auth":

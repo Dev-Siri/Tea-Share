@@ -6,6 +6,4 @@ export interface ContextItems {
   switchMode?: (mode: string) => void;
   switchColor?: (color: string) => void;
   themeColor?: string;
-  user?: FirebaseUser | null;
-  setUser?: any;
 }

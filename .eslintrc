@@ -1,7 +1,15 @@
 {
   "root": true,
-  "extends": "./web/node_modules/next/core-web-vitals",
   "ignorePatterns": ["types"],
+  "parser": "./web/node_modules/@typescript-eslint/eslint-plugin",
+  "parserOptions": {
+    "tsconfigRootDir": "./web",
+    "project": "./web/tsconfig.json",
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["./web/node_modules/@typescript-eslint"],
+  "extends": ["./web/node_modules/@typescript-eslint/recommended", "./web/node_modules/@typescript-eslint/recommended-requiring-type-checking"],
   "rules": {
     "quotes": "off",
     "curly": "off",

@@ -1,6 +1,6 @@
 {
   "name": "tea_share_web",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -22,6 +22,7 @@
   "devDependencies": {
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",
+    "@typescript-eslint/eslint-plugin": "^5.46.0",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.28.0",
     "eslint-config-next": "^13.0.5",

@@ -13,22 +13,24 @@ export const getPosts = async (req, res) => {
     return postsByDateCreated;
   } catch (error) {
     res.code(404);
-    return { message: error.message };
+    return error.message;
   }
 };
 
 export const getPostsBySearchTerm = async (req, res) => {
   const { query, user } = req.query;
 
+  const isAskingForPostsByUser = user === "true";
+
   try {
-    const findObject = Boolean(user) ? [{ author: query }] : [{ _id: query }];
+    const findObject = isAskingForPostsByUser ? [{ author: query }] : [{ _id: query }];
 
     const posts = await PostModel.find({ $or: findObject });
 
     return posts;
   } catch (error) {
     res.code(404);
-    return { message: error.message };
+    return error.message;
   }
 };
 
@@ -47,7 +49,7 @@ export const createPost = async (req, res) => {
     return newPost;
   } catch (error) {
     res.code(409);
-    return { message: error.message };
+    return error.message;
   }
 };
 

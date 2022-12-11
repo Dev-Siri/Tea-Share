@@ -16,7 +16,7 @@ export const getUsers = async (req, res) => {
     return users;
   } catch (error) {
     res.code(404);
-    return { message: error.message };
+    return error.message;
   }
 };
 
@@ -28,7 +28,7 @@ export const createUser = async (req, res) => {
   if (userExists) {
     res.code(204);
 
-    return { message: "User already exists" };
+    return "User already exists";
   }
 
   const newUser = new UserModel(user);
@@ -41,7 +41,7 @@ export const createUser = async (req, res) => {
     return newUser;
   } catch (error) {
     res.code(500);
-    return { message: error.message };
+    return error.message;
   }
 };
 
@@ -54,7 +54,7 @@ export const getUserBySearchTerm = async (req, res) => {
     return user[0];
   } catch (error) {
     res.code(404);
-    return { message: error.message };
+    return error.message;
   }
 };
 
@@ -66,9 +66,8 @@ export const updateUser = async (req, res) => {
     await UserModel.findByIdAndUpdate(id, { ...user, id }, { new: true });
 
     res.code(204);
-    return { message: "User updated successfully" };
   } catch (error) {
     res.code(400);
-    return { message: error.message };
+    return error.message;
   }
 };

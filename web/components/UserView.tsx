@@ -21,7 +21,7 @@ const UserPreview: FC<UserSideViewProps> = ({ closeMenu, user }) => {
   }, [user]);
 
   return (
-    <section className="border-l-gray absolute ml-[70.7%] h-screen w-[400px] border-l-4 bg-light-gray dark:border-semi-gray dark:bg-dark-gray dark:text-white">
+    <section className="border-l-gray absolute ml-20 h-screen w-[400px] border-l-4 bg-light-gray dark:border-semi-gray dark:bg-dark-gray dark:text-white sm:ml-[40%] md:ml-[70.7%]">
       <MdCancel title="Close menu" size={33} className="m-[10px] cursor-pointer" onClick={closeMenu} />
       <div className="flex h-full w-full flex-col items-center overflow-y-auto pb-20">
         <div className="flex flex-col items-center rounded-md bg-white p-9 dark:bg-semi-gray">

@@ -10,7 +10,6 @@ import useStateContext from "../hooks/useStateContext";
 import { fetchPosts } from "../api";
 
 import Sidebar from "../components/Sidebar";
-import { brotliDecompress } from "zlib";
 const Post = dynamic(() => import("../components/Post"));
 const SearchBar = dynamic(() => import("../components/SearchBar"));
 
@@ -63,7 +62,7 @@ const Home: FC<HomeProps> = ({ posts }) => {
         >
           {loading ? "Loading..." : "Show more"}
         </button>
-        <aside className="flex h-screen w-full flex-wrap justify-around overflow-y-auto p-[30px] pb-[100px]">
+        <aside className="flex h-screen w-full flex-wrap justify-around overflow-y-auto p-[30px] pl-0 pb-[100px] md:pl-[30px]">
           {reactivePosts?.map?.(post => (
             <Post key={post._id} post={post} />
           ))}

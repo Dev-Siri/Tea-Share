@@ -7,7 +7,7 @@ import useStateContext from "../hooks/useStateContext";
 import useRoutes from "../hooks/useRoutes";
 
 import type { SidebarProps } from "../types";
-import type { User as FirebaseUser } from "firebase/auth";
+import { User as FirebaseUser } from "firebase/auth";
 
 import Logo from "../assets/LightLogo.png";
 import Cup from "../assets/Cup.png";
@@ -21,50 +21,55 @@ const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo }) => {
   const [isSSR, setIsSSR] = useState<boolean>(true);
   const [user, setUser] = useState<FirebaseUser | null>(null);
 
-  const routes = useMemo(() => useRoutes(`${user?.displayName}`, route), [route]);
+  const routes = useMemo(() => useRoutes(`${user?.displayName}`, route), [route, user]);
 
   useEffect(() => {
     setIsSSR(false);
 
     setUser(JSON.parse(localStorage.getItem("user") as string));
 
-    if (!isSSR && !user) window.location.reload();
+    if (!isSSR && !user) location.reload();
   }, []);
 
   return (
-    <aside className="flex h-screen w-[260px] flex-col overflow-y-auto rounded-tr-[10px] rounded-br-[10px] border-r-4 border-r-light-gray align-top dark:border-r-dark-gray">
+    <aside className="flex h-screen w-[80px] flex-col overflow-y-auto rounded-tr-[10px] rounded-br-[10px] border-r-4 border-r-light-gray align-top dark:border-r-dark-gray md:w-[260px]">
       {!isSSR && (
         <Link href="/">
-          <Image
-            src={window.innerWidth < 940 ? Cup : Logo}
-            alt="Logo"
-            className="h-[140px] w-full cursor-pointer rounded-tr-[10px] p-5"
-            style={{ backgroundColor: themeColor }}
-          />
+          <picture>
+            <source media="(max-width: 767px)" srcSet={Cup.src} />
+            <Image
+              src={Logo}
+              alt="Logo"
+              className="h-[80px] w-full cursor-pointer rounded-md rounded-tr-[10px] p-5 md:h-[140px] md:rounded-none"
+              style={{ backgroundColor: themeColor }}
+            />
+          </picture>
         </Link>
       )}
       {!isOnPostInfo?.visible && !isSSR && (
         <>
-          <div className="h-[60px]" style={{ backgroundColor: themeColor }} />
+          <div className="mb-16 hidden h-[60px] md:mb-0 md:block" style={{ backgroundColor: themeColor }} />
           <Image
             src={user?.photoURL ?? "https://via.placeholder.com/100x100"}
             alt={`${user?.displayName}`}
             height={105}
             width={110}
-            className="absolute mt-[140px] h-[105px] self-center rounded-full border-2 border-gray-400 bg-white p-px"
+            className="absolute mt-24 h-11 w-11 self-center rounded-full border-2 border-gray-400 bg-white p-px md:mt-[120px] md:block md:h-[105px] md:w-[105px]"
           />
-          <p className={`self-center pt-14 text-[22px] font-bold ${isOnPostInfo?.visible ? "mt-[110px]" : "mt-0"}`}>
-            {parseInt(`${user?.displayName?.length}`) > 15 ? `${user?.displayName?.slice(0, 15)}...` : user?.displayName}
+          <p className={`hidden self-center pt-10 text-[22px] font-bold md:block ${isOnPostInfo?.visible ? "mt-[110px]" : "mt-0"}`}>
+            {(user?.displayName?.length as number) > 15 ? `${user?.displayName?.slice(0, 15)}...` : user?.displayName}
           </p>
         </>
       )}
-      <p className={`ml-[30px] mb-2 text-lg text-gray-500 duration-[250ms] ${isOnPostInfo?.visible ? "mt-10" : "mt-0"}`}>PAGES</p>
-      {routes.map(route => (
-        <SidebarOption key={route.title} {...route} />
-      ))}
+      <p className={`ml-[30px] mb-2 hidden text-lg text-gray-500 duration-[250ms] md:block ${isOnPostInfo?.visible ? "mt-10" : "mt-0"}`}>PAGES</p>
+      <section className={`md:mt-0 ${isOnPostInfo?.visible ? "mt-0" : "mt-20"}`}>
+        {routes.map(route => (
+          <SidebarOption key={route.title} {...route} />
+        ))}
+      </section>
       {isOnPostInfo?.visible && (
         <>
-          <p className="ml-[30px] mb-2 text-lg text-gray-500 duration-[250ms]">POST INFO</p>
+          <p className="ml-[30px] mt-3 mb-2 hidden text-lg text-gray-500 duration-[250ms] md:block">POST INFO</p>
           <SidebarOption
             href={isOnPostInfo.href}
             title={isOnPostInfo.title}
