@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IoSettingsSharp } from "react-icons/io5";
-import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import { type NextRouter, useRouter } from "next/router";
 
 import type { NextPage } from "next";
 import type { User as FirebaseUser } from "firebase/auth";
@@ -9,7 +9,6 @@ import type { MongoDBUser } from "../types";
 
 import colors from "../constants/colors";
 import useStateContext from "../hooks/useStateContext";
-import { Logout, UpdateProfile } from "../utils/auth";
 
 import Sidebar from "../components/Sidebar";
 const LogoutButton = dynamic(() => import("../components/LogoutButton"));
@@ -18,7 +17,7 @@ const ColorInput = dynamic(() => import("../components/ColorInput"));
 
 const Settings: NextPage = () => {
   const { switchColor, switchMode, themeColor } = useStateContext();
-  const router = useRouter();
+  const router: NextRouter = useRouter();
 
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -27,12 +26,14 @@ const Settings: NextPage = () => {
 
   useEffect(() => {
     const setupUserStates = async () => {
-      const user = JSON.parse(localStorage.getItem("user") as string);
-      setUsername(`${user?.displayName}`);
-      setEmail(`${user?.email}`);
+      const user: FirebaseUser = JSON.parse(localStorage.getItem("user") as string);
+
+      setUsername(user?.displayName as string);
+      setEmail(user?.email as string);
       setImage(user?.photoURL);
+
       const { fetchUserByQuery } = await import("../api");
-      const { data: fetchedUser } = await fetchUserByQuery(`${user?.displayName}`);
+      const { data: fetchedUser } = await fetchUserByQuery(user?.displayName as string);
       const id = (fetchedUser as MongoDBUser)._id;
 
       setUserID(id);
@@ -43,7 +44,15 @@ const Settings: NextPage = () => {
 
   const handleUpdateProfile = async (event: any) => {
     event.preventDefault();
+    const { UpdateProfile } = await import("../utils/auth");
+
     UpdateProfile(email, username, image, userID);
+  };
+
+  const handleLogout = async () => {
+    const { Logout } = await import("../utils/auth");
+
+    Logout(router);
   };
 
   return (
@@ -53,7 +62,7 @@ const Settings: NextPage = () => {
         <header className="flex items-center pt-2">
           <h1 className="mr-[10px] text-2xl font-bold">Settings</h1>
           <IoSettingsSharp size={30} />
-          <LogoutButton handleLogout={() => Logout(router)} />
+          <LogoutButton handleLogout={handleLogout} />
         </header>
         <form
           className="mt-[10px] w-[350px] rounded-md bg-light-gray p-7 pb-10 dark:bg-dark-gray sm:w-[410px]"

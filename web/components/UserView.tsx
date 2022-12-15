@@ -13,7 +13,7 @@ const UserPreview: FC<UserSideViewProps> = ({ closeMenu, user }) => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const { data: posts } = await fetchPostByQuery(`${user?.username}`);
+      const { data: posts } = await fetchPostByQuery(user?.username as string);
       setPosts(posts);
     };
 
@@ -26,8 +26,8 @@ const UserPreview: FC<UserSideViewProps> = ({ closeMenu, user }) => {
       <div className="flex h-full w-full flex-col items-center overflow-y-auto pb-20">
         <div className="flex flex-col items-center rounded-md bg-white p-9 dark:bg-semi-gray">
           <Image
-            src={`${user?.image}`}
-            alt={`${user?.username}`}
+            src={user?.image as string}
+            alt={user?.username as string}
             height={200}
             width={200}
             className="mt-5 rounded-full border-2 border-dark-gray bg-dark-gray p-1"

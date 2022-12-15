@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import { type NextRouter, useRouter } from "next/router";
 
 import type { ChangeHandler, PostFormData } from "../types";
 import type { User as FirebaseUser } from "firebase/auth";
@@ -16,20 +16,27 @@ const Image = dynamic(() => import("next/image"));
 
 const Create: NextPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<FirebaseUser | null>(null);
   const [formData, setFormData] = useState<PostFormData>({
     title: "",
     description: "",
     image: null,
-    author: `${user?.displayName}`,
-    authorImage: `${user?.photoURL}`,
+    author: "",
+    authorImage: "",
   });
 
   const { themeColor, themeMode } = useStateContext();
-  const router = useRouter();
+  const router: NextRouter = useRouter();
 
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user") as string));
+    const user: FirebaseUser = JSON.parse(localStorage.getItem("user") as string);
+
+    setFormData({
+      ...formData,
+      author: user.displayName as string,
+      authorImage: user.photoURL as string,
+    });
+
+    // console.log(formData);
   }, []);
 
   const handleChange: ChangeHandler = event => setFormData({ ...formData, [event.target.name]: event.target.value });

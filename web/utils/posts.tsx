@@ -41,8 +41,8 @@ export const CreatePost: CreatePostSubmitHandler = async (formData, router, load
 export const LikedPeoples: LikedPeople = (people, user) => {
   if (!people.length) return "0 Likes";
 
-  if (people.includes(`${user?.displayName}`)) {
-    if (people.length === 1 && people.includes(`${user?.displayName}`)) return "You liked this post";
+  if (people.includes(user?.displayName as string)) {
+    if (people.length === 1 && people.includes(user?.displayName as string)) return "You liked this post";
 
     return `You and ${people.length - 1} ${people.length - 1 === 1 ? "other" : "others"}`;
   }
@@ -64,5 +64,5 @@ export const LikePost: LikePostHandler = async (setLikes, setLikeBTN, people, th
 
   setLikes(!people?.length ? "You liked this post" : people?.length === 1 ? "You and 1 other" : `You and ${people?.length} others`);
   setLikeBTN(<AiFillLike size={18} color={themeColor} />);
-  await LikePostAPI(_id, `${user?.displayName}`, `${user?.photoURL}`);
+  await LikePostAPI(_id, user?.displayName as string, user?.photoURL as string);
 };

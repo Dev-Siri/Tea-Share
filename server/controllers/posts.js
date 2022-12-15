@@ -5,12 +5,10 @@ export const getPosts = async (req, res) => {
   const { limit } = req.query;
 
   try {
-    const posts = limit ? await PostModel.find().limit(parseInt(limit)) : await PostModel.find();
-
-    const postsByDateCreated = posts.sort((prevPost, nextPost) => new Date(nextPost.createdAt) - new Date(prevPost.createdAt));
+    const posts = limit ? await PostModel.find().limit(parseInt(limit)).sort({ date: -1 }) : await PostModel.find().sort({ date: -1 });
 
     res.code(200);
-    return postsByDateCreated;
+    return posts;
   } catch (error) {
     res.code(404);
     return error.message;
@@ -20,12 +18,10 @@ export const getPosts = async (req, res) => {
 export const getPostsBySearchTerm = async (req, res) => {
   const { query, user } = req.query;
 
-  const isAskingForPostsByUser = user === "true";
-
   try {
-    const findObject = isAskingForPostsByUser ? [{ author: query }] : [{ _id: query }];
+    const findObject = user === "true" ? [{ author: query }] : [{ _id: query }];
 
-    const posts = await PostModel.find({ $or: findObject });
+    const posts = await PostModel.find({ $or: findObject }).sort({ date: -1 });
 
     return posts;
   } catch (error) {
@@ -35,7 +31,7 @@ export const getPostsBySearchTerm = async (req, res) => {
 };
 
 export const createPost = async (req, res) => {
-  const post = req.body;
+  const { body: post } = req;
 
   const newPost = new PostModel({
     ...post,

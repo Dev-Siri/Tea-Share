@@ -66,9 +66,9 @@ export const GoogleAuth: GoogleAuthHandler = async router => {
     if (!auth.currentUser) return;
 
     await createUser({
-      email: `${auth.currentUser?.email}`,
-      username: `${auth.currentUser?.displayName}`,
-      image: `${auth.currentUser?.photoURL}`,
+      email: auth.currentUser?.email as string,
+      username: auth.currentUser?.displayName as string,
+      image: auth.currentUser?.photoURL as string,
     });
 
     localStorage.setItem("user", JSON.stringify(auth.currentUser));

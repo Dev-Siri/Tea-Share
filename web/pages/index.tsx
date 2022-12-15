@@ -1,25 +1,24 @@
-import { type FC, useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { toast } from "react-hot-toast";
+import { type NextRouter, useRouter } from "next/router";
 
 import type { Post as PostType, HomeProps } from "../types";
-import type { GetStaticProps } from "next";
+import type { NextPage, GetStaticProps } from "next";
 
 import useStateContext from "../hooks/useStateContext";
-import { fetchPosts } from "../api";
 
 import Sidebar from "../components/Sidebar";
 const Post = dynamic(() => import("../components/Post"));
 const SearchBar = dynamic(() => import("../components/SearchBar"));
 
-const Home: FC<HomeProps> = ({ posts }) => {
+const Home: NextPage<HomeProps> = ({ posts }) => {
   const [reactivePosts, setReactivePosts] = useState<PostType[]>(posts);
   const [postLimit, setPostLimit] = useState<number>(18);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { searchTerm, themeColor } = useStateContext();
-  const router = useRouter();
+  const router: NextRouter = useRouter();
 
   useEffect(() => {
     toast.remove();
@@ -30,6 +29,7 @@ const Home: FC<HomeProps> = ({ posts }) => {
   useEffect(() => {
     const fetchMorePosts = async () => {
       setLoading(true);
+      const { fetchPosts } = await import("../api");
       const { data: posts } = await fetchPosts(postLimit);
 
       setReactivePosts(posts);
@@ -73,6 +73,7 @@ const Home: FC<HomeProps> = ({ posts }) => {
 };
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const { fetchPosts } = await import("../api");
   const { data } = await fetchPosts(6);
 
   return {

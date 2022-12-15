@@ -23,7 +23,7 @@ const Post: FC<PostProps> = ({ post }) => {
 
   const [likes, setLikes] = useState<string>(LikedPeoples(people, user));
   const [likeBTN, setLikeBTN] = useState<ReactElement>(
-    people.includes(`${user?.displayName}`) ? <AiFillLike size={22} color={themeColor} /> : <AiOutlineLike size={22} color={themeColor} />
+    people.includes(user?.displayName as string) ? <AiFillLike size={22} color={themeColor} /> : <AiOutlineLike size={22} color={themeColor} />
   );
 
   return (
@@ -37,8 +37,8 @@ const Post: FC<PostProps> = ({ post }) => {
       <div className="mt-2 flex pb-2.5">
         <button
           type="button"
-          onClick={() => LikePost(setLikes, setLikeBTN, people, `${themeColor}`, user, _id)}
-          disabled={people.includes(`${user?.displayName}`)}
+          onClick={() => LikePost(setLikes, setLikeBTN, people, themeColor as string, user, _id)}
+          disabled={people.includes(user?.displayName as string)}
           className="ml-5 flex h-8 w-[165px] cursor-pointer items-center border-none bg-transparent text-xs text-primary"
         >
           {likeBTN}

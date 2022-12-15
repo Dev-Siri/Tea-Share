@@ -54,8 +54,8 @@ const Profile: NextPage<ProfileProps> = ({ user, posts }) => {
 };
 
 export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({ params }) => {
-  const { data: posts } = await fetchPostByQuery(`${params?.name}`);
-  const { data: user } = await fetchUserByQuery(`${params?.name}`);
+  const { data: posts } = await fetchPostByQuery(params?.name as string);
+  const { data: user } = await fetchUserByQuery(params?.name as string);
 
   return {
     props: { user, posts },

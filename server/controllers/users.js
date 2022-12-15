@@ -4,13 +4,7 @@ export const getUsers = async (req, res) => {
   const { limit } = req.query;
 
   try {
-    let users;
-
-    if (limit) {
-      users = await UserModel.find().limit(parseInt(`${limit}`));
-    } else {
-      users = await UserModel.find();
-    }
+    const users = limit ? await UserModel.find().limit(parseInt(limit)) : await UserModel.find();
 
     res.code(200);
     return users;
@@ -21,7 +15,7 @@ export const getUsers = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-  const user = req.body;
+  const { body: user } = req;
 
   const userExists = (await UserModel.find({ username: user.username })).length;
 

@@ -27,7 +27,7 @@ const PostInfo: NextPage<PostInfoProps> = ({ post }) => {
           <p className="mb-2 max-w-[300px] border-b-[1px] border-b-semi-gray pb-2 sm:max-w-[500px]">{PostTime(createdAt)}</p>
           <div className="flex items-center border-b-[1px] border-b-semi-gray pb-2">
             <p>Posted by {author}</p>
-            <Link href={`/user/${author}`}>
+            <Link href={`/users/${author}`}>
               <Image height={30} width={30} src={authorImage} alt={author} className="ml-[10px] hidden rounded-full md:inline" />
             </Link>
           </div>
@@ -47,7 +47,7 @@ const PostInfo: NextPage<PostInfoProps> = ({ post }) => {
 };
 
 export const getServerSideProps: GetServerSideProps<PostInfoProps> = async ({ params }) => {
-  const { data } = await fetchPostByQuery(`${params?.name}`, false);
+  const { data } = await fetchPostByQuery(params?.name as string, false);
 
   if (!data[0]) return { notFound: true };
 
