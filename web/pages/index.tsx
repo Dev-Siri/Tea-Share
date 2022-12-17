@@ -18,7 +18,7 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
   const [postLimit, setPostLimit] = useState<number>(18);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { searchTerm, themeColor } = useStateContext();
+  const { searchTerm } = useStateContext();
   const router: NextRouter = useRouter();
 
   useEffect(() => {
@@ -27,10 +27,18 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
 
     const user: FirebaseUser = JSON.parse(localStorage.getItem("user") as string);
 
-    // console.log(user);
-
     if (!user) router.replace("/auth");
   }, []);
+
+  const search = () => {
+    if (!searchTerm) return setReactivePosts(posts);
+
+    const searchedPosts = posts?.filter(
+      post => post?.title.toLowerCase().includes(searchTerm.toLowerCase()) || post?.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setReactivePosts(searchedPosts);
+  };
 
   useEffect(() => {
     const fetchMorePosts = async () => {
@@ -45,29 +53,17 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
     fetchMorePosts();
   }, [postLimit]);
 
-  const search = () => {
-    if (!searchTerm) return setReactivePosts(posts);
-
-    const searchedPosts = posts?.filter(
-      post => post?.title.toLowerCase().includes(searchTerm.toLowerCase()) || post?.description.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    setReactivePosts(searchedPosts);
-  };
-
   return (
     <section className="flex dark:bg-black dark:text-white">
-      <Sidebar route="home" />
+      <Sidebar
+        route="home"
+        postScrollingOptions={{
+          setPostLimit,
+          loading,
+        }}
+      />
       <article className="w-[82%]">
         <SearchBar onSearch={search} />
-        <button
-          onClick={() => setPostLimit(prevPostLimit => prevPostLimit + 9)}
-          style={{ backgroundColor: themeColor }}
-          type="button"
-          className="absolute z-[1] ml-[32%] mt-[75vh] flex w-[190px] cursor-pointer justify-center rounded-md border-none p-[14px] text-white"
-        >
-          {loading ? "Loading..." : "Show more"}
-        </button>
         <aside className="flex h-screen w-full flex-wrap justify-around overflow-y-auto p-[30px] pl-0 pb-[100px] md:pl-[30px]">
           {reactivePosts?.map?.(post => (
             <Post key={post._id} post={post} />

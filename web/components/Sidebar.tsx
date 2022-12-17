@@ -1,6 +1,4 @@
 import React, { type FC, useState, useEffect, useMemo } from "react";
-import { FaUserFriends } from "react-icons/fa";
-import { BsFilePost } from "react-icons/bs";
 import dynamic from "next/dynamic";
 
 import useStateContext from "../hooks/useStateContext";
@@ -12,11 +10,14 @@ import { User as FirebaseUser } from "firebase/auth";
 import Logo from "../assets/LightLogo.png";
 import Cup from "../assets/Cup.png";
 
+import { FaUserFriends } from "react-icons/fa";
+import { BsFilePost, BsViewList } from "react-icons/bs";
+import { Oval } from "react-loader-spinner";
 const Link = dynamic(() => import("next/link"));
 const Image = dynamic(() => import("next/image"));
 const SidebarOption = dynamic(() => import("./SidebarOption"));
 
-const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo }) => {
+const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo, postScrollingOptions }) => {
   const { themeColor } = useStateContext();
   const [isSSR, setIsSSR] = useState<boolean>(true);
   const [user, setUser] = useState<FirebaseUser | null>(null);
@@ -54,7 +55,7 @@ const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo }) => {
             alt={user?.displayName ?? "Profile picture"}
             height={105}
             width={110}
-            className="absolute mt-24 h-11 w-11 self-center rounded-full border-2 border-gray-400 bg-white p-px md:mt-[120px] md:block md:h-[105px] md:w-[105px]"
+            className="absolute mt-24 h-11 w-11 self-center rounded-full border-2 border-gray-400 bg-white p-px md:mt-[110px] md:block md:h-[105px] md:w-[105px]"
           />
           <p className={`hidden self-center pt-10 text-[22px] font-bold md:block ${isOnPostInfo?.visible ? "mt-[110px]" : "mt-0"}`}>
             {(user?.displayName?.length as number) > 15 ? `${user?.displayName?.slice(0, 15)}...` : user?.displayName}
@@ -67,6 +68,21 @@ const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo }) => {
           <SidebarOption key={route.title} {...route} />
         ))}
       </section>
+      {route === "home" && (
+        <button
+          onClick={() => postScrollingOptions?.setPostLimit(prevPostLimit => prevPostLimit + 9)}
+          type="button"
+          style={{ color: themeColor }}
+          className="flex w-full cursor-pointer items-center justify-start rounded-sm border-none bg-black p-[14px] text-white hover:bg-dark-gray"
+        >
+          {postScrollingOptions?.loading ? (
+            <Oval height={18} width={18} color={themeColor} wrapperClass="ml-[10px]" />
+          ) : (
+            <BsViewList className="ml-4" />
+          )}
+          <p className="hidden md:ml-2 md:block">{postScrollingOptions?.loading ? "Loading..." : "Show more posts"}</p>
+        </button>
+      )}
       {isOnPostInfo?.visible && (
         <>
           <p className="ml-[30px] mt-3 mb-2 hidden text-lg text-gray-500 duration-[250ms] md:block">POST INFO</p>

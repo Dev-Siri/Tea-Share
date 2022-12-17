@@ -14,27 +14,32 @@ const Image = dynamic(() => import("next/image"));
 
 const Post: FC<PostProps> = ({ post }) => {
   const { themeColor } = useStateContext();
-  const [user, setUser] = useState<FirebaseUser | null>(null);
   const { image, title, people, description, _id, createdAt } = post;
+
+  const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [likes, setLikes] = useState<string>(LikedPeoples(people, user));
+  const [responsiveTitle, setResponsiveTitle] = useState<string>(title);
+  const [likeBTN, setLikeBTN] = useState<ReactElement>(<AiOutlineLike size={22} color={themeColor} />);
 
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user") as string));
+
+    setResponsiveTitle(window.innerWidth < 640 && title.length > 24 ? `${title.slice(0, 18)}...` : title);
+
+    setLikeBTN(
+      people.includes(user?.displayName as string) ? <AiFillLike size={22} color={themeColor} /> : <AiOutlineLike size={22} color={themeColor} />
+    );
   }, []);
 
-  const [likes, setLikes] = useState<string>(LikedPeoples(people, user));
-  const [likeBTN, setLikeBTN] = useState<ReactElement>(
-    people.includes(user?.displayName as string) ? <AiFillLike size={22} color={themeColor} /> : <AiOutlineLike size={22} color={themeColor} />
-  );
-
   return (
-    <article className="ml-10 mb-10 h-[570px] w-[300px] rounded-3xl border-4 border-light-gray dark:border-dark-gray sm:h-[570px] sm:w-[450px]">
+    <article className="ml-10 mb-10 h-[580px] w-[300px] rounded-3xl border-4 border-light-gray dark:border-dark-gray sm:h-[580px] sm:w-[450px]">
       <Image src={image} alt={title} height={300} width={450} className="h-[300px] w-[450px] rounded-3xl object-cover" />
       <div className="pl-6">
-        <h3 className="1px mt-10 text-[22px] font-bold leading-[1px]">{title}</h3>
+        <h3 className="mt-6 text-[22px] font-bold">{responsiveTitle}</h3>
         <p className="mt-8 h-16 w-[250px] overflow-y-auto break-words pb-5 text-gray-500 sm:w-[400px]">{description}</p>
         <p className="mt-3 h-16 overflow-y-auto break-words pb-2 text-gray-500">{PostTime(createdAt)}</p>
       </div>
-      <div className="mt-2 flex pb-2.5">
+      <div className="flex pb-2.5">
         <button
           type="button"
           onClick={() => LikePost(setLikes, setLikeBTN, people, themeColor as string, user, _id)}
@@ -48,7 +53,7 @@ const Post: FC<PostProps> = ({ post }) => {
         </button>
         <Link
           href={`/post/${_id}`}
-          className="ml-8 flex h-8 cursor-pointer items-center border-none bg-transparent pr-[10px] text-xs text-medium-blue  md:ml-44"
+          className="ml-8 flex h-8 cursor-pointer items-center border-none bg-transparent pr-[10px] text-xs text-medium-blue md:ml-44"
         >
           View more
         </Link>
