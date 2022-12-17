@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { IoSettingsSharp } from "react-icons/io5";
 import dynamic from "next/dynamic";
 import { type NextRouter, useRouter } from "next/router";

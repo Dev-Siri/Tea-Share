@@ -1,19 +1,18 @@
-import React, { type FC, useState } from "react";
-import { BsFillPeopleFill } from "react-icons/bs";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 
-import type { GetServerSideProps } from "next";
+import type { NextPage, GetServerSideProps } from "next";
 import type { AllUsersViewProps, MongoDBUser } from "../../types";
 
-import { fetchUsers } from "../../api";
 import useStateContext from "../../hooks/useStateContext";
 
 import Sidebar from "../../components/Sidebar";
+import { BsFillPeopleFill } from "react-icons/bs";
 const SearchBar = dynamic(() => import("../../components/SearchBar"));
 const UserList = dynamic(() => import("../../components/UserList"));
 const UserView = dynamic(() => import("../../components/UserView"));
 
-const AllUsersView: FC<AllUsersViewProps> = ({ users }) => {
+const AllUsersView: NextPage<AllUsersViewProps> = ({ users }) => {
   const { searchTerm } = useStateContext();
   const [reactiveUsers, setReactiveUsers] = useState<MongoDBUser[]>(users);
   const [showUserInfo, setShowUserInfo] = useState<boolean>(false);
@@ -45,6 +44,7 @@ const AllUsersView: FC<AllUsersViewProps> = ({ users }) => {
 };
 
 export const getServerSideProps: GetServerSideProps<AllUsersViewProps> = async () => {
+  const { fetchUsers } = await import("../../api");
   const { data: users } = await fetchUsers();
 
   return {

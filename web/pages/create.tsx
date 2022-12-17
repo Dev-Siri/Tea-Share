@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { type NextRouter, useRouter } from "next/router";
 
@@ -35,8 +35,6 @@ const Create: NextPage = () => {
       author: user.displayName as string,
       authorImage: user.photoURL as string,
     });
-
-    // console.log(formData);
   }, []);
 
   const handleChange: ChangeHandler = event => setFormData({ ...formData, [event.target.name]: event.target.value });

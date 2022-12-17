@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import type { ProfileProps, Post } from "../../types";
-import type { NextPage, GetServerSideProps } from "next";
-import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { type NextRouter, useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
-import { fetchPostByQuery, fetchUserByQuery } from "../../api";
+import type { User as FirebaseUser } from "firebase/auth";
+import type { ProfileProps, Post } from "../../types";
+import type { NextPage, GetServerSideProps } from "next";
 
 import Sidebar from "../../components/Sidebar";
 const Post = dynamic(() => import("../../components/Post"));
@@ -13,10 +13,10 @@ const Image = dynamic(() => import("next/image"));
 const Profile: NextPage<ProfileProps> = ({ user, posts }) => {
   const { username, image } = user;
 
-  const router = useRouter();
+  const router: NextRouter = useRouter();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") as string);
+    const user: FirebaseUser = JSON.parse(localStorage.getItem("user") as string);
 
     if (!user?.displayName) router.push(`/users/${user?.displayName}`);
   }, []);
@@ -54,6 +54,8 @@ const Profile: NextPage<ProfileProps> = ({ user, posts }) => {
 };
 
 export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({ params }) => {
+  const { fetchPostByQuery, fetchUserByQuery } = await import("../../api");
+
   const { data: posts } = await fetchPostByQuery(params?.name as string);
   const { data: user } = await fetchUserByQuery(params?.name as string);
 

@@ -2,11 +2,11 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { AiFillLike } from "react-icons/ai";
 
-import { createPost, storage } from "../api";
 import type { CreatePostSubmitHandler, LikedPeople, LikePostHandler, PostTimeCalculator } from "../types";
 
 export const CreatePost: CreatePostSubmitHandler = async (formData, router, loading) => {
   const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
+  const { createPost, storage } = await import("../api");
   const { toast } = await import("react-hot-toast");
 
   if (!formData.title || (!formData.image && formData.title.length > 3) || loading) return;
@@ -14,13 +14,13 @@ export const CreatePost: CreatePostSubmitHandler = async (formData, router, load
   toast.loading("Creating post...", { id: "creating-post-toast" });
 
   const characters: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" as const;
-  let imgName: string = "";
+  let imageName: string = "";
 
   for (let i = 0; i < characters.length; i++) {
-    imgName += characters.charAt(Math.floor(Math.random() * characters.length));
+    imageName += characters.charAt(Math.floor(Math.random() * characters.length));
   }
 
-  const imageRef = ref(storage, `posts/${imgName}.jpg`);
+  const imageRef = ref(storage, `posts/${imageName}.jpg`);
 
   await uploadBytes(imageRef, new Blob([formData.image as File]));
 

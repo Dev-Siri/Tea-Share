@@ -1,11 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 import type { NextPage, GetServerSideProps } from "next";
 import type { PostAuthorProps } from "../../../types";
-
-import { fetchUserByQuery, fetchPostByQuery } from "../../../api";
 
 import Sidebar from "../../../components/Sidebar";
 const Post = dynamic(() => import("../../../components/Post"));
@@ -56,6 +54,8 @@ const Author: NextPage<PostAuthorProps> = ({ user, posts }) => {
 };
 
 export const getServerSideProps: GetServerSideProps<PostAuthorProps> = async ({ params }) => {
+  const { fetchUserByQuery, fetchPostByQuery } = await import("../../../api");
+
   const { data: posts } = await fetchPostByQuery(params?.name as string);
   const { data: user } = await fetchUserByQuery(params?.name as string);
 

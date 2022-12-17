@@ -28,10 +28,17 @@ export const MailAuth: MailAuthHandler = async (displayName, email, password, ph
 
       const imageLink: string = await getDownloadURL(imageRef);
 
-      await createUser({ username: displayName, email, image: imageLink });
       await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(auth.currentUser as User, { displayName, photoURL: imageLink });
-      await createUser({ username: displayName, image: imageLink, email });
+      await updateProfile(auth.currentUser as User, {
+        displayName,
+        photoURL: imageLink,
+      });
+      await createUser({
+        username: displayName,
+        image: imageLink,
+        email,
+      });
+
       localStorage.setItem("user", JSON.stringify(auth.currentUser));
       router.replace("/");
     } catch (error: any) {
@@ -61,6 +68,7 @@ export const GoogleAuth: GoogleAuthHandler = async router => {
 
   try {
     const provider = new GoogleAuthProvider();
+
     await signInWithPopup(auth, provider);
 
     if (!auth.currentUser) return;

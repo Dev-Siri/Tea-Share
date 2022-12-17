@@ -51,7 +51,7 @@ const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo }) => {
           <div className="mb-16 hidden h-[60px] md:mb-0 md:block" style={{ backgroundColor: themeColor }} />
           <Image
             src={user?.photoURL ?? "https://via.placeholder.com/100x100"}
-            alt={user?.displayName as string}
+            alt={user?.displayName ?? "Profile picture"}
             height={105}
             width={110}
             className="absolute mt-24 h-11 w-11 self-center rounded-full border-2 border-gray-400 bg-white p-px md:mt-[120px] md:block md:h-[105px] md:w-[105px]"

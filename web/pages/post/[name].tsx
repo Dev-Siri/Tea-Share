@@ -1,10 +1,9 @@
-import { NextRouter, useRouter } from "next/router";
+import { type NextRouter, useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 import type { GetServerSideProps, NextPage } from "next";
 import type { PostInfoProps } from "../../types";
 
-import { fetchPostByQuery } from "../../api";
 import { PostTime } from "../../utils/posts";
 
 import Sidebar from "../../components/Sidebar";
@@ -47,6 +46,7 @@ const PostInfo: NextPage<PostInfoProps> = ({ post }) => {
 };
 
 export const getServerSideProps: GetServerSideProps<PostInfoProps> = async ({ params }) => {
+  const { fetchPostByQuery } = await import("../../api");
   const { data } = await fetchPostByQuery(params?.name as string, false);
 
   if (!data[0]) return { notFound: true };

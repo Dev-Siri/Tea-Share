@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { toast } from "react-hot-toast";
 import { type NextRouter, useRouter } from "next/router";
 
 import type { Post as PostType, HomeProps } from "../types";
 import type { NextPage, GetStaticProps } from "next";
+import type { User as FirebaseUser } from "firebase/auth";
 
 import useStateContext from "../hooks/useStateContext";
 
@@ -21,9 +22,14 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
   const router: NextRouter = useRouter();
 
   useEffect(() => {
+    // Remove the toast that is displayed when trying to login
     toast.remove();
 
-    if (!JSON.parse(localStorage.getItem("user") as string)) router.replace("/auth");
+    const user: FirebaseUser = JSON.parse(localStorage.getItem("user") as string);
+
+    // console.log(user);
+
+    if (!user) router.replace("/auth");
   }, []);
 
   useEffect(() => {

@@ -11,8 +11,10 @@ export default class Errors {
         return "User not found.";
       case "(auth/invalid-display-name).":
         return "Username must be entered.";
+      case "(auth/weak-password).":
+        return "Password too weak.";
       default:
-        return "Something went wrong.";
+        return error;
     }
   }
 

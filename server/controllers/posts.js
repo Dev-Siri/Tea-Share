@@ -5,7 +5,7 @@ export const getPosts = async (req, res) => {
   const { limit } = req.query;
 
   try {
-    const posts = limit ? await PostModel.find().limit(parseInt(limit)).sort({ date: -1 }) : await PostModel.find().sort({ date: -1 });
+    const posts = limit ? await PostModel.find().limit(parseInt(limit)) : await PostModel.find();
 
     res.code(200);
     return posts;

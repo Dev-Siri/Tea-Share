@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
@@ -8,6 +8,7 @@ import type { AuthHandler, UserSubmitFormData } from "../types";
 import useStateContext from "../hooks/useStateContext";
 
 import Banner from "../assets/banner.png";
+import SmallerBanner from "../assets/smaller-banner.png";
 import PurpleLogo from "../assets/DarkLogo.png";
 import WhiteLogo from "../assets/LightLogo.png";
 
@@ -102,7 +103,17 @@ const Auth: NextPage = () => {
           <GoogleLogin onClick={() => handleAuth(null, "google")} />
         </form>
       </article>
-      <Image src={Banner} alt="Tea Share, The brand new social networking application." height={944} width={1100} className="h-full" loading="lazy" />
+      <picture className="hidden min-[560px]:inline">
+        <source media="(max-width: 620px)" srcSet={SmallerBanner.src} />
+        <Image
+          src={Banner}
+          alt="Tea Share, The brand new social networking application."
+          height={944}
+          width={1100}
+          className="h-full"
+          loading="lazy"
+        />
+      </picture>
     </section>
   );
 };
