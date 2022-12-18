@@ -23,7 +23,7 @@ const Author: NextPage<PostAuthorProps> = ({ user, posts }) => {
 
   return (
     <section className="flex h-screen dark:bg-black dark:text-white">
-      <Sidebar route="post-info" isOnPostInfo={{ visible: true, title: "View Post", href: `/post/${post}`, postedBy: username }} />
+      <Sidebar route="post-author-info" isOnPostInfo={{ visible: true, title: "View Post", href: `/post/${post}`, postedBy: username }} />
       <article className="h-full w-[82%] overflow-y-auto">
         <div className="flex flex-col items-center">
           <div className="mt-[50px] flex w-[80%] flex-col items-center rounded-md bg-light-gray p-12 dark:bg-dark-gray sm:ml-5 md:ml-0 md:w-[30%] md:flex-row md:items-start lg:w-1/2">
