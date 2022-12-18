@@ -11,13 +11,13 @@ import Logo from "../assets/LightLogo.png";
 import Cup from "../assets/Cup.png";
 
 import { FaUserFriends } from "react-icons/fa";
-import { BsFilePost, BsViewList } from "react-icons/bs";
-import { Oval } from "react-loader-spinner";
+import { BsFilePost } from "react-icons/bs";
+import { MdViewList, MdOutlineViewList } from "react-icons/md";
 const Link = dynamic(() => import("next/link"));
 const Image = dynamic(() => import("next/image"));
 const SidebarOption = dynamic(() => import("./SidebarOption"));
 
-const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo, postScrollingOptions }) => {
+const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo, scrollingOptions }) => {
   const { themeColor } = useStateContext();
   const [isSSR, setIsSSR] = useState<boolean>(true);
   const [user, setUser] = useState<FirebaseUser | null>(null);
@@ -68,21 +68,18 @@ const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo, postScrollingOptions }
           <SidebarOption key={route.title} {...route} />
         ))}
       </section>
-      {route === "home" && (
-        <button
-          onClick={() => postScrollingOptions?.setPostLimit(prevPostLimit => prevPostLimit + 9)}
-          type="button"
-          style={{ color: themeColor }}
-          className="flex w-full cursor-pointer items-center justify-start rounded-sm border-none bg-black p-[14px] text-white hover:bg-dark-gray"
-        >
-          {postScrollingOptions?.loading ? (
-            <Oval height={18} width={18} color={themeColor} wrapperClass="ml-[10px]" />
-          ) : (
-            <BsViewList className="ml-4" />
-          )}
-          <p className="hidden md:ml-2 md:block">{postScrollingOptions?.loading ? "Loading..." : "Show more posts"}</p>
-        </button>
-      )}
+      {route === "home" ||
+        (route === "users" && (
+          <button
+            onClick={() => scrollingOptions?.setLimit(prevLimit => prevLimit + 9)}
+            type="button"
+            style={{ color: themeColor }}
+            className="flex w-full cursor-pointer items-center justify-start rounded-sm border-none bg-white p-[14px] text-white hover:bg-light-gray dark:bg-black dark:hover:bg-dark-gray"
+          >
+            {scrollingOptions?.loading ? <MdViewList className="ml-4" /> : <MdOutlineViewList className="ml-4" />}
+            <p className="hidden md:ml-2 md:block">{scrollingOptions?.loading ? "Loading..." : "Show more"}</p>
+          </button>
+        ))}
       {isOnPostInfo?.visible && (
         <>
           <p className="ml-[30px] mt-3 mb-2 hidden text-lg text-gray-500 duration-[250ms] md:block">POST INFO</p>

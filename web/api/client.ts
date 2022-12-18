@@ -11,7 +11,7 @@ const API = axios.create({
 });
 
 export const fetchPosts: FetchPostsAPI = limit => API.get(`/posts?limit=${limit}`);
-export const fetchUsers: FetchUsersAPI = () => API.get("/users");
+export const fetchUsers: FetchUsersAPI = limit => API.get(`/users?limit=${limit}`);
 export const fetchPostByQuery: FetchItemByQuery = (query, user = true) => API.get(`/posts/search?query=${query}&user=${user}`);
 export const fetchUserByQuery: FetchItemByQuery = query => API.get(`/users/search?query=${query}`);
 export const createPost: CreatePostAPI = formdata => API.post("/posts", formdata);

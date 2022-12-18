@@ -57,8 +57,8 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
     <section className="flex dark:bg-black dark:text-white">
       <Sidebar
         route="home"
-        postScrollingOptions={{
-          setPostLimit,
+        scrollingOptions={{
+          setLimit: setPostLimit,
           loading,
         }}
       />

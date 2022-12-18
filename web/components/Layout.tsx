@@ -44,7 +44,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         <link rel="icon" href="/favicon.png" />
         <title>{title}</title>
       </Head>
-      <main className={themeMode}>{children}</main>
+      <main className={`${themeMode} overflow-y-hidden`}>{children}</main>
     </>
   );
 };

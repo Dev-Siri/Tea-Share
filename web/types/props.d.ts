@@ -70,8 +70,8 @@ export interface UserSideViewProps extends WithUser<null> {
 
 export interface SidebarProps {
   route: string;
-  postScrollingOptions?: {
-    setPostLimit: Dispatch<SetStateAction<number>>;
+  scrollingOptions?: {
+    setLimit: Dispatch<SetStateAction<number>>;
     loading: boolean;
   };
   isOnPostInfo?: {

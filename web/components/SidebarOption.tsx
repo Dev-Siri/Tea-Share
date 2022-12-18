@@ -12,7 +12,7 @@ const SidebarOption: FC<SidebarOptionProps> = ({ href, title, icon, isActive }) 
   return (
     <Link
       href={href}
-      className={`flex w-full cursor-pointer items-center rounded-md bg-transparent text-white hover:bg-[#e6e7e8] dark:hover:bg-dark-gray ${
+      className={`flex w-full cursor-pointer items-center rounded-md bg-transparent text-white hover:bg-light-gray dark:hover:bg-dark-gray ${
         isActive ? "pl-0" : "pl-[35px]"
       } ${isActive ? "py-0 pr-5 pl-0" : "py-5 pr-5 pl-[30px]"}`}
       style={{ color: themeColor }}

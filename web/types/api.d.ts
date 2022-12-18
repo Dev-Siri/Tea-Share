@@ -17,5 +17,5 @@ export type FetchItemByQuery = (query: string, user?: boolean) => Promise<AxiosR
 export type CreatePostAPI = (formdata: PostFormData) => Promise<AxiosResponse<any, any>>;
 export type LikePostAPI = (id: string, name: string, image: string) => Promise<AxiosResponse<any, any>>;
 export type CreateUserAPI = (formdata: UserFormData) => Promise<AxiosResponse<any, any>>;
-export type FetchUsersAPI = () => Promise<AxiosResponse<any, any>>;
+export type FetchUsersAPI = (limit?: number) => Promise<AxiosResponse<any, any>>;
 export type UpdateProfileAPI = (id: string, user: MongoDBUser) => Promise<AxiosResponse<void, any>>;
