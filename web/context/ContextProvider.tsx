@@ -1,5 +1,4 @@
 import React, { type FC, useState, useEffect } from "react";
-import type { User as FirebaseUser } from "firebase/auth";
 
 import colors from "../constants/colors";
 import type { ContextProps } from "../types";
@@ -11,12 +10,10 @@ const ContextProvider: FC<ContextProps> = ({ children }) => {
   const [themeColor, setThemeColor] = useState<string>("#594194");
 
   useEffect(() => {
-    const setupStates = () => {
-      setThemeColor(localStorage.getItem("color") ?? colors[0]);
-      setThemeMode(localStorage.getItem("mode") ?? "light");
-    };
-
-    setupStates();
+    // Set the default states of the `color` and `mode` variables if
+    // they don't exist in `localStorage`. colors[3] = #594194 or a custom shade of purple
+    setThemeColor(localStorage.getItem("color") ?? colors[3]);
+    setThemeMode(localStorage.getItem("mode") ?? "light");
   }, []);
 
   const switchMode = (mode: string) => {

@@ -5,5 +5,7 @@ interface Route {
   isActive: boolean;
 }
 
-export type PageTitleHook = () => string;
+type Environment = "client" | "server";
+
+export type PageTitleHook = (environment: Environment) => string;
 export type RoutesHook = (username: string, route: string) => Route[];

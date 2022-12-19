@@ -22,7 +22,7 @@ export const MailAuth: MailAuthHandler = async (displayName, email, password, ph
         imageName += characters.charAt(Math.floor(Math.random() * characters.length));
       }
 
-      const imageRef = ref(storage, `users/${imageName}.jpg`);
+      const imageRef = ref(storage, `users/${imageName}`);
 
       await uploadBytes(imageRef, photoURL as File);
 

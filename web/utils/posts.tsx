@@ -20,9 +20,9 @@ export const CreatePost: CreatePostSubmitHandler = async (formData, router, load
     imageName += characters.charAt(Math.floor(Math.random() * characters.length));
   }
 
-  const imageRef = ref(storage, `posts/${imageName}.jpg`);
+  const imageRef = ref(storage, `posts/${imageName}`);
 
-  await uploadBytes(imageRef, new Blob([formData.image as File]));
+  await uploadBytes(imageRef, formData.image as File);
 
   const imageLink = await getDownloadURL(imageRef);
 

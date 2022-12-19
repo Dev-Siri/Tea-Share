@@ -1,36 +1,26 @@
-import { useEffect, useState } from "react";
-
 import type { PageTitleHook } from "../types";
-import type { User as FirebaseUser } from "firebase/auth";
 
-const usePageTitle: PageTitleHook = () => {
-  const [user, setUser] = useState<FirebaseUser | null>(null);
-  const [pageTitle, setPageTitle] = useState<string>("");
+import { PAGE_TITLE } from "../constants/pageInfo";
 
-  useEffect(() => {
-    const calculatePageTitle = () => {
-      setUser(JSON.parse(localStorage.getItem("user") as string));
+const usePageTitle: PageTitleHook = environment => {
+  if (environment === "server") return PAGE_TITLE;
 
-      switch (location.pathname) {
-        case "/auth":
-          setPageTitle("Tea Share - A Brand New Social Networking Platform");
-        case "/":
-          setPageTitle("Tea Share - Home");
-        case "/settings":
-          setPageTitle("Tea Share - Settings");
-        case "/users":
-          setPageTitle("Tea Share - Users");
-        case `/users/${user?.displayName}`:
-          setPageTitle(`Tea Share - ${user?.displayName}`);
-        default:
-          setPageTitle("Tea Share");
-      }
-    };
+  const user = JSON.parse(localStorage.getItem("user") as string);
 
-    calculatePageTitle();
-  }, []);
-
-  return pageTitle;
+  switch (location.pathname) {
+    case "/auth":
+      return "Tea Share - Signup | Login";
+    case "/":
+      return "Tea Share - Home";
+    case "/settings":
+      return "Tea Share - Settings";
+    case "/users":
+      return "Tea Share - Users";
+    case `/users/${user?.displayName}`:
+      return `Tea Share - ${user?.displayName}`;
+    default:
+      return "Tea Share";
+  }
 };
 
 export default usePageTitle;
