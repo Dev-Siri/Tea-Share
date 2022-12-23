@@ -99,7 +99,7 @@ const Auth: NextPage = () => {
         </form>
       </article>
       <picture className="hidden min-[560px]:inline">
-        <source media="(max-width: 620px)" srcSet="/smaller-banner.png" />
+        <source media="(max-width: 620px)" srcSet="/images/smaller-banner.png" />
         <Image
           src="/images/banner.png"
           alt="Tea Share, The brand new social networking application."
