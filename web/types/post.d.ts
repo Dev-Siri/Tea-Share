@@ -1,5 +1,3 @@
-export type ChangeHandler = (event: any) => void;
-
 export interface PostFormData {
   title: string;
   description: string;

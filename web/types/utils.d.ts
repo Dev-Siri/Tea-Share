@@ -17,7 +17,11 @@ export type GoogleAuthHandler = (router: NextRouter) => Promise<void>;
 export type LogoutHandler = (router: NextRouter) => Promise<void>;
 export type UpdateProfileHandler = (email: string, username: string, image: File | string | undefined | null, id: string) => Promise<void>;
 
-export type CreatePostSubmitHandler = (formData: PostFormData, router: NextRouter, loading: boolean) => Promise<void>;
+export type CreatePostSubmitHandler = (
+  formData: PostFormData,
+  router: NextRouter,
+  setIsCreatingPost: Dispatch<SetStateAction<boolean>>
+) => Promise<void>;
 
 export type LikedPeople = (people: string[], user: FirebaseUser | null) => string;
 export type LikePostHandler = (

@@ -1,13 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { type NextRouter, useRouter } from "next/router";
 
-import type { ChangeHandler, PostFormData } from "../types";
 import type { User as FirebaseUser } from "firebase/auth";
 import type { NextPage } from "next";
-
-import SelectImageLight from "../assets/SelectLight.png";
-import SelectImageDark from "../assets/Select.png";
 
 import useStateContext from "../hooks/useStateContext";
 
@@ -15,14 +11,12 @@ import Sidebar from "../components/Sidebar";
 const Image = dynamic(() => import("next/image"));
 
 const Create: NextPage = () => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [formData, setFormData] = useState<PostFormData>({
-    title: "",
-    description: "",
-    image: null,
-    author: "",
-    authorImage: "",
-  });
+  const [isCreatingPost, setIsCreatingPost] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [image, setImage] = useState<File | string | undefined | null>(null);
+  const [author, setAuthor] = useState<string>("");
+  const [authorImage, setAuthorImage] = useState<string>("");
 
   const { themeColor, themeMode } = useStateContext();
   const router: NextRouter = useRouter();
@@ -30,21 +24,36 @@ const Create: NextPage = () => {
   useEffect(() => {
     const user: FirebaseUser = JSON.parse(localStorage.getItem("user") as string);
 
-    setFormData({
-      ...formData,
-      author: user.displayName as string,
-      authorImage: user.photoURL as string,
-    });
+    setAuthor(user.displayName as string);
+    setAuthorImage(user.photoURL as string);
   }, []);
-
-  const handleChange: ChangeHandler = event => setFormData({ ...formData, [event.target.name]: event.target.value });
 
   const handleCreate = async (event: any) => {
     event.preventDefault();
     const { CreatePost } = await import("../utils/posts");
 
-    CreatePost(formData, router, loading);
+    if ((image as File).type.match("image.*")) {
+      CreatePost(
+        {
+          title,
+          description,
+          image,
+          author,
+          authorImage,
+        },
+        router,
+        setIsCreatingPost
+      );
+    } else {
+      const { toast } = await import("react-hot-toast");
+      toast.error("Upload file type is not an image.");
+    }
   };
+
+  const optimizedImage = useMemo(
+    () => (!image ? (themeMode === "dark" ? "/images/select-dark.png" : "/images/select-light.png") : URL.createObjectURL(image as File)),
+    [image]
+  );
 
   return (
     <section className="relative flex items-center dark:bg-black dark:text-white">
@@ -55,9 +64,7 @@ const Create: NextPage = () => {
           onSubmit={event => handleCreate(event)}
         >
           <Image
-            src={
-              !formData.image || loading ? (themeMode === "dark" ? SelectImageDark : SelectImageLight) : URL.createObjectURL(formData.image as Blob)
-            }
+            src={optimizedImage}
             className="mr-[10px] h-[200px] w-full rounded-[10px] sm:h-[380px] lg:w-[490px]"
             alt="Selected Image"
             height={300}
@@ -69,30 +76,28 @@ const Create: NextPage = () => {
             <div className="w-[98%]">
               <input
                 className="mt-5 ml-[5px] w-full rounded-md border-[1px] border-light-gray p-[15px] outline-none duration-[250ms] focus:border-primary dark:border-semi-gray dark:bg-semi-gray dark:text-white"
-                value={formData.title}
+                value={title}
                 placeholder="Title"
                 name="title"
-                onChange={handleChange}
+                onChange={event => setTitle(event.target.value)}
               />
               <input
                 className="mt-5 ml-[5px] w-full rounded-md border-[1px] border-light-gray p-[15px] outline-none duration-[250ms] focus:border-primary dark:border-semi-gray dark:bg-semi-gray dark:text-white"
-                value={formData.description}
+                value={description}
                 placeholder="About The Post"
                 name="description"
-                onChange={handleChange}
+                onChange={event => setDescription(event.target.value)}
               />
               <input
                 className="mt-5 ml-[5px] w-full rounded-md border-[1px] border-light-gray p-[15px] outline-none duration-[250ms] focus:border-primary dark:border-semi-gray dark:bg-semi-gray dark:text-white"
                 type="file"
                 aria-label="Post File Upload"
-                onChange={event => {
-                  setFormData({ ...formData, image: event.target.files?.[0] });
-                  setLoading(false);
-                }}
+                onChange={event => setImage(event.target.files?.[0])}
               />
             </div>
             <button
               type="submit"
+              disabled={isCreatingPost}
               className="mt-5 ml-[5px] w-[98%] cursor-pointer rounded-[5px] border-none bg-primary p-[13px] text-white duration-[250ms] hover:bg-primary-dark lg:mt-[50px]"
               style={{ backgroundColor: themeColor }}
             >

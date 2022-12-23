@@ -7,11 +7,6 @@ import type { AuthHandler, UserSubmitFormData } from "../types";
 
 import useStateContext from "../hooks/useStateContext";
 
-import Banner from "../assets/banner.png";
-import SmallerBanner from "../assets/smaller-banner.png";
-import PurpleLogo from "../assets/DarkLogo.png";
-import WhiteLogo from "../assets/LightLogo.png";
-
 const Image = dynamic(() => import("next/image"));
 const GoogleLogin = dynamic(() => import("../components/GoogleLogin"));
 
@@ -45,7 +40,7 @@ const Auth: NextPage = () => {
   return (
     <section className="flex h-screen w-screen dark:bg-black dark:text-white">
       <article className="mr-[60px] h-fit w-[350px] pt-[10px] pl-5 duration-[250ms]">
-        <Image src={themeMode === "dark" ? WhiteLogo : PurpleLogo} alt="Logo" height={100} width={200} priority />
+        <Image src={themeMode === "dark" ? "/images/logo-white.png" : "/images/logo-purple.png"} alt="Logo" height={100} width={200} priority />
         <h1 className={`mt-3 mb-7 h-px w-[310px] text-3xl font-bold ${isSignup ? "text-center" : "ml-2"}`}>
           {isSignup ? "Signup for" : "Login to"} Tea share
         </h1>
@@ -104,9 +99,9 @@ const Auth: NextPage = () => {
         </form>
       </article>
       <picture className="hidden min-[560px]:inline">
-        <source media="(max-width: 620px)" srcSet={SmallerBanner.src} />
+        <source media="(max-width: 620px)" srcSet="/smaller-banner.png" />
         <Image
-          src={Banner}
+          src="/images/banner.png"
           alt="Tea Share, The brand new social networking application."
           height={944}
           width={1100}

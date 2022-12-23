@@ -1,5 +1,6 @@
-import React, { type FC } from "react";
 import dynamic from "next/dynamic";
+
+import type { FC } from "react";
 import type { PostProps } from "../types";
 
 const Link = dynamic(() => import("next/link"));

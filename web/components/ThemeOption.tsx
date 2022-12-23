@@ -1,6 +1,6 @@
-import React, { type FC } from "react";
 import { BsFillSunFill, BsFillMoonFill } from "react-icons/bs";
 
+import type { FC } from "react";
 import type { ThemeOptionProps } from "../types";
 
 const ThemeOption: FC<ThemeOptionProps> = ({ title, onClick }) => (

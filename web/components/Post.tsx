@@ -1,4 +1,4 @@
-import React, { type FC, type ReactElement, useState, useEffect } from "react";
+import { type FC, type ReactElement, useState, useEffect } from "react";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import dynamic from "next/dynamic";
 

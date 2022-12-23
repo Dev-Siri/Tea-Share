@@ -4,12 +4,14 @@ import { AiFillLike } from "react-icons/ai";
 
 import type { CreatePostSubmitHandler, LikedPeople, LikePostHandler, PostTimeCalculator } from "../types";
 
-export const CreatePost: CreatePostSubmitHandler = async (formData, router, loading) => {
+export const CreatePost: CreatePostSubmitHandler = async (formData, router, setIsCreatingPost) => {
   const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
   const { createPost, storage } = await import("../api");
   const { toast } = await import("react-hot-toast");
 
-  if (!formData.title || (!formData.image && formData.title.length > 3) || loading) return;
+  if (!formData.title || (!formData.image && formData.title.length > 3)) return;
+
+  setIsCreatingPost(true);
 
   toast.loading("Creating post...", { id: "creating-post-toast" });
 
@@ -35,6 +37,8 @@ export const CreatePost: CreatePostSubmitHandler = async (formData, router, load
 
   toast.remove("creating-post-toast");
   toast.success("Post created successfully");
+
+  setIsCreatingPost(false);
   router.push("/");
 };
 

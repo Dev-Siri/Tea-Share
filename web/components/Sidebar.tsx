@@ -1,4 +1,4 @@
-import React, { type FC, useState, useEffect, useMemo } from "react";
+import { type FC, useState, useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
 
 import useStateContext from "../hooks/useStateContext";
@@ -6,9 +6,6 @@ import useRoutes from "../hooks/useRoutes";
 
 import type { SidebarProps } from "../types";
 import { User as FirebaseUser } from "firebase/auth";
-
-import Logo from "../assets/LightLogo.png";
-import Cup from "../assets/Cup.png";
 
 import { FaUserFriends } from "react-icons/fa";
 import { BsFilePost } from "react-icons/bs";
@@ -37,10 +34,12 @@ const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo, scrollingOptions }) =>
       {!isSSR && (
         <Link href="/">
           <picture>
-            <source media="(max-width: 767px)" srcSet={Cup.src} />
+            <source media="(max-width: 767px)" srcSet="/images/icon.png" />
             <Image
-              src={Logo}
+              src="/images/logo-white.png"
               alt="Logo"
+              height={140}
+              width={140}
               className="h-[80px] w-full cursor-pointer rounded-md rounded-tr-[10px] p-5 md:h-[140px] md:rounded-none"
               style={{ backgroundColor: themeColor }}
             />

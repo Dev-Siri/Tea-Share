@@ -1,7 +1,8 @@
-import React, { type FC } from "react";
 import { IoSearch } from "react-icons/io5";
 
+import type { FC } from "react";
 import type { SearchBarProps } from "../types";
+
 import useStateContext from "../hooks/useStateContext";
 
 const SearchBar: FC<SearchBarProps> = ({ onSearch }) => {

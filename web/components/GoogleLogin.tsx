@@ -1,6 +1,6 @@
-import React, { type FC } from "react";
 import { FcGoogle } from "react-icons/fc";
 
+import type { FC } from "react";
 import type { GoogleLoginProps } from "../types";
 
 const GoogleLogin: FC<GoogleLoginProps> = ({ onClick }) => (

@@ -1,6 +1,6 @@
-import React, { type FC } from "react";
 import { AiOutlineLogout } from "react-icons/ai";
 
+import type { FC } from "react";
 import type { LogoutButtonProps } from "../types";
 
 const LogoutButton: FC<LogoutButtonProps> = ({ handleLogout }) => (

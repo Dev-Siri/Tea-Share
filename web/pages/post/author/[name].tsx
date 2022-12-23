@@ -29,7 +29,7 @@ const Author: NextPage<PostAuthorProps> = ({ user, posts }) => {
           <div className="mt-[50px] flex w-[80%] flex-col items-center rounded-md bg-light-gray p-12 dark:bg-dark-gray sm:ml-5 md:ml-0 md:w-[30%] md:flex-row md:items-start lg:w-1/2">
             {user ? (
               <>
-                <Image src={image} alt={username} height={130} width={130} className="rounded-full" />
+                <Image src={image} alt={username} height={130} width={130} className="h-[130px] rounded-full" />
                 <div className="mt-4 text-center md:mt-0 md:ml-8 md:text-start">
                   <h1 className="text-3xl font-bold">{username}</h1>
                   <h2 className="text-xl text-gray-500">@{username?.toLowerCase().split(" ").join("-")}</h2>

@@ -27,7 +27,7 @@ const PostInfo: NextPage<PostInfoProps> = ({ post }) => {
           <div className="flex items-center border-b-[1px] border-b-semi-gray pb-2">
             <p>Posted by {author}</p>
             <Link href={`/users/${author}`}>
-              <Image height={30} width={30} src={authorImage} alt={author} className="ml-[10px] hidden rounded-full md:inline" />
+              <Image height={30} width={30} src={authorImage} alt={author} className="ml-[10px] hidden h-[30px] rounded-full md:inline" />
             </Link>
           </div>
         </div>

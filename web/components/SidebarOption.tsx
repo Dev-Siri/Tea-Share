@@ -1,8 +1,9 @@
-import React, { type FC } from "react";
 import dynamic from "next/dynamic";
 
-import useStateContext from "../hooks/useStateContext";
+import type { FC } from "react";
 import type { SidebarOptionProps } from "../types";
+
+import useStateContext from "../hooks/useStateContext";
 
 const Link = dynamic(() => import("next/link"));
 

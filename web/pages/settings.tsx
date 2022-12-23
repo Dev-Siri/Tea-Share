@@ -46,13 +46,13 @@ const Settings: NextPage = () => {
     event.preventDefault();
     const { UpdateProfile } = await import("../utils/auth");
 
-    UpdateProfile(email, username, image, userID);
+    await UpdateProfile(email, username, image, userID);
   };
 
   const handleLogout = async () => {
     const { Logout } = await import("../utils/auth");
 
-    Logout(router);
+    await Logout(router);
   };
 
   return (

@@ -1,7 +1,8 @@
-import React, { type FC } from "react";
 import { TiTick } from "react-icons/ti";
 
+import type { FC } from "react";
 import type { ColorInputProps } from "../types";
+
 import useStateContext from "../hooks/useStateContext";
 
 const ColorInput: FC<ColorInputProps> = ({ color, handleClick }) => {

@@ -9,15 +9,15 @@ const usePageTitle: PageTitleHook = environment => {
 
   switch (location.pathname) {
     case "/auth":
-      return "Tea Share - Signup | Login";
+      return "Login";
     case "/":
-      return "Tea Share - Home";
+      return "Home";
     case "/settings":
-      return "Tea Share - Settings";
+      return "Settings";
     case "/users":
-      return "Tea Share - Users";
+      return "Users";
     case `/users/${user?.displayName}`:
-      return `Tea Share - ${user?.displayName}`;
+      return `${user?.displayName}`;
     default:
       return "Tea Share";
   }
