@@ -7,6 +7,7 @@ import type { Post as PostType, HomeProps } from "../types";
 import type { NextPage, GetStaticProps } from "next";
 import type { User as FirebaseUser } from "firebase/auth";
 
+import { CLIENT_POST_LIMIT } from "../constants/limit";
 import useStateContext from "../hooks/useStateContext";
 
 import Sidebar from "../components/Sidebar";
@@ -15,7 +16,7 @@ const SearchBar = dynamic(() => import("../components/SearchBar"));
 
 const Home: NextPage<HomeProps> = ({ posts }) => {
   const [reactivePosts, setReactivePosts] = useState<PostType[]>(posts);
-  const [postLimit, setPostLimit] = useState<number>(18);
+  const [postLimit, setPostLimit] = useState<number>(CLIENT_POST_LIMIT);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { searchTerm } = useStateContext();
@@ -33,7 +34,7 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
   const search = () => {
     if (!searchTerm) return setReactivePosts(posts);
 
-    const searchedPosts = posts?.filter(
+    const searchedPosts: PostType[] = posts?.filter(
       post => post?.title.toLowerCase().includes(searchTerm.toLowerCase()) || post?.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -75,8 +76,9 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
 };
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const { SERVER_POST_LIMIT } = await import("../constants/limit");
   const { fetchPosts } = await import("../api");
-  const { data } = await fetchPosts(6);
+  const { data } = await fetchPosts(SERVER_POST_LIMIT);
 
   return {
     props: { posts: data },

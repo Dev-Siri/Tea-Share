@@ -4,6 +4,8 @@ import dynamic from "next/dynamic";
 import useStateContext from "../hooks/useStateContext";
 import useRoutes from "../hooks/useRoutes";
 
+import { MORE_POST_TO_FETCH_LIMIT } from "../constants/limit";
+
 import type { SidebarProps } from "../types";
 import { User as FirebaseUser } from "firebase/auth";
 
@@ -69,7 +71,7 @@ const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo, scrollingOptions }) =>
       </section>
       {(route === "home" || route === "users") && (
         <button
-          onClick={() => scrollingOptions?.setLimit(prevLimit => prevLimit + 9)}
+          onClick={() => scrollingOptions?.setLimit(prevLimit => prevLimit + MORE_POST_TO_FETCH_LIMIT)}
           type="button"
           style={{ color: themeColor }}
           className="flex w-full cursor-pointer items-center justify-start rounded-sm border-none bg-white p-[14px] text-white hover:bg-light-gray dark:bg-black dark:hover:bg-dark-gray"
