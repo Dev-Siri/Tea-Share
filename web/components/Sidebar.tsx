@@ -5,9 +5,10 @@ import useStateContext from "../hooks/useStateContext";
 import useRoutes from "../hooks/useRoutes";
 
 import { MORE_POST_TO_FETCH_LIMIT } from "../constants/limit";
+import { getPlaceholderImage } from "../utils/globals";
 
-import type { SidebarProps } from "../types";
-import { User as FirebaseUser } from "firebase/auth";
+import type { Route, SidebarProps } from "../types";
+import type { User as FirebaseUser } from "firebase/auth";
 
 import { FaUserFriends } from "react-icons/fa";
 import { BsFilePost } from "react-icons/bs";
@@ -21,7 +22,7 @@ const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo, scrollingOptions }) =>
   const [isSSR, setIsSSR] = useState<boolean>(true);
   const [user, setUser] = useState<FirebaseUser | null>(null);
 
-  const routes = useMemo(() => useRoutes(user?.displayName as string, route), [route, user]);
+  const routes: Route[] = useMemo(() => useRoutes(user?.displayName as string, route), [route, user]);
 
   useEffect(() => {
     setIsSSR(false);
@@ -31,40 +32,46 @@ const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo, scrollingOptions }) =>
     if (!isSSR && !user) location.reload();
   }, []);
 
+  const correctlyFetchUserImage = (): string => {
+    if (isSSR || !user?.photoURL) {
+      return getPlaceholderImage(100);
+    } else {
+      return user.photoURL;
+    }
+  };
+
   return (
-    <aside className="flex h-screen w-[80px] flex-col overflow-y-auto rounded-tr-[10px] rounded-br-[10px] border-r-4 border-r-light-gray align-top dark:border-r-dark-gray md:w-[260px]">
-      {!isSSR && (
-        <Link href="/">
-          <picture>
-            <source media="(max-width: 767px)" srcSet="/images/icon.png" />
-            <Image
-              src="/images/logo-white.png"
-              alt="Logo"
-              height={140}
-              width={140}
-              className="h-[80px] w-full cursor-pointer rounded-md rounded-tr-[10px] p-5 md:h-[140px] md:rounded-none"
-              style={{ backgroundColor: themeColor }}
-            />
-          </picture>
-        </Link>
-      )}
-      {!isOnPostInfo?.visible && !isSSR && (
+    <aside className="flex h-screen w-[80px] flex-col overflow-y-auto rounded-tr-[10px] rounded-br-[10px] border-r-2 border-r-light-gray bg-white align-top dark:border-r-border-gray dark:bg-black md:w-[260px]">
+      <Link href="/">
+        <picture>
+          <source media="(max-width: 767px)" srcSet="/images/icon.png" />
+          <Image
+            src="/images/logo-white.png"
+            alt="Logo"
+            height={140}
+            width={140}
+            className="h-[80px] w-full cursor-pointer rounded-md rounded-tr-[10px] p-5 md:h-[140px] md:rounded-none"
+            style={{ backgroundColor: themeColor }}
+          />
+        </picture>
+      </Link>
+      {!isOnPostInfo?.visible && (
         <>
           <div className="mb-16 hidden h-[60px] md:mb-0 md:block" style={{ backgroundColor: themeColor }} />
           <Image
-            src={user?.photoURL ?? "https://via.placeholder.com/100x100"}
+            src={correctlyFetchUserImage()}
             alt={user?.displayName ?? "Profile picture"}
             height={105}
             width={110}
-            className="absolute mt-24 h-11 w-11 self-center rounded-full border-2 border-gray-400 bg-white p-px md:mt-[110px] md:block md:h-[105px] md:w-[105px]"
+            className="mt-2 h-11 w-11 self-center rounded-full border-2 border-gray-400 bg-white p-px md:-mt-20 md:block md:h-[105px] md:w-[105px]"
           />
-          <p className={`hidden self-center pt-10 text-[22px] font-bold md:block ${isOnPostInfo?.visible ? "mt-[110px]" : "mt-0"}`}>
-            {(user?.displayName?.length as number) > 15 ? `${user?.displayName?.slice(0, 15)}...` : user?.displayName}
+          <p className={`mt-4 hidden self-center text-[22px] font-bold md:block ${isOnPostInfo?.visible ? "mt-[110px]" : "mt-0"}`}>
+            {!user?.displayName ? "Loading..." : user.displayName.length > 15 ? `${user.displayName.slice(0, 15)}...` : user.displayName}
           </p>
         </>
       )}
       <p className={`ml-[30px] mb-2 hidden text-lg text-gray-500 duration-[250ms] md:block ${isOnPostInfo?.visible ? "mt-10" : "mt-0"}`}>PAGES</p>
-      <section className={`md:mt-0 ${isOnPostInfo?.visible ? "mt-0" : "mt-20"}`}>
+      <section className={`md:mt-0 ${isOnPostInfo?.visible ? "mt-0" : "mt-2"}`}>
         {routes.map(route => (
           <SidebarOption key={route.title} {...route} />
         ))}

@@ -1,11 +1,9 @@
 # Tea share
 
-The platform for sharing images.
-
 ## Description
 
-Tea share is an online image sharing platform for Android and the Web. It provides UI to interact and scroll through posts and allows you to
-create posts easily with the click of a button. It is built with React native for mobile (iOS/Android) and **[Next.js](https://nextjs.org)** for the web version. It uses **[MongoDB](https://www.mongodb.com)** as the
+Tea share is an online social media app for iOS, Android and the Web. It provides UI to interact and scroll through posts and allows you to
+create posts easily with the click of a button. It is built with Flutter for mobile (iOS/Android) and **[Next.js](https://nextjs.org)** for the web version. It uses **[MongoDB](https://www.mongodb.com)** as the
 database, **[Node.js](https://nodejs.org)** as the server side runtime and **[Firebase](https://firebase.google.com)** for authentication and storage for all the user generated data.
 
 The web version is a younger version of the App.
@@ -35,39 +33,44 @@ it will be available in this repository.
 - Run this command to clone the project
 
 ```sh
-$ git clone https://github.com/Dev-Siri/Tea-share.git
+git clone https://github.com/Dev-Siri/Tea-share.git
 ```
 
 Now enter the directory like (web or server) to start
 
 ```sh
-$ cd web
-    # OR
-$ cd server
-    # OR
-$ cd mobile
+cd web
+  # OR
+cd server
+  # OR
+cd mobile
 ```
 
 - Make sure to run npm/yarn install to install the dependencies for the **Web and Server** only, before running the project
 
 ```sh
-$ npm install
+npm install
     # OR
-$ yarn install
+yarn install
 ```
 
 - Then run npm/yarn start to run the project locally
 
-> Warning: The project is currently undergoing a migration from react native to flutter. Recommended to not use the mobile version for now.
+> Warning: The project is currently undergoing a migration from react native to flutter. The mobile version is not available right now.
 
 ```sh
-# For mobile version
-$ flutter run
+# For mobile version (Not available right now)
+flutter run
 
 # For web version
-$ npm run dev
+npm run dev
+
+# For the server version (with live reloading)
+npm run dev
+# Or without live reloading
+npm start
 ```
 
 ## License
 
-This project MIT Licensed - see the LICENSE.md file for details
+This project is MIT Licensed - see the [LICENSE.md](LICENSE.md) file for details

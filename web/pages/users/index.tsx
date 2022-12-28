@@ -7,7 +7,6 @@ import type { AllUsersViewProps, MongoDBUser } from "../../types";
 import useStateContext from "../../hooks/useStateContext";
 
 import Sidebar from "../../components/Sidebar";
-import { BsFillPeopleFill } from "react-icons/bs";
 const SearchBar = dynamic(() => import("../../components/SearchBar"));
 const UserList = dynamic(() => import("../../components/UserList"));
 const UserView = dynamic(() => import("../../components/UserView"));
@@ -41,7 +40,7 @@ const AllUsersView: NextPage<AllUsersViewProps> = ({ users }) => {
   }, [usersLimit]);
 
   return (
-    <article className="flex dark:bg-black dark:text-white">
+    <article className="flex dark:bg-dark-gray dark:text-white">
       <Sidebar
         route="users"
         scrollingOptions={{
@@ -50,13 +49,7 @@ const AllUsersView: NextPage<AllUsersViewProps> = ({ users }) => {
         }}
       />
       <div className="w-[82%]">
-        <div className="mt-5 flex flex-col justify-center pl-[50px]">
-          <div className="flex items-center">
-            <h1 className="mr-[10px] text-3xl font-bold leading-[1px]">Users</h1>
-            <BsFillPeopleFill size={40} />
-          </div>
-        </div>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} noBorder />
         <UserList users={reactiveUsers} itemClick={{ changeShowingUserInfo: () => setShowUserInfo(true), setSelectedUser }} />
       </div>
       {showUserInfo && <UserView user={selectedUser} closeMenu={() => setShowUserInfo(false)} />}

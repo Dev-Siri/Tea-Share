@@ -56,11 +56,11 @@ const Create: NextPage = () => {
   );
 
   return (
-    <section className="relative flex items-center dark:bg-black dark:text-white">
+    <section className="relative flex items-center dark:bg-dark-gray dark:text-white">
       <Sidebar route="create" />
       <article className="z-50 flex h-screen w-[82%] items-center justify-center overflow-auto">
         <form
-          className="mt-40 mb-4 flex h-[570px] w-[70%] flex-col rounded-[20px] border-8 border-light-gray p-5 dark:border-dark-gray sm:h-[740px] lg:mt-0 lg:mb-0 lg:h-[440px] lg:w-[85%] lg:flex-row"
+          className="mt-40 mb-4 flex h-[570px] w-[70%] flex-col rounded-[20px] border-2 border-light-gray bg-white p-5 dark:border-border-gray dark:bg-black sm:h-[740px] lg:mt-0 lg:mb-0 lg:h-[440px] lg:w-[85%] lg:flex-row"
           onSubmit={event => handleCreate(event)}
         >
           <Image

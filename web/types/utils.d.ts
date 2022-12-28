@@ -26,7 +26,7 @@ export type CreatePostSubmitHandler = (
 export type LikedPeople = (people: string[], user: FirebaseUser | null) => string;
 export type LikePostHandler = (
   setLikes: Dispatch<SetStateAction<string>>,
-  setLikeBTN: Dispatch<SetStateAction<JSX.Element>>,
+  setLikeBTN: Dispatch<SetStateAction<JSX.Element | null>>,
   people: string[],
   themeColor: string,
   user: FirebaseUser | null,

@@ -19,20 +19,24 @@ const Post: FC<PostProps> = ({ post }) => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [likes, setLikes] = useState<string>(LikedPeoples(people, user));
   const [responsiveTitle, setResponsiveTitle] = useState<string>(title);
-  const [likeBTN, setLikeBTN] = useState<ReactElement>(<AiOutlineLike size={22} color={themeColor} />);
+  const [likeBTN, setLikeBTN] = useState<ReactElement | null>(null);
 
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user") as string));
 
-    setResponsiveTitle(window.innerWidth < 640 && title.length > 24 ? `${title.slice(0, 18)}...` : title);
-
     setLikeBTN(
       people.includes(user?.displayName as string) ? <AiFillLike size={22} color={themeColor} /> : <AiOutlineLike size={22} color={themeColor} />
     );
+
+    if (window.innerWidth < 640) {
+      setResponsiveTitle(title.length > 24 ? `${title.slice(0, 18)}...` : title);
+    } else {
+      setResponsiveTitle(title.length > 36 ? `${title.slice(0, 30)}...` : title);
+    }
   }, []);
 
   return (
-    <article className="ml-10 mb-10 h-[580px] w-[300px] rounded-3xl border-4 border-light-gray dark:border-dark-gray sm:h-[580px] sm:w-[450px]">
+    <article className="ml-10 mb-10 h-[580px] w-[300px] rounded-3xl border-2 border-light-gray bg-white dark:border-border-gray dark:bg-black sm:h-[580px] sm:w-[450px]">
       <Image src={image} alt={title} height={300} width={450} className="h-[300px] w-[450px] rounded-3xl object-cover" />
       <div className="pl-6">
         <h3 className="mt-6 text-[22px] font-bold">{responsiveTitle}</h3>
@@ -44,10 +48,10 @@ const Post: FC<PostProps> = ({ post }) => {
           type="button"
           onClick={() => LikePost(setLikes, setLikeBTN, people, themeColor as string, user, _id)}
           disabled={people.includes(user?.displayName as string)}
-          className="ml-5 flex h-8 w-[165px] cursor-pointer items-center border-none bg-transparent text-xs text-primary"
+          className="ml-5 flex h-8 w-[175px] cursor-pointer items-center border-none bg-transparent text-xs text-primary"
         >
           {likeBTN}
-          <span className="mr-6 w-[165px] md:w-full" style={{ color: themeColor }}>
+          <span className="mr-6 w-[175px] md:w-full" style={{ color: themeColor }}>
             &nbsp;{likes}
           </span>
         </button>

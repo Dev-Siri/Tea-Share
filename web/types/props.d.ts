@@ -32,6 +32,7 @@ export interface PostAuthorProps extends WithPosts, WithUser {}
 
 export interface SearchBarProps {
   onSearch(): void;
+  noBorder?: boolean;
 }
 
 export interface LogoutButtonProps {

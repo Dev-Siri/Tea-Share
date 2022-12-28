@@ -55,7 +55,7 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
   }, [postLimit]);
 
   return (
-    <section className="flex dark:bg-black dark:text-white">
+    <section className="flex dark:bg-dark-gray dark:text-white">
       <Sidebar
         route="home"
         scrollingOptions={{
@@ -82,7 +82,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
 
   return {
     props: { posts: data },
-    revalidate: 10,
+    revalidate: 3,
   };
 };
 

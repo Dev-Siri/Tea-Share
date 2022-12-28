@@ -1,4 +1,5 @@
 import { type FC, useState, useEffect } from "react";
+import { Inter } from "@next/font/google";
 import Head from "next/head";
 
 import type { LayoutProps } from "../types";
@@ -7,6 +8,10 @@ import usePageTitle from "../hooks/usePageTitle";
 import useStateContext from "../hooks/useStateContext";
 
 import { PAGE_DESCRIPTION, PAGE_URL, PAGE_SHORT_TITLE, PAGE_FAVICON_PATH, PAGE_TITLE, PAGE_KEYWORDS } from "../constants/pageInfo";
+
+const inter = Inter({
+  weight: ["400", "700"],
+});
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   const [title, setTitle] = useState(usePageTitle("server"));
@@ -41,7 +46,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         <link rel="icon" href={PAGE_FAVICON_PATH} />
         <title>{title}</title>
       </Head>
-      <main className={`${themeMode} overflow-y-hidden`}>{children}</main>
+      <main className={`${themeMode} ${inter.className} overflow-x-hidden`}>{children}</main>
     </>
   );
 };

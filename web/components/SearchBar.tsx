@@ -5,11 +5,13 @@ import type { SearchBarProps } from "../types";
 
 import useStateContext from "../hooks/useStateContext";
 
-const SearchBar: FC<SearchBarProps> = ({ onSearch }) => {
+const SearchBar: FC<SearchBarProps> = ({ onSearch, noBorder }) => {
   const { searchTerm, setSearchTerm, themeColor } = useStateContext();
 
   return (
-    <nav className="z-10 flex h-[100px] w-full items-center justify-center border-b-4 border-b-light-gray dark:border-b-dark-gray">
+    <nav
+      className={`z-10 flex h-[100px] w-full items-center justify-center ${!noBorder && "border-b-2 border-b-light-gray dark:border-b-dark-gray"}`}
+    >
       <input
         className="w-[70%] rounded-tl-[5px] rounded-bl-[5px] border-none bg-light-gray p-[15px] outline-none duration-[250ms] dark:border-semi-gray dark:bg-semi-gray dark:text-white md:w-[80%]"
         placeholder="Search"

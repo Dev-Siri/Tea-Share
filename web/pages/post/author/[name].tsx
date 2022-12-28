@@ -16,17 +16,15 @@ const Author: NextPage<PostAuthorProps> = ({ user, posts }) => {
   const { post } = router.query;
 
   useEffect(() => {
-    const localUser = JSON.parse(localStorage.getItem("user") as string);
-
-    if (!user) router.push(`/posts/author/${localUser?.displayName}`);
+    if (!user) location.reload();
   }, []);
 
   return (
-    <section className="flex h-screen dark:bg-black dark:text-white">
+    <section className="flex h-screen bg-white dark:bg-dark-gray dark:text-white">
       <Sidebar route="post-author-info" isOnPostInfo={{ visible: true, title: "View Post", href: `/post/${post}`, postedBy: username }} />
       <article className="h-full w-[82%] overflow-y-auto">
         <div className="flex flex-col items-center">
-          <div className="mt-[50px] flex w-[80%] flex-col items-center rounded-md bg-light-gray p-12 dark:bg-dark-gray sm:ml-5 md:ml-0 md:w-[30%] md:flex-row md:items-start lg:w-1/2">
+          <div className="mt-[50px] flex w-[80%] flex-col items-center rounded-md border-2 border-light-gray bg-white p-12 dark:border-border-gray dark:bg-black sm:ml-5 md:ml-0 md:w-[30%] md:flex-row md:items-start lg:w-1/2">
             {user ? (
               <>
                 <Image src={image} alt={username} height={130} width={130} className="h-[130px] rounded-full" />

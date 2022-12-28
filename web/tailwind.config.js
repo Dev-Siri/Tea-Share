@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       boxShadow: {
-        dark: "-3px 10px 35px 0px hsla(0, 0%, 0%, 0.75)",
+        dark: "0px 2px 122px 18px rgba(0, 0, 0, 0.23)",
         light: "-22px 10px 300px -97px hsl(0, 0%, 100%)",
       },
       colors: {
@@ -15,7 +15,8 @@ module.exports = {
         "light-gray": "hsl(0, 0%, 90%)",
         "semi-gray": "rgb(51, 51, 51)",
         "hover-color": "rgb(28, 20, 46)",
-        "dark-gray": "rgb(18, 18, 18)",
+        "dark-gray": "rgb(17, 17, 17)",
+        "border-gray": "rgb(50, 50, 50)",
       },
       fontFamily: {},
     },

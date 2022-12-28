@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 
 import type { User as FirebaseUser } from "firebase/auth";
+import type { NextPage } from "next";
 
 import useStateContext from "../hooks/useStateContext";
 
@@ -9,7 +10,7 @@ import { IoArrowBackCircleSharp } from "react-icons/io5";
 const Link = dynamic(() => import("next/link"));
 const Image = dynamic(() => import("next/image"));
 
-const NotFound = () => {
+const NotFound: NextPage = () => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const { themeColor } = useStateContext();
 
@@ -20,7 +21,7 @@ const NotFound = () => {
   }, []);
 
   return (
-    <article className="flex h-screen w-screen flex-col items-center justify-center bg-white dark:bg-black">
+    <article className="flex h-screen w-screen flex-col items-center justify-center bg-white dark:bg-dark-gray">
       <Image src="/images/icon.png" alt="Tea Share Logo" className="mb-4 rounded-full bg-primary" priority height={150} width={150} />
       <div className="flex items-center">
         <h4 className="text-2xl text-black dark:text-white">404</h4>
