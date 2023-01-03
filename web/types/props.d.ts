@@ -35,10 +35,6 @@ export interface SearchBarProps {
   noBorder?: boolean;
 }
 
-export interface LogoutButtonProps {
-  handleLogout(): void;
-}
-
 export interface GoogleLoginProps {
   onClick(): void;
 }
@@ -72,7 +68,7 @@ export interface UserSideViewProps extends WithUser<null> {
 export interface SidebarProps {
   route: string;
   scrollingOptions?: {
-    setLimit: Dispatch<SetStateAction<number>>;
+    setCurrentPage: Dispatch<SetStateAction<number>>;
     loading: boolean;
   };
   isOnPostInfo?: {

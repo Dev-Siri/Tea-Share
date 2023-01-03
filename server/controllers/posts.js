@@ -2,10 +2,19 @@ import { Types } from "mongoose";
 import PostModel from "../models/postsModel.js";
 
 export const getPosts = async (req, res) => {
-  const { limit } = req.query;
+  const { limit, page } = req.query;
 
   try {
-    const posts = limit ? await PostModel.find().limit(parseInt(limit)).sort({ createdAt: -1 }) : await PostModel.find().sort({ createdAt: -1 });
+    let posts;
+
+    const LIMIT = Number(limit) || 8;
+    const startIndex = (Number(page) - 1) * LIMIT;
+
+    if (page) {
+      posts = await PostModel.find().limit(LIMIT).sort({ createdAt: -1 }).skip(startIndex);
+    } else {
+      posts = await PostModel.find().sort({ createdAt: -1 });
+    }
 
     res.code(200);
     return posts;
@@ -21,7 +30,7 @@ export const getPostsBySearchTerm = async (req, res) => {
   try {
     const findObject = user === "true" ? [{ author: query }] : [{ _id: query }];
 
-    const posts = await PostModel.find({ $or: findObject }).sort({ date: -1 });
+    const posts = await PostModel.find({ $or: findObject }).sort({ createdAt: -1 });
 
     return posts;
   } catch (error) {
@@ -31,7 +40,7 @@ export const getPostsBySearchTerm = async (req, res) => {
 };
 
 export const createPost = async (req, res) => {
-  const { body: post } = req;
+  const post = req.body;
 
   const newPost = new PostModel({
     ...post,

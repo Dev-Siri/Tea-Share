@@ -11,6 +11,7 @@ import { PAGE_DESCRIPTION, PAGE_URL, PAGE_SHORT_TITLE, PAGE_FAVICON_PATH, PAGE_T
 
 const inter = Inter({
   weight: ["400", "700"],
+  subsets: ["latin", "cyrillic", "greek", "vietnamese"],
 });
 
 const Layout: FC<LayoutProps> = ({ children }) => {

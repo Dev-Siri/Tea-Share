@@ -1,1 +1,3 @@
-export const getPlaceholderImage = (size: number): string => `https://via.placeholder.com/${size}x${size}`;
+import type { PlaceholderImageGetter } from "../types";
+
+export const getPlaceholderImage: PlaceholderImageGetter = size => `https://via.placeholder.com/${size}x${size}`;

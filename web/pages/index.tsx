@@ -7,8 +7,8 @@ import type { Post as PostType, HomeProps } from "../types";
 import type { NextPage, GetStaticProps } from "next";
 import type { User as FirebaseUser } from "firebase/auth";
 
-import { CLIENT_POST_LIMIT } from "../constants/limit";
 import useStateContext from "../hooks/useStateContext";
+import { INITIAL_PAGE_LIMIT, SERVER_POST_LIMIT } from "../constants/limit";
 
 import Sidebar from "../components/Sidebar";
 const Post = dynamic(() => import("../components/Post"));
@@ -16,7 +16,7 @@ const SearchBar = dynamic(() => import("../components/SearchBar"));
 
 const Home: NextPage<HomeProps> = ({ posts }) => {
   const [reactivePosts, setReactivePosts] = useState<PostType[]>(posts);
-  const [postLimit, setPostLimit] = useState<number>(CLIENT_POST_LIMIT);
+  const [currentPage, setCurrentPage] = useState<number>(INITIAL_PAGE_LIMIT);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { searchTerm } = useStateContext();
@@ -45,21 +45,28 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
     const fetchMorePosts = async () => {
       setLoading(true);
       const { fetchPosts } = await import("../api");
-      const { data: posts } = await fetchPosts(postLimit);
+      const { CLIENT_POST_LIMIT } = await import("../constants/limit");
 
-      setReactivePosts(posts);
+      const { data: fetchedPosts } = await fetchPosts(currentPage, CLIENT_POST_LIMIT);
+
+      if (reactivePosts.length === SERVER_POST_LIMIT) {
+        setReactivePosts(fetchedPosts);
+      } else {
+        setReactivePosts([...reactivePosts, ...fetchedPosts]);
+      }
+
       setLoading(false);
     };
 
     fetchMorePosts();
-  }, [postLimit]);
+  }, [currentPage]);
 
   return (
     <section className="flex dark:bg-dark-gray dark:text-white">
       <Sidebar
         route="home"
         scrollingOptions={{
-          setLimit: setPostLimit,
+          setCurrentPage,
           loading,
         }}
       />
@@ -76,9 +83,8 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
 };
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  const { SERVER_POST_LIMIT } = await import("../constants/limit");
   const { fetchPosts } = await import("../api");
-  const { data } = await fetchPosts(SERVER_POST_LIMIT);
+  const { data } = await fetchPosts(INITIAL_PAGE_LIMIT, SERVER_POST_LIMIT);
 
   return {
     props: { posts: data },

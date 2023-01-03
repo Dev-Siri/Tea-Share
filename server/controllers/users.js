@@ -1,10 +1,19 @@
 import UserModel from "../models/usersModel.js";
 
 export const getUsers = async (req, res) => {
-  const { limit } = req.query;
+  const { limit, page } = req.query;
 
   try {
-    const users = limit ? await UserModel.find().limit(parseInt(limit)) : await UserModel.find();
+    let users;
+
+    const LIMIT = Number(limit) || 8;
+    const startIndex = (Number(page) - 1) * LIMIT;
+
+    if (page) {
+      users = await UserModel.find().limit(LIMIT).skip(startIndex);
+    } else {
+      users = await UserModel.find();
+    }
 
     res.code(200);
     return users;
@@ -15,7 +24,7 @@ export const getUsers = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-  const { body: user } = req;
+  const user = req.body;
 
   const userExists = (await UserModel.find({ username: user.username })).length;
 

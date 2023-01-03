@@ -17,7 +17,9 @@ const ORIGIN = process.env.NODE_ENV === "development" ? "http://localhost:3000" 
 
 const fastify = Fastify();
 
-await fastify.register(compression, { encodings: ["gzip", "br", "deflate"] });
+await fastify.register(compression, {
+  encodings: ["gzip", "br", "deflate"],
+});
 await fastify.register(cors, {
   origin: ORIGIN,
   methods: ["GET", "POST", "PATCH"],

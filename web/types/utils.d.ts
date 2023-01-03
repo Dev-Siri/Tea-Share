@@ -33,3 +33,5 @@ export type LikePostHandler = (
   _id: string
 ) => Promise<void>;
 export type PostTimeCalculator = (createdAt: string) => string;
+
+export type PlaceholderImageGetter = (size: number) => string;

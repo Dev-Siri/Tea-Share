@@ -5,6 +5,7 @@ import type { NextPage, GetServerSideProps } from "next";
 import type { AllUsersViewProps, MongoDBUser } from "../../types";
 
 import useStateContext from "../../hooks/useStateContext";
+import { INITIAL_PAGE_LIMIT, CLIENT_USER_LIMIT, SERVER_USER_LIMIT } from "../../constants/limit";
 
 import Sidebar from "../../components/Sidebar";
 const SearchBar = dynamic(() => import("../../components/SearchBar"));
@@ -15,7 +16,7 @@ const AllUsersView: NextPage<AllUsersViewProps> = ({ users }) => {
   const { searchTerm } = useStateContext();
   const [reactiveUsers, setReactiveUsers] = useState<MongoDBUser[]>(users);
   const [showUserInfo, setShowUserInfo] = useState<boolean>(false);
-  const [usersLimit, setUsersLimit] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(INITIAL_PAGE_LIMIT);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<MongoDBUser | null>(null);
 
@@ -31,13 +32,19 @@ const AllUsersView: NextPage<AllUsersViewProps> = ({ users }) => {
       setLoading(true);
       const { fetchUsers } = await import("../../api");
 
-      const { data: users } = await fetchUsers(usersLimit);
-      setReactiveUsers(users);
+      const { data: fetchedUsers } = await fetchUsers(currentPage, CLIENT_USER_LIMIT);
+
+      if (reactiveUsers.length === SERVER_USER_LIMIT) {
+        setReactiveUsers(fetchedUsers);
+      } else {
+        setReactiveUsers([...reactiveUsers, ...fetchedUsers]);
+      }
+
       setLoading(false);
     };
 
     fetchMoreUsers();
-  }, [usersLimit]);
+  }, [currentPage]);
 
   return (
     <article className="flex dark:bg-dark-gray dark:text-white">
@@ -45,7 +52,7 @@ const AllUsersView: NextPage<AllUsersViewProps> = ({ users }) => {
         route="users"
         scrollingOptions={{
           loading,
-          setLimit: setUsersLimit,
+          setCurrentPage,
         }}
       />
       <div className="w-[82%]">
@@ -59,7 +66,7 @@ const AllUsersView: NextPage<AllUsersViewProps> = ({ users }) => {
 
 export const getServerSideProps: GetServerSideProps<AllUsersViewProps> = async () => {
   const { fetchUsers } = await import("../../api");
-  const { data: users } = await fetchUsers(10);
+  const { data: users } = await fetchUsers(INITIAL_PAGE_LIMIT, SERVER_USER_LIMIT);
 
   return {
     props: { users },

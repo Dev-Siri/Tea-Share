@@ -9,6 +9,9 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
+  "engines": {
+    "node": "19.x"
+  },
   "keywords": [
     "backend",
     "node",
