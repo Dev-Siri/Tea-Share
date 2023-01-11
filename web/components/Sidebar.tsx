@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 
 import useStateContext from "../hooks/useStateContext";
 import useRoutes from "../hooks/useRoutes";
+import usePageTitle from "../hooks/usePageTitle";
 
 import { PAGE_INC_COUNT } from "../constants/limit";
 import { getPlaceholderImage } from "../utils/globals";
@@ -18,7 +19,7 @@ const Image = dynamic(() => import("next/image"));
 const SidebarOption = dynamic(() => import("./SidebarOption"));
 
 const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo, scrollingOptions }) => {
-  const { themeColor } = useStateContext();
+  const { themeColor, setTitle } = useStateContext();
   const [isSSR, setIsSSR] = useState<boolean>(true);
   const [user, setUser] = useState<FirebaseUser | null>(null);
 
@@ -31,6 +32,10 @@ const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo, scrollingOptions }) =>
 
     if (!isSSR && !user) location.reload();
   }, []);
+
+  useEffect(() => {
+    setTitle?.(usePageTitle("client"));
+  });
 
   const correctlyFetchUserImage = (): string => {
     if (isSSR || !user?.photoURL) {

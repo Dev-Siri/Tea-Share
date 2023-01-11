@@ -1,8 +1,12 @@
+import type { Dispatch, SetStateAction } from "react";
+
 export interface ContextItems {
   searchTerm?: string;
-  setSearchTerm?: any;
+  setSearchTerm?: Dispatch<SetStateAction<string>>;
   themeMode?: string;
-  setThemeMode?: any;
+  setThemeMode?: Dispatch<SetStateAction<string>>;
+  setTitle?: Dispatch<SetStateAction<string>>;
+  title?: string;
   switchMode?: (mode: string) => void;
   switchColor?: (color: string) => void;
   themeColor?: string;

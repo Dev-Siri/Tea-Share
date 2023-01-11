@@ -1,10 +1,14 @@
 import React, { type FC, useState, useEffect } from "react";
 
+import usePageTitle from "../hooks/usePageTitle";
 import colors from "../constants/colors";
+
 import type { ContextProps } from "../types";
+
 import Context from "./Context";
 
 const ContextProvider: FC<ContextProps> = ({ children }) => {
+  const [title, setTitle] = useState(usePageTitle("server"));
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [themeMode, setThemeMode] = useState<string>("dark");
   const [themeColor, setThemeColor] = useState<string>("#594194");
@@ -36,6 +40,8 @@ const ContextProvider: FC<ContextProps> = ({ children }) => {
         switchMode,
         switchColor,
         themeColor,
+        setTitle,
+        title,
       }}
     >
       {children}

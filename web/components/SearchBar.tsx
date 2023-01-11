@@ -16,7 +16,7 @@ const SearchBar: FC<SearchBarProps> = ({ onSearch, noBorder }) => {
         className="w-[70%] rounded-tl-[5px] rounded-bl-[5px] border-none bg-light-gray p-[15px] outline-none duration-[250ms] dark:border-semi-gray dark:bg-semi-gray dark:text-white md:w-[80%]"
         placeholder="Search"
         value={searchTerm}
-        onChange={event => setSearchTerm(event.target.value)}
+        onChange={event => setSearchTerm?.(event.target.value)}
       />
       <button
         type="button"

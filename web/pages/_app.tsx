@@ -12,7 +12,7 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => (
   <Suspense>
     <ContextProvider>
       <Layout>
-        <Toaster />
+        <Toaster toastOptions={{ className: "dark:bg-dark-gray dark:text-white" }} />
         <Component {...pageProps} />
       </Layout>
     </ContextProvider>

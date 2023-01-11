@@ -42,7 +42,7 @@ const Auth: NextPage = () => {
       <article className="mr-[60px] h-fit w-[350px] pt-[10px] pl-5 duration-[250ms]">
         <Image src={themeMode === "dark" ? "/images/logo-white.png" : "/images/logo-purple.png"} alt="Logo" height={100} width={200} priority />
         <h1 className={`mt-3 mb-7 h-px w-[310px] text-3xl font-bold ${isSignup ? "text-center" : "ml-2"}`}>
-          {isSignup ? "Signup for" : "Login to"} Tea share
+          {isSignup ? "Signup for" : "Login to"} Tea Share
         </h1>
         <form className="flex flex-col" onSubmit={event => handleAuth(event, "mail")}>
           {isSignup && (

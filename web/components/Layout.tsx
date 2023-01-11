@@ -1,10 +1,9 @@
-import { type FC, useState, useEffect } from "react";
+import { type FC } from "react";
 import { Inter } from "@next/font/google";
 import Head from "next/head";
 
 import type { LayoutProps } from "../types";
 
-import usePageTitle from "../hooks/usePageTitle";
 import useStateContext from "../hooks/useStateContext";
 
 import { PAGE_DESCRIPTION, PAGE_URL, PAGE_SHORT_TITLE, PAGE_FAVICON_PATH, PAGE_TITLE, PAGE_KEYWORDS } from "../constants/pageInfo";
@@ -15,12 +14,7 @@ const inter = Inter({
 });
 
 const Layout: FC<LayoutProps> = ({ children }) => {
-  const [title, setTitle] = useState(usePageTitle("server"));
-  const { themeMode } = useStateContext();
-
-  useEffect(() => {
-    setTitle(usePageTitle("client"));
-  }, []);
+  const { themeMode, title } = useStateContext();
 
   return (
     <>
@@ -42,7 +36,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         <meta name="twitter:image" content={PAGE_FAVICON_PATH} />
         <meta name="twitter:site" content={PAGE_URL} />
         <meta name="twitter:creator" content="Dev-Siri" />
-        <link rel="canonical" href={PAGE_URL} />
+        <link rel="canonical" href={`PAGE_URL/auth`} />
         <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION_TOKEN} />
         <link rel="icon" href={PAGE_FAVICON_PATH} />
         <title>{title}</title>
