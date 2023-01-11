@@ -1,12 +1,11 @@
 import { type User } from "firebase/auth";
 
-import { auth, storage } from "../api";
+import {} from "../api";
 import type { MailAuthHandler, GoogleAuthHandler, LogoutHandler, UpdateProfileHandler } from "../types";
 
 export const MailAuth: MailAuthHandler = async (displayName, email, password, photoURL, router, isSignup) => {
   const { toast } = await import("react-hot-toast");
-  const { createUser } = await import("../api");
-  const { default: Errors } = await import("./errors");
+  const { createUser, storage, auth } = await import("../api");
 
   toast.loading(isSignup ? "Creating your account..." : "Logging you in...", { id: "loading" });
 
@@ -42,7 +41,9 @@ export const MailAuth: MailAuthHandler = async (displayName, email, password, ph
       localStorage.setItem("user", JSON.stringify(auth.currentUser));
       router.replace("/");
     } catch (error: any) {
+      const { default: Errors } = await import("./errors");
       const errorMessage = Errors.mailAuth(error.message);
+
       toast.remove("loading");
       toast.error(`Failed to create your account, ${errorMessage}`);
     }
@@ -54,7 +55,9 @@ export const MailAuth: MailAuthHandler = async (displayName, email, password, ph
       localStorage.setItem("user", JSON.stringify(auth.currentUser));
       router.replace("/");
     } catch (error: any) {
+      const { default: Errors } = await import("./errors");
       const errorMessage = Errors.mailAuth(error.message);
+
       toast.remove("loading");
       toast.error(`Failed to login, ${errorMessage}`);
     }
@@ -64,7 +67,7 @@ export const MailAuth: MailAuthHandler = async (displayName, email, password, ph
 export const GoogleAuth: GoogleAuthHandler = async router => {
   const { signInWithPopup, GoogleAuthProvider } = await import("firebase/auth");
   const { toast } = await import("react-hot-toast");
-  const { createUser } = await import("../api");
+  const { createUser, auth } = await import("../api");
 
   try {
     const provider = new GoogleAuthProvider();
@@ -90,6 +93,7 @@ export const GoogleAuth: GoogleAuthHandler = async router => {
 
 export const Logout: LogoutHandler = async router => {
   const { toast } = await import("react-hot-toast");
+  const { auth } = await import("../api");
 
   try {
     await auth.signOut();
@@ -103,7 +107,7 @@ export const Logout: LogoutHandler = async router => {
 export const UpdateProfile: UpdateProfileHandler = async (email, username, image, id) => {
   const { updateEmail, updateProfile } = await import("firebase/auth");
   const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
-  const { updateProfile: updateProfileAPI } = await import("../api/client");
+  const { updateProfile: updateProfileAPI, storage, auth } = await import("../api");
   const { toast } = await import("react-hot-toast");
 
   try {

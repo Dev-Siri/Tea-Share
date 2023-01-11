@@ -36,7 +36,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         <meta name="twitter:image" content={PAGE_FAVICON_PATH} />
         <meta name="twitter:site" content={PAGE_URL} />
         <meta name="twitter:creator" content="Dev-Siri" />
-        <link rel="canonical" href={`PAGE_URL/auth`} />
+        <link rel="canonical" href={`${PAGE_URL}/auth`} />
         <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION_TOKEN} />
         <link rel="icon" href={PAGE_FAVICON_PATH} />
         <title>{title}</title>
