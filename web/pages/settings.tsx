@@ -31,10 +31,10 @@ const Settings: NextPage = () => {
       setImage(user?.photoURL);
 
       const { fetchUserByQuery } = await import("../api");
-      const { data: fetchedUser } = await fetchUserByQuery(user?.displayName as string);
-      const id = (fetchedUser as MongoDBUser)._id;
+      const response: Response = await fetchUserByQuery(user?.displayName as string);
+      const fetchedUser: MongoDBUser = await response.json();
 
-      setUserID(id);
+      setUserID(fetchedUser._id);
     };
 
     setupUserStates();

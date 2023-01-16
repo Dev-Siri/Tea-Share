@@ -1,4 +1,3 @@
-import type { AxiosResponse } from "axios";
 import type { Post, PostFormData } from "./post";
 import type { MongoDBUser, UserFormData } from "./user";
 
@@ -12,10 +11,10 @@ export interface FirebaseConfig {
   appId: string | undefined;
 }
 
-export type FetchPostsAPI = (page?: number, limit?: number) => Promise<AxiosResponse<any, any>>;
-export type FetchItemByQuery = (query: string, user?: boolean) => Promise<AxiosResponse<any, any>>;
-export type CreatePostAPI = (formdata: PostFormData) => Promise<AxiosResponse<any, any>>;
-export type LikePostAPI = (id: string, name: string, image: string) => Promise<AxiosResponse<any, any>>;
-export type CreateUserAPI = (formdata: UserFormData) => Promise<AxiosResponse<any, any>>;
-export type FetchUsersAPI = (page?: number, limit?: number) => Promise<AxiosResponse<any, any>>;
-export type UpdateProfileAPI = (id: string, user: MongoDBUser) => Promise<AxiosResponse<void, any>>;
+export type FetchPostsAPI = (page?: number, limit?: number) => Promise<Response>;
+export type FetchItemByQuery = (query: string, user?: boolean) => Promise<Response>;
+export type CreatePostAPI = (formdata: PostFormData) => Promise<Response>;
+export type LikePostAPI = (id: string, name: string, image: string) => Promise<Response>;
+export type CreateUserAPI = (formdata: UserFormData) => Promise<Response>;
+export type FetchUsersAPI = (page?: number, limit?: number) => Promise<Response>;
+export type UpdateProfileAPI = (id: string, user: MongoDBUser) => Promise<Response>;

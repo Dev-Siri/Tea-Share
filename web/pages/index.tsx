@@ -47,7 +47,8 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
       const { fetchPosts } = await import("../api");
       const { CLIENT_POST_LIMIT } = await import("../constants/limit");
 
-      const { data: fetchedPosts } = await fetchPosts(currentPage, CLIENT_POST_LIMIT);
+      const response: Response = await fetchPosts(currentPage, CLIENT_POST_LIMIT);
+      const fetchedPosts: PostType[] = await response.json();
 
       if (reactivePosts.length === SERVER_POST_LIMIT) {
         setReactivePosts(fetchedPosts);
@@ -84,10 +85,11 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const { fetchPosts } = await import("../api");
-  const { data } = await fetchPosts(INITIAL_PAGE_LIMIT, SERVER_POST_LIMIT);
+  const response: Response = await fetchPosts(INITIAL_PAGE_LIMIT, SERVER_POST_LIMIT);
+  const posts: PostType[] = await response.json();
 
   return {
-    props: { posts: data },
+    props: { posts },
     revalidate: 3,
   };
 };

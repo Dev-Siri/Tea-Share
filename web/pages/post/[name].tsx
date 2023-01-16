@@ -2,7 +2,7 @@ import { type NextRouter, useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 import type { GetServerSideProps, NextPage } from "next";
-import type { PostInfoProps } from "../../types";
+import type { Post, PostInfoProps } from "../../types";
 
 import { PostTime } from "../../utils/posts";
 import useStateContext from "../../hooks/useStateContext";
@@ -52,10 +52,11 @@ export const getServerSideProps: GetServerSideProps<PostInfoProps> = async ({ pa
   const { fetchPostByQuery } = await import("../../api");
 
   try {
-    const { data } = await fetchPostByQuery(params?.name as string, false);
+    const response: Response = await fetchPostByQuery(params?.name as string, false);
+    const posts: Post[] = await response.json();
 
     return {
-      props: { post: data[0] ?? null },
+      props: { post: posts[0] ?? null },
     };
   } catch {
     return { notFound: true };

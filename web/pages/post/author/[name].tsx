@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 import type { NextPage, GetServerSideProps } from "next";
-import type { PostAuthorProps } from "../../../types";
+import type { MongoDBUser, Post, PostAuthorProps } from "../../../types";
 
 import Sidebar from "../../../components/Sidebar";
 const Post = dynamic(() => import("../../../components/Post"));
@@ -54,8 +54,11 @@ const Author: NextPage<PostAuthorProps> = ({ user, posts }) => {
 export const getServerSideProps: GetServerSideProps<PostAuthorProps> = async ({ params }) => {
   const { fetchUserByQuery, fetchPostByQuery } = await import("../../../api");
 
-  const { data: posts } = await fetchPostByQuery(params?.name as string);
-  const { data: user } = await fetchUserByQuery(params?.name as string);
+  const postsResponse: Response = await fetchPostByQuery(params?.name as string);
+  const userResponse: Response = await fetchUserByQuery(params?.name as string);
+
+  const posts: Post[] = await postsResponse.json();
+  const user: MongoDBUser = await userResponse.json();
 
   return {
     props: { user, posts },

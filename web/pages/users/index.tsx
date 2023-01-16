@@ -32,7 +32,8 @@ const AllUsersView: NextPage<AllUsersViewProps> = ({ users }) => {
       setLoading(true);
       const { fetchUsers } = await import("../../api");
 
-      const { data: fetchedUsers } = await fetchUsers(currentPage, CLIENT_USER_LIMIT);
+      const response: Response = await fetchUsers(currentPage, CLIENT_USER_LIMIT);
+      const fetchedUsers: MongoDBUser[] = await response.json();
 
       if (reactiveUsers.length === SERVER_USER_LIMIT) {
         setReactiveUsers(fetchedUsers);
@@ -66,7 +67,8 @@ const AllUsersView: NextPage<AllUsersViewProps> = ({ users }) => {
 
 export const getServerSideProps: GetServerSideProps<AllUsersViewProps> = async () => {
   const { fetchUsers } = await import("../../api");
-  const { data: users } = await fetchUsers(INITIAL_PAGE_LIMIT, SERVER_USER_LIMIT);
+  const response: Response = await fetchUsers(INITIAL_PAGE_LIMIT, SERVER_USER_LIMIT);
+  const users: MongoDBUser[] = await response.json();
 
   return {
     props: { users },

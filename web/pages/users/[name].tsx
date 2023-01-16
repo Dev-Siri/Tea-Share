@@ -3,7 +3,7 @@ import { type NextRouter, useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 import type { User as FirebaseUser } from "firebase/auth";
-import type { ProfileProps, Post } from "../../types";
+import type { ProfileProps, Post, MongoDBUser } from "../../types";
 import type { NextPage, GetServerSideProps } from "next";
 
 import Sidebar from "../../components/Sidebar";
@@ -56,8 +56,11 @@ const Profile: NextPage<ProfileProps> = ({ user, posts }) => {
 export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({ params }) => {
   const { fetchPostByQuery, fetchUserByQuery } = await import("../../api");
 
-  const { data: posts } = await fetchPostByQuery(params?.name as string);
-  const { data: user } = await fetchUserByQuery(params?.name as string);
+  const postResponse: Response = await fetchPostByQuery(params?.name as string);
+  const userResponse: Response = await fetchUserByQuery(params?.name as string);
+
+  const posts: Post[] = await postResponse.json();
+  const user: MongoDBUser = await userResponse.json();
 
   return {
     props: { user, posts },
