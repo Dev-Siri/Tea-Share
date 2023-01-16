@@ -49,9 +49,9 @@ const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo, scrollingOptions }) =>
     <aside className="flex h-screen w-[80px] flex-col overflow-y-auto rounded-tr-[10px] rounded-br-[10px] border-r-2 border-r-light-gray bg-white align-top dark:border-r-border-gray dark:bg-black md:w-[260px]">
       <Link href="/">
         <picture>
-          <source media="(max-width: 767px)" srcSet="/images/icon.png" />
+          <source media="(max-width: 767px)" srcSet="/images/icon.webp" />
           <Image
-            src="/images/logo-white.png"
+            src="/images/logo-white.webp"
             alt="Logo"
             height={140}
             width={140}

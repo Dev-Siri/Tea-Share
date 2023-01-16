@@ -51,7 +51,7 @@ const Create: NextPage = () => {
   };
 
   const optimizedImage = useMemo(
-    () => (!image ? (themeMode === "dark" ? "/images/select-dark.png" : "/images/select-light.png") : URL.createObjectURL(image as File)),
+    () => (!image ? (themeMode === "dark" ? "/images/select-dark.webp" : "/images/select-light.webp") : URL.createObjectURL(image as File)),
     [image]
   );
 
