@@ -10,6 +10,8 @@ import { PAGE_DESCRIPTION, PAGE_URL, PAGE_SHORT_TITLE, PAGE_FAVICON_PATH, PAGE_T
 
 const inter = Inter({
   weight: ["400", "700"],
+  preload: true,
+  display: "swap",
   fallback: ["system-ui", "arial"],
   subsets: ["latin", "cyrillic", "greek", "vietnamese"],
 });

@@ -54,11 +54,8 @@ const Author: NextPage<PostAuthorProps> = ({ user, posts }) => {
 export const getServerSideProps: GetServerSideProps<PostAuthorProps> = async ({ params }) => {
   const { fetchUserByQuery, fetchPostByQuery } = await import("../../../api");
 
-  const postsResponse: Response = await fetchPostByQuery(params?.name as string);
-  const userResponse: Response = await fetchUserByQuery(params?.name as string);
-
-  const posts: Post[] = await postsResponse.json();
-  const user: MongoDBUser = await userResponse.json();
+  const posts: Post[] = await fetchPostByQuery(params?.name as string);
+  const user: MongoDBUser = await fetchUserByQuery(params?.name as string);
 
   return {
     props: { user, posts },

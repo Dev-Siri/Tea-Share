@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { toast } from "react-hot-toast";
 import { type NextRouter, useRouter } from "next/router";
 
 import type { Post as PostType, HomeProps } from "../types";
@@ -23,12 +22,17 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
   const router: NextRouter = useRouter();
 
   useEffect(() => {
-    // Remove the toast that is displayed when trying to login
-    toast.remove();
+    const onPageLoad = async () => {
+      const { toast } = await import("react-hot-toast");
+      // Remove the toast that is displayed when trying to login
+      toast.remove();
 
-    const user: FirebaseUser = JSON.parse(localStorage.getItem("user") as string);
+      const user: FirebaseUser = JSON.parse(localStorage.getItem("user") as string);
 
-    if (!user) router.replace("/auth");
+      if (!user) router.replace("/auth");
+    };
+
+    onPageLoad();
   }, []);
 
   const search = () => {
@@ -47,8 +51,7 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
       const { fetchPosts } = await import("../api");
       const { CLIENT_POST_LIMIT } = await import("../constants/limit");
 
-      const response: Response = await fetchPosts(currentPage, CLIENT_POST_LIMIT);
-      const fetchedPosts: PostType[] = await response.json();
+      const fetchedPosts: PostType[] = await fetchPosts(currentPage, CLIENT_POST_LIMIT);
 
       if (reactivePosts.length === SERVER_POST_LIMIT) {
         setReactivePosts(fetchedPosts);
@@ -85,8 +88,7 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const { fetchPosts } = await import("../api");
-  const response: Response = await fetchPosts(INITIAL_PAGE_LIMIT, SERVER_POST_LIMIT);
-  const posts: PostType[] = await response.json();
+  const posts: PostType[] = await fetchPosts(INITIAL_PAGE_LIMIT, SERVER_POST_LIMIT);
 
   return {
     props: { posts },

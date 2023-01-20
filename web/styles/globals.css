@@ -26,7 +26,7 @@ a {
   background: rgba(0, 225, 255, 0.484);
 }
 
-/* Progress Indicator Styles */
+/* Progress Indicator Styles (NProgress) */
 
 #nprogress {
   pointer-events: none;

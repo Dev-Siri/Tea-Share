@@ -14,8 +14,7 @@ const UserPreview: FC<UserSideViewProps> = ({ closeMenu, user }) => {
     const fetchPosts = async () => {
       const { fetchPostByQuery } = await import("../api");
 
-      const response: Response = await fetchPostByQuery(user?.username as string);
-      const posts = await response.json();
+      const posts: Post[] = await fetchPostByQuery(user?.username as string);
 
       setPosts(posts);
     };

@@ -6,7 +6,6 @@ import useRoutes from "../hooks/useRoutes";
 import usePageTitle from "../hooks/usePageTitle";
 
 import { PAGE_INC_COUNT } from "../constants/limit";
-import { getPlaceholderImage } from "../utils/globals";
 
 import type { Route, SidebarProps } from "../types";
 import type { User as FirebaseUser } from "firebase/auth";
@@ -39,7 +38,7 @@ const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo, scrollingOptions }) =>
 
   const correctlyFetchUserImage = (): string => {
     if (isSSR || !user?.photoURL) {
-      return getPlaceholderImage(100);
+      return "/images/placeholder-image.webp";
     } else {
       return user.photoURL;
     }

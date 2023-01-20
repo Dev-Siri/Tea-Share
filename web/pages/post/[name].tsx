@@ -52,8 +52,7 @@ export const getServerSideProps: GetServerSideProps<PostInfoProps> = async ({ pa
   const { fetchPostByQuery } = await import("../../api");
 
   try {
-    const response: Response = await fetchPostByQuery(params?.name as string, false);
-    const posts: Post[] = await response.json();
+    const posts: Post[] = await fetchPostByQuery(params?.name as string, false);
 
     return {
       props: { post: posts[0] ?? null },
