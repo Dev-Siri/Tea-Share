@@ -1,7 +1,6 @@
 import "../styles/globals.css";
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
-import Nprogress from "nprogress";
 import Router from "next/router";
 
 import type { AppProps } from "next/app";
@@ -11,11 +10,13 @@ const Toaster = dynamic(() => import("react-hot-toast").then(({ Toaster }) => To
 const ContextProvider = dynamic(() => import("../context/ContextProvider"));
 const Layout = dynamic(() => import("../components/Layout"));
 
-Router.events.on("routeChangeStart", () => Nprogress.start());
-Router.events.on("routeChangeComplete", () => Nprogress.done(false));
+import("nprogress").then(Nprogress => {
+  Router.events.on("routeChangeStart", () => Nprogress.start());
+  Router.events.on("routeChangeComplete", () => Nprogress.done(false));
+});
 
 const App: NextPage<AppProps> = ({ Component, pageProps }) => (
-  <Suspense>
+  <Suspense fallback={<div />}>
     <ContextProvider>
       <Layout>
         <Toaster toastOptions={{ className: "dark:bg-dark-gray dark:text-white" }} />

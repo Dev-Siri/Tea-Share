@@ -7,7 +7,7 @@ import type { Post, PostInfoProps } from "../../types";
 import { PostTime } from "../../utils/posts";
 import useStateContext from "../../hooks/useStateContext";
 
-import Sidebar from "../../components/Sidebar";
+const Sidebar = dynamic(() => import("../../components/Sidebar"));
 const Link = dynamic(() => import("next/link"));
 const Image = dynamic(() => import("next/image"));
 

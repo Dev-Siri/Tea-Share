@@ -1,9 +1,11 @@
-import { IoSearch } from "react-icons/io5";
+import dynamic from "next/dynamic";
 
 import type { FC } from "react";
 import type { SearchBarProps } from "../types";
 
 import useStateContext from "../hooks/useStateContext";
+
+const IoSearch = dynamic(() => import("@react-icons/all-files/io5/IoSearch").then(({ IoSearch }) => IoSearch));
 
 const SearchBar: FC<SearchBarProps> = ({ onSearch, noBorder }) => {
   const { searchTerm, setSearchTerm, themeColor } = useStateContext();

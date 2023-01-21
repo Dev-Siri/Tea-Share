@@ -1,9 +1,9 @@
 import { type FC, useState, useEffect } from "react";
-import { MdCancel } from "react-icons/md";
 import dynamic from "next/dynamic";
 
 import type { UserSideViewProps, Post } from "../types";
 
+const MdCancel = dynamic(() => import("@react-icons/all-files/md/MdCancel").then(({ MdCancel }) => MdCancel));
 const SidePost = dynamic(() => import("./SidePost"));
 const Image = dynamic(() => import("next/image"));
 

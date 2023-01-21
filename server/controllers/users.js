@@ -24,7 +24,7 @@ export const getUsers = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-  const user = req.body;
+  const user = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
   const userExists = (await UserModel.find({ username: user.username })).length;
 
@@ -63,7 +63,7 @@ export const getUserBySearchTerm = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   const { id } = req.params;
-  const user = req.body;
+  const user = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
   try {
     await UserModel.findByIdAndUpdate(id, { ...user, id }, { new: true });

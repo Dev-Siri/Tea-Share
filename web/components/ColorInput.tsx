@@ -1,9 +1,11 @@
-import { TiTick } from "react-icons/ti";
+import dynamic from "next/dynamic";
 
 import type { FC } from "react";
 import type { ColorInputProps } from "../types";
 
 import useStateContext from "../hooks/useStateContext";
+
+const TiTick = dynamic(() => import("@react-icons/all-files/ti/TiTick").then(({ TiTick }) => TiTick));
 
 const ColorInput: FC<ColorInputProps> = ({ color, handleClick }) => {
   const { themeColor } = useStateContext();

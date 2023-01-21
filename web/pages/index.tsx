@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 import { type NextRouter, useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 import type { Post as PostType, HomeProps } from "../types";
 import type { NextPage, GetStaticProps } from "next";
-import type { User as FirebaseUser } from "firebase/auth";
 
 import useStateContext from "../hooks/useStateContext";
 import { INITIAL_PAGE_LIMIT, SERVER_POST_LIMIT } from "../constants/limit";
 
-import Sidebar from "../components/Sidebar";
+const Sidebar = dynamic(() => import("../components/Sidebar"));
 const Post = dynamic(() => import("../components/Post"));
 const SearchBar = dynamic(() => import("../components/SearchBar"));
 
@@ -24,10 +23,9 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
   useEffect(() => {
     const onPageLoad = async () => {
       const { toast } = await import("react-hot-toast");
-      // Remove the toast that is displayed when trying to login
-      toast.remove();
+      const user = localStorage.getItem("user");
 
-      const user: FirebaseUser = JSON.parse(localStorage.getItem("user") as string);
+      toast.remove();
 
       if (!user) router.replace("/auth");
     };

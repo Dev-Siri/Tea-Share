@@ -1,14 +1,15 @@
 import { type FC, type ReactElement, useState, useEffect } from "react";
-import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import dynamic from "next/dynamic";
 
-import { LikedPeoples, LikePost, PostTime } from "../utils/posts";
+import { LikedPeoples, PostTime } from "../utils/posts";
 
 import type { User as FirebaseUser } from "firebase/auth";
 import type { PostProps } from "../types";
 
 import useStateContext from "../hooks/useStateContext";
 
+const AiFillLike = dynamic(() => import("@react-icons/all-files/ai/AiFillLike").then(({ AiFillLike }) => AiFillLike));
+const AiOutlineLike = dynamic(() => import("@react-icons/all-files/ai/AiOutlineLike").then(({ AiOutlineLike }) => AiOutlineLike));
 const Link = dynamic(() => import("next/link"));
 const Image = dynamic(() => import("next/image"));
 
@@ -35,6 +36,11 @@ const Post: FC<PostProps> = ({ post }) => {
     }
   }, []);
 
+  const handleLikePost = async () => {
+    const { LikePost } = await import("../utils/posts");
+    LikePost(setLikes, setLikeBTN, people, themeColor as string, user, _id);
+  };
+
   return (
     <article className="ml-10 mb-10 h-[580px] w-[300px] rounded-3xl border-2 border-light-gray bg-white dark:border-border-gray dark:bg-black sm:h-[580px] sm:w-[450px]">
       <Image src={image} alt={title} height={300} width={450} className="h-[300px] w-[450px] rounded-3xl object-cover" />
@@ -46,7 +52,7 @@ const Post: FC<PostProps> = ({ post }) => {
       <div className="flex pb-2.5">
         <button
           type="button"
-          onClick={() => LikePost(setLikes, setLikeBTN, people, themeColor as string, user, _id)}
+          onClick={handleLikePost}
           disabled={people.includes(user?.displayName as string)}
           className="ml-5 flex h-8 w-[175px] cursor-pointer items-center border-none bg-transparent text-xs text-primary"
         >

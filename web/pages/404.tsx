@@ -6,7 +6,9 @@ import type { NextPage } from "next";
 
 import useStateContext from "../hooks/useStateContext";
 
-import { IoArrowBackCircleSharp } from "react-icons/io5";
+const IoArrowBackCircleSharp = dynamic(() =>
+  import("@react-icons/all-files/io5/IoArrowBackCircleSharp").then(({ IoArrowBackCircleSharp }) => IoArrowBackCircleSharp)
+);
 const Link = dynamic(() => import("next/link"));
 const Image = dynamic(() => import("next/image"));
 

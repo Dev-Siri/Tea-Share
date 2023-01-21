@@ -1,6 +1,5 @@
 import { type User } from "firebase/auth";
 
-import {} from "../api";
 import type { MailAuthHandler, GoogleAuthHandler, LogoutHandler, UpdateProfileHandler } from "../types";
 
 export const MailAuth: MailAuthHandler = async (displayName, email, password, photoURL, router, isSignup) => {

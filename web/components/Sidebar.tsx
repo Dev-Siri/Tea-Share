@@ -10,9 +10,10 @@ import { PAGE_INC_COUNT } from "../constants/limit";
 import type { Route, SidebarProps } from "../types";
 import type { User as FirebaseUser } from "firebase/auth";
 
-import { FaUserFriends } from "react-icons/fa";
-import { BsFilePost } from "react-icons/bs";
-import { MdViewList, MdOutlineViewList } from "react-icons/md";
+const FaUserFriends = dynamic(() => import("@react-icons/all-files/fa/FaUserFriends").then(({ FaUserFriends }) => FaUserFriends));
+const BsFilePost = dynamic(() => import("@react-icons/all-files/bs/BsFilePost").then(({ BsFilePost }) => BsFilePost));
+const FaList = dynamic(() => import("@react-icons/all-files/fa/FaList").then(({ FaList }) => FaList));
+const ImList = dynamic(() => import("@react-icons/all-files/im/ImList").then(({ ImList }) => ImList));
 const Link = dynamic(() => import("next/link"));
 const Image = dynamic(() => import("next/image"));
 const SidebarOption = dynamic(() => import("./SidebarOption"));
@@ -87,7 +88,7 @@ const Sidebar: FC<SidebarProps> = ({ route, isOnPostInfo, scrollingOptions }) =>
           style={{ color: themeColor }}
           className="flex w-full cursor-pointer items-center justify-start rounded-sm border-none bg-white p-[14px] text-white hover:bg-light-gray dark:bg-black dark:hover:bg-dark-gray"
         >
-          {scrollingOptions?.loading ? <MdViewList className="ml-4" /> : <MdOutlineViewList className="ml-4" />}
+          {scrollingOptions?.loading ? <FaList className="ml-4" /> : <ImList className="ml-4" />}
           <p className="hidden md:ml-2 md:block">{scrollingOptions?.loading ? "Loading..." : "Show more"}</p>
         </button>
       )}

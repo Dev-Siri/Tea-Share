@@ -40,7 +40,7 @@ export const getPostsBySearchTerm = async (req, res) => {
 };
 
 export const createPost = async (req, res) => {
-  const post = req.body;
+  const post = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
   const newPost = new PostModel({
     ...post,

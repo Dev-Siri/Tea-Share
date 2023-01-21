@@ -9,7 +9,7 @@ import type { MongoDBUser } from "../types";
 import colors from "../constants/colors";
 import useStateContext from "../hooks/useStateContext";
 
-import Sidebar from "../components/Sidebar";
+const Sidebar = dynamic(() => import("../components/Sidebar"));
 const ThemeOption = dynamic(() => import("../components/ThemeOption"));
 const ColorInput = dynamic(() => import("../components/ColorInput"));
 

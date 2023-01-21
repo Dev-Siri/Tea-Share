@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { type NextRouter, useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 import type { NextPage } from "next";
@@ -12,7 +12,7 @@ const GoogleLogin = dynamic(() => import("../components/GoogleLogin"));
 
 const Auth: NextPage = () => {
   const [isSignup, setIsSignup] = useState<boolean>(false);
-  const router = useRouter();
+  const router: NextRouter = useRouter();
 
   const [formData, setFormData] = useState<UserSubmitFormData>({ username: "", email: "", password: "", photoURL: "" });
 
@@ -22,7 +22,9 @@ const Auth: NextPage = () => {
   const { themeMode } = useStateContext();
 
   useEffect(() => {
-    if (JSON.parse(localStorage.getItem("user") as string)) router.replace("/");
+    const user = localStorage.getItem("user");
+
+    if (user) router.replace("/");
   }, []);
 
   const handleAuth: AuthHandler = async (event, type) => {

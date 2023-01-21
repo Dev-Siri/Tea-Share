@@ -7,7 +7,7 @@ import type { AllUsersViewProps, MongoDBUser } from "../../types";
 import useStateContext from "../../hooks/useStateContext";
 import { INITIAL_PAGE_LIMIT, CLIENT_USER_LIMIT, SERVER_USER_LIMIT } from "../../constants/limit";
 
-import Sidebar from "../../components/Sidebar";
+const Sidebar = dynamic(() => import("../../components/Sidebar"));
 const SearchBar = dynamic(() => import("../../components/SearchBar"));
 const UserList = dynamic(() => import("../../components/UserList"));
 const UserView = dynamic(() => import("../../components/UserView"));

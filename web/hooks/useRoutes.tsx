@@ -1,10 +1,12 @@
-import { IoHomeSharp, IoSettingsSharp } from "react-icons/io5";
+import dynamic from "next/dynamic";
 
 import type { RoutesHook } from "../types";
 
-import { IoIosCreate } from "react-icons/io";
-import { FaUserCircle } from "react-icons/fa";
-import { BsFillPeopleFill } from "react-icons/bs";
+const IoSettingsSharp = dynamic(() => import("@react-icons/all-files/io5/IoSettingsSharp").then(({ IoSettingsSharp }) => IoSettingsSharp));
+const IoHomeSharp = dynamic(() => import("@react-icons/all-files/io5/IoHomeSharp").then(({ IoHomeSharp }) => IoHomeSharp));
+const IoIosCreate = dynamic(() => import("@react-icons/all-files/io/IoIosCreate").then(({ IoIosCreate }) => IoIosCreate));
+const FaUserCircle = dynamic(() => import("@react-icons/all-files/fa/FaUserCircle").then(({ FaUserCircle }) => FaUserCircle));
+const BsFillPeopleFill = dynamic(() => import("@react-icons/all-files/bs/BsFillPeopleFill").then(({ BsFillPeopleFill }) => BsFillPeopleFill));
 
 const useRoutes: RoutesHook = (username, route) => [
   {

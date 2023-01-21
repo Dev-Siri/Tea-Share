@@ -7,7 +7,7 @@ import type { NextPage } from "next";
 
 import useStateContext from "../hooks/useStateContext";
 
-import Sidebar from "../components/Sidebar";
+const Sidebar = dynamic(() => import("../components/Sidebar"));
 const Image = dynamic(() => import("next/image"));
 
 const Create: NextPage = () => {

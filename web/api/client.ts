@@ -39,7 +39,31 @@ export const fetchUserByQuery: FetchItemByQuery<MongoDBUser> = async query => {
   return user;
 };
 
-export const createPost: CreatePostAPI = async formdata => fetch(`${url}/posts`, { method: "POST", body: JSON.stringify(formdata) });
+export const createPost: CreatePostAPI = async formdata =>
+  fetch(`${url}/posts`, {
+    method: "POST",
+    body: JSON.stringify(formdata),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+export const createUser: CreateUserAPI = async formData =>
+  fetch(`${url}/users`, {
+    method: "POST",
+    body: JSON.stringify(formData),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+export const updateProfile: UpdateProfileAPI = async (id, user) =>
+  fetch(`${url}/users/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(user),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
 export const LikePost: LikePostAPI = async (id, name, image) => fetch(`${url}/posts/${id}/like?name=${name}&image=${image}`, { method: "PATCH" });
-export const createUser: CreateUserAPI = async formData => fetch(`${url}/users`, { method: "POST", body: JSON.stringify(formData) });
-export const updateProfile: UpdateProfileAPI = async (id, user) => fetch(`${url}/users/${id}`, { method: "PATCH", body: JSON.stringify(user) });

@@ -1,7 +1,9 @@
-import { FcGoogle } from "react-icons/fc";
+import dynamic from "next/dynamic";
 
 import type { FC } from "react";
 import type { GoogleLoginProps } from "../types";
+
+const FcGoogle = dynamic(() => import("@react-icons/all-files/fc/FcGoogle").then(({ FcGoogle }) => FcGoogle));
 
 const GoogleLogin: FC<GoogleLoginProps> = ({ onClick }) => (
   <button

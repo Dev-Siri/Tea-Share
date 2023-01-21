@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
+import dynamic from "next/dynamic";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { AiFillLike } from "react-icons/ai";
 
 import type { CreatePostSubmitHandler, LikedPeople, LikePostHandler, PostTimeCalculator } from "../types";
 
@@ -65,6 +65,7 @@ export const PostTime: PostTimeCalculator = createdAt => {
 
 export const LikePost: LikePostHandler = async (setLikes, setLikeBTN, people, themeColor, user, _id) => {
   const { LikePost: LikePostAPI } = await import("../api");
+  const AiFillLike = dynamic(() => import("@react-icons/all-files/ai/AiFillLike").then(({ AiFillLike }) => AiFillLike));
 
   setLikes(!people?.length ? "You liked this post" : people?.length === 1 ? "You and 1 other" : `You and ${people?.length} others`);
   setLikeBTN(<AiFillLike size={18} color={themeColor} />);
