@@ -117,7 +117,7 @@ export const UpdateProfile: UpdateProfileHandler = async (email, username, image
       imgName += characters.charAt(Math.floor(Math.random() * characters.length));
     }
 
-    const imageRef = ref(storage, `posts/${imgName}.jpg`);
+    const imageRef = ref(storage, `users/${imgName}.jpg`);
 
     await uploadBytes(imageRef, new Blob([image as File]));
 
