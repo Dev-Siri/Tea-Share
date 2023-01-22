@@ -1,22 +1,27 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 import type { NextPage, GetServerSideProps } from "next";
 import type { MongoDBUser, Post, PostAuthorProps } from "../../../types";
+import { getBannerImage } from "../../../utils/globals";
 
 const Sidebar = dynamic(() => import("../../../components/Sidebar"));
 const Post = dynamic(() => import("../../../components/Post"));
 const Image = dynamic(() => import("next/image"));
 
 const Author: NextPage<PostAuthorProps> = ({ user, posts }) => {
-  const { username, image } = user;
+  const [isSSR, setIsSSR] = useState(true);
 
+  const { username, image } = user;
   const router = useRouter();
+
   const { post } = router.query;
 
   useEffect(() => {
     if (!user) location.reload();
+
+    setIsSSR(false);
   }, []);
 
   return (
@@ -24,6 +29,14 @@ const Author: NextPage<PostAuthorProps> = ({ user, posts }) => {
       <Sidebar route="post-author-info" isOnPostInfo={{ visible: true, title: "View Post", href: `/post/${post}`, postedBy: username }} />
       <article className="h-full w-[82%] overflow-y-auto">
         <div className="flex flex-col items-center">
+          {!isSSR && (
+            <Image
+              src={getBannerImage([window.innerWidth, window.innerHeight - 350], ["technology", "nature", "photography", "travel"])}
+              alt="Banner Image"
+              height={window.innerHeight - 350}
+              width={window.innerWidth}
+            />
+          )}
           <div className="mt-[50px] flex w-[80%] flex-col items-center rounded-md border-2 border-light-gray bg-white p-12 dark:border-border-gray dark:bg-black sm:ml-5 md:ml-0 md:w-[30%] md:flex-row md:items-start lg:w-1/2">
             {user ? (
               <>

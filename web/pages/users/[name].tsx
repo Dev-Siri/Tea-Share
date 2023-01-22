@@ -1,24 +1,28 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { type NextRouter, useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 import type { User as FirebaseUser } from "firebase/auth";
 import type { ProfileProps, Post, MongoDBUser } from "../../types";
 import type { NextPage, GetServerSideProps } from "next";
+import { getBannerImage } from "../../utils/globals";
 
 const Sidebar = dynamic(() => import("../../components/Sidebar"));
 const Post = dynamic(() => import("../../components/Post"));
 const Image = dynamic(() => import("next/image"));
 
 const Profile: NextPage<ProfileProps> = ({ user, posts }) => {
-  const { username, image } = user;
+  const [isSSR, setIsSSR] = useState(true);
 
+  const { username, image } = user;
   const router: NextRouter = useRouter();
 
   useEffect(() => {
     const user: FirebaseUser = JSON.parse(localStorage.getItem("user") as string);
 
     if (!user?.displayName) router.push(`/users/${user?.displayName}`);
+
+    setIsSSR(false);
   }, []);
 
   return (
@@ -26,7 +30,15 @@ const Profile: NextPage<ProfileProps> = ({ user, posts }) => {
       <Sidebar route="profile" />
       <article className="h-full w-[82%] overflow-y-auto">
         <div className="flex flex-col items-center">
-          <div className="mt-[50px] flex w-[80%] flex-col items-center rounded-md border-2 border-light-gray p-12 dark:border-border-gray dark:bg-black sm:ml-5 md:ml-0 md:w-[30%] md:flex-row md:items-start lg:w-1/2">
+          {!isSSR && (
+            <Image
+              src={getBannerImage([window.innerWidth, window.innerHeight - 350], ["technology", "nature", "photography", "travel"])}
+              alt="Banner Image"
+              height={window.innerHeight - 350}
+              width={window.innerWidth}
+            />
+          )}
+          <div className="-mt-28 flex w-[80%] flex-col items-center rounded-md border-2 border-light-gray p-12 dark:border-border-gray dark:bg-black sm:ml-5 md:ml-0 md:w-[30%] md:flex-row md:items-start lg:w-1/2">
             {user ? (
               <>
                 <Image src={image} alt={username} height={130} width={130} className="h-[130px] rounded-full" />

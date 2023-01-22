@@ -31,17 +31,17 @@ export interface ProfileProps extends WithPosts, WithUser {}
 export interface PostAuthorProps extends WithPosts, WithUser {}
 
 export interface SearchBarProps {
-  onSearch(): void;
+  protected onSearch(): void;
   noBorder?: boolean;
 }
 
 export interface GoogleLoginProps {
-  onClick(): void;
+  protected onClick(): void;
 }
 
 export interface ThemeOptionProps {
   title: string;
-  onClick(): void;
+  protected onClick(): void;
 }
 
 export interface FormProps {
@@ -51,18 +51,18 @@ export interface FormProps {
 
 export interface ColorInputProps {
   color: string;
-  handleClick(): void;
+  protected onClick(): void;
 }
 
 export interface UserListProps extends WithUsers {
   itemClick: {
-    changeShowingUserInfo(): void;
+    protected changeShowingUserInfo(): void;
     setSelectedUser: Dispatch<SetStateAction<MongoDBUser | null>>;
   };
 }
 
 export interface UserSideViewProps extends WithUser<null> {
-  closeMenu(): void;
+  protected closeMenu(): void;
 }
 
 export interface SidebarProps {
@@ -85,4 +85,10 @@ export interface SidebarOptionProps {
   title: string;
   icon: ReactElement;
   isActive: boolean;
+}
+
+export interface UserListItemProps {
+  username: string;
+  image: string;
+  protected onClick?(): void;
 }

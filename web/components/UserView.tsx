@@ -32,7 +32,7 @@ const UserPreview: FC<UserSideViewProps> = ({ closeMenu, user }) => {
             alt={user?.username as string}
             height={200}
             width={200}
-            className="mt-5 h-[200px] rounded-full border-2 border-dark-gray bg-dark-gray p-1"
+            className="mt-5 rounded-full border-2 border-dark-gray bg-dark-gray p-1"
           />
           <h1 className="mt-3 max-w-[300px] break-words text-center text-3xl font-bold">{user?.username}</h1>
           <h1 className="mt-1 text-xl text-gray-500">@{user?.username?.toLowerCase().split(" ").join("-")}</h1>

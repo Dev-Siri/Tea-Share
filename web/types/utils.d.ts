@@ -34,4 +34,4 @@ export type LikePostHandler = (
 ) => Promise<void>;
 export type PostTimeCalculator = (createdAt: string) => string;
 
-export type PlaceholderImageGetter = (size: number) => string;
+export type BannerImageGetter = (size: [number, number], categories: string[]) => string;

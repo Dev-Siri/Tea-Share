@@ -102,7 +102,7 @@ const Settings: NextPage = () => {
           <h2 className="text-2xl font-bold">Theme color</h2>
           <div className="ml-4 grid grid-cols-3 sm:ml-8">
             {colors.map(color => (
-              <ColorInput color={color} handleClick={() => switchColor?.(color)} key={color} />
+              <ColorInput color={color} onClick={() => switchColor?.(color)} key={color} />
             ))}
           </div>
         </section>

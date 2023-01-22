@@ -7,7 +7,7 @@ const nextConfig = {
   swcMinify: true,
   compress: true,
   images: {
-    domains: ["firebasestorage.googleapis.com", "localhost", "lh3.googleusercontent.com", "via.placeholder.com"],
+    domains: ["firebasestorage.googleapis.com", "localhost", "lh3.googleusercontent.com", "via.placeholder.com", "source.unsplash.com"],
   },
   i18n: {
     locales: ["en"],

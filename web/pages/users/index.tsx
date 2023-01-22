@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 
-import type { NextPage, GetServerSideProps } from "next";
+import type { NextPage, GetStaticProps } from "next";
 import type { AllUsersViewProps, MongoDBUser } from "../../types";
 
 import useStateContext from "../../hooks/useStateContext";
@@ -55,7 +55,7 @@ const AllUsersView: NextPage<AllUsersViewProps> = ({ users }) => {
           setCurrentPage,
         }}
       />
-      <div className="w-[82%]">
+      <div className="w-[82vw]">
         <SearchBar onSearch={handleSearch} noBorder />
         <UserList users={reactiveUsers} itemClick={{ changeShowingUserInfo: () => setShowUserInfo(true), setSelectedUser }} />
       </div>
@@ -64,12 +64,13 @@ const AllUsersView: NextPage<AllUsersViewProps> = ({ users }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<AllUsersViewProps> = async () => {
+export const getStaticProps: GetStaticProps<AllUsersViewProps> = async () => {
   const { fetchUsers } = await import("../../api");
   const users: MongoDBUser[] = await fetchUsers(INITIAL_PAGE_LIMIT, SERVER_USER_LIMIT);
 
   return {
     props: { users },
+    revalidate: 3,
   };
 };
 
