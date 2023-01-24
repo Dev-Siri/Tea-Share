@@ -1,0 +1,35 @@
+name: tea_share
+description: A brand new social media app.
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.18.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  bottom_bar_page_transition: ^2.0.0
+  flutter_expandable_fab: ^1.7.0
+  cached_network_image: ^3.2.3
+  shared_preferences: ^2.0.16
+  date_time_format: ^2.0.1
+  cupertino_icons: ^1.0.5
+  firebase_core: ^2.4.1
+  firebase_auth: ^4.2.5
+  firebase_storage: ^11.0.10
+  image_picker: ^0.8.6+1
+  provider: ^6.0.5
+  http: ^0.13.5
+
+dev_dependencies:
+  change_app_package_name: ^1.1.0
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/

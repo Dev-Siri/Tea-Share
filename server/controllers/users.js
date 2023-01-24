@@ -30,7 +30,6 @@ export const createUser = async (req, res) => {
 
   if (userExists) {
     res.code(204);
-
     return "User already exists";
   }
 
@@ -40,7 +39,6 @@ export const createUser = async (req, res) => {
     newUser.save();
 
     res.code(201);
-
     return newUser;
   } catch (error) {
     res.code(500);
@@ -54,6 +52,7 @@ export const getUserBySearchTerm = async (req, res) => {
   try {
     const user = await UserModel.find({ username: query });
 
+    res.code(200);
     return user[0];
   } catch (error) {
     res.code(404);

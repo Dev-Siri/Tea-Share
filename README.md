@@ -2,28 +2,23 @@
 
 ## Description
 
-Tea share is an online social media app for iOS, Android and the Web. It provides UI to interact and scroll through posts and allows you to
+Tea Share is an online social media app for iOS, Android and the Web. It provides UI to interact and scroll through posts and allows you to
 create posts easily with the click of a button. It is built with Flutter for mobile (iOS/Android) and **[Next.js](https://nextjs.org)** for the web version. It uses **[MongoDB](https://www.mongodb.com)** as the
-database, **[Node.js](https://nodejs.org)** as the server side runtime and **[Firebase](https://firebase.google.com)** for authentication and storage for all the user generated data.
+database, **[Node.js](https://nodejs.org)** as the server side runtime and **[Firebase](https://firebase.google.com)** for authentication and storage for all the user generated data. The mobile app is made with **[Flutter](https://flutter.dev)**, a cross platform framework.
 
-The web version is a younger version of the App.
-It was released for more users on desktop.
-
-Currently the IOS version is not available but it will be soon. After the IOS version is ready,
-it will be available in this repository.
-
-> NOTE: The Mobile version of the app is currently migrating from React Native to Flutter. It is currently not available but it is still being worked on.
+Currently even though the Flutter project has a **iOS** folder, the iOS version is not configured for it and will not be available for a long time.
 
 ## Technologies
 
-- Flutter
 - Dart
-- Typescript
+- TypeScript
+- JavaScript
+- Flutter
 - React.js
 - Next.js
-- Sass
 - Node.js
 - MongoDB
+- Tailwindcss
 - Firebase
 
 # Getting started
@@ -36,7 +31,7 @@ it will be available in this repository.
 git clone https://github.com/Dev-Siri/Tea-share.git
 ```
 
-Now enter the directory like (web or server) to start
+Enter a version directory.
 
 ```sh
 cd web
@@ -46,20 +41,20 @@ cd server
 cd mobile
 ```
 
-- Make sure to run npm/yarn install to install the dependencies for the **Web and Server** only, before running the project
+- Make sure to run npm, yarn or pnpm install to install the dependencies for the **Web and Server** only, before running the project.
 
 ```sh
 npm install
-    # OR
+  # OR
 yarn install
+  # OR
+pnpm install
 ```
 
-- Then run npm/yarn start to run the project locally
-
-> Warning: The project is currently undergoing a migration from react native to flutter. The mobile version is not available right now.
+- Then run flutter, npm, yarn or pnpm to run the project locally.
 
 ```sh
-# For mobile version (Not available right now)
+# For mobile version
 flutter run
 
 # For web version
@@ -71,6 +66,46 @@ npm run dev
 npm start
 ```
 
+### Connecting A Physical Device To The Flutter App.
+
+In the **Mobile** directory, there is a [connect.py](mobile/connect.py) script that allows you to connect to a physical android device with [ADB](https://developer.android.com/studio/command-line/adb). <br />
+Script usage:
+
+```sh
+python connect.py <IP-ADDRESS> <PORT>
+```
+
+Make sure your android device is connected to your computer with USB and has [Wireless Debugging](https://medium.com/android-news/wireless-debugging-through-adb-in-android-using-wifi-965f7edd163a) enabled in the Developer Settings.
+
+### Building The Production Version (For Mobile & Web)
+
+#### Web
+
+To build the web version, run:
+
+```sh
+npm run build
+  # OR
+yarn run build
+  # OR
+pnpm run build
+```
+
+Then to start the production version, run:
+
+```sh
+npm start
+  # OR
+yarn start
+  # OR
+pnpm start
+```
+
+#### Mobile
+
+For building the mobile app for android, follow the official [Flutter Documentation](https://docs.flutter.dev/deployment/android) <br />
+OR, you can download the already compiled apks from releases.
+
 ## License
 
-This project is MIT Licensed - see the [LICENSE.md](LICENSE.md) file for details
+This project is MIT Licensed - see the [LICENSE.md](LICENSE.md) file for details.

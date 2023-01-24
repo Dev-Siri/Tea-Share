@@ -1,8 +1,4 @@
-.bundle
-.buckconfig
 .vscode
 .env.example
 .env.local
 .node-version
-bundle.js
-index.bundle

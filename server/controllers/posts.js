@@ -32,6 +32,7 @@ export const getPostsBySearchTerm = async (req, res) => {
 
     const posts = await PostModel.find({ $or: findObject }).sort({ createdAt: -1 });
 
+    res.code(200);
     return posts;
   } catch (error) {
     res.code(404);
@@ -62,23 +63,29 @@ export const likePost = async (req, res) => {
   const { id } = req.params;
   const { name, image } = req.query;
 
-  if (!Types.ObjectId.isValid(id)) {
-    res.code(404);
-    return "No posts with that ID";
+  try {
+    if (!Types.ObjectId.isValid(id)) {
+      res.code(404);
+      return "No posts with that ID";
+    }
+  
+    const post = await PostModel.findById(id);
+  
+    const alreadyLiked = post?.people?.includes(name);
+  
+    if (alreadyLiked) return res.status(304);
+  
+    post?.people?.push(name);
+    post?.peopleImage?.push(image);
+  
+    const updatedPost = await PostModel.findByIdAndUpdate(id, post, {
+      new: true,
+    });
+  
+    res.code(200);
+    return updatedPost;
+  } catch (error) {
+    res.code(304);
+    return error.message;
   }
-
-  const post = await PostModel.findById(id);
-
-  const alreadyLiked = post?.people?.includes(name);
-
-  if (alreadyLiked) return res.status(304);
-
-  post?.people?.push(name);
-  post?.peopleImage?.push(image);
-
-  const updatedPost = await PostModel.findByIdAndUpdate(id, post, {
-    new: true,
-  });
-
-  return updatedPost;
 };
