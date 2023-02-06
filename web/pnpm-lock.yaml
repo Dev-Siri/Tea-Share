@@ -12,7 +12,7 @@ specifiers:
   eslint: ^8.33.0
   eslint-config-next: ^13.1.6
   firebase: ^9.17.1
-  next: ^13.1.6
+  next: latest
   nextjs-progressbar: ^0.0.16
   nprogress: ^0.2.0
   postcss: ^8.4.21
