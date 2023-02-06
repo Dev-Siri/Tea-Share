@@ -8,9 +8,9 @@
   "rules": {
     "quotes": "off",
     "curly": "off",
+    "import/no-anonymous-default-export": "off",
     "react-hooks/exhaustive-deps": "off",
     "react-native/no-inline-styles": "off",
-    "react/no-unstable-nested-components": "off",
     "react-hooks/rules-of-hooks": "off",
     "react/react-in-jsx-scope": "off",
     "no-unused-vars": "warn",

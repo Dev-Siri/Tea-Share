@@ -1,29 +1,39 @@
-import "../styles/globals.css";
-import { Suspense } from "react";
+import "@styles/globals.css";
 import dynamic from "next/dynamic";
-import Router from "next/router";
+import { useRouter, type NextRouter } from "next/router";
+import { Suspense } from "react";
 
-import type { AppProps } from "next/app";
 import type { NextPage } from "next";
+import type { AppProps } from "next/app";
 
 const Toaster = dynamic(() => import("react-hot-toast").then(({ Toaster }) => Toaster));
-const ContextProvider = dynamic(() => import("../context/ContextProvider"));
-const Layout = dynamic(() => import("../components/Layout"));
+const ContextProvider = dynamic(() => import("@context/ContextProvider"));
+const ProgressBar = dynamic(() => import("nextjs-progressbar"));
+const Navbar = dynamic(() => import("@components/Navbar"));
+const Layout = dynamic(() => import("@components/Layout"));
+const Loader = dynamic(() => import("@components/Loader"));
 
-import("nprogress").then(Nprogress => {
-  Router.events.on("routeChangeStart", () => Nprogress.start());
-  Router.events.on("routeChangeComplete", () => Nprogress.done(false));
-});
+const App: NextPage<AppProps> = ({ Component, pageProps }) => {
+  const router: NextRouter = useRouter();
 
-const App: NextPage<AppProps> = ({ Component, pageProps }) => (
-  <Suspense fallback={<div />}>
+  return (
     <ContextProvider>
       <Layout>
         <Toaster toastOptions={{ className: "dark:bg-dark-gray dark:text-white" }} />
-        <Component {...pageProps} />
+        <ProgressBar
+          options={{
+            showSpinner: false,
+          }}
+        />
+        {router.pathname !== "/auth" && <Navbar />}
+        <Suspense fallback={<Loader visible />}>
+          <article className="flex dark:bg-dark-gray dark:text-white">
+            <Component {...pageProps} />
+          </article>
+        </Suspense>
       </Layout>
     </ContextProvider>
-  </Suspense>
-);
+  );
+};
 
 export default App;

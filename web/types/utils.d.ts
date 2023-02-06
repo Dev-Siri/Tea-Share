@@ -1,6 +1,6 @@
-import type { Dispatch, SetStateAction, FormEvent } from "react";
-import type { NextRouter } from "next/router";
 import type { User as FirebaseUser } from "firebase/auth";
+import type { NextRouter } from "next/router";
+import type { Dispatch, FormEvent, SetStateAction } from "react";
 import type { PostFormData } from "./post";
 
 export type AuthHandler = (event: FormEvent<HTMLFormElement> | null, type: "mail" | "google") => Promise<void>;
@@ -23,7 +23,7 @@ export type CreatePostSubmitHandler = (
   setIsCreatingPost: Dispatch<SetStateAction<boolean>>
 ) => Promise<void>;
 
-export type LikedPeople = (people: string[], user: FirebaseUser | null) => string;
+export type LikedPeopleCalculator = (people: string[], user: FirebaseUser | null) => string;
 export type LikePostHandler = (
   setLikes: Dispatch<SetStateAction<string>>,
   setLikeBTN: Dispatch<SetStateAction<JSX.Element | null>>,
@@ -32,6 +32,7 @@ export type LikePostHandler = (
   user: FirebaseUser | null,
   _id: string
 ) => Promise<void>;
-export type PostTimeCalculator = (createdAt: string) => string;
 
 export type BannerImageGetter = (size: [number, number], categories: string[]) => string;
+export type RelativeTimeGetter = (date: Date) => string;
+export type HandleGetter = (username?: string) => string;

@@ -1,15 +1,14 @@
-import { type FC, useState, useEffect } from "react";
+import { useEffect, useState, type FC } from "react";
 
-import usePageTitle from "../hooks/usePageTitle";
-import colors from "../constants/colors";
+import colors from "@constants/colors";
+import usePageTitle from "@hooks/usePageTitle";
 
-import type { ContextProps } from "../types";
+import type { ContextProps, Switcher } from "../types";
 
 import Context from "./Context";
 
 const ContextProvider: FC<ContextProps> = ({ children }) => {
   const [title, setTitle] = useState(usePageTitle("server"));
-  const [searchTerm, setSearchTerm] = useState<string>("");
   const [themeMode, setThemeMode] = useState<string>("dark");
   const [themeColor, setThemeColor] = useState<string>("#594194");
 
@@ -20,12 +19,12 @@ const ContextProvider: FC<ContextProps> = ({ children }) => {
     setThemeMode(localStorage.getItem("mode") ?? "light");
   }, []);
 
-  const switchMode = (mode: string) => {
+  const switchMode: Switcher = mode => {
     localStorage.setItem("mode", mode);
     setThemeMode(mode);
   };
 
-  const switchColor = (color: string) => {
+  const switchColor: Switcher = color => {
     localStorage.setItem("color", color);
     setThemeColor(color);
   };
@@ -33,8 +32,6 @@ const ContextProvider: FC<ContextProps> = ({ children }) => {
   return (
     <Context.Provider
       value={{
-        searchTerm,
-        setSearchTerm,
         themeMode,
         setThemeMode,
         switchMode,

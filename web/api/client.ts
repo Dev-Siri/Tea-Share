@@ -1,16 +1,20 @@
 import type {
+  CreatePostAPI,
+  CreateUserAPI,
   FetchItemByQuery,
   FetchPostsAPI,
-  CreatePostAPI,
-  LikePostAPI,
-  CreateUserAPI,
   FetchUsersAPI,
-  UpdateProfileAPI,
-  Post,
+  LikePostAPI,
   MongoDBUser,
+  Post,
+  UpdateProfileAPI,
 } from "../types";
 
 const url: string = process.env.NEXT_PUBLIC_BACKEND_URL as string;
+
+const headers = {
+  "Content-Type": "application/json",
+};
 
 export const fetchPosts: FetchPostsAPI = async (page, limit) => {
   const response: Response = await fetch(`${url}/posts?page=${page}&limit=${limit}`);
@@ -25,8 +29,8 @@ export const fetchUsers: FetchUsersAPI = async (page, limit) => {
   return users;
 };
 
-export const fetchPostByQuery: FetchItemByQuery<Post[]> = async (query, user = true) => {
-  const response: Response = await fetch(`${url}/posts/search?query=${query}&user=${user}`);
+export const fetchPostByQuery: FetchItemByQuery<Post[]> = async (query, fromUser = true) => {
+  const response: Response = await fetch(`${url}/posts/search?query=${query}&user=${fromUser}`);
   const posts = await response.json();
 
   return posts;
@@ -42,28 +46,27 @@ export const fetchUserByQuery: FetchItemByQuery<MongoDBUser> = async query => {
 export const createPost: CreatePostAPI = async formdata =>
   fetch(`${url}/posts`, {
     method: "POST",
+    headers,
     body: JSON.stringify(formdata),
-    headers: {
-      "Content-Type": "application/json",
-    },
   });
 
 export const createUser: CreateUserAPI = async formData =>
   fetch(`${url}/users`, {
     method: "POST",
+    headers,
     body: JSON.stringify(formData),
-    headers: {
-      "Content-Type": "application/json",
-    },
   });
 
 export const updateProfile: UpdateProfileAPI = async (id, user) =>
   fetch(`${url}/users/${id}`, {
     method: "PATCH",
+    headers,
     body: JSON.stringify(user),
-    headers: {
-      "Content-Type": "application/json",
-    },
   });
 
-export const LikePost: LikePostAPI = async (id, name, image) => fetch(`${url}/posts/${id}/like?name=${name}&image=${image}`, { method: "PATCH" });
+export const LikePost: LikePostAPI = async (id, name, image) =>
+  fetch(`${url}/posts/${id}/like?name=${name}&image=${image}`, {
+    method: "PATCH",
+    headers,
+    body: JSON.stringify({ name, image }),
+  });

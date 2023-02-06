@@ -1,6 +1,6 @@
 import type { PageTitleHook } from "../types";
 
-import { PAGE_TITLE } from "../constants/pageInfo";
+import { PAGE_TITLE } from "@constants/pageInfo";
 
 const usePageTitle: PageTitleHook = environment => {
   if (environment === "server") return PAGE_TITLE;
@@ -11,13 +11,13 @@ const usePageTitle: PageTitleHook = environment => {
     case "/auth":
       return "Login";
     case "/":
-      return "Home";
+      return "Tea Share";
     case "/settings":
       return "Settings";
-    case "/users":
-      return "Users";
-    case `/users/${user?.displayName}`:
-      return `${user?.displayName}`;
+    case "/people":
+      return "People";
+    case `/people/${user?.displayName}`:
+      return user?.displayName;
     default:
       return "Tea Share";
   }

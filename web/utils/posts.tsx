@@ -1,12 +1,11 @@
-import dayjs from "dayjs";
 import dynamic from "next/dynamic";
-import relativeTime from "dayjs/plugin/relativeTime";
 
-import type { CreatePostSubmitHandler, LikedPeople, LikePostHandler, PostTimeCalculator } from "../types";
+import type { CreatePostSubmitHandler, LikedPeopleCalculator, LikePostHandler } from "../types";
 
 export const CreatePost: CreatePostSubmitHandler = async (formData, router, setIsCreatingPost) => {
   const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
-  const { createPost, storage } = await import("../api");
+  const { createPost } = await import("@api/client");
+  const { storage } = await import("@api/firebase");
   const { toast } = await import("react-hot-toast");
 
   if (!formData.title || (!formData.image && formData.title.length > 3)) return;
@@ -42,7 +41,7 @@ export const CreatePost: CreatePostSubmitHandler = async (formData, router, setI
   router.push("/");
 };
 
-export const LikedPeoples: LikedPeople = (people, user) => {
+export const LikedPeople: LikedPeopleCalculator = (people, user) => {
   if (!people.length) return "0 Likes";
 
   if (people.includes(user?.displayName as string)) {
@@ -56,18 +55,11 @@ export const LikedPeoples: LikedPeople = (people, user) => {
   return `${people[0]} and ${people.length - 1} others`;
 };
 
-export const PostTime: PostTimeCalculator = createdAt => {
-  dayjs.extend(relativeTime);
-  const defaultTime = dayjs(createdAt).fromNow();
-  const result = `${defaultTime.charAt(0).toUpperCase()}${defaultTime.slice(1)}`;
-  return result;
-};
-
 export const LikePost: LikePostHandler = async (setLikes, setLikeBTN, people, themeColor, user, _id) => {
-  const { LikePost: LikePostAPI } = await import("../api");
-  const AiFillLike = dynamic(() => import("@react-icons/all-files/ai/AiFillLike").then(({ AiFillLike }) => AiFillLike));
+  const { LikePost: LikePostAPI } = await import("@api/client");
+  const IoMdThumbsUp = dynamic(() => import("@react-icons/all-files/io/IoMdThumbsUp").then(({ IoMdThumbsUp }) => IoMdThumbsUp));
 
   setLikes(!people?.length ? "You liked this post" : people?.length === 1 ? "You and 1 other" : `You and ${people?.length} others`);
-  setLikeBTN(<AiFillLike size={18} color={themeColor} />);
+  setLikeBTN(<IoMdThumbsUp size={25} color={themeColor} />);
   await LikePostAPI(_id, user?.displayName as string, user?.photoURL as string);
 };

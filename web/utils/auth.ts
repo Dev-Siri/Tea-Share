@@ -1,10 +1,11 @@
 import { type User } from "firebase/auth";
 
-import type { MailAuthHandler, GoogleAuthHandler, LogoutHandler, UpdateProfileHandler } from "../types";
+import type { GoogleAuthHandler, LogoutHandler, MailAuthHandler, UpdateProfileHandler } from "../types";
 
 export const MailAuth: MailAuthHandler = async (displayName, email, password, photoURL, router, isSignup) => {
   const { toast } = await import("react-hot-toast");
-  const { createUser, storage, auth } = await import("../api");
+  const { createUser } = await import("@api/client");
+  const { storage, auth } = await import("@api/firebase");
 
   toast.loading(isSignup ? "Creating your account..." : "Logging you in...", { id: "loading" });
 
@@ -66,7 +67,8 @@ export const MailAuth: MailAuthHandler = async (displayName, email, password, ph
 export const GoogleAuth: GoogleAuthHandler = async router => {
   const { signInWithPopup, GoogleAuthProvider } = await import("firebase/auth");
   const { toast } = await import("react-hot-toast");
-  const { createUser, auth } = await import("../api");
+  const { createUser } = await import("@api/client");
+  const { auth } = await import("@api/firebase");
 
   try {
     const provider = new GoogleAuthProvider();
@@ -92,7 +94,7 @@ export const GoogleAuth: GoogleAuthHandler = async router => {
 
 export const Logout: LogoutHandler = async router => {
   const { toast } = await import("react-hot-toast");
-  const { auth } = await import("../api");
+  const { auth } = await import("@api/firebase");
 
   try {
     await auth.signOut();
@@ -106,7 +108,8 @@ export const Logout: LogoutHandler = async router => {
 export const UpdateProfile: UpdateProfileHandler = async (email, username, image, id) => {
   const { updateEmail, updateProfile } = await import("firebase/auth");
   const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
-  const { updateProfile: updateProfileAPI, storage, auth } = await import("../api");
+  const { updateProfile: updateProfileAPI } = await import("@api/client");
+  const { storage, auth } = await import("@api/firebase");
   const { toast } = await import("react-hot-toast");
 
   try {

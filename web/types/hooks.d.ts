@@ -1,11 +1,6 @@
-interface Route {
-  href: string;
-  title: string;
-  icon: ReactElement;
-  isActive: boolean;
-}
+import type { DependencyList, EffectCallback } from "react";
 
 type Environment = "client" | "server";
 
 export type PageTitleHook = (environment: Environment) => string;
-export type RoutesHook = (username: string, route: string) => Route[];
+export type DidMountEffectHook = (effect: EffectCallback, deps: DependencyList) => void;

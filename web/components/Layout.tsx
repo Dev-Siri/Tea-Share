@@ -1,12 +1,12 @@
-import { type FC } from "react";
 import { Inter } from "@next/font/google";
 import Head from "next/head";
+import { type FC } from "react";
 
 import type { LayoutProps } from "../types";
 
-import useStateContext from "../hooks/useStateContext";
+import useStateContext from "@hooks/useStateContext";
 
-import { PAGE_DESCRIPTION, PAGE_URL, PAGE_SHORT_TITLE, PAGE_FAVICON_PATH, PAGE_TITLE, PAGE_KEYWORDS } from "../constants/pageInfo";
+import { PAGE_DESCRIPTION, PAGE_FAVICON_PATH, PAGE_KEYWORDS, PAGE_SHORT_TITLE, PAGE_TITLE, PAGE_URL } from "@constants/pageInfo";
 
 const inter = Inter({
   weight: ["400", "700"],
@@ -39,8 +39,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         <meta name="twitter:image" content={PAGE_FAVICON_PATH} />
         <meta name="twitter:site" content={PAGE_URL} />
         <meta name="twitter:creator" content="Dev-Siri" />
-        <link rel="canonical" href={`${PAGE_URL}/auth`} />
         <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION_TOKEN} />
+        <link rel="canonical" href={`${PAGE_URL}/auth`} />
         <link rel="icon" href={PAGE_FAVICON_PATH} />
         <title>{title}</title>
       </Head>

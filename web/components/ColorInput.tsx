@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import type { FC } from "react";
 import type { ColorInputProps } from "../types";
 
-import useStateContext from "../hooks/useStateContext";
+import useStateContext from "@hooks/useStateContext";
 
 const TiTick = dynamic(() => import("@react-icons/all-files/ti/TiTick").then(({ TiTick }) => TiTick));
 

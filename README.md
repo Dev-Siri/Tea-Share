@@ -77,11 +77,11 @@ python connect.py <IP-ADDRESS> <PORT>
 
 Make sure your android device is connected to your computer with USB and has [Wireless Debugging](https://medium.com/android-news/wireless-debugging-through-adb-in-android-using-wifi-965f7edd163a) enabled in the Developer Settings.
 
-### Building The Production Version (For Mobile & Web)
+### Building The Production Version
 
-#### Web
+#### Web & Server
 
-To build the web version, run:
+To build the web app & server, run:
 
 ```sh
 npm run build

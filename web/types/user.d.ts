@@ -1,5 +1,3 @@
-import type { NextRouter } from "next/router";
-
 export interface MongoDBUser {
   username: string;
   image: string;

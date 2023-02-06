@@ -1,3 +1,4 @@
+// @ts-check
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
@@ -14,11 +15,12 @@ module.exports = {
         "medium-blue": "rgb(0, 102, 255)",
         "light-gray": "hsl(0, 0%, 90%)",
         "semi-gray": "rgb(51, 51, 51)",
-        "hover-color": "rgb(28, 20, 46)",
         "dark-gray": "rgb(17, 17, 17)",
         "border-gray": "rgb(50, 50, 50)",
       },
-      fontFamily: {},
     },
+  },
+  future: {
+    hoverOnlyWhenSupported: true,
   },
 };

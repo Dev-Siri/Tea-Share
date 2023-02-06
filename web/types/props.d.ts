@@ -1,5 +1,5 @@
-import type { ReactElement, SetStateAction, Dispatch, JSXElementConstructor } from "react";
-import type { Post, MongoDBUser } from "./";
+import type { Dispatch, JSXElementConstructor, ReactElement, SetStateAction } from "react";
+import type { MongoDBUser, Post } from "./";
 
 interface WithPost {
   post: Post;
@@ -18,20 +18,20 @@ interface WithUsers {
 }
 
 interface WithChildren {
-  children: ReactElement<any, JSXElementConstructor<any>>[] | ReactElement<any, JSXElementConstructor<any>>;
+  children: reactElement<any, JSXElementConstructor<any>>[] | reactElement<any, JSXElementConstructor<any>>;
 }
 
 export interface PostProps extends WithPost {}
-export interface HomeProps extends WithPosts {}
 export interface PostInfoProps extends WithPost {}
 export interface LayoutProps extends WithChildren {}
 export interface ContextProps extends WithChildren {}
 export interface AllUsersViewProps extends WithUsers {}
+export interface HomeProps extends WithPosts, WithUsers {}
 export interface ProfileProps extends WithPosts, WithUser {}
 export interface PostAuthorProps extends WithPosts, WithUser {}
 
 export interface SearchBarProps {
-  protected onSearch(): void;
+  protected onSearch(searchTerm: string): void;
   noBorder?: boolean;
 }
 
@@ -54,34 +54,19 @@ export interface ColorInputProps {
   protected onClick(): void;
 }
 
-export interface UserListProps extends WithUsers {
-  itemClick: {
-    protected changeShowingUserInfo(): void;
-    setSelectedUser: Dispatch<SetStateAction<MongoDBUser | null>>;
-  };
+export interface UserListProps {
+  users: Omit<Omit<MongoDBUser, "email">, "_id">[] | MongoDBUser[];
+  protected onScroll?(event: any): void;
+  fullHeight?: boolean;
+  title: string;
 }
 
 export interface UserSideViewProps extends WithUser<null> {
   protected closeMenu(): void;
 }
 
-export interface SidebarProps {
-  route: string;
-  scrollingOptions?: {
-    setCurrentPage: Dispatch<SetStateAction<number>>;
-    loading: boolean;
-  };
-  isOnPostInfo?: {
-    visible: boolean;
-    title: string;
-    _id?: string;
-    href: string;
-    postedBy: string;
-  };
-}
-
 export interface SidebarOptionProps {
-  href: any;
+  href: string;
   title: string;
   icon: ReactElement;
   isActive: boolean;
@@ -90,5 +75,8 @@ export interface SidebarOptionProps {
 export interface UserListItemProps {
   username: string;
   image: string;
-  protected onClick?(): void;
+}
+
+export interface LoaderProps {
+  visible: boolean;
 }
