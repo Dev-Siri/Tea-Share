@@ -1,6 +1,6 @@
 import type { DependencyList, EffectCallback } from "react";
 
-type Environment = "client" | "server";
+import type { FirebaseUser } from "./user";
 
-export type PageTitleHook = (environment: Environment) => string;
+export type SessionHook = () => FirebaseUser;
 export type DidMountEffectHook = (effect: EffectCallback, deps: DependencyList) => void;

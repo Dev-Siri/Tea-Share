@@ -1,7 +1,7 @@
 {
   "name": "tea-share-backend",
   "version": "1.0.0",
-  "description": "The backend made with Node.js for tea-share",
+  "description": "The backend made with Node.js for Tea Share",
   "main": "index.js",
   "private": true,
   "type": "module",

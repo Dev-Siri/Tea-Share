@@ -1,25 +1,23 @@
-import dynamic from "next/dynamic";
+import { PRIMARY_COLOR } from "@constants/colors";
+import { IoMdThumbsUp } from "@react-icons/all-files/io/IoMdThumbsUp";
 
-import type { CreatePostSubmitHandler, LikedPeopleCalculator, LikePostHandler } from "../types";
+import type { CreatePostSubmitHandler, LikedPeopleCalculator, LikePostHandler } from "@types";
 
-export const CreatePost: CreatePostSubmitHandler = async (formData, router, setIsCreatingPost) => {
+export const CreatePost: CreatePostSubmitHandler = async (formData, router) => {
+  if (!formData.title || (!formData.image && formData.title.length > 3)) return;
+
   const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
-  const { createPost } = await import("@api/client");
+  const { default: useSession } = await import("@hooks/useSession");
+  const { getRandomString } = await import("./globals");
+  const { createPost } = await import("@api/fetchers");
   const { storage } = await import("@api/firebase");
   const { toast } = await import("react-hot-toast");
 
-  if (!formData.title || (!formData.image && formData.title.length > 3)) return;
+  const user = useSession();
 
-  setIsCreatingPost(true);
+  const loadingToast = toast.loading("Creating post...");
 
-  toast.loading("Creating post...", { id: "creating-post-toast" });
-
-  const characters: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" as const;
-  let imageName: string = "";
-
-  for (let i = 0; i < characters.length; i++) {
-    imageName += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
+  const imageName = getRandomString();
 
   const imageRef = ref(storage, `posts/${imageName}`);
 
@@ -27,25 +25,28 @@ export const CreatePost: CreatePostSubmitHandler = async (formData, router, setI
 
   const imageLink = await getDownloadURL(imageRef);
 
-  const newFormData = {
+  await createPost({
     ...formData,
     image: imageLink,
-  };
+    author: user.name,
+    authorImage: user.picture,
+  });
 
-  await createPost(newFormData);
-
-  toast.remove("creating-post-toast");
+  toast.remove(loadingToast);
   toast.success("Post created successfully");
 
-  setIsCreatingPost(false);
   router.push("/");
 };
 
-export const LikedPeople: LikedPeopleCalculator = (people, user) => {
+export const LikedPeople: LikedPeopleCalculator = async people => {
+  const { default: useSession } = await import("@hooks/useSession");
+
+  const user = useSession();
+
   if (!people.length) return "0 Likes";
 
-  if (people.includes(user?.displayName as string)) {
-    if (people.length === 1 && people.includes(user?.displayName as string)) return "You liked this post";
+  if (people.includes(user.name)) {
+    if (people.length === 1) return "You liked this post";
 
     return `You and ${people.length - 1} ${people.length - 1 === 1 ? "other" : "others"}`;
   }
@@ -55,11 +56,11 @@ export const LikedPeople: LikedPeopleCalculator = (people, user) => {
   return `${people[0]} and ${people.length - 1} others`;
 };
 
-export const LikePost: LikePostHandler = async (setLikes, setLikeBTN, people, themeColor, user, _id) => {
-  const { LikePost: LikePostAPI } = await import("@api/client");
-  const IoMdThumbsUp = dynamic(() => import("@react-icons/all-files/io/IoMdThumbsUp").then(({ IoMdThumbsUp }) => IoMdThumbsUp));
+export const LikePost: LikePostHandler = async (setLikes, setLikeBTN, setisLikeButtonDisabled, people, user, id) => {
+  const { LikePost: LikePostAPI } = await import("@api/fetchers");
 
-  setLikes(!people?.length ? "You liked this post" : people?.length === 1 ? "You and 1 other" : `You and ${people?.length} others`);
-  setLikeBTN(<IoMdThumbsUp size={25} color={themeColor} />);
-  await LikePostAPI(_id, user?.displayName as string, user?.photoURL as string);
+  setLikes(!people.length ? "You liked this post" : people.length === 1 ? "You and 1 other" : `You and ${people.length} others`);
+  setLikeBTN(<IoMdThumbsUp size={30} color={PRIMARY_COLOR} />);
+  setisLikeButtonDisabled(true);
+  await LikePostAPI(id, user.name, user.picture);
 };

@@ -1,7 +1,7 @@
 export interface PostFormData {
   title: string;
   description: string;
-  image: File | string | undefined | null;
+  image: File | string | null;
   author: string;
   authorImage: string;
 }

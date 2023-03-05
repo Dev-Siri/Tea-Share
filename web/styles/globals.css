@@ -25,5 +25,45 @@ a {
 }
 
 ::selection {
-  background: rgba(0, 225, 255, 0.484);
+  background: rgba(0, 153, 255, 0.247);
+}
+
+@keyframes loading-skeleton {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.loading-skeleton {
+  --bg-color: hsl(0, 11%, 96%);
+  --flash-color: hsl(0, 0%, 90%);
+  display: block;
+  line-height: 1;
+  margin: 4px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.loading-skeleton::after {
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(90deg, var(--bg-color), var(--flash-color), var(--bg-color));
+  transform: translateX(-100%);
+  animation: loading-skeleton 1.5s ease-in-out infinite;
+}
+
+@layer utilities {
+  .dark-gradient {
+    background: radial-gradient(circle at top, #3f6be9, #000000);
+  }
+
+  .light-gradient {
+    background: radial-gradient(circle at top, #738cf2, #ffffff);
+  }
 }

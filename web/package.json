@@ -2,9 +2,10 @@
   "name": "tea_share_web",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/postbuild.js",
     "start": "next start",
     "lint": "next lint"
   },
@@ -13,34 +14,42 @@
     "edge 90",
     "firefox 90",
     "opera 90",
-    "safari 14"
+    "safari 14",
+    "not IE >= 0"
   ],
+  "postcss": {
+    "plugins": {
+      "tailwindcss": {
+        "config": "./tailwind.config.cjs"
+      },
+      "autoprefixer": {}
+    }
+  },
   "dependencies": {
-    "@next/font": "latest",
     "@react-icons/all-files": "^4.1.0",
+    "encoding": "^0.1.13",
     "firebase": "^9.17.1",
-    "next": "latest",
-    "nextjs-progressbar": "^0.0.16",
-    "nprogress": "^0.2.0",
+    "jwt-decode": "^3.1.2",
+    "next": "^13.2.3",
+    "next-pwa": "^5.6.0",
+    "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0",
-    "react-loader-spinner": "^5.3.4",
     "sharp": "^0.31.3"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^13.1.6",
-    "@types/node": "^18.11.19",
-    "@types/nprogress": "^0.2.0",
-    "@types/react": "^18.0.27",
-    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@next/bundle-analyzer": "^13.2.2",
+    "@types/node": "^18.14.1",
+    "@types/react": "^18.0.28",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
     "autoprefixer": "^10.4.13",
-    "eslint": "^8.33.0",
-    "eslint-config-next": "^13.1.6",
+    "eslint": "^8.34.0",
+    "eslint-config-next": "^13.2.2",
     "postcss": "^8.4.21",
-    "prettier": "^2.8.3",
-    "prettier-plugin-tailwindcss": "^0.2.2",
-    "tailwindcss": "^3.2.4",
+    "prettier": "^2.8.4",
+    "prettier-plugin-tailwindcss": "^0.2.3",
+    "tailwindcss": "^3.2.7",
     "typescript": "^4.9.5"
   }
 }

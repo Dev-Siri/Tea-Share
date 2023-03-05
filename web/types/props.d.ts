@@ -1,6 +1,7 @@
-import type { Dispatch, JSXElementConstructor, ReactElement, SetStateAction } from "react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
 import type { MongoDBUser, Post } from "./";
 
+// Parent Types
 interface WithPost {
   post: Post;
 }
@@ -14,34 +15,52 @@ interface WithUser<T = MongoDBUser> {
 }
 
 interface WithUsers {
-  users: MongoDBUser[];
+  users: Pick<MongoDBUser, "username" | "image">[];
 }
 
 interface WithChildren {
-  children: reactElement<any, JSXElementConstructor<any>>[] | reactElement<any, JSXElementConstructor<any>>;
+  children: ReactNode;
 }
 
-export interface PostProps extends WithPost {}
+interface InfiniteItems<T = string> {
+  [key: string]: T;
+}
+
+// Types for Next.js 13 Components that are not yet available
+export interface PageProps {
+  params: InfiniteItems;
+  searchParams?: any;
+}
+
+export interface LayoutProps extends WithChildren {
+  params: InfiniteItems;
+}
+
+export interface ErrorProps {
+  error: Error;
+  protected reset(): void;
+}
+
+export interface GenerateMetadataProps extends PageProps {}
+
+// Component
 export interface PostInfoProps extends WithPost {}
-export interface LayoutProps extends WithChildren {}
+export interface PostsListProps extends WithPosts {}
 export interface ContextProps extends WithChildren {}
-export interface AllUsersViewProps extends WithUsers {}
 export interface HomeProps extends WithPosts, WithUsers {}
 export interface ProfileProps extends WithPosts, WithUser {}
 export interface PostAuthorProps extends WithPosts, WithUser {}
 
-export interface SearchBarProps {
-  protected onSearch(searchTerm: string): void;
-  noBorder?: boolean;
+export interface PostProps extends WithPost {
+  lazyLoadImage?: boolean;
 }
 
-export interface GoogleLoginProps {
-  protected onClick(): void;
+export interface ErrorMessageProps extends Partial<WithChildren> {
+  type?: "not-found" | "exception";
 }
 
 export interface ThemeOptionProps {
-  title: string;
-  protected onClick(): void;
+  title: "Light" | "Dark";
 }
 
 export interface FormProps {
@@ -54,11 +73,10 @@ export interface ColorInputProps {
   protected onClick(): void;
 }
 
-export interface UserListProps {
-  users: Omit<Omit<MongoDBUser, "email">, "_id">[] | MongoDBUser[];
-  protected onScroll?(event: any): void;
-  fullHeight?: boolean;
+export interface UserPresenterProps {
   title: string;
+  limit?: number;
+  initialUsers: Pick<MongoDBUser, "username" | "image">[];
 }
 
 export interface UserSideViewProps extends WithUser<null> {
@@ -75,8 +93,48 @@ export interface SidebarOptionProps {
 export interface UserListItemProps {
   username: string;
   image: string;
+  loading?: boolean;
+}
+
+export interface UserListProps extends WithUsers {
+  title: string;
+}
+
+export interface UserListSkeletonProps {
+  numberOfItems: number;
+  itemFullWidth?: boolean;
+}
+
+export interface PostsListSkeletonProps {
+  numberOfItems: number;
 }
 
 export interface LoaderProps {
   visible: boolean;
+}
+
+export interface UserInfoProps extends WithUser {
+  postsLength: number;
+}
+
+export interface PostsPresenterProps {
+  initialPosts: Post[];
+}
+
+export interface SkeletonProps {
+  className?: string;
+}
+
+export interface LikeButtonProps {
+  people: string[];
+  postId: string;
+}
+
+export interface RelativeTimeProps {
+  className?: string;
+  dateString: string;
+}
+
+export interface LogoProps {
+  bigger?: boolean;
 }

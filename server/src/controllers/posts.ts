@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Types, type FilterQuery } from "mongoose";
 import PostModel from "../models/postsModel.js";
 
 import type { RequestHandler } from "../types/controllers.js";
@@ -21,13 +21,16 @@ export const getPosts: RequestHandler<Post[]> = async (req, res) => {
   }
 };
 
-export const getPostsBySearchTerm: RequestHandler<Post[]> = async (req, res) => {
-  const { query, user } = req.query;
+export const getPostsBySearchTerm: RequestHandler<Post[], Post> = async (req, res) => {
+  const { q, fromUser } = req.query;
 
   try {
-    const findObject: [{ author: string } | { _id: string }] = user === "true" ? [{ author: query }] : [{ _id: query }];
+    const queryRegex = new RegExp(q, "i");
+    let queryObject: FilterQuery<Post> = Types.ObjectId.isValid(q) ? { _id: q } : { $or: [{ title: queryRegex }, { description: queryRegex }] };
 
-    const posts: Post[] = await PostModel.find({ $or: findObject }).sort({ createdAt: -1 }).lean();
+    if (fromUser === "true") queryObject = { author: q };
+
+    const posts: Post[] = await PostModel.find(queryObject).sort({ createdAt: -1 }).lean();
 
     res.code(200);
     return posts;

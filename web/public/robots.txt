@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://tea-share.vercel.app/sitemap.xml

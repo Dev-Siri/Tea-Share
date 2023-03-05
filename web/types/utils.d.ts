@@ -1,38 +1,30 @@
-import type { User as FirebaseUser } from "firebase/auth";
-import type { NextRouter } from "next/router";
-import type { Dispatch, FormEvent, SetStateAction } from "react";
+import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import type { Dispatch, SetStateAction } from "react";
 import type { PostFormData } from "./post";
+import type { FirebaseUser } from "./user";
 
-export type AuthHandler = (event: FormEvent<HTMLFormElement> | null, type: "mail" | "google") => Promise<void>;
-export type MailAuthHandler = (
-  displayName: string,
-  email: string,
-  password: string,
-  photoURL: File | string | undefined | null,
-  router: NextRouter,
-  isSignup: boolean
-) => Promise<void>;
-
-export type GoogleAuthHandler = (router: NextRouter) => Promise<void>;
-export type LogoutHandler = (router: NextRouter) => Promise<void>;
+export type SignupHandler = (username: string, image: File | null, email: string, password: string, router: AppRouterInstance) => Promise<void>;
+export type LoginHandler = (email: string, password: string, router: AppRouterInstance) => Promise<void>;
+export type GoogleAuthHandler = (router: AppRouterInstance) => Promise<void>;
 export type UpdateProfileHandler = (email: string, username: string, image: File | string | undefined | null, id: string) => Promise<void>;
+export type LogoutHandler = (router: AppRouterInstance) => Promise<void>;
 
-export type CreatePostSubmitHandler = (
-  formData: PostFormData,
-  router: NextRouter,
-  setIsCreatingPost: Dispatch<SetStateAction<boolean>>
-) => Promise<void>;
+export type CreatePostSubmitHandler = (formData: Pick<PostFormData, "title" | "description" | "image">, router: AppRouterInstance) => Promise<void>;
 
-export type LikedPeopleCalculator = (people: string[], user: FirebaseUser | null) => string;
+export type LikedPeopleCalculator = (people: string[]) => Promise<string>;
 export type LikePostHandler = (
   setLikes: Dispatch<SetStateAction<string>>,
-  setLikeBTN: Dispatch<SetStateAction<JSX.Element | null>>,
+  setLikeBTN: Dispatch<SetStateAction<JSX.Element>>,
+  setisLikeButtonDisabled: Dispatch<SetStateAction<boolean>>,
   people: string[],
-  themeColor: string,
-  user: FirebaseUser | null,
-  _id: string
+  user: FirebaseUser,
+  id: string
 ) => Promise<void>;
 
-export type BannerImageGetter = (size: [number, number], categories: string[]) => string;
 export type RelativeTimeGetter = (date: Date) => string;
 export type HandleGetter = (username?: string) => string;
+export type RandomStringGetter = () => string;
+
+export type CookieSetter = (key: string, value: string) => void;
+export type CookieGetter = (key: string) => string;
+export type CookieRemover = (key: string) => void;

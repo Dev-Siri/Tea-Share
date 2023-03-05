@@ -1,17 +1,6 @@
 import { TIME_UNITS, TIME_UNIT_SECONDS } from "@constants/date";
-import type { BannerImageGetter, HandleGetter, RelativeTimeGetter } from "../types";
 
-/**
- * @param size - Size of the image Width to Height
- * @param categories - List of categories for the image to be related to.
- * @returns A url that can be used in an `<Image />` component
- */
-export const getBannerImage: BannerImageGetter = (size, categories) => {
-  const [width, height]: [number, number] = size;
-  const categoriesAsString: string = categories.join(",");
-
-  return `https://source.unsplash.com/${width}x${height}/?${categoriesAsString}`;
-};
+import type { HandleGetter, RandomStringGetter, RelativeTimeGetter } from "@types";
 
 /**
  * @param date - The Date object to calculate the time
@@ -33,3 +22,19 @@ export const getRelativeTime: RelativeTimeGetter = date => {
  * @returns A string with the username formatted with '@'
  */
 export const getHandle: HandleGetter = username => `@${username?.toLowerCase()?.split(" ")?.join("-")}`;
+
+/**
+ * Generates a random string of characters from a pre-defined set.
+ *
+ * @returns A randomly generated string.
+ */
+export const getRandomString: RandomStringGetter = () => {
+  const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" as const;
+  let randomString = "";
+
+  for (let i = 0; i < characters.length; i++) {
+    randomString += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+
+  return randomString;
+};
