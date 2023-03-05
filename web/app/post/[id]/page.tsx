@@ -36,6 +36,14 @@ export const generateMetadata: GenerateMetadata = async ({ params: { id } }) => 
         },
       ],
     },
+    twitter: {
+      title,
+      description,
+      images: {
+        url: image,
+        alt: "Post Image",
+      },
+    },
   };
 };
 

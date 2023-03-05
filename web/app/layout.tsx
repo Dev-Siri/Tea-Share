@@ -13,6 +13,7 @@ import {
   PAGE_KEYWORDS,
   PAGE_OG_IMAGE_PATH,
   PAGE_TITLE,
+  PAGE_TWITTER_IMAGE_PATH,
   PAGE_URL,
 } from "@constants/pageInfo";
 import { APPLE_TOUCH_ICON, APPLE_TOUCH_STARTUP_IMAGE_SIZES } from "@constants/pwa";
@@ -20,9 +21,9 @@ import { APPLE_TOUCH_ICON, APPLE_TOUCH_STARTUP_IMAGE_SIZES } from "@constants/pw
 import Logo from "@components/Logo";
 import NavLinks from "@components/NavLinks";
 
+const Toaster = lazy(() => import("@components/Toaster"), { ssr: false });
 const SearchBar = lazy(() => import("@components/SearchBar"));
 const Provider = lazy(() => import("@components/Provider"));
-const Toaster = lazy(() => import("@components/Toaster"));
 const Navbar = lazy(() => import("@components/Navbar"));
 
 const inter = Inter({
@@ -68,7 +69,7 @@ export const metadata: Metadata = {
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
     images: {
-      url: PAGE_FAVICON_PATH,
+      url: PAGE_TWITTER_IMAGE_PATH,
       alt: PAGE_FAVICON_ALT,
     },
   },

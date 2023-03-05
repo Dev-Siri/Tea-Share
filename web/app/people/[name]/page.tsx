@@ -16,22 +16,35 @@ export const generateMetadata: GenerateMetadata = async ({ params: { name } }) =
 
   const { username, image } = user;
   const title: string = `${username}'s Profile`;
+  const description = `Visit ${title} on Tea Share.`;
 
   return {
     title,
+    description,
     openGraph: {
       title,
+      description,
       images: [
         {
+          height: 600,
+          width: 600,
           url: image,
         },
       ],
+    },
+    twitter: {
+      title,
+      description,
+      images: {
+        url: image,
+        alt: name,
+      },
     },
   };
 };
 
 const Profile: PageComponent = async ({ params: { name } }) => {
-  const [posts, user] = await Promise.all([fetchPostsByQuery(name as string), fetchUsersByName(name as string, true)]);
+  const [posts, user] = await Promise.all([fetchPostsByQuery(name, true), fetchUsersByName(name, true)]);
 
   if (!user) notFound();
 
