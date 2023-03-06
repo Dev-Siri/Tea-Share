@@ -4,14 +4,8 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEventHandler } from "react";
 
 import type { PageComponent, PostFormData } from "@types";
-import type { Metadata } from "next";
 
 const Image = lazy(() => import("next/image"));
-
-export const metadata: Metadata = {
-  title: "Create a Post",
-  description: "Create a post and share it with the World on Tea Share",
-};
 
 const Create: PageComponent = () => {
   const [previewImage, setPreviewImage] = useState<File | null>(null);
