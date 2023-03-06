@@ -48,8 +48,6 @@ const Profile: PageComponent = async ({ params: { name } }) => {
 
   if (!user) notFound();
 
-  console.log(posts);
-
   return (
     <article className="grid h-screen place-items-center overflow-y-auto">
       <UserInfo user={user as MongoDBUser} postsLength={(posts as Post[]).length} />
