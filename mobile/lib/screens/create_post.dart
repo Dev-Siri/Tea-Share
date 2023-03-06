@@ -1,14 +1,15 @@
 import 'dart:io';
 
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 
 import 'package:tea_share/models/post_model.dart';
-import 'package:tea_share/services/authentication_service.dart';
+import 'package:tea_share/utils/error_dialog.dart';
 import 'package:tea_share/services/posts_service.dart';
+import 'package:tea_share/services/users_service.dart';
 
 class Create extends StatefulWidget {
   const Create({ super.key });
@@ -17,7 +18,7 @@ class Create extends StatefulWidget {
   State<Create> createState() => _CreateState();
 }
 
-class _CreateState extends State<Create> {
+class _CreateState extends State<Create> with ErrorDialog {
   final TextEditingController _titleInputController = TextEditingController();
   final TextEditingController _aboutInputController = TextEditingController();
 
@@ -34,51 +35,37 @@ class _CreateState extends State<Create> {
   }
   
   Future<void> _createPost() async {
-    try {
-      if (_image == null) throw Error();
+    if (_image == null) showErrorDialog(context, 'No image selected.');
 
-      final User? user = context.read<AuthenticationService>().user;
+    final User? user = context.read<UserService>().user;
+    
+    final PostsServiceResponse response = await context.read<PostService>().createPost(
+      post: PostModel(
+        title: _titleInputController.text,
+        description: _aboutInputController.text,
+        author: user!.displayName!,
+        authorImage: user.photoURL!,
+        image: _image!.path,
+        people: [],
+        peopleImage: [],
+        id: "",
+        createdAt: "",
+      )
+    );
 
-      await context.read<PostService>().createPost(
-        post: Post(
-          title: _titleInputController.text,
-          description: _aboutInputController.text,
-          author: user!.displayName!,
-          authorImage: user.photoURL!,
-          image: _image!.path,
-          people: [],
-          peopleImage: [],
-          id: "",
-          createdAt: "",
-        )
-      );
-
+    if (response.successful) {
       Navigator.pushNamed(context, "/");
-    } catch (error) {
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          elevation: 5,
-          title: const Text('Error'),
-          content: const Text('Failed to create post.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Ok'),
-            ),
-          ],
-        )
-      );
+      return;
     }
+
+    showErrorDialog(context, response.errorMessage!);
   }
 
   Future<void> _pickImage(String imageInputOption) async {
     final ImagePicker imagePicker = ImagePicker();
 
     final XFile? image = await imagePicker.pickImage(
-      source: imageInputOption == "Gallery" ? ImageSource.gallery : ImageSource.camera,
-      maxHeight: 300,
-      maxWidth: 300,
+      source: imageInputOption == "Gallery" ? ImageSource.gallery : ImageSource.camera
     );
     
     if (image != null) setState(() => _image = image);
@@ -90,40 +77,30 @@ class _CreateState extends State<Create> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
         leading: BackButton(
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Tea Share'),
+        title: const Text('Create A Post'),
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
         key: _expandableFabKey,
-        backgroundColor: Colors.blue,
+        openButtonHeroTag: "Create Post Image Picker: Open",
+        closeButtonHeroTag: "Create Post Image Picker: Close",
         type: ExpandableFabType.up,
         distance: 80,
-        child: const Icon(Icons.cloud_upload,
-          color: Colors.white,
-        ),
-        closeButtonStyle: const ExpandableFabCloseButtonStyle(
-          backgroundColor: Colors.blue,
-          foregroundColor: Colors.white
-        ),
+        child: const Icon(Icons.cloud_upload),
         children: <Widget>[
           FloatingActionButton(
-            backgroundColor: Colors.blue,
+            heroTag: 'Create Post Image Picker: Gallery',
             tooltip: 'Open Gallery',
-            child: const Icon(Icons.photo_library_rounded,
-              color: Colors.white,
-            ),
+            child: const Icon(Icons.photo_library_rounded),
             onPressed: () => _pickImage("Gallery"),
           ),
           FloatingActionButton(
-            backgroundColor: Colors.blue,
+            heroTag: 'Create Post Image Picker: Camera',
             tooltip: 'Capture Photo',
-            child: const Icon(Icons.camera_alt,
-              color: Colors.white,
-            ),
+            child: const Icon(Icons.camera_alt),
             onPressed: () => _pickImage("Camera"),
           ),
         ],

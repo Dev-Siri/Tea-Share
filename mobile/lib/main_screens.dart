@@ -1,14 +1,14 @@
-import 'package:bottom_bar_page_transition/bottom_bar_page_transition.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:bottom_bar_page_transition/bottom_bar_page_transition.dart';
 
+import 'package:tea_share/services/users_service.dart';
 import 'package:tea_share/screens/home.dart';
 import 'package:tea_share/screens/profile.dart';
 import 'package:tea_share/screens/people.dart';
 import 'package:tea_share/screens/settings.dart';
-import 'package:tea_share/services/authentication_service.dart';
 
 class MainScreens extends StatefulWidget {
   const MainScreens({ super.key });
@@ -29,76 +29,56 @@ class _MainScreensState extends State<MainScreens> {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = context.read<AuthenticationService>().user;
+    final User? user = context.read<UserService>().user;
 
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(6),
-          child: Image.asset(
-            'assets/LogoWhite.gif',
-          ),
-        ),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.search,
-              color: Colors.white,
-            ),
+            icon: const Icon(Icons.search),
             tooltip: 'Search',
             onPressed: () => Navigator.pushNamed(context, '/search'),
           ),
         ],
-        backgroundColor: Colors.blue,
-        title: const Text('Tea Share',
-          style: TextStyle(
-            color: Colors.white
-          ),
-        ),
+        title: const Text('Tea Share'),
       ),
       body: BottomBarPageTransition(
         builder: (_, index) => _screens[index],
         currentIndex: _currentTab,
         totalLength: _screens.length,
         transitionType: TransitionType.slide,
-        transitionCurve: Curves.easeIn,
+        transitionCurve: Curves.easeOut,
       ),
-      floatingActionButton: Visibility(
-        visible: true,
-        child: FloatingActionButton(
-          onPressed: () => Navigator.pushNamed(context, '/create-post'),
-          backgroundColor: Colors.blue,
-          tooltip: 'Create a Post',
-          child: const Icon(Icons.add,
-            color: Colors.white,
-          ),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushNamed(context, '/create-post'),
+        tooltip: 'Create A Post',
+        heroTag: 'Go To Create Post Screen',
+        child: const Icon(Icons.add),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentTab,
-        onTap: (int index) => setState(() => _currentTab = index),
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        items: <BottomNavigationBarItem>[
-          const BottomNavigationBarItem(
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentTab,
+        onDestinationSelected: (int index) => setState(() => _currentTab = index),
+        destinations: <NavigationDestination>[
+          const NavigationDestination(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          const BottomNavigationBarItem(
+          const NavigationDestination(
             icon: Icon(Icons.people),
             label: 'People',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Visibility(
               visible: user != null,
               replacement: const CircularProgressIndicator(),
               child: CircleAvatar(
                 radius: 15,
-                backgroundImage: CachedNetworkImageProvider(user!.photoURL ?? ""),
+                backgroundImage: CachedNetworkImageProvider(user?.photoURL ?? ""),
               )
             ),
             label: 'Profile',
           ),
-          const BottomNavigationBarItem(
+          const NavigationDestination(
             icon: Icon(Icons.settings),
             label: 'Settings',
           ),

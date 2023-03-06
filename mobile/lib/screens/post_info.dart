@@ -9,7 +9,7 @@ class PostInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Post post = ModalRoute.of(context)!.settings.arguments as Post;
+    final PostModel post = ModalRoute.of(context)!.settings.arguments as PostModel;
     
     return Scaffold(
       body: SafeArea(
@@ -76,11 +76,10 @@ class PostInfo extends StatelessWidget {
                             onPressed: () => Navigator.pushNamed(
                               context,
                               '/other-profile',
-                              arguments: User(
+                              arguments: UserModel(
                                 email: post.id,
                                 username: post.author,
                                 image: post.authorImage,
-                                id: ""
                               ),
                             ),
                             child: Hero(
@@ -117,11 +116,10 @@ class PostInfo extends StatelessWidget {
                             itemCount: post.people.length,
                             itemBuilder: (BuildContext context, int index) {
                               return UserTile(
-                                user: User(
+                                user: UserModel(
                                   username: post.people[index],
                                   image: post.peopleImage[index],
                                   email: post.people[index],
-                                  id: ""
                                 )
                               );
                             }

@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tea_share/firebase_options.dart';
 import 'package:tea_share/routes.dart';
 
-import 'package:tea_share/services/authentication_service.dart';
 import 'package:tea_share/services/posts_service.dart';
 import 'package:tea_share/services/users_service.dart';
 import 'package:tea_share/services/theme_service.dart' show DarkThemeService;
@@ -24,9 +23,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<AuthenticationService>(create: (_) => AuthenticationService(FirebaseAuth.instance)),
+        Provider<UserService>(create: (_) => UserService(FirebaseAuth.instance)),
         Provider<PostService>(create: (_) => PostService()),
-        Provider<UserService>(create: (_) => UserService()),
         ChangeNotifierProvider<DarkThemeService>(create: (_) => DarkThemeService()),
       ],
       builder: (_, __) => const StateWrapper(),
@@ -47,7 +45,7 @@ class _StateWrapperState extends State<StateWrapper> {
   @override
   void initState() {
     WidgetsFlutterBinding.ensureInitialized();
-    if (context.read<AuthenticationService>().user == null) setState(() => _initialRoute = '/auth');
+    if (context.read<UserService>().user == null) setState(() => _initialRoute = '/auth');
 
     super.initState();
     
@@ -61,8 +59,8 @@ class _StateWrapperState extends State<StateWrapper> {
     return MaterialApp(
       initialRoute: _initialRoute,
       routes: routes,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: ThemeData.light(useMaterial3: true),
+      darkTheme: ThemeData.dark(useMaterial3: true),
       themeMode: context.watch<DarkThemeService>().darkTheme ? ThemeMode.dark : ThemeMode.light,
     );
   }

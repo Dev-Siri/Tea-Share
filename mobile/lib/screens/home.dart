@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,72 +18,60 @@ class Home extends StatefulWidget {
 int page = 1;
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
-  final List<PostCard> _posts = [];
-
   final GlobalKey<AnimatedListState> _postListState = GlobalKey<AnimatedListState>();
 
-  late bool _isLoadingPosts;
-  bool _didErrorOccurr = false;
+  final List<PostModel> _posts = [];
+  bool _isLoadingPosts = true;
+
+  String? _errorMessage;
 
   @override
   void initState() {
     WidgetsFlutterBinding.ensureInitialized();
     if (mounted) {
-      setState(() => _isLoadingPosts = true);
-
       page = 1;
 
       WidgetsBinding.instance.addPostFrameCallback((_) => showPosts(page));
     }
-    
+
     super.initState();
   }
 
-  void showPosts(int page) {
-    const int postFetchLimit = 4;
+  Future<void> showPosts(int page) async {
+    final PostsServiceResponse response = await context.read<PostService>().fetchPosts(limit: 4, page: page);
+    
+    if (!response.successful && mounted) {
+      setState(() {
+        _errorMessage = response.errorMessage;
+        _isLoadingPosts = false;
+      });
 
+      return;
+    }
+ 
     if (mounted) {
-      context.read<PostService>()
-        .fetchPosts(
-          limit: postFetchLimit,
-          page: page
-        )
-        .then((List<Post> posts) {
-        
-        Future<void> delay = Future(() {});
+      setState(() {
+        _isLoadingPosts = false;
 
-        setState(() {
-          _isLoadingPosts = false;
-           
-          for (Post post in posts) {
-            delay = delay.then((_) => Future.delayed(const Duration(milliseconds: 50), () {            
-              _posts.add(
-                PostCard(
-                  id: post.id,
-                  title: post.title,
-                  description: post.description,
-                  image: post.image,
-                  author: post.author,
-                  authorImage: post.authorImage,
-                  createdAt: post.createdAt,
-                  people: post.people,
-                  peopleImage: post.peopleImage
-                )
-              );
-
-              _postListState.currentState?.insertItem(_posts.length - 1);
-            }));
-          }
-        });
-      })
-      .catchError((_) {
-        if (mounted) {
-          setState(() {
-            _isLoadingPosts = false;
-            _didErrorOccurr = true;
+        for (PostModel post in response.posts!) {
+          Future.delayed(const Duration(milliseconds: 50), () {
+            _posts.add(
+              PostModel(
+                id: post.id,
+                title: post.title,
+                description: post.description,
+                image: post.image,
+                author: post.author,
+                authorImage: post.authorImage,
+                createdAt: post.createdAt,
+                people: post.people,
+                peopleImage: post.peopleImage
+              )
+            );
+            
+            _postListState.currentState?.insertItem(_posts.length - 1);
           });
         }
-        return null;
       });
     }
   }
@@ -92,10 +82,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       return const Center(
         child: CircularProgressIndicator(),
       );
-    } else if (_didErrorOccurr) {
-      return const ErrorMessage(
+    } else if (_errorMessage != null) {
+      return ErrorMessage(
         icon: Icons.error,
-        message: "Failed to get posts. Please try again later."
+        message: _errorMessage!
       );
     } else {
       return AnimatedList(
@@ -124,7 +114,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   curve: Curves.easeIn
                 )
               ),
-              child: _posts[index],
+              child: PostCard(
+                id: _posts[index].id,
+                title: _posts[index].title,
+                description: _posts[index].description,
+                image: _posts[index].image,
+                author: _posts[index].author,
+                authorImage: _posts[index].authorImage,
+                createdAt: _posts[index].createdAt,
+                people: _posts[index].people,
+                peopleImage: _posts[index].peopleImage
+              ),
             );
           }
         },

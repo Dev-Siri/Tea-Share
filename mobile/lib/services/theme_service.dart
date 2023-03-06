@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 
 class DarkThemePreference {
-  static const _themeLocalStoreKey = "theme";
+  static const String _themeLocalStoreKey = "theme";
 
   Future<void> setDarkTheme(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_themeLocalStoreKey, value);
   }
 
   Future<bool> getTheme() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_themeLocalStoreKey) ?? false;
   }
 }

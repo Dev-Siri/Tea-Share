@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:tea_share/models/user_model.dart' as user_model;
+import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 
-import 'package:tea_share/services/authentication_service.dart';
+import 'package:tea_share/models/user_model.dart';
 import 'package:tea_share/services/users_service.dart';
+import 'package:tea_share/utils/error_dialog.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({ super.key });
@@ -17,34 +17,32 @@ class EditProfile extends StatefulWidget {
   State<EditProfile> createState() => _EditProfileState();
 }
 
-class _EditProfileState extends State<EditProfile> {
+class _EditProfileState extends State<EditProfile> with ErrorDialog {
   final TextEditingController _usernameInputController = TextEditingController();
   final TextEditingController _emailInputController = TextEditingController();
   
   final GlobalKey<ExpandableFabState> _expandableFabKey = GlobalKey<ExpandableFabState>();
 
-  late user_model.User _mongoUser;
+  late UserModel _mongoUser;
 
   XFile? _newPicture;
   bool _isLoading = false;
 
   @override
   void initState() {
-    if (mounted) {
-      final User user = context.read<AuthenticationService>().user!;
+    final User user = context.read<UserService>().user!;
 
-      _usernameInputController.text = user.displayName!;
-      _emailInputController.text = user.email!;
+    _usernameInputController.text = user.displayName!;
+    _emailInputController.text = user.email!;
 
-      context.read<UserService>().fetchUserByQuery(
-        query: user.displayName!
-      ).then((user_model.User fetchedUser) {
-        if (mounted) {
-          setState(() => _mongoUser = fetchedUser);
-        }
-      });
-    }
-    
+    context.read<UserService>().fetchUserByQuery(
+      query: user.displayName!
+    ).then((UserModel fetchedUser) {
+      if (mounted) {
+        setState(() => _mongoUser = fetchedUser);
+      }
+    });
+      
     super.initState();
   }
 
@@ -58,24 +56,11 @@ class _EditProfileState extends State<EditProfile> {
 
   Future<void> _updateUser() async {
     if (_newPicture == null) {
-      return showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          elevation: 5,
-          title: const Text('Error'),
-          content: const Text('Failed to update your profile.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Ok'),
-            ),
-          ],
-        )
-      );
+      return showErrorDialog(context, 'Failed to update your profile.');
     }
 
-    await context.read<AuthenticationService>().updateProfile(
-      user: user_model.User(
+    await context.read<UserService>().updateProfile(
+      user: UserModel(
         username: _usernameInputController.text,
         email: _emailInputController.text,
         image: _newPicture!.path,
@@ -103,40 +88,33 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
         leading: BackButton(
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Tea Share'),
+        title: const Text('Edit Profile',
+          style: TextStyle(
+          ),
+        ),
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
+        openButtonHeroTag: "Edit Profile Image Picker: Open",
+        closeButtonHeroTag: "Edit Profile Image Picker: Close",
         key: _expandableFabKey,
-        backgroundColor: Colors.blue,
         type: ExpandableFabType.up,
         distance: 80,
-        child: const Icon(Icons.cloud_upload,
-          color: Colors.white,
-        ),
-        closeButtonStyle: const ExpandableFabCloseButtonStyle(
-          backgroundColor: Colors.blue,
-          foregroundColor: Colors.white
-        ),
+        child: const Icon(Icons.cloud_upload),
         children: <Widget>[
           FloatingActionButton(
-            backgroundColor: Colors.blue,
+            heroTag: 'Edit Profile Image Picker: Gallery',
             tooltip: 'Open Gallery',
-            child: const Icon(Icons.photo_library_rounded,
-              color: Colors.white,
-            ),
+            child: const Icon(Icons.photo_library_rounded),
             onPressed: () => _pickImage("Gallery"),
           ),
           FloatingActionButton(
-            backgroundColor: Colors.blue,
+            heroTag: 'Edit Profile Image Picker: Camera',
             tooltip: 'Capture Photo',
-            child: const Icon(Icons.camera_alt,
-              color: Colors.white,
-            ),
+            child: const Icon(Icons.camera_alt),
             onPressed: () => _pickImage("Camera"),
           ),
         ],

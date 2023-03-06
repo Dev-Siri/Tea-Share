@@ -6,7 +6,8 @@ import 'package:tea_share/models/user_model.dart';
 
 import 'package:tea_share/services/posts_service.dart';
 import 'package:tea_share/services/theme_service.dart';
-import 'package:tea_share/widgets/smaller_post_card.dart';
+import 'package:tea_share/widgets/error_message.dart';
+import 'package:tea_share/widgets/post_grid.dart';
 
 class OtherProfile extends StatefulWidget {
   const OtherProfile({ super.key });
@@ -16,24 +17,32 @@ class OtherProfile extends StatefulWidget {
 }
 
 class _OtherProfileState extends State<OtherProfile> {  
-  List<Post> _posts = [];
+  List<PostModel> _posts = [];
   bool _isLoading = true;
+
+  String? _errorMessage;
 
   @override
   void didChangeDependencies() {
     if (mounted) {
       WidgetsFlutterBinding.ensureInitialized();
-      final User user = ModalRoute.of(context)!.settings.arguments as User;
+      final UserModel user = ModalRoute.of(context)!.settings.arguments as UserModel;
 
       setState(() => _isLoading = true);
 
       context.read<PostService>().fetchPostsByQuery(
         query: user.username,
         user: true
-      ).then((List<Post> posts) => setState(() {
-        _posts = posts;
-        _isLoading = false;
-      }));
+      ).then((PostsServiceResponse postsResponse) {
+        setState(() {
+          if (postsResponse.successful) {
+            _posts = postsResponse.posts!;
+          } else {
+            _errorMessage = postsResponse.errorMessage;
+          }
+          _isLoading = false;
+        });
+      });
     }
     
     super.didChangeDependencies();
@@ -41,95 +50,101 @@ class _OtherProfileState extends State<OtherProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = ModalRoute.of(context)!.settings.arguments as User;
+    final UserModel user = ModalRoute.of(context)!.settings.arguments as UserModel;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text('Tea Share'),
         leading: BackButton(
-          onPressed: () => Navigator.pop(context)
-        )
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text('${user.username}\'s Profile'),
       ),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Hero(
-                  tag: user.email,
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: CachedNetworkImageProvider(user.image),
+      body: Visibility(
+        visible: _errorMessage == null,
+        replacement: ErrorMessage(
+          icon: Icons.error,
+          message: _errorMessage!,
+        ),
+        child: ListView(
+          addAutomaticKeepAlives: false,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Hero(
+                    tag: user.email,
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: CachedNetworkImageProvider(user.image),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(user.username,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 28
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 7),
-                        child: Text(
-                          '@${user.username.toLowerCase().replaceAll(RegExp(r' '), '-')}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 180,
+                          child: Text(user.username,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 28,
+                            ),
                           ),
                         ),
-                      ),
-                      Text(
-                        '${_isLoading ? 'Loading' : _posts.isEmpty ? 'No' : _posts.length} Posts${_isLoading ? '...' : ''}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: context.read<DarkThemeService>().darkTheme ?
-                            Colors.grey.shade400 : Colors.grey.shade600 ,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5, bottom: 7),
+                          child: Text(
+                            '@${user.username.toLowerCase().replaceAll(RegExp(r' '), '-')}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+                        Text(
+                          '${_isLoading ? 'Loading' : _posts.isEmpty ? 'No' : _posts.length} Posts${_isLoading ? '...' : ''}',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: context.read<DarkThemeService>().darkTheme ?
+                              Colors.grey.shade400 : Colors.grey.shade600 ,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          _isLoading ? const Center(
-            child: CircularProgressIndicator()
-          ) : _posts.isEmpty ?
-          Padding(
-            padding: const EdgeInsets.only(top: 120),
-            child: Column(
-              children: <Widget>[
-                const Icon(Icons.no_photography,
-                  size: 80,
+          Visibility(
+            visible: _isLoading,
+            replacement: Visibility(
+              visible: _posts.isNotEmpty,
+              replacement: Padding(
+                padding: const EdgeInsets.only(top: 120),
+                child: Column(
+                  children: const <Widget>[
+                    Icon(Icons.add_a_photo,
+                      size: 80,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Text('You have not posted anything yet.'),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text('${user.username} has not posted anything yet.'),
-                ),
-              ],
+              ),
+              child: PostGrid(posts: _posts)
             ),
-          ) :
-          SizedBox(
-            height: 386,
-            child: ListView.builder(
-              itemCount: _posts.length,
-              addAutomaticKeepAlives: false,
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (BuildContext context, int index) {
-                return SmallerPostCard(post: _posts[index]);
-              },
+            child: const Center(
+                child: CircularProgressIndicator()
+              ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

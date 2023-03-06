@@ -24,8 +24,9 @@ class ErrorMessage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(message,
+          textAlign: TextAlign.center,
             style: const TextStyle(
-              color: Colors.red
+              color: Colors.red,
             ),
           ),
         ),

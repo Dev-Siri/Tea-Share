@@ -5,9 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:tea_share/models/post_model.dart';
 
-import 'package:tea_share/services/authentication_service.dart';
+import 'package:tea_share/services/users_service.dart';
 import 'package:tea_share/services/posts_service.dart';
 import 'package:tea_share/services/theme_service.dart';
+import 'package:tea_share/utils/error_dialog.dart';
 
 class PostCard extends StatefulWidget {
   final String id;
@@ -37,7 +38,7 @@ class PostCard extends StatefulWidget {
   State<PostCard> createState() => _PostCardState();
 }
 
-class _PostCardState extends State<PostCard> {
+class _PostCardState extends State<PostCard> with ErrorDialog {
   late String _likeText;
   late IconData _thumbsUpIcon;
   late bool _isLikeButtonDisabled;
@@ -58,7 +59,7 @@ class _PostCardState extends State<PostCard> {
 
   @override
   void initState() {
-    final User? user = context.read<AuthenticationService>().user;
+    final User? user = context.read<UserService>().user;
     
     setState(() {
       _likeText = _postLikes(user);
@@ -74,13 +75,15 @@ class _PostCardState extends State<PostCard> {
   }
 
   Future<void> _likePost() async {
-    final User? user = context.read<AuthenticationService>().user;
+    final User? user = context.read<UserService>().user;
     
-    await context.read<PostService>().likePost(
+    final PostsServiceResponse response = await context.read<PostService>().likePost(
       id: widget.id,
       username: user!.displayName! ,
       image: user.photoURL!,
     );
+
+    if (!response.successful) return showErrorDialog(context, response.errorMessage!);
 
     widget.people.add(user.displayName);
     widget.peopleImage.add(user.photoURL);
@@ -110,7 +113,7 @@ class _PostCardState extends State<PostCard> {
               onPressed: () => Navigator.pushNamed(
                 context,
                 '/post-info',
-                arguments: Post(
+                arguments: PostModel(
                   title: widget.title,
                   image: widget.image,
                   description: widget.description,
@@ -162,8 +165,7 @@ class _PostCardState extends State<PostCard> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: context.read<DarkThemeService>().darkTheme ?
-                        Colors.grey.shade400 : Colors.grey.shade600
+                      color: context.read<DarkThemeService>().darkTheme ? Colors.grey.shade400 : Colors.grey.shade600
                     ),
                   )
                 ),
@@ -174,8 +176,7 @@ class _PostCardState extends State<PostCard> {
                   ),
                   child: Text(DateTimeFormat.relative(DateTime.parse(widget.createdAt)),
                     style: TextStyle(
-                      color: context.read<DarkThemeService>().darkTheme ?
-                        Colors.grey.shade400 : Colors.grey.shade600
+                      color: context.read<DarkThemeService>().darkTheme ? Colors.grey.shade400 : Colors.grey.shade600
                     ),
                   )
                 ),
@@ -193,7 +194,7 @@ class _PostCardState extends State<PostCard> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Icon(_thumbsUpIcon,
-                                color: Colors.blue,
+                                color: Colors.deepPurple,
                                 size: 22
                               ),
                               Padding(
@@ -210,11 +211,9 @@ class _PostCardState extends State<PostCard> {
                           ),
                         ),
                       ),
+                      const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.only(
-                          left: 52,
-                          right: 5
-                        ),
+                        padding: const EdgeInsets.only(right: 5),
                         child: SizedBox(
                           width: 50,
                           child: Text(
@@ -223,9 +222,12 @@ class _PostCardState extends State<PostCard> {
                           ),
                         ),
                       ),
-                      CircleAvatar(
-                        backgroundImage: CachedNetworkImageProvider(widget.authorImage),
-                        radius: 15,
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: CircleAvatar(
+                          backgroundImage: CachedNetworkImageProvider(widget.authorImage),
+                          radius: 15,
+                        ),
                       )
                     ],
                   ),

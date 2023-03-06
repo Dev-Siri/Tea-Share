@@ -1,65 +1,112 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart' show compute;
 import 'package:http/http.dart' as http;
 
 import 'package:tea_share/env/secret_keys.dart';
 import 'package:tea_share/models/post_model.dart';
-import 'package:tea_share/utils/firebase_storage.dart';
+import 'package:tea_share/utils/storage.dart';
+
+class PostsServiceResponse {
+  final bool successful;
+  
+  List<PostModel>? posts;
+  String? errorMessage;
+
+  PostsServiceResponse({
+    required this.successful,
+    this.posts,
+    this.errorMessage,
+  });
+}
 
 class PostService with Storage {
-  List _decodePosts(String jsonString) {
-    final List posts = jsonDecode(jsonString);
-    return posts;
-  }
+  static const Map<String, String> _headers = {
+    'Content-Type': 'application/json; charset=UTF-8',
+  };
 
-  Future<List<Post>> fetchPosts({ int? limit, int? page }) async {
+  Future<PostsServiceResponse> fetchPosts({ required int limit, required int page }) async {
     final http.Response response = await http.get(Uri.parse('$BACKEND_URL/posts?page=$page&limit=$limit'));
 
     if (response.statusCode == 200) {
-      final List body = await compute(_decodePosts, response.body);
-      final List<Post> posts = body.map((var post) => Post.fromJson(post)).toList();
+      final List body = jsonDecode(response.body);
+      final List<PostModel> posts = body.map((final post) => PostModel.fromJson(post)).toList();
       
-      return posts;
+      return PostsServiceResponse(
+        successful: true,
+        posts: posts
+      );
     }
     
-    return throw Error();
+    return PostsServiceResponse(
+      successful: false,
+      errorMessage: 'Failed to get posts.\nThe Server responded with a status code of ${response.statusCode}'
+    );
   }
 
-  Future<List<Post>> fetchPostsByQuery({ required String query, bool? user = false }) async {
+  Future<PostsServiceResponse> fetchPostsByQuery({ required String query, bool? user = false }) async {
     final http.Response response = await http.get(Uri.parse('$BACKEND_URL/posts/search?query=$query&user=$user'));
 
     if (response.statusCode == 200) {
-      final List body = await compute(_decodePosts, response.body);
-      final List<Post> posts = body.map((var post) => Post.fromJson(post)).toList();
+      final List body = jsonDecode(response.body);
+      final List<PostModel> posts = body.map((final post) => PostModel.fromJson(post)).toList();
       
-      return posts;
+      return PostsServiceResponse(
+        successful: true,
+        posts: posts,
+      );
     }
     
-    return throw Error();
+    return PostsServiceResponse(
+      successful: false,
+      errorMessage: 'Failed to get posts.\nThe Server responded with a status code of ${response.statusCode}'
+    );
   }
 
-  Future<void> likePost({ required String id, required String username, required String image }) async {
-    await http.patch(Uri.parse("$BACKEND_URL/posts/$id/like?name=$username&image=$image"));
+  Future<PostsServiceResponse> likePost({ required String id, required String username, required String image }) async {
+    final http.Response response = await http.patch(Uri.parse("$BACKEND_URL/posts/$id/like?name=$username&image=$image"));
+  
+    if (response.statusCode != 200) {
+      return PostsServiceResponse(
+        successful: false,
+        errorMessage: 'Failed to like post.\nThe server responded with a status code of ${response.statusCode}'
+      );
+    }
+
+    return PostsServiceResponse(successful: true);
   }
 
-  Future<void> createPost({ required Post post }) async {
-    final String? uploadedImageResponse = await uploadImage(imagePath: post.image, type: "posts");
-
-    await http.post(
+  Future<PostsServiceResponse> createPost({ required PostModel post }) async {
+    final StorageResponse uploadedImageResponse = await uploadImage(imagePath: post.image, type: "posts");
+    
+    if (!uploadedImageResponse.successful) {
+      return PostsServiceResponse(
+        successful: false,
+        errorMessage: uploadedImageResponse.errorMessage
+      );
+    }
+    
+    final http.Response response = await http.post(
       Uri.parse("$BACKEND_URL/posts"),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: _headers,
       body: jsonEncode({
         'title': post.title,
         'description': post.description,
         'image': uploadedImageResponse,
         'author': post.author,
         'authorImage': post.authorImage,
-        'people': post.people,
-        'peopleImage': post.peopleImage
       })
+    );
+
+    if (response.statusCode == 201) {
+      return PostsServiceResponse(
+        successful: true
+      );
+    }
+
+
+    return PostsServiceResponse(
+      successful: false,
+      errorMessage: 'Failed to create post.\nThe server responded with a status code of ${response.statusCode}'
     );
   }
 }

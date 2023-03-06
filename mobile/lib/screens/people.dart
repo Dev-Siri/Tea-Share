@@ -54,12 +54,12 @@ class _PeopleState extends State<People> {
     
     const int limit = 13;
 
-    context.read<UserService>().fetchUsers(limit: limit, page: page).then((List<User> users) {
+    context.read<UserService>().fetchUsers(limit: limit, page: page).then((List<UserModel> users) {
       if (mounted) {
         setState(() {
           _isLoadingUsers = false;
           
-          for (User user in users) {
+          for (UserModel user in users) {
             delay = delay.then((_) => Future.delayed(const Duration(milliseconds: 50), () {
                 _users.add(UserTile(user: user));
                 _userListState.currentState?.insertItem(_users.length - 1);

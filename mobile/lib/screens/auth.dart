@@ -1,8 +1,9 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:tea_share/services/authentication_service.dart';
 
 import 'package:tea_share/services/theme_service.dart' show DarkThemeService;
+import 'package:tea_share/services/users_service.dart';
+import 'package:tea_share/utils/error_dialog.dart';
 
 class Auth extends StatefulWidget {
   const Auth({ super.key });
@@ -11,13 +12,14 @@ class Auth extends StatefulWidget {
   State<Auth> createState() => _AuthState();
 }
 
-class _AuthState extends State<Auth> {
+class _AuthState extends State<Auth> with ErrorDialog {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   
   bool _isSignup = false;
   bool _isLoading = false;
+  bool _isEmailInvalid = false;
 
   @override
   void dispose() {
@@ -27,29 +29,17 @@ class _AuthState extends State<Auth> {
     super.dispose();
   }
 
-  void _showErrorDialog(String? errorMessage) => showDialog(
-    context: context,
-    builder: (_) => AlertDialog(
-      elevation: 5,
-      title: const Text('Error'),
-      content: Text(errorMessage ?? 'Error, could not log you in.'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Ok'),
-        ),
-      ],
-    )
-  );
-
   Future<void> _signInWithMail() async {
     setState(() => _isLoading = true);
+
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
     
     if (_isSignup) {
-      final String? response = await context.read<AuthenticationService>().signUp(
+      final String? response = await context.read<UserService>().signUp(
         username: _usernameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
+        email: email,
+        password: password,
       );
       
       if (response == 'Signed up') {
@@ -58,11 +48,11 @@ class _AuthState extends State<Auth> {
       }
 
       setState(() => _isLoading = false);
-      _showErrorDialog(response);
+      showErrorDialog(context, response ?? 'Error, could not log you in.');
     } else {
-      final String? response = await context.read<AuthenticationService>().login(
-        email: _emailController.text,
-        password: _passwordController.text,
+      final String? response = await context.read<UserService>().login(
+        email: email,
+        password: password,
       );
       
       if (response == 'Logged in') {
@@ -71,19 +61,19 @@ class _AuthState extends State<Auth> {
       }
       
       setState(() => _isLoading = false);
-      _showErrorDialog(response);
+      showErrorDialog(context, response ?? 'Error, could not log you in.');
     }
   }
 
   Future<void> _signInWithGoogle() async {
-    final String? response = await context.read<AuthenticationService>().signInWithGoogle();
+    final String? response = await context.read<UserService>().signInWithGoogle();
     
     if (response == 'Signed in with Google') {
       Navigator.pushReplacementNamed(context, '/');
       return;
     }
     
-    _showErrorDialog(response);
+    showErrorDialog(context, response ?? 'Error, could not log you in.');
   }
 
   @override
@@ -115,13 +105,16 @@ class _AuthState extends State<Auth> {
                       padding: const EdgeInsets.only(top: 25),
                       child: Column(
                         children: <Widget>[
-                          if (_isSignup) TextFormField(
-                            autocorrect: false,
-                            controller: _usernameController,
-                            keyboardType: TextInputType.name,
-                            decoration: const InputDecoration(
-                              labelText: 'Username',
-                              border: OutlineInputBorder(),
+                          Visibility(
+                            visible: _isSignup,
+                            child: TextFormField(
+                              autocorrect: false,
+                              controller: _usernameController,
+                              keyboardType: TextInputType.name,
+                              decoration: const InputDecoration(
+                                labelText: 'Username',
+                                border: OutlineInputBorder(),
+                              ),
                             ),
                           ),
                           Padding(
@@ -132,9 +125,11 @@ class _AuthState extends State<Auth> {
                               autocorrect: false,
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
-                              decoration: const InputDecoration(
+                              onChanged: (String value) => setState(() => _isEmailInvalid = value.isNotEmpty && !value.contains("@")),
+                              decoration: InputDecoration(
                                 labelText: 'Email',
-                                border: OutlineInputBorder()
+                                errorText: _isEmailInvalid ? 'Invalid Email' : null,
+                                border: const OutlineInputBorder()
                               ),
                             ),
                           ),
@@ -185,13 +180,16 @@ class _AuthState extends State<Auth> {
                                       )
                                     ),
                                   ),
-                                  if (_isLoading) Container(
-                                    height: 20,
-                                    width: 30,
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: const CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 3,
+                                  Visibility(
+                                    visible: _isLoading,
+                                    child: Container(
+                                      height: 20,
+                                      width: 30,
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: const CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 3,
+                                      ),
                                     ),
                                   )
                                 ],
@@ -255,8 +253,9 @@ class _AuthState extends State<Auth> {
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap
                         ),
                         child: Text(_isSignup ? 'Login.' : 'Signup.',
-                          style: const TextStyle(
-                            color: Colors.blue
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor
                           ),
                         ),
                       ),

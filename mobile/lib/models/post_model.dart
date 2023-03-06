@@ -1,4 +1,4 @@
-class Post {
+class PostModel {
   final String id;
   final String title;
   final String description;
@@ -9,7 +9,7 @@ class Post {
   final List people;
   final List peopleImage;
 
-  const Post({
+  const PostModel({
     required this.id,
     required this.title,
     required this.description,
@@ -21,17 +21,15 @@ class Post {
     required this.peopleImage,
   });
 
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
-      id: json['_id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      image: json['image'] as String,
-      author: json['author'] as String,
-      authorImage: json['authorImage'] as String,
-      createdAt: json['createdAt'] as String,
-      people: json['people'] as List<dynamic>,
-      peopleImage: json['peopleImage'] as List<dynamic>
-    );
-  }
+  factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
+    id: json['_id'] as String,
+    title: json['title'] as String,
+    description: json['description'] as String,
+    image: json['image'] as String,
+    author: json['author'] as String,
+    authorImage: json['authorImage'] as String,
+    createdAt: json['createdAt'] as String,
+    people: json['people'] as List,
+    peopleImage: json['peopleImage'] as List
+  );
 }
