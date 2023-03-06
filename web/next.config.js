@@ -7,7 +7,7 @@ const isProduction = process.env.NODE_ENV === "production";
 /** @type {import("next").NextConfig} **/
 const nextConfig = {
   compiler: {
-    removeConsole: isProduction,
+    // removeConsole: isProduction,
   },
   images: {
     domains: ["firebasestorage.googleapis.com", "localhost", "lh3.googleusercontent.com", "source.unsplash.com"],
