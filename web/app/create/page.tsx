@@ -1,11 +1,17 @@
 "use client";
 import lazy from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { /* useMemo */ useState, type FormEventHandler } from "react";
+import { useState, type FormEventHandler } from "react";
 
 import type { PageComponent, PostFormData } from "@types";
+import type { Metadata } from "next";
 
 const Image = lazy(() => import("next/image"));
+
+export const metadata: Metadata = {
+  title: "Create a Post",
+  description: "Create a post and share it with the World on Tea Share",
+};
 
 const Create: PageComponent = () => {
   const [previewImage, setPreviewImage] = useState<File | null>(null);
@@ -61,7 +67,6 @@ const Create: PageComponent = () => {
         )}
         <button
           type="submit"
-          // disabled={isCreatingPost}
           className="mt-4 mb-20 w-[90%] cursor-pointer rounded-md border-none bg-primary p-3 text-white duration-200 hover:bg-primary-dark"
         >
           Create Post!

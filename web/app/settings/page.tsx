@@ -1,9 +1,14 @@
 import lazy from "next/dynamic";
 
 import type { PageComponent } from "@types";
+import type { Metadata } from "next";
 
 const ThemeOption = lazy(() => import("@components/ThemeOption"));
 const UpdateProfileForm = lazy(() => import("@components/UpdateProfileForm"));
+
+export const metadata: Metadata = {
+  title: "Settings",
+};
 
 const Settings: PageComponent = () => (
   <section className="ml-3 flex h-screen w-full flex-col overflow-y-auto pr-3 sm:ml-10 lg:flex-row lg:justify-around">
