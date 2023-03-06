@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState, type FC, type FormEventHandler } from "react";
 
-import { authInputStyles } from "@styles/commonStyles";
+import { inputStyles } from "@styles/commonStyles";
 import { InfiniteItems } from "@types";
 
 const LoginForm: FC = () => {
@@ -30,10 +30,10 @@ const LoginForm: FC = () => {
     <>
       <h1 className="mt-3 mb-7 ml-2 h-px w-[310px] text-3xl font-bold">{isSignup ? "Signup" : "Login"}</h1>
       <form className="flex flex-col" onSubmit={loginWithEmail}>
-        {isSignup && <input className={authInputStyles} placeholder="Username" name="username" required />}
-        <input className={authInputStyles} placeholder="Email" type="email" name="email" required />
-        <input className={authInputStyles} placeholder="Password" type="password" name="password" required />
-        {isSignup && <input type="file" name="image" aria-label="Profile Picture Upload" className={authInputStyles} required />}
+        {isSignup && <input className={inputStyles} placeholder="Username" name="username" required />}
+        <input className={inputStyles} placeholder="Email" type="email" name="email" required />
+        <input className={inputStyles} placeholder="Password" type="password" name="password" required />
+        {isSignup && <input type="file" name="image" aria-label="Profile Picture Upload" className={inputStyles} required />}
         <div className="mt-[60px] flex h-fit items-center">
           <button
             type="submit"

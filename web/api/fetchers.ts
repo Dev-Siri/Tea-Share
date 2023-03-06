@@ -41,9 +41,6 @@ export const fetchPostsByQuery: FetchItemByQuery<Post[]> = async (query, fromUse
     const response: Response = await fetch(`${url}/posts/search?q=${query}&fromUser=${fromUser}`);
     const posts = await response.json();
 
-    console.log(posts);
-    console.log(`${url}/posts/search?q=${query}&fromUser=${fromUser}`);
-
     return posts;
   } catch {
     return null;
