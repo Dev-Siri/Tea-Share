@@ -10,12 +10,12 @@ import UserInfo from "@components/UserInfo";
 export const dynamic = "force-dynamic";
 
 export const generateMetadata: GenerateMetadata = async ({ params: { name } }) => {
-  const user = (await fetchUsersByName(name as string, true)) as MongoDBUser;
+  const user = (await fetchUsersByName(name, true)) as MongoDBUser;
 
   if (!user) notFound();
 
   const { username, image } = user;
-  const title: string = `${username}'s Profile`;
+  const title = `${username}'s Profile`;
   const description = `Visit ${title} on Tea Share.`;
 
   return {
@@ -44,7 +44,7 @@ export const generateMetadata: GenerateMetadata = async ({ params: { name } }) =
 };
 
 const Profile: PageComponent = async ({ params: { name } }) => {
-  const [posts, user] = await Promise.all([fetchPostsByQuery(name, true), fetchUsersByName(name, true)]);
+  const [posts, user] = await Promise.all([fetchPostsByQuery(name), fetchUsersByName(name, true)]);
 
   if (!user) notFound();
 
