@@ -2,7 +2,7 @@ import { initializeApp, type FirebaseOptions } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
-import { PAGE_TITLE } from "@constants/pageInfo";
+import { PAGE_TITLE } from "@/constants/pageInfo";
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
