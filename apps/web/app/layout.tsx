@@ -1,4 +1,4 @@
-import "@styles/globals.css";
+import "@/styles/globals.css";
 import lazy from "next/dynamic";
 import { Inter } from "next/font/google";
 
@@ -14,12 +14,9 @@ import {
   PAGE_OG_IMAGE_PATH,
   PAGE_TITLE,
   PAGE_TWITTER_IMAGE_PATH,
-  PAGE_URL
+  PAGE_URL,
 } from "@/constants/pageInfo";
-import {
-  APPLE_TOUCH_ICON,
-  APPLE_TOUCH_STARTUP_IMAGE_SIZES
-} from "@/constants/pwa";
+import { APPLE_TOUCH_ICON, APPLE_TOUCH_STARTUP_IMAGE_SIZES } from "@/constants/pwa";
 
 import Logo from "@/components/Logo";
 import NavLinks from "@/components/NavLinks";
