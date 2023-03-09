@@ -9,7 +9,7 @@ const GoogleLogin: FC = () => {
   const router = useRouter();
 
   const loginWithGoogle = async () => {
-    const { GoogleAuth } = await import("@utils/auth");
+    const { GoogleAuth } = await import("@/utils/auth");
     GoogleAuth(router);
   };
 
@@ -17,7 +17,7 @@ const GoogleLogin: FC = () => {
     <button
       type="button"
       onClick={loginWithGoogle}
-      className="ml-2 mt-5 flex w-[250px] cursor-pointer items-center justify-center rounded-md border-2 border-light-gray bg-white p-3 duration-200 hover:bg-light-gray"
+      className="border-light-gray hover:bg-light-gray ml-2 mt-5 flex w-[250px] cursor-pointer items-center justify-center rounded-md border-2 bg-white p-3 duration-200"
     >
       <FcGoogle size={24} />
       <p className="ml-[10px] text-black">Sign in with Google</p>

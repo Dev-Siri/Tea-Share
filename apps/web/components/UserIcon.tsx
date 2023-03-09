@@ -2,7 +2,7 @@
 import lazy from "next/dynamic";
 import { useEffect, useState, type FC } from "react";
 
-import type { FirebaseUser } from "@types";
+import type { FirebaseUser } from "@/types";
 
 const Image = lazy(() => import("next/image"));
 const Link = lazy(() => import("next/link"));
@@ -12,7 +12,7 @@ const UserIcon: FC = () => {
 
   useEffect(() => {
     const onPageLoad = async () => {
-      const { default: useSession } = await import("@hooks/useSession");
+      const { default: useSession } = await import("@/hooks/useSession");
 
       setUser(useSession());
     };

@@ -3,6 +3,7 @@
   "extends": "./base.json",
   "compilerOptions": {
     "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "removeComments": true,
     "skipLibCheck": true,
     "baseUrl": ".",

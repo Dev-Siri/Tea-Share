@@ -1,7 +1,7 @@
-import type { SkeletonProps } from "@types";
+import type { SkeletonProps } from "@/types";
 import type { CSSProperties, FC } from "react";
 
-import { DARK_GRAY, SEMI_GRAY } from "@constants/colors";
+import { DARK_GRAY, SEMI_GRAY } from "@/constants/colors";
 
 const Skeleton: FC<SkeletonProps> = ({ className = "" }) => (
   <span

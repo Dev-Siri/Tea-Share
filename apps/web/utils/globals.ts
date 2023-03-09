@@ -1,6 +1,6 @@
-import { TIME_UNITS, TIME_UNIT_SECONDS } from "@constants/date";
+import { TIME_UNITS, TIME_UNIT_SECONDS } from "@/constants/date";
 
-import type { HandleGetter, RandomStringGetter, RelativeTimeGetter } from "@types";
+import type { HandleGetter, RandomStringGetter, RelativeTimeGetter } from "@/types";
 
 /**
  * @param date - The Date object to calculate the time

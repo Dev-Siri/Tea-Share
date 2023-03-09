@@ -1,12 +1,12 @@
 import lazy from "next/dynamic";
 
-import type { PageComponent } from "@types";
+import type { PageComponent } from "@/types";
 import type { Metadata } from "next";
 
-import Logo from "@components/Logo";
+import Logo from "@/components/Logo";
 
-const GoogleLogin = lazy(() => import("@components/GoogleLogin"));
-const LoginForm = lazy(() => import("@components/LoginForm"));
+const GoogleLogin = lazy(() => import("@/components/GoogleLogin"));
+const LoginForm = lazy(() => import("@/components/LoginForm"));
 const Image = lazy(() => import("next/image"));
 
 export const dynamic = "force-static";

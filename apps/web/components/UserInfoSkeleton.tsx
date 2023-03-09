@@ -1,9 +1,9 @@
 import type { FC } from "react";
 
-import Skeleton from "@components/Skeleton";
+import Skeleton from "@/components/Skeleton";
 
 const UserInfoSkeleton: FC = () => (
-  <article className="mt-10 flex w-[80%] flex-col items-center rounded-md border-2 border-light-gray bg-white p-12 dark:border-semi-gray dark:bg-black sm:ml-5 md:ml-0 md:w-[30%] md:flex-row md:items-start lg:w-1/2">
+  <article className="border-light-gray dark:border-semi-gray mt-10 flex w-[80%] flex-col items-center rounded-md border-2 bg-white p-12 dark:bg-black sm:ml-5 md:ml-0 md:w-[30%] md:flex-row md:items-start lg:w-1/2">
     <Skeleton className="h-32 w-32 rounded-full" />
     <ul className="mt-4 text-center md:mt-0 md:ml-8 md:text-start">
       <Skeleton className="h-6 w-[280px]" />

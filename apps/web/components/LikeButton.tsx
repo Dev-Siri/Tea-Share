@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState, type ReactElement } from "react";
 
-import type { LikeButtonProps } from "@types";
+import type { LikeButtonProps } from "@/types";
 import type { FC } from "react";
 
-import { PRIMARY_COLOR } from "@constants/colors";
-import { LikedPeople } from "@utils/posts";
+import { PRIMARY_COLOR } from "@/constants/colors";
+import { LikedPeople } from "@/utils/posts";
 
 import { IoMdThumbsUp } from "@react-icons/all-files/io/IoMdThumbsUp";
 import { RiThumbUpLine } from "@react-icons/all-files/ri/RiThumbUpLine";
@@ -47,10 +47,10 @@ const LikeButton: FC<LikeButtonProps> = ({ people, postId }) => {
       type="button"
       onClick={handleLikePost}
       disabled={isLikeButtonDisabled}
-      className="mt-16 flex h-8 cursor-pointer items-center border-none text-xs text-primary"
+      className="text-primary mt-16 flex h-8 cursor-pointer items-center border-none text-xs"
     >
       {likeBTN}
-      <span className="mr-6 text-base  text-primary md:w-full">&nbsp;{likes}</span>
+      <span className="text-primary mr-6  text-base md:w-full">&nbsp;{likes}</span>
     </button>
   );
 };

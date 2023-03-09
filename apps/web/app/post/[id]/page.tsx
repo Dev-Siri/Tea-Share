@@ -1,14 +1,14 @@
 import lazy from "next/dynamic";
 import { notFound } from "next/navigation";
 
-import type { GenerateMetadata, PageComponent } from "@types";
+import type { GenerateMetadata, PageComponent } from "@/types";
 
-import { fetchPostsByQuery } from "@api/fetchers";
-import { PAGE_URL } from "@constants/pageInfo";
+import { fetchPostsByQuery } from "@/api/fetchers";
+import { PAGE_URL } from "@/constants/pageInfo";
 
-import UserList from "@components/UserList";
+import UserList from "@/components/UserList";
 
-const RelativeTime = lazy(() => import("@components/RelativeTime"));
+const RelativeTime = lazy(() => import("@/components/RelativeTime"));
 const Image = lazy(() => import("next/image"));
 const Link = lazy(() => import("next/link"));
 

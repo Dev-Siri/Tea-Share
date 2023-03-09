@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState, type FC } from "react";
 
-import type { RelativeTimeProps } from "@types";
+import type { RelativeTimeProps } from "@/types";
 
-import { getRelativeTime } from "@utils/globals";
+import { getRelativeTime } from "@/utils/globals";
 
 const RelativeTime: FC<RelativeTimeProps> = ({ className, dateString }) => {
   const [relativeTime, setRelativeTime] = useState("Loading...");

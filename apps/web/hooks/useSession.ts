@@ -1,8 +1,8 @@
 import jwtDecode from "jwt-decode";
 
-import type { FirebaseUser, SessionHook } from "@types";
+import type { FirebaseUser, SessionHook } from "@/types";
 
-import { getCookie } from "@utils/cookies";
+import { getCookie } from "@/utils/cookies";
 
 /**
  * ! Only use in components that are not rendered on the server or in a `useEffect`

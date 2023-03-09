@@ -2,8 +2,8 @@
 import { useRouter } from "next/navigation";
 import { useState, type FC, type FormEventHandler } from "react";
 
-import { inputStyles } from "@styles/commonStyles";
-import { InfiniteItems } from "@types";
+import { inputStyles } from "@/styles/commonStyles";
+import { InfiniteItems } from "@/types";
 
 const LoginForm: FC = () => {
   const [isSignup, setIsSignup] = useState(false);
@@ -16,11 +16,11 @@ const LoginForm: FC = () => {
     const { username, email, password, image } = Object.fromEntries(form.entries()) as InfiniteItems & { image: File | null };
 
     if (isSignup) {
-      const { Signup } = await import("@utils/auth");
+      const { Signup } = await import("@/utils/auth");
 
       Signup(username, image, email, password, router);
     } else {
-      const { Login } = await import("@utils/auth");
+      const { Login } = await import("@/utils/auth");
 
       Login(email, password, router);
     }
@@ -37,14 +37,14 @@ const LoginForm: FC = () => {
         <div className="mt-[60px] flex h-fit items-center">
           <button
             type="submit"
-            className="ml-2 h-10 w-[150px] cursor-pointer rounded-md border-[1px] border-primary bg-primary text-white duration-200 hover:bg-primary-dark"
+            className="border-primary bg-primary hover:bg-primary-dark ml-2 h-10 w-[150px] cursor-pointer rounded-md border-[1px] text-white duration-200"
           >
             {isSignup ? "Signup" : "Login"}
           </button>
           <p className="ml-[10px] w-[390px] text-sm">
             {isSignup ? "Already an user? " : "Don't have an account? "}
             <span
-              className="cursor-pointer text-primary duration-200 hover:text-primary-dark"
+              className="text-primary hover:text-primary-dark cursor-pointer duration-200"
               onClick={() => setIsSignup(previsSignup => !previsSignup)}
             >
               {isSignup ? "Login" : "Signup"}

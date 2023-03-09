@@ -1,12 +1,12 @@
 "use client";
 import { useState, type FC, type UIEventHandler } from "react";
 
-import type { Post as PostType, PostsPresenterProps } from "@types";
+import type { Post as PostType, PostsPresenterProps } from "@/types";
 
-import { fetchPosts } from "@api/fetchers";
-import { INITIAL_PAGE_LIMIT, POST_LIMIT } from "@constants/limit";
+import { fetchPosts } from "@/api/fetchers";
+import { INITIAL_PAGE_LIMIT, POST_LIMIT } from "@/constants/limit";
 
-import Post from "@components/Post";
+import Post from "@/components/Post";
 
 let currentPage: number = INITIAL_PAGE_LIMIT;
 

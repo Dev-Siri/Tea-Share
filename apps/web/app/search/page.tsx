@@ -1,9 +1,9 @@
-import type { GenerateMetadata, MongoDBUser, PageComponent } from "@types";
+import type { GenerateMetadata, MongoDBUser, PageComponent } from "@/types";
 
-import { fetchPostsByQuery, fetchUsersByName } from "@api/fetchers";
+import { fetchPostsByQuery, fetchUsersByName } from "@/api/fetchers";
 
-import PostList from "@components/PostList";
-import UserList from "@components/UserList";
+import PostList from "@/components/PostList";
+import UserList from "@/components/UserList";
 import { FaUserAltSlash } from "@react-icons/all-files/fa/FaUserAltSlash";
 import { FiCameraOff } from "@react-icons/all-files/fi/FiCameraOff";
 

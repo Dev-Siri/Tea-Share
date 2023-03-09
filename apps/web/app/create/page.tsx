@@ -3,7 +3,7 @@ import lazy from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useState, type FormEventHandler } from "react";
 
-import type { PageComponent, PostFormData } from "@types";
+import type { PageComponent, PostFormData } from "@/types";
 
 const Image = lazy(() => import("next/image"));
 
@@ -23,7 +23,7 @@ const Create: PageComponent = () => {
       return toast.error("The uploaded file is not an image.");
     }
 
-    const { CreatePost } = await import("@utils/posts");
+    const { CreatePost } = await import("@/utils/posts");
 
     CreatePost(formData, router);
   };
@@ -32,17 +32,17 @@ const Create: PageComponent = () => {
     <section className="h-screen w-full overflow-y-scroll">
       <form className="flex w-full flex-col items-center p-2" onSubmit={handleCreate}>
         <input
-          className="w-[90%] rounded-tl-lg rounded-tr-lg p-4 text-4xl font-extralight outline-none duration-200 dark:bg-semi-gray dark:text-white"
+          className="dark:bg-semi-gray w-[90%] rounded-tl-lg rounded-tr-lg p-4 text-4xl font-extralight outline-none duration-200 dark:text-white"
           placeholder="Title"
           name="title"
         />
         <input
-          className="w-[90%] rounded-bl-lg rounded-br-lg p-4 pl-5 font-extralight outline-none duration-200 dark:bg-semi-gray dark:text-white"
+          className="dark:bg-semi-gray w-[90%] rounded-bl-lg rounded-br-lg p-4 pl-5 font-extralight outline-none duration-200 dark:text-white"
           placeholder="What's on your mind?"
           name="description"
         />
         <input
-          className="mt-4 w-[90%] rounded-lg p-4 outline-none duration-200 dark:bg-semi-gray dark:text-white"
+          className="dark:bg-semi-gray mt-4 w-[90%] rounded-lg p-4 outline-none duration-200 dark:text-white"
           type="file"
           name="image"
           aria-label="Post File Upload"
@@ -61,7 +61,7 @@ const Create: PageComponent = () => {
         )}
         <button
           type="submit"
-          className="mt-4 mb-20 w-[90%] cursor-pointer rounded-md border-none bg-primary p-3 text-white duration-200 hover:bg-primary-dark"
+          className="bg-primary hover:bg-primary-dark mt-4 mb-20 w-[90%] cursor-pointer rounded-md border-none p-3 text-white duration-200"
         >
           Create Post!
         </button>

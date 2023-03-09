@@ -1,4 +1,4 @@
-import type { LayoutComponent } from "@types";
+import type { LayoutComponent } from "@/types";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

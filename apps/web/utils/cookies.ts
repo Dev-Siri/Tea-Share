@@ -1,4 +1,4 @@
-import type { CookieGetter, CookieRemover, CookieSetter } from "@types";
+import type { CookieGetter, CookieRemover, CookieSetter } from "@/types";
 
 /**
  * @param key The name of the cookie

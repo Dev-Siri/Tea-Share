@@ -1,4 +1,4 @@
-export const mailAuthErrorFormater = (error: string): string => {
+export const mailAuthErrorFormater = (error: string) => {
   switch (error.substring(16)) {
     case "(auth/email-already-exists).":
       return "The entered email is in use.";

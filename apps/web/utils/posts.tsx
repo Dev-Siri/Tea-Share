@@ -1,16 +1,16 @@
-import { PRIMARY_COLOR } from "@constants/colors";
+import { PRIMARY_COLOR } from "@/constants/colors";
 import { IoMdThumbsUp } from "@react-icons/all-files/io/IoMdThumbsUp";
 
-import type { CreatePostSubmitHandler, LikedPeopleCalculator, LikePostHandler } from "@types";
+import type { CreatePostSubmitHandler, LikedPeopleCalculator, LikePostHandler } from "@/types";
 
 export const CreatePost: CreatePostSubmitHandler = async (formData, router) => {
   if (!formData.title || (!formData.image && formData.title.length > 3)) return;
 
   const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
-  const { default: useSession } = await import("@hooks/useSession");
+  const { default: useSession } = await import("@/hooks/useSession");
   const { getRandomString } = await import("./globals");
-  const { createPost } = await import("@api/fetchers");
-  const { storage } = await import("@api/firebase");
+  const { createPost } = await import("@/api/fetchers");
+  const { storage } = await import("@/api/firebase");
   const { toast } = await import("react-hot-toast");
 
   const user = useSession();
@@ -39,7 +39,7 @@ export const CreatePost: CreatePostSubmitHandler = async (formData, router) => {
 };
 
 export const LikedPeople: LikedPeopleCalculator = async people => {
-  const { default: useSession } = await import("@hooks/useSession");
+  const { default: useSession } = await import("@/hooks/useSession");
 
   const user = useSession();
 
@@ -57,7 +57,7 @@ export const LikedPeople: LikedPeopleCalculator = async people => {
 };
 
 export const LikePost: LikePostHandler = async (setLikes, setLikeBTN, setisLikeButtonDisabled, people, user, id) => {
-  const { LikePost: LikePostAPI } = await import("@api/fetchers");
+  const { LikePost: LikePostAPI } = await import("@/api/fetchers");
 
   setLikes(!people.length ? "You liked this post" : people.length === 1 ? "You and 1 other" : `You and ${people.length} others`);
   setLikeBTN(<IoMdThumbsUp size={30} color={PRIMARY_COLOR} />);

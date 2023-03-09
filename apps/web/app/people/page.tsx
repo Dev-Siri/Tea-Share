@@ -1,12 +1,12 @@
 import lazy from "next/dynamic";
 
-import type { PageComponent } from "@types";
+import type { PageComponent } from "@/types";
 import type { Metadata } from "next";
 
-import { fetchUsers } from "@api/fetchers";
-import { INITIAL_PAGE_LIMIT, SERVER_USER_LIMIT } from "@constants/limit";
+import { fetchUsers } from "@/api/fetchers";
+import { INITIAL_PAGE_LIMIT, SERVER_USER_LIMIT } from "@/constants/limit";
 
-const UserPresentor = lazy(() => import("@components/UserPresenter"));
+const UserPresentor = lazy(() => import("@/components/UserPresenter"));
 
 export const revalidate: number = 10;
 
