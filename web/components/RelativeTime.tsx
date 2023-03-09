@@ -6,7 +6,7 @@ import type { RelativeTimeProps } from "@types";
 import { getRelativeTime } from "@utils/globals";
 
 const RelativeTime: FC<RelativeTimeProps> = ({ className, dateString }) => {
-  const [relativeTime, setRelativeTime] = useState<string>("Loading...");
+  const [relativeTime, setRelativeTime] = useState("Loading...");
 
   useEffect(() => {
     setRelativeTime(getRelativeTime(new Date(dateString)));

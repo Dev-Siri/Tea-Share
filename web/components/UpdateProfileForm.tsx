@@ -9,9 +9,9 @@ import { inputStyles } from "@styles/commonStyles";
 const UpdateProfileForm: FC = () => {
   const router = useRouter();
 
-  const [username, setUsername] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [userID, setUserID] = useState<string>("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [userID, setUserID] = useState("");
   const [image, setImage] = useState<string | File | undefined | null>(null);
 
   useEffect(() => {

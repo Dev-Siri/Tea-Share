@@ -1,6 +1,5 @@
 {
   "root": true,
-  "ignorePatterns": ["types"],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"

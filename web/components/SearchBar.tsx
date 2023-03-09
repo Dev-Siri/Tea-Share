@@ -5,7 +5,7 @@ import { useState, type FC, type KeyboardEventHandler } from "react";
 import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
 
 const SearchBar: FC = () => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const router = useRouter();
 

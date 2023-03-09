@@ -16,8 +16,8 @@ const likeBTNProps = {
 } as const;
 
 const LikeButton: FC<LikeButtonProps> = ({ people, postId }) => {
-  const [likes, setLikes] = useState<string>("Loading...");
-  const [isLikeButtonDisabled, setisLikeButtonDisabled] = useState<boolean>(true);
+  const [likes, setLikes] = useState("Loading...");
+  const [isLikeButtonDisabled, setisLikeButtonDisabled] = useState(true);
   const [likeBTN, setLikeBTN] = useState<ReactElement>(<RiThumbUpLine {...likeBTNProps} />);
 
   useEffect(() => {
