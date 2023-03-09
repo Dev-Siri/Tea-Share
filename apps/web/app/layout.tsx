@@ -2,7 +2,7 @@ import "@styles/globals.css";
 import lazy from "next/dynamic";
 import { Inter } from "next/font/google";
 
-import type { LayoutComponent } from "@types";
+import type { LayoutComponent } from "@/types";
 import type { Metadata } from "next";
 
 import {
@@ -14,17 +14,20 @@ import {
   PAGE_OG_IMAGE_PATH,
   PAGE_TITLE,
   PAGE_TWITTER_IMAGE_PATH,
-  PAGE_URL,
-} from "@constants/pageInfo";
-import { APPLE_TOUCH_ICON, APPLE_TOUCH_STARTUP_IMAGE_SIZES } from "@constants/pwa";
+  PAGE_URL
+} from "@/constants/pageInfo";
+import {
+  APPLE_TOUCH_ICON,
+  APPLE_TOUCH_STARTUP_IMAGE_SIZES
+} from "@/constants/pwa";
 
-import Logo from "@components/Logo";
-import NavLinks from "@components/NavLinks";
+import Logo from "@/components/Logo";
+import NavLinks from "@/components/NavLinks";
 
-const Toaster = lazy(() => import("@components/Toaster"), { ssr: false });
-const SearchBar = lazy(() => import("@components/SearchBar"));
-const Provider = lazy(() => import("@components/Provider"));
-const Navbar = lazy(() => import("@components/Navbar"));
+const Toaster = lazy(() => import("@/components/Toaster"), { ssr: false });
+const SearchBar = lazy(() => import("@/components/SearchBar"));
+const Provider = lazy(() => import("@/components/Provider"));
+const Navbar = lazy(() => import("@/components/Navbar"));
 
 const inter = Inter({
   preload: true,
@@ -95,7 +98,11 @@ const RootLayout: LayoutComponent = ({ children }) => (
     <head />
     <body>
       <main className={`${inter.className} dark:bg-dark-gray dark:text-white`}>
-        <Toaster toastOptions={{ className: "dark:bg-dark-gray dark:text-white shadow-md" }} />
+        <Toaster
+          toastOptions={{
+            className: "dark:bg-dark-gray dark:text-white shadow-md",
+          }}
+        />
         <Navbar>
           <Logo />
           <SearchBar />

@@ -1,0 +1,14 @@
+{
+  "name": "tea_share",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "prettier": "./shared/config/prettier.config.cjs",
+  "eslintConfig": {
+    "extends": [
+      "./shared/config/.eslintrc"
+    ]
+  },
+  "license": "MIT",
+  "author": "Dev-Siri"
+}

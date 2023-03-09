@@ -10,15 +10,25 @@ const nextConfig = {
     removeConsole: isProduction,
   },
   images: {
-    domains: ["firebasestorage.googleapis.com", "localhost", "lh3.googleusercontent.com", "source.unsplash.com"],
+    domains: [
+      "firebasestorage.googleapis.com",
+      "localhost",
+      "lh3.googleusercontent.com",
+      "source.unsplash.com",
+    ],
   },
   experimental: {
     appDir: true,
     legacyBrowsers: false,
   },
+  typescript: {
+    tsconfigPath: "../../shared/tsconfig/web.json",
+  },
 };
 
-const withBundleAnalyzer = configureBundleAnalyzer({ enabled: process.env.ANALYZE_BUNDLE === "true" });
+const withBundleAnalyzer = configureBundleAnalyzer({
+  enabled: process.env.ANALYZE_BUNDLE === "true",
+});
 const withPWA = configureNextPWA({
   dest: "public",
   register: true,
