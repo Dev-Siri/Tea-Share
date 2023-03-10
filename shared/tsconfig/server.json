@@ -7,7 +7,7 @@
     "removeComments": true,
     "skipLibCheck": true,
     "baseUrl": ".",
-    "outDir": "dist"
+    "outDir": "../../apps/server/dist"
   },
   "ts-node": {
     "transpileOnly": true,
