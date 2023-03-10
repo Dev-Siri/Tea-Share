@@ -1,4 +1,8 @@
-# Tea share
+<div style="display: flex; justify-content: center;">
+  <img src="images/logo.png" height="150" width="150" style="border-radius: 100%;" />
+</div>
+
+<h1 style="text-align: center;">Tea Share</h1>
 
 ## Description
 
@@ -6,20 +10,20 @@ Tea Share is an online social media app for iOS, Android and the Web. It provide
 create posts easily with the click of a button. It is built with Flutter for mobile (iOS/Android) and **[Next.js](https://nextjs.org)** for the web version. It uses **[MongoDB](https://www.mongodb.com)** as the
 database, **[Node.js](https://nodejs.org)** as the server side runtime and **[Firebase](https://firebase.google.com)** for authentication and storage for all the user generated data. The mobile app is made with **[Flutter](https://flutter.dev)**, a cross platform framework.
 
-Currently even though the Flutter project has a **iOS** folder, the iOS version is not configured for it and will not be available for a long time.
+Currently, even though the Flutter project has a **iOS** folder, the iOS version is not configured for it and will not be available for a long time.
 
 ## Technologies
 
-- Dart
+- Tailwindcss
 - TypeScript
 - JavaScript
-- Flutter
-- React.js
-- Next.js
-- Node.js
-- MongoDB
-- Tailwindcss
 - Firebase
+- Next.js
+- Flutter
+- MongoDB
+- React
+- Dart
+- Node
 
 # Getting started
 
@@ -44,11 +48,11 @@ cd mobile
 - Make sure to run npm, yarn or pnpm install to install the dependencies for the **Web and Server** only, before running the project.
 
 ```sh
-npm install
+npm i
   # OR
-yarn install
+yarn
   # OR
-pnpm install
+pnpm i
 ```
 
 - Then run flutter, npm, yarn or pnpm to run the project locally.
@@ -58,12 +62,10 @@ pnpm install
 flutter run
 
 # For web version
-npm run dev
+pnpm dev
 
 # For the server version (with live reloading)
-npm run dev
-# Or without live reloading
-npm start
+pnpm dev
 ```
 
 ### Connecting A Physical Device To The Flutter App.
@@ -86,9 +88,9 @@ To build the web app & server, run:
 ```sh
 npm run build
   # OR
-yarn run build
+yarn build
   # OR
-pnpm run build
+pnpm build
 ```
 
 Then to start the production version, run:
@@ -104,7 +106,6 @@ pnpm start
 #### Mobile
 
 For building the mobile app for android, follow the official [Flutter Documentation](https://docs.flutter.dev/deployment/android) <br />
-OR, you can download the already compiled apks from releases.
 
 ## License
 
