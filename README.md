@@ -1,9 +1,5 @@
-<style>
-  .round { border-radius: 100%; }
-</style>
-
 <p align="center">
-  <img src="images/logo.png" height="150" width="150" class="round" />
+  <img src="images/logo.png" height="150" width="150" style="border: 1px solid transparent; border-radius: 100%;" />
 </p>
 
 <h1 style="text-align: center;">Tea Share</h1>
