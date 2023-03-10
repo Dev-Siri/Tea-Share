@@ -1,8 +1,8 @@
 import { createPost, getPosts, getPostsBySearchTerm, likePost } from "../controllers/posts.js";
 
-import type { Router } from "../types/routes.js";
+import type { FastifyPluginCallback } from "fastify";
 
-const postRoutes: Router = async fastify => {
+const postRoutes: FastifyPluginCallback = async fastify => {
   fastify.get("/posts", getPosts);
   fastify.post("/posts", createPost);
   fastify.get("/posts/search", getPostsBySearchTerm);

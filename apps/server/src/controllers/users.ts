@@ -21,7 +21,7 @@ export const getUsers: RequestHandler<User[]> = async (req, res) => {
 };
 
 export const createUser: RequestHandler<DatabaseDocument<User>, User> = async (req, res) => {
-  const user: User = typeof req.body === "string" ? (JSON.parse(req.body) as User) : req.body;
+  const user: User = typeof req.body === "string" ? (JSON.parse(req.body)) : req.body;
 
   const userExists: boolean = !!(await UserModel.find({ username: user.username })).length;
 

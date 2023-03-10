@@ -2,16 +2,20 @@
   "name": "tea-share-backend",
   "version": "1.0.0",
   "description": "The backend made with Node.js for Tea Share",
-  "main": "index.js",
+  "main": "dist/index.js",
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node .",
     "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc"
   },
+  "repository": {
+    "url": "git://github.com/Dev-Siri/Tea-Share",
+    "type": "git"
+  },
   "engines": {
-    "node": "19.x"
+    "node": "19.7.0"
   },
   "keywords": [
     "backend",

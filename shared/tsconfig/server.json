@@ -6,7 +6,7 @@
     "moduleResolution": "NodeNext",
     "removeComments": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
+    "baseUrl": "../../apps/server",
     "outDir": "../../apps/server/dist"
   },
   "ts-node": {
