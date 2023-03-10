@@ -1,6 +1,10 @@
-<div style="display: flex; justify-content: center;">
-  <img src="images/logo.png" height="150" width="150" style="border-radius: 100%;" />
-</div>
+<style>
+  .round { border-radius: 100%; }
+</style>
+
+<p align="center">
+  <img src="images/logo.png" height="150" width="150" class="round" />
+</p>
 
 <h1 style="text-align: center;">Tea Share</h1>
 
