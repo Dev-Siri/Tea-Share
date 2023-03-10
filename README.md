@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="images/logo.png" height="150" width="150" style="border: 1px solid transparent; border-radius: 100%;" />
+  <img src="images/logo.png" height="150" width="150" />
 </p>
 
-<h1 style="text-align: center;">Tea Share</h1>
+<h1 align="center">Tea Share</h1>
 
 ## Description
 
