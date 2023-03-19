@@ -14,5 +14,10 @@
     "react/react-in-jsx-scope": "off",
     "no-unused-vars": "warn",
     "no-var": "error"
-  }
+  },
+  "ignorePatterns": [
+    "types",
+    "dist",
+    ".next"
+  ]
 }

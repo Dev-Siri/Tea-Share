@@ -95,11 +95,7 @@ const RootLayout: LayoutComponent = ({ children }) => (
     <head />
     <body>
       <main className={`${inter.className} dark:bg-dark-gray dark:text-white`}>
-        <Toaster
-          toastOptions={{
-            className: "dark:bg-dark-gray dark:text-white shadow-md",
-          }}
-        />
+        <Toaster toastOptions={{ className: "dark:bg-dark-gray dark:text-white shadow-md" }} />
         <Navbar>
           <Logo />
           <SearchBar />

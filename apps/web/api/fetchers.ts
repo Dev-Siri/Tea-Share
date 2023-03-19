@@ -7,7 +7,7 @@ import type {
   LikePostAPI,
   MongoDBUser,
   Post,
-  UpdateProfileAPI
+  UpdateProfileAPI,
 } from "@/types";
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL as string;
