@@ -15,7 +15,7 @@ migrate_working_dir/
 .idea/
 
 **/doc/api/
-**/ios/Flutter/.last_build_id
+apps/mobile/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
@@ -25,10 +25,11 @@ migrate_working_dir/
 
 app.*.symbols
 app.*.map.json
+apps/mobile/pubspec.lock
 
-android/app/debug
-android/app/profile
-android/app/release
+apps/mobile/android/app/debug
+apps/mobile/android/app/profile
+apps/mobile/android/app/release
 
 secret_keys.dart
 
@@ -58,7 +59,6 @@ coverage
 out
 build
 
-.DS_Store
 *.pem
 
 npm-debug.log*
@@ -88,17 +88,17 @@ Icon?
 profile
 xcuserdata
 **/.generated/
-Flutter/App.framework
-Flutter/Flutter.framework
-Flutter/Flutter.podspec
-Flutter/Generated.xcconfig
-Flutter/ephemeral/
-Flutter/app.flx
-Flutter/app.zip
-Flutter/flutter_assets/
-Flutter/flutter_export_environment.sh
+App.framework
+Flutter.framework
+Flutter.podspec
+Generated.xcconfig
+ephemeral/
+app.flx
+app.zip
+flutter_assets/
+flutter_export_environment.sh
 ServiceDefinitions.json
-Runner/GeneratedPluginRegistrant.*
+GeneratedPluginRegistrant.*
 
 !default.mode1v3
 !default.mode2v3
