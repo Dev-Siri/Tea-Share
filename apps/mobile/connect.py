@@ -1,21 +1,22 @@
 #!/usr/bin/python
 
-import sys
-from os import system
+import argparse
+import subprocess
 
-def connect_to_phone(ip: str):
-  port: int = 5555
+def connect_to_phone(ip: str, port: int):
   connection_ip: str = f"{ip}:{port}"
 
-  system("adb kill-server")
-  system(f"adb tcpip {port}")
-  system(f"adb connect {connection_ip}")
+  subprocess.run(["adb", "kill-server"])
+  subprocess.run(["adb", "tcpip", str(port)])
+  subprocess.run(["adb", "connect", connection_ip])
 
-if len(sys.argv) > 1:
-  ip: str = sys.argv[1]
+def main():
+  parser = argparse.ArgumentParser(description="Connect to an Android phone over Wi-Fi.")
+  parser.add_argument("ip", type=str, help="the IP address of the phone")
+  parser.add_argument("--port", type=int, default=5555, help="the port number to use (default: 5555)")
+  args = parser.parse_args()
+ 
+  connect_to_phone(args.ip, args.port)
 
-  connect_to_phone(ip)
-else:
-  print("IP or Port is not defined\n")
-  print("Usage:")
-  print("python connect.py <IP-ADDRESS> <PORT>")
+if __name__ == "__main__":
+  main()
