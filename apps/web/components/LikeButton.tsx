@@ -23,7 +23,7 @@ const LikeButton: FC<LikeButtonProps> = ({ people, postId }) => {
   useEffect(() => {
     const setupStates = async () => {
       const { default: useSession } = await import("@/hooks/useSession");
-      const user = useSession();
+      const user = await useSession();
 
       setLikes(await LikedPeople(people));
       setisLikeButtonDisabled(people.includes(user.name));
@@ -35,11 +35,8 @@ const LikeButton: FC<LikeButtonProps> = ({ people, postId }) => {
 
   const handleLikePost = async () => {
     const { LikePost } = await import("@/utils/posts");
-    const { default: useSession } = await import("@/hooks/useSession");
 
-    const user = useSession();
-
-    LikePost(setLikes, setLikeBTN, setisLikeButtonDisabled, people, user, postId);
+    LikePost(setLikes, setLikeBTN, setisLikeButtonDisabled, people, postId);
   };
 
   return (

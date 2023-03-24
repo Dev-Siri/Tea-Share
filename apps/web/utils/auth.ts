@@ -80,9 +80,9 @@ export const GoogleAuth: GoogleAuthHandler = async router => {
     const { user } = await signInWithPopup(auth, provider);
 
     await createUser({
-      email: user.email as string,
-      username: user.displayName as string,
-      image: user.photoURL as string,
+      email: user.email!,
+      username: user.displayName!,
+      image: user.photoURL!,
     });
 
     const authToken: string = await getIdToken(user);

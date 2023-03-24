@@ -10,7 +10,7 @@ import type {
   UpdateProfileAPI,
 } from "@/types";
 
-const url = process.env.NEXT_PUBLIC_BACKEND_URL as string;
+const url = process.env.NEXT_PUBLIC_BACKEND_URL!;
 
 const headers = {
   "Content-Type": "application/json",
@@ -79,7 +79,7 @@ export const updateProfile: UpdateProfileAPI = async (id, user) =>
     body: JSON.stringify(user),
   });
 
-export const LikePost: LikePostAPI = async (id, name, image) =>
+export const likePost: LikePostAPI = async (id, name, image) =>
   fetch(`${url}/posts/${id}/like?name=${name}&image=${image}`, {
     method: "PATCH",
     headers,

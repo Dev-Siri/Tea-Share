@@ -17,7 +17,6 @@ export type LikePostHandler = (
   setLikeBTN: Dispatch<SetStateAction<JSX.Element>>,
   setisLikeButtonDisabled: Dispatch<SetStateAction<boolean>>,
   people: string[],
-  user: FirebaseUser,
   id: string
 ) => Promise<void>;
 

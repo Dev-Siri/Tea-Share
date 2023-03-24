@@ -13,7 +13,7 @@ export const CreatePost: CreatePostSubmitHandler = async (formData, router) => {
   const { storage } = await import("@/api/firebase");
   const { toast } = await import("react-hot-toast");
 
-  const user = useSession();
+  const user = await useSession();
 
   const loadingToast = toast.loading("Creating post...");
 
@@ -41,7 +41,7 @@ export const CreatePost: CreatePostSubmitHandler = async (formData, router) => {
 export const LikedPeople: LikedPeopleCalculator = async people => {
   const { default: useSession } = await import("@/hooks/useSession");
 
-  const user = useSession();
+  const user = await useSession();
 
   if (!people.length) return "0 Likes";
 
@@ -56,11 +56,13 @@ export const LikedPeople: LikedPeopleCalculator = async people => {
   return `${people[0]} and ${people.length - 1} others`;
 };
 
-export const LikePost: LikePostHandler = async (setLikes, setLikeBTN, setisLikeButtonDisabled, people, user, id) => {
-  const { LikePost: LikePostAPI } = await import("@/api/fetchers");
+export const LikePost: LikePostHandler = async (setLikes, setLikeBTN, setisLikeButtonDisabled, people, id) => {
+  const { default: useSession } = await import("@/hooks/useSession");
+  const { likePost } = await import("@/api/fetchers");
+  const user = await useSession();
 
   setLikes(!people.length ? "You liked this post" : people.length === 1 ? "You and 1 other" : `You and ${people.length} others`);
   setLikeBTN(<IoMdThumbsUp size={30} color={PRIMARY_COLOR} />);
   setisLikeButtonDisabled(true);
-  await LikePostAPI(id, user.name, user.picture);
+  await likePost(id, user.name, user.picture);
 };

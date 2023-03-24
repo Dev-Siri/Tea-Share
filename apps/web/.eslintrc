@@ -1,5 +1,5 @@
 {
-  "extends": ["next/core-web-vitals", "../../shared/config/.eslintrc"],
+  "extends": ["next/core-web-vitals", "next", "../../shared/config/.eslintrc"],
   "rules": {
     "no-html-link-for-pages": "off",
     "react-hooks/rules-of-hooks": "off"

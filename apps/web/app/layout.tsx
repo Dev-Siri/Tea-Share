@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import lazy from "next/dynamic";
+import { Analytics, type AnalyticsProps } from "@vercel/analytics/react";
 import { Inter } from "next/font/google";
 
 import type { LayoutComponent } from "@/types";
@@ -92,7 +93,6 @@ export const metadata: Metadata = {
 
 const RootLayout: LayoutComponent = ({ children }) => (
   <html lang="en" suppressHydrationWarning>
-    <head />
     <body>
       <main className={`${inter.className} dark:bg-dark-gray dark:text-white`}>
         <Toaster toastOptions={{ className: "dark:bg-dark-gray dark:text-white shadow-md" }} />
@@ -102,6 +102,7 @@ const RootLayout: LayoutComponent = ({ children }) => (
           <NavLinks />
         </Navbar>
         <Provider>{children}</Provider>
+        <Analytics mode={process.env.NODE_ENV as AnalyticsProps["mode"]} />
       </main>
     </body>
   </html>

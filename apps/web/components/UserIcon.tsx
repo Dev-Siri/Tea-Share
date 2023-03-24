@@ -8,13 +8,13 @@ const Image = lazy(() => import("next/image"));
 const Link = lazy(() => import("next/link"));
 
 const UserIcon: FC = () => {
-  const [user, setUser] = useState<FirebaseUser>(null as unknown as FirebaseUser);
+  const [user, setUser] = useState<FirebaseUser | null>(null);
 
   useEffect(() => {
     const onPageLoad = async () => {
       const { default: useSession } = await import("@/hooks/useSession");
 
-      setUser(useSession());
+      setUser(await useSession());
     };
 
     onPageLoad();
