@@ -93,13 +93,13 @@ export const metadata: Metadata = {
 const RootLayout: LayoutComponent = ({ children }) => (
   <html lang="en" suppressHydrationWarning>
     <body>
+      <Navbar>
+        <Logo />
+        <SearchBar />
+        <NavLinks />
+      </Navbar>
       <main className={`${inter.className} dark:bg-dark-gray dark:text-white`}>
         <Toaster toastOptions={{ className: "dark:bg-dark-gray dark:text-white shadow-md" }} />
-        <Navbar>
-          <Logo />
-          <SearchBar />
-          <NavLinks />
-        </Navbar>
         <Provider>{children}</Provider>
       </main>
     </body>
