@@ -1,5 +1,4 @@
 import "@/styles/globals.css";
-import { Analytics, type AnalyticsProps } from "@vercel/analytics/react";
 import lazy from "next/dynamic";
 import { Inter } from "next/font/google";
 
@@ -102,7 +101,6 @@ const RootLayout: LayoutComponent = ({ children }) => (
           <NavLinks />
         </Navbar>
         <Provider>{children}</Provider>
-        <Analytics mode={process.env.NODE_ENV as AnalyticsProps["mode"]} />
       </main>
     </body>
   </html>

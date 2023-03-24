@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
-    "@vercel/analytics": "^0.1.11",
     "encoding": "^0.1.13",
     "firebase": "^9.18.0",
     "jwt-decode": "^3.1.2",

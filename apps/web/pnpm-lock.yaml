@@ -6,7 +6,6 @@ specifiers:
   '@types/node': ^18.15.3
   '@types/react': ^18.0.28
   '@typescript-eslint/eslint-plugin': ^5.55.0
-  '@vercel/analytics': ^0.1.11
   autoprefixer: ^10.4.14
   encoding: ^0.1.13
   eslint: ^8.36.0
@@ -28,7 +27,6 @@ specifiers:
 
 dependencies:
   '@react-icons/all-files': 4.1.0_react@18.2.0
-  '@vercel/analytics': 0.1.11_react@18.2.0
   encoding: 0.1.13
   firebase: 9.18.0_encoding@0.1.13
   jwt-decode: 3.1.2
@@ -2249,14 +2247,6 @@ packages:
       '@typescript-eslint/types': 5.55.0
       eslint-visitor-keys: 3.3.0
     dev: true
-
-  /@vercel/analytics/0.1.11_react@18.2.0:
-    resolution: {integrity: sha512-mj5CPR02y0BRs1tN3oZcBNAX9a8NxsIUl9vElDPcqxnMfP0RbRc9fI9Ud7+QDg/1Izvt5uMumsr+6YsmVHcyuw==}
-    peerDependencies:
-      react: ^16.8||^17||^18
-    dependencies:
-      react: 18.2.0
-    dev: false
 
   /acorn-jsx/5.3.2_acorn@8.8.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
