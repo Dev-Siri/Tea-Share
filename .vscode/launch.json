@@ -1,0 +1,51 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Mobile",
+      "cwd": "apps/mobile",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "Mobile (Profile)",
+      "cwd": "apps/mobile",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "Mobile (Release)",
+      "cwd": "apps/mobile",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    },
+    {
+      "name": "Web (Server Side)",
+      "type": "node-terminal",
+      "cwd": "apps/web",
+      "request": "launch",
+      "command": "pnpm dev"
+    },
+    {
+      "name": "Web (Client Side)",
+      "type": "chrome",
+      "cwd": "apps/web",
+      "request": "launch",
+      "url": "http://localhost:3000"
+    },
+    {
+      "name": "Web (Full Stack)",
+      "type": "node-terminal",
+      "request": "launch",
+      "cwd": "apps/web",
+      "command": "pnpm dev",
+      "serverReadyAction": {
+        "pattern": "started server on .+, url: (https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      }
+    }
+  ]
+}
