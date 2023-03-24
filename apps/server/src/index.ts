@@ -10,23 +10,22 @@ import userRoutes from "./routes/user.js";
 
 configureEnv();
 
-const CONNECTION_URL = process.env.NODE_PRIVATE_MONGO_DB_CONNECTION_URL as string;
+const CONNECTION_URL = process.env.NODE_PRIVATE_MONGO_DB_CONNECTION_URL!;
 const PORT = Number(process.env.PORT) || 5000;
 const HOST = process.env.NODE_ENV === "development" ? "localhost" : "0.0.0.0";
 const ORIGIN = process.env.NODE_ENV === "development" ? "http://localhost:3000" : (process.env.NODE_PRIVATE_FRONTEND_WEB_URL as string);
 
 const fastify = Fastify();
 
-await fastify.register(compression, { encodings: ["br"] });
-await fastify.register(cors, {
-  origin: ORIGIN,
-  methods: ["GET", "POST", "PATCH"],
-});
-
-fastify.get("/", (_, res) => res.status(200).send());
-
-await fastify.register(postRoutes);
-await fastify.register(userRoutes);
+await Promise.all([
+  fastify.register(compression, { encodings: ["br"] }),
+  fastify.register(cors, {
+    origin: ORIGIN,
+    methods: ["GET", "POST", "PATCH"],
+  }),
+  fastify.register(postRoutes),
+  fastify.register(userRoutes),
+]);
 
 setMongooseOption("strictQuery", true);
 await connectDatabase(CONNECTION_URL);
