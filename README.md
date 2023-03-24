@@ -35,36 +35,29 @@ Currently, even though the Flutter project has a **iOS** folder, the iOS version
 git clone https://github.com/Dev-Siri/Tea-share.git
 ```
 
-Enter a version directory.
+Enter the directory for an app.
 
 ```sh
-cd web
+cd apps/web
   # OR
-cd server
+cd apps/server
   # OR
-cd mobile
+cd apps/mobile
 ```
 
 - Make sure to run npm, yarn or pnpm install to install the dependencies for the **Web and Server** only, before running the project.
 
 ```sh
-npm i
-  # OR
-yarn
-  # OR
 pnpm i
 ```
 
 - Then run flutter, npm, yarn or pnpm to run the project locally.
 
 ```sh
-# For mobile version
+# For mobile
 flutter run
 
-# For web version
-pnpm dev
-
-# For the server version (with live reloading)
+# For the web & server
 pnpm dev
 ```
 
@@ -86,20 +79,12 @@ Make sure your android device is connected to your computer with USB and has [Wi
 To build the web app & server, run:
 
 ```sh
-npm run build
-  # OR
-yarn build
-  # OR
 pnpm build
 ```
 
 Then to start the production version, run:
 
 ```sh
-npm start
-  # OR
-yarn start
-  # OR
 pnpm start
 ```
 
