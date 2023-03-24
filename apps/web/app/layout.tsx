@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
-import lazy from "next/dynamic";
 import { Analytics, type AnalyticsProps } from "@vercel/analytics/react";
+import lazy from "next/dynamic";
 import { Inter } from "next/font/google";
 
 import type { LayoutComponent } from "@/types";

@@ -9,13 +9,13 @@
   "description": "A social media app.",
   "icons": [
     {
-      "src": "/icon-192x.png",
+      "src": "./icon-192x.png",
       "sizes": "192x192",
       "purpose": "any maskable",
       "type": "image/png"
     },
     {
-      "src": "/icon-512x.png",
+      "src": "./icon-512x.png",
       "sizes": "512x512",
       "purpose": "any maskable",
       "type": "image/png"

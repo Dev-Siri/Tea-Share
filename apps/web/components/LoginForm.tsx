@@ -2,8 +2,9 @@
 import { useRouter } from "next/navigation";
 import { useState, type FC, type FormEventHandler } from "react";
 
+import type { InfiniteItems } from "@/types";
+
 import { inputStyles } from "@/styles/commonStyles";
-import { InfiniteItems } from "@/types";
 
 const LoginForm: FC = () => {
   const [isSignup, setIsSignup] = useState(false);

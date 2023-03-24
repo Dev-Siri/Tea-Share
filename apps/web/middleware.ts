@@ -15,5 +15,5 @@ export const middleware: NextMiddleware = async request => {
 };
 
 export const config = {
-  matchers: ["/", "/((?!api|static|.*\\..*|_next).*)"],
+  matcher: ["/", "/((?!api|static|.*\\..*|_next).*)"],
 };

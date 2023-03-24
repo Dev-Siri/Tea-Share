@@ -105,6 +105,8 @@ GeneratedPluginRegistrant.*
 !default.pbxuser
 !default.perspectivev3
 
+apps/web/.vscode
+
 **/public/sw.js
 **/public/workbox-*.js
 **/public/worker-*.js
