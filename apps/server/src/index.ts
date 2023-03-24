@@ -13,7 +13,7 @@ configureEnv();
 const CONNECTION_URL = process.env.NODE_PRIVATE_MONGO_DB_CONNECTION_URL!;
 const PORT = Number(process.env.PORT) || 5000;
 const HOST = process.env.NODE_ENV === "development" ? "localhost" : "0.0.0.0";
-const ORIGIN = process.env.NODE_ENV === "development" ? "http://localhost:3000" : (process.env.NODE_PRIVATE_FRONTEND_WEB_URL as string);
+const ORIGIN = process.env.NODE_ENV === "development" ? "http://localhost:3000" : process.env.NODE_PRIVATE_FRONTEND_WEB_URL!;
 
 const fastify = Fastify();
 
