@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,6 +42,11 @@ class StateWrapper extends StatefulWidget {
 
 class _StateWrapperState extends State<StateWrapper> {
   String _initialRoute = '/';
+  
+  final ThemeData _themeData = ThemeData(
+    useMaterial3: true,
+    textTheme: GoogleFonts.interTextTheme(),
+  );
 
   @override
   void initState() {
@@ -59,8 +65,8 @@ class _StateWrapperState extends State<StateWrapper> {
     return MaterialApp(
       initialRoute: _initialRoute,
       routes: routes,
-      theme: ThemeData.light(useMaterial3: true),
-      darkTheme: ThemeData.dark(useMaterial3: true),
+      theme: _themeData.copyWith(brightness: Brightness.light),
+      darkTheme: _themeData.copyWith(brightness: Brightness.dark),
       themeMode: context.watch<DarkThemeService>().darkTheme ? ThemeMode.dark : ThemeMode.light,
     );
   }
