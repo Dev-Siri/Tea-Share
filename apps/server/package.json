@@ -15,7 +15,7 @@
     "type": "git"
   },
   "engines": {
-    "node": "19.7.0"
+    "node": "19.8.1"
   },
   "keywords": [
     "backend",
