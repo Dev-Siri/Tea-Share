@@ -69,7 +69,7 @@ export const likePost: RequestHandler<Post, Omit<User, "username"> & { name: str
       return "No posts with that ID";
     }
 
-    const post: Post = await PostModel.findById(id).lean();
+    const post = (await PostModel.findById(id).lean()) as Post;
 
     const alreadyLiked: boolean = post.people.includes(name);
 
@@ -78,7 +78,7 @@ export const likePost: RequestHandler<Post, Omit<User, "username"> & { name: str
     post.people.push(name);
     post.peopleImage.push(image);
 
-    const updatedPost: Post = await PostModel.findByIdAndUpdate(id, post, { new: true }).lean();
+    const updatedPost = (await PostModel.findByIdAndUpdate(id, post, { new: true }).lean()) as Post;
 
     res.code(200);
     return updatedPost;
