@@ -22,6 +22,7 @@ apps/mobile/ios/Flutter/.last_build_id
 .packages
 .pub-cache/
 .pub/
+.vscode/settings.json
 
 app.*.symbols
 app.*.map.json
