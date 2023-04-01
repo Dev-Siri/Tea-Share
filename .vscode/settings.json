@@ -3,9 +3,11 @@
     "source.fixAll": true,
     "source.organizeImports": true
   },
-  "typescript.tsdk": "apps/web/node_modules/.pnpm/typescript@5.0.2/node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
   "[dart]": {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": false,
+      "source.organizeImports": false
+    }
   }
 }
