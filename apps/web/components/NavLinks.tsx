@@ -10,7 +10,7 @@ const UserIcon = lazy(() => import("@/components/UserIcon"));
 const Link = lazy(() => import("next/link"));
 
 const NavLinks: FC = () => (
-  <section className="ml-auto flex">
+  <section className="ml-auto mr-2 flex">
     <Link href="/create" className="bg-primary mr-2 flex items-center justify-center rounded-full p-3.5 text-white sm:w-40 sm:p-0">
       <AiOutlinePlus />
       <p className="ml-2 hidden text-sm sm:block">Create a Post</p>

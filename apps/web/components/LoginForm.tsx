@@ -19,17 +19,20 @@ const LoginForm: FC = () => {
     if (isSignup) {
       const { Signup } = await import("@/utils/auth");
 
-      Signup(username, image, email, password, router);
+      await Signup(username, image, email, password);
     } else {
       const { Login } = await import("@/utils/auth");
 
-      Login(email, password, router);
+      await Login(email, password);
     }
+
+    router.replace("/");
+    router.refresh();
   };
 
   return (
     <>
-      <h1 className="mt-3 mb-7 ml-2 h-px w-[310px] text-3xl font-bold">{isSignup ? "Signup" : "Login"}</h1>
+      <h1 className="mb-7 ml-2 mt-3 h-px w-[310px] text-3xl font-bold">{isSignup ? "Signup" : "Login"}</h1>
       <form className="flex flex-col" onSubmit={loginWithEmail}>
         {isSignup && <input className={inputStyles} placeholder="Username" name="username" required />}
         <input className={inputStyles} placeholder="Email" type="email" name="email" required />

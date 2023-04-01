@@ -4,16 +4,16 @@ import { notFound } from "next/navigation";
 import type { GenerateMetadata, PageComponent } from "@/types";
 
 import { fetchPostsByQuery } from "@/api/fetchers";
+import { getRelativeTime } from "@/utils/globals";
 import { PAGE_URL } from "@/constants/pageInfo";
 
 import UserList from "@/components/UserList";
 
-const RelativeTime = lazy(() => import("@/components/RelativeTime"));
 const Image = lazy(() => import("next/image"));
 const Link = lazy(() => import("next/link"));
 
 export const generateMetadata: GenerateMetadata = async ({ params: { id } }) => {
-  const posts = await fetchPostsByQuery(id, false);
+  const posts = await fetchPostsByQuery(id, { cache: "no-store" }, false);
 
   if (!posts?.[0]) notFound();
 
@@ -46,7 +46,7 @@ export const generateMetadata: GenerateMetadata = async ({ params: { id } }) => 
 };
 
 const PostInfo: PageComponent = async ({ params: { id } }) => {
-  const posts = await fetchPostsByQuery(id, false);
+  const posts = await fetchPostsByQuery(id, { cache: "no-store" }, false);
 
   if (!posts?.[0]) notFound();
 
@@ -58,7 +58,7 @@ const PostInfo: PageComponent = async ({ params: { id } }) => {
         <div className="border-light-gray dark:border-semi-gray mb-4 h-fit w-full rounded-md border-2 p-8 dark:bg-black xl:mb-0">
           <h1 className="text-4xl font-bold">{title}</h1>
           <p className="mt-4 w-[200px] sm:w-full">{description}</p>
-          <RelativeTime className="border-b-semi-gray mb-2 border-b-[1px] pb-2 sm:max-w-full" dateString={createdAt} />
+          <p className="border-b-semi-gray mb-2 border-b-[1px] pb-2 sm:max-w-full">{getRelativeTime(createdAt)}</p>
           <div className="border-b-semi-gray flex items-center border-b-[1px] pb-2">
             <Link href={`/people/${author}`}>
               <Image height={30} width={30} src={authorImage} alt={author} className="mr-[10px] hidden h-[30px] rounded-full md:inline" />

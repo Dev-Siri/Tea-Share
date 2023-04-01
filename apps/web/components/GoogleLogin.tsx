@@ -10,7 +10,9 @@ const GoogleLogin: FC = () => {
 
   const loginWithGoogle = async () => {
     const { GoogleAuth } = await import("@/utils/auth");
-    GoogleAuth(router);
+
+    await GoogleAuth();
+    router.replace("/");
   };
 
   return (

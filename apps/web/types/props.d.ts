@@ -1,4 +1,4 @@
-import type { Dispatch, ReactNode, SetStateAction } from "react";
+import type { Dispatch, ReactElement, ReactNode, SetStateAction } from "react";
 import type { MongoDBUser, Post } from "./";
 
 // Parent Types
@@ -117,8 +117,8 @@ export interface UserInfoProps extends WithUser {
   postsLength: number;
 }
 
-export interface PostsPresenterProps {
-  initialPosts: Post[];
+export interface PostsPresenterProps extends WithChildren {
+  currentPage: number;
 }
 
 export interface SkeletonProps {

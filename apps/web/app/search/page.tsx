@@ -14,7 +14,7 @@ export const generateMetadata: GenerateMetadata = ({ searchParams: { query } }) 
 });
 
 const Search: PageComponent = async ({ searchParams: { query } }) => {
-  const [posts, users] = await Promise.all([fetchPostsByQuery(query, false), fetchUsersByName(query)]);
+  const [posts, users] = await Promise.all([fetchPostsByQuery(query, { cache: "no-store" }, false), fetchUsersByName(query, { cache: "no-store" })]);
 
   return (
     <aside className="flex h-screen w-full flex-col-reverse min-[1002px]:flex-row min-[1002px]:pr-4">
@@ -22,7 +22,7 @@ const Search: PageComponent = async ({ searchParams: { query } }) => {
         {posts?.length ? (
           <PostList posts={posts} />
         ) : (
-          <aside className="flex h-full w-full flex-col items-center justify-center rounded-xl border-2 border-light-gray bg-white py-4 dark:border-semi-gray dark:bg-black">
+          <aside className="border-light-gray dark:border-semi-gray flex h-full w-full flex-col items-center justify-center rounded-xl border-2 bg-white py-4 dark:bg-black">
             <FiCameraOff size={44} />
             <p className="mt-4 text-center">No posts found with query &apos;{query}&apos;</p>
           </aside>
@@ -32,7 +32,7 @@ const Search: PageComponent = async ({ searchParams: { query } }) => {
         {(users as MongoDBUser[] | null)?.length ? (
           <UserList title="People" users={users as MongoDBUser[]} />
         ) : (
-          <aside className="grid w-full place-items-center rounded-xl border-2 border-light-gray bg-white py-4 dark:border-semi-gray dark:bg-black">
+          <aside className="border-light-gray dark:border-semi-gray grid w-full place-items-center rounded-xl border-2 bg-white py-4 dark:bg-black">
             <FaUserAltSlash size={44} />
             <p className="mt-4 px-4 text-center">No people found with name &apos;{query}&apos;</p>
           </aside>

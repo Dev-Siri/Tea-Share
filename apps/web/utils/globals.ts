@@ -6,7 +6,8 @@ import type { HandleGetter, RandomStringGetter, RelativeTimeGetter } from "@/typ
  * @param date - The Date object to calculate the time
  * @returns A relative time string.
  */
-export const getRelativeTime: RelativeTimeGetter = date => {
+export const getRelativeTime: RelativeTimeGetter = dateString => {
+  const date = new Date(dateString);
   const timeMs = date.getTime();
   const deltaSeconds = Math.round((timeMs - Date.now()) / 1000);
   const unitIndex = TIME_UNIT_SECONDS.findIndex(timeUnitSecond => timeUnitSecond > Math.abs(deltaSeconds));

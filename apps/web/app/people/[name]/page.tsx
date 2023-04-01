@@ -10,7 +10,7 @@ import UserInfo from "@/components/UserInfo";
 export const dynamic = "force-dynamic";
 
 export const generateMetadata: GenerateMetadata = async ({ params: { name } }) => {
-  const user = (await fetchUsersByName(name, true)) as MongoDBUser;
+  const user = (await fetchUsersByName(name, { cache: "no-store" }, true)) as MongoDBUser;
 
   if (!user) notFound();
 
@@ -44,7 +44,7 @@ export const generateMetadata: GenerateMetadata = async ({ params: { name } }) =
 };
 
 const Profile: PageComponent = async ({ params: { name } }) => {
-  const [posts, user] = await Promise.all([fetchPostsByQuery(name), fetchUsersByName(name, true)]);
+  const [posts, user] = await Promise.all([fetchPostsByQuery(name, { cache: "no-store" }), fetchUsersByName(name, { cache: "no-store" }, true)]);
 
   if (!user) notFound();
 

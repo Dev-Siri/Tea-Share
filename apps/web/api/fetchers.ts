@@ -1,9 +1,10 @@
 import type {
   CreatePostAPI,
   CreateUserAPI,
-  FetchItemByQuery,
   FetchPostsAPI,
+  FetchPostsByQuery,
   FetchUsersAPI,
+  FetchUsersByName,
   LikePostAPI,
   MongoDBUser,
   Post,
@@ -16,8 +17,8 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-export const fetchPosts: FetchPostsAPI = async (page, limit) => {
-  const response: Response = await fetch(`${url}/posts?page=${page}&limit=${limit}`);
+export const fetchPosts: FetchPostsAPI = async (page, limit, cacheBehaviour) => {
+  const response = await fetch(`${url}/posts?page=${page}&limit=${limit}`, cacheBehaviour);
 
   if (!response.ok) throw new Error(`Failed to fetch posts, The server returned a status code of ${response.status}.`);
 
@@ -26,8 +27,8 @@ export const fetchPosts: FetchPostsAPI = async (page, limit) => {
   return posts;
 };
 
-export const fetchUsers: FetchUsersAPI = async (page, limit) => {
-  const response: Response = await fetch(`${url}/users?page=${page}&limit=${limit}`);
+export const fetchUsers: FetchUsersAPI = async (page, limit, cacheBehaviour) => {
+  const response = await fetch(`${url}/users?page=${page}&limit=${limit}`, cacheBehaviour);
 
   if (!response.ok) throw new Error(`Failed to fetch users, The server returned a status code of ${response.status}.`);
 
@@ -36,9 +37,9 @@ export const fetchUsers: FetchUsersAPI = async (page, limit) => {
   return users;
 };
 
-export const fetchPostsByQuery: FetchItemByQuery<Post[]> = async (query, fromUser = true) => {
+export const fetchPostsByQuery: FetchPostsByQuery = async (query, cacheBehaviour, fromUser = true) => {
   try {
-    const response: Response = await fetch(`${url}/posts/search?q=${query}&fromUser=${fromUser}`);
+    const response = await fetch(`${url}/posts/search?q=${query}&fromUser=${fromUser}`, cacheBehaviour);
     const posts = await response.json();
 
     return posts;
@@ -47,9 +48,9 @@ export const fetchPostsByQuery: FetchItemByQuery<Post[]> = async (query, fromUse
   }
 };
 
-export const fetchUsersByName: FetchItemByQuery<MongoDBUser | MongoDBUser[]> = async (name, exact = false) => {
+export const fetchUsersByName: FetchUsersByName = async (name, cacheBehaviour, exact = false) => {
   try {
-    const response: Response = await fetch(`${url}/users/search?name=${name}&exact=${exact}`);
+    const response = await fetch(`${url}/users/search?name=${name}&exact=${exact}`, cacheBehaviour);
     const users: MongoDBUser = await response.json();
 
     return users;
@@ -80,7 +81,7 @@ export const updateProfile: UpdateProfileAPI = async (id, user) =>
   });
 
 export const likePost: LikePostAPI = async (id, name, image) =>
-  fetch(`${url}/posts/${id}/like?name=${name}&image=${image}`, {
+  fetch(`${url}/posts/${id}/like`, {
     method: "PATCH",
     headers,
     body: JSON.stringify({ name, image }),

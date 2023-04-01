@@ -12,14 +12,19 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
+  webpack(config, { isServer }) {
+    if (!isServer) config.optimization.splitChunks.minSize = 100000;
+
+    return config;
+  },
 };
 
 const withBundleAnalyzer = configureBundleAnalyzer({ enabled: process.env.ANALYZE_BUNDLE === "true" });
 const withPWA = configureNextPWA({
-  dest: "public/pwa/worker",
-  register: true,
+  dest: "public/worker",
   skipWaiting: true,
   disable: !isProduction,
 });
 
+// @ts-ignore
 export default withBundleAnalyzer(withPWA(nextConfig));

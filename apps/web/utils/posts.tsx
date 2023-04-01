@@ -3,7 +3,7 @@ import { IoMdThumbsUp } from "@react-icons/all-files/io/IoMdThumbsUp";
 
 import type { CreatePostSubmitHandler, LikedPeopleCalculator, LikePostHandler } from "@/types";
 
-export const CreatePost: CreatePostSubmitHandler = async (formData, router) => {
+export const CreatePost: CreatePostSubmitHandler = async formData => {
   if (!formData.title || (!formData.image && formData.title.length > 3)) return;
 
   const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
@@ -34,8 +34,6 @@ export const CreatePost: CreatePostSubmitHandler = async (formData, router) => {
 
   toast.remove(loadingToast);
   toast.success("Post created successfully");
-
-  router.push("/");
 };
 
 export const LikedPeople: LikedPeopleCalculator = async people => {

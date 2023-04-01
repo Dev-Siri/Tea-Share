@@ -25,7 +25,9 @@ const Create: PageComponent = () => {
 
     const { CreatePost } = await import("@/utils/posts");
 
-    CreatePost(formData, router);
+    await CreatePost(formData);
+
+    router.push("/");
   };
 
   return (
@@ -61,7 +63,7 @@ const Create: PageComponent = () => {
         )}
         <button
           type="submit"
-          className="bg-primary hover:bg-primary-dark mt-4 mb-20 w-[90%] cursor-pointer rounded-md border-none p-3 text-white duration-200"
+          className="bg-primary hover:bg-primary-dark mb-20 mt-4 w-[90%] cursor-pointer rounded-md border-none p-3 text-white duration-200"
         >
           Create Post!
         </button>

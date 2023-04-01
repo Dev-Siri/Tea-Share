@@ -8,14 +8,12 @@ import { INITIAL_PAGE_LIMIT, USER_LIMIT } from "@/constants/limit";
 
 const UserPresentor = lazy(() => import("@/components/UserPresenter"));
 
-export const revalidate: number = 10;
-
 export const metadata: Metadata = {
   title: "People",
 };
 
 const People: PageComponent = async () => {
-  const initialUsers = await fetchUsers(INITIAL_PAGE_LIMIT, USER_LIMIT);
+  const initialUsers = await fetchUsers(INITIAL_PAGE_LIMIT, USER_LIMIT, { next: { revalidate: 10 } });
 
   return (
     <article className="mt-4 h-screen w-screen">

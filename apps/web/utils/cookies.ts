@@ -1,20 +1,25 @@
-import type { CookieGetter, CookieRemover, CookieSetter } from "@/types";
+import type { CookieGetter, CookieRemover, CookieSetter, InfiniteItems } from "@/types";
+
+// To speedup the `getCookie()` function, it is cached in memory
+const cachedCookies: InfiniteItems = {};
 
 /**
  * @param key The name of the cookie
  * @returns Value of the cookie
  */
 export const getCookie: CookieGetter = key => {
+  if (key in cachedCookies) return cachedCookies[key];
+
   const name = `${key}=`;
   const decodedCookie = decodeURIComponent(document.cookie);
-  const seperatedCookies = decodedCookie.split(";");
-  for (let i = 0; i < seperatedCookies.length; i++) {
-    let cookie = seperatedCookies[i];
 
-    while (cookie.charAt(0) === " ") cookie = cookie.substring(1);
-    if (cookie.indexOf(name) === 0) return cookie.substring(name.length, cookie.length);
-  }
-  return "";
+  const regex = new RegExp(`(?:^|;\\s*)${name}([^;]*)`);
+  const match = decodedCookie.match(regex);
+
+  const value = match ? match[1] : "";
+  cachedCookies[key] = value;
+
+  return value;
 };
 
 /**

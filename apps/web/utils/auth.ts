@@ -1,7 +1,6 @@
 import type { GoogleAuthHandler, LoginHandler, LogoutHandler, SignupHandler, UpdateProfileHandler } from "@/types";
-import type { User } from "firebase/auth";
 
-export const Signup: SignupHandler = async (username, image, email, password, router) => {
+export const Signup: SignupHandler = async (username, image, email, password) => {
   const { createUserWithEmailAndPassword, updateProfile, getIdToken } = await import("firebase/auth");
   const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
   const { getRandomString } = await import("./globals");
@@ -11,6 +10,8 @@ export const Signup: SignupHandler = async (username, image, email, password, ro
   const { setCookie } = await import("./cookies");
 
   if (!username || !image) return toast.error("All the fields were not provided for sign up.") as unknown as void;
+
+  const loading = toast.loading("Creating your account...");
 
   try {
     const imageName = getRandomString();
@@ -35,21 +36,22 @@ export const Signup: SignupHandler = async (username, image, email, password, ro
     const authToken: string = await getIdToken(user);
 
     setCookie("auth_token", authToken);
-    router.replace("/");
   } catch (error: any) {
     const { mailAuthErrorFormater } = await import("./errors");
     const errorMessage = mailAuthErrorFormater(error.message);
 
-    toast.remove("loading");
+    toast.remove(loading);
     toast.error(`Failed to create your account, ${errorMessage}`);
   }
 };
 
-export const Login: LoginHandler = async (email, password, router) => {
+export const Login: LoginHandler = async (email, password) => {
   const { signInWithEmailAndPassword, getIdToken } = await import("firebase/auth");
   const { toast } = await import("react-hot-toast");
   const { setCookie } = await import("./cookies");
   const { auth } = await import("@/api/firebase");
+
+  const loading = toast.loading("Logging you in...");
 
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
@@ -57,22 +59,23 @@ export const Login: LoginHandler = async (email, password, router) => {
     const authToken = await getIdToken(user);
 
     setCookie("auth_token", authToken);
-    router.replace("/");
   } catch (error: any) {
     const { mailAuthErrorFormater } = await import("./errors");
     const errorMessage = mailAuthErrorFormater(error.message);
 
-    toast.remove("loading");
+    toast.remove(loading);
     toast.error(`Failed to login, ${errorMessage}`);
   }
 };
 
-export const GoogleAuth: GoogleAuthHandler = async router => {
+export const GoogleAuth: GoogleAuthHandler = async () => {
   const { signInWithPopup, getIdToken, GoogleAuthProvider } = await import("firebase/auth");
   const { createUser } = await import("@/api/fetchers");
   const { toast } = await import("react-hot-toast");
   const { setCookie } = await import("./cookies");
   const { auth } = await import("@/api/firebase");
+
+  const loading = toast.loading("Logging you in...");
 
   try {
     const provider = new GoogleAuthProvider();
@@ -85,27 +88,30 @@ export const GoogleAuth: GoogleAuthHandler = async router => {
       image: user.photoURL!,
     });
 
-    const authToken: string = await getIdToken(user);
+    const authToken = await getIdToken(user);
 
     setCookie("auth_token", authToken);
-    router.replace("/");
   } catch (error: any) {
     const { googleAuthErrorFormater } = await import("./errors");
     const errorMessage = googleAuthErrorFormater(error.message);
+
+    toast.remove(loading);
     toast.error(`Could not sign in with Google, ${errorMessage}`);
   }
 };
 
-export const Logout: LogoutHandler = async router => {
+export const Logout: LogoutHandler = async () => {
   const { removeCookie } = await import("./cookies");
   const { toast } = await import("react-hot-toast");
   const { auth } = await import("@/api/firebase");
 
+  const loading = toast.loading("Logging you out...");
+
   try {
     await auth.signOut();
     removeCookie("auth_token");
-    router.replace("/auth");
   } catch (error: any) {
+    toast.remove(loading);
     toast.error(`Failed to log you out, ${error.message}`);
   }
 };
@@ -122,23 +128,23 @@ export const UpdateProfile: UpdateProfileHandler = async (email, username, image
   try {
     const imageName = getRandomString();
 
-    const imageRef = ref(storage, `users/${imageName}.jpg`);
+    const imageRef = ref(storage, `users/${imageName}`);
 
     await uploadBytes(imageRef, image as File);
 
     const uploadedImage = await getDownloadURL(imageRef);
 
     toast.loading("Updating your profile...", { id: "update-profile" });
-    await updateProfile(auth.currentUser as User, {
+    await updateProfile(auth.currentUser!, {
       displayName: username,
       photoURL: uploadedImage,
     });
 
-    await updateEmail(auth.currentUser as User, email);
+    await updateEmail(auth.currentUser!, email);
 
     await updateProfileAPI(id, { _id: id, image: uploadedImage, username, email });
 
-    const authToken: string = await getIdToken(auth.currentUser as User);
+    const authToken = await getIdToken(auth.currentUser!);
 
     setCookie("auth_token", authToken);
 

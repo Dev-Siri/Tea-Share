@@ -19,9 +19,7 @@ const Navbar: FC<WithChildren> = ({ children }) => {
 
   if (pathname === "/auth") return null;
 
-  return (
-    <nav className="bg-light-gray mb-9 flex h-16 items-center justify-between p-2 dark:bg-black dark:text-white min-[700px]:mb-0">{children}</nav>
-  );
+  return <nav className="bg-light-gray mb-9 flex h-16 items-center justify-between dark:bg-black dark:text-white min-[700px]:mb-0">{children}</nav>;
 };
 
 export default Navbar;

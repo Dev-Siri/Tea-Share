@@ -21,7 +21,7 @@ import { APPLE_TOUCH_ICON, APPLE_TOUCH_STARTUP_IMAGE_SIZES } from "@/constants/p
 import Logo from "@/components/Logo";
 import NavLinks from "@/components/NavLinks";
 
-const Toaster = lazy(() => import("@/components/Toaster"), { ssr: false });
+const AppToaster = lazy(() => import("@/components/AppToaster"));
 const SearchBar = lazy(() => import("@/components/SearchBar"));
 const Provider = lazy(() => import("@/components/Provider"));
 const Navbar = lazy(() => import("@/components/Navbar"));
@@ -99,7 +99,7 @@ const RootLayout: LayoutComponent = ({ children }) => (
         <NavLinks />
       </Navbar>
       <main className={`${inter.className} dark:bg-dark-gray dark:text-white`}>
-        <Toaster toastOptions={{ className: "dark:bg-dark-gray dark:text-white shadow-md" }} />
+        <AppToaster />
         <Provider>{children}</Provider>
       </main>
     </body>

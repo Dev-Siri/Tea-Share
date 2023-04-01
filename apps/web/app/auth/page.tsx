@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 const Auth: PageComponent = () => (
   <section className="flex h-screen w-screen">
-    <article className="mr-16 h-fit w-[95%] pt-3 pl-5 duration-200 sm:mr-10 md:w-[350px]">
+    <article className="mr-16 h-fit w-[95%] pl-5 pt-3 duration-200 sm:mr-10 md:w-[350px]">
       <Logo bigger />
       <LoginForm />
       <GoogleLogin />

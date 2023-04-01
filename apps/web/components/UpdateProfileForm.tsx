@@ -12,7 +12,7 @@ const UpdateProfileForm: FC = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [userID, setUserID] = useState("");
-  const [image, setImage] = useState<string | File | undefined | null>(null);
+  const [image, setImage] = useState<string | File | null>(null);
 
   useEffect(() => {
     const setupUserStates = async () => {
@@ -25,7 +25,7 @@ const UpdateProfileForm: FC = () => {
       setEmail(user.email);
 
       const { fetchUsersByName } = await import("@/api/fetchers");
-      const fetchedUser = (await fetchUsersByName(user.name, true)) as MongoDBUser;
+      const fetchedUser = (await fetchUsersByName(user.name, { cache: "no-store" }, true)) as MongoDBUser;
 
       setUserID(fetchedUser._id);
     };
@@ -43,7 +43,8 @@ const UpdateProfileForm: FC = () => {
   const handleLogout = async () => {
     const { Logout } = await import("@/utils/auth");
 
-    await Logout(router);
+    await Logout();
+    router.replace("/auth");
   };
 
   return (
@@ -54,8 +55,8 @@ const UpdateProfileForm: FC = () => {
       <h2 className="text-2xl font-bold">Your Profile</h2>
       <input onChange={event => setUsername(event.target.value)} value={username} className={inputStyles} placeholder="Username" />
       <input onChange={event => setEmail(event.target.value)} value={email} className={inputStyles} placeholder="Email" type="email" />
-      <input onChange={event => setImage(event.target.files?.[0])} type="file" className={inputStyles} />
-      <div className="mt-5 ml-1 flex">
+      <input onChange={event => setImage(event.target.files?.[0] as File | null)} type="file" className={inputStyles} />
+      <div className="ml-1 mt-5 flex">
         <button type="submit" className="bg-primary ml-1 w-36 cursor-pointer rounded-md border-none p-[10px] text-white">
           Update Profile
         </button>

@@ -21,7 +21,7 @@ const UserList: FC<UserPresenterProps> = ({ title, limit, initialUsers }) => {
     if (didScrollToBottom) {
       currentPage++;
 
-      const users: MongoDBUser[] = await fetchUsers(currentPage, limit!);
+      const users: MongoDBUser[] = await fetchUsers(currentPage, limit!, { cache: "no-store" });
 
       setUsers(prevUsers => [...prevUsers, ...users]);
     }
