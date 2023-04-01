@@ -9,6 +9,10 @@
       "./shared/config/.eslintrc"
     ]
   },
+  "repository": {
+    "url": "git://github.com/Dev-Siri/Tea-Share",
+    "type": "git"
+  },
   "license": "MIT",
   "author": "Dev-Siri"
 }
