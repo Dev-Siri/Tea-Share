@@ -1,5 +1,5 @@
 {
-  "extends": "../../shared/tsconfig/server.json",
+  "extends": "@tea-share/packages/tsconfig/server.json",
   "exclude": ["node_modules"],
   "include": ["src/**/*"]
 }

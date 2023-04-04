@@ -1,18 +1,21 @@
 {
-  "name": "tea_share",
+  "name": "tea-share",
   "version": "1.0.0",
   "type": "module",
   "private": true,
-  "prettier": "./shared/config/prettier.config.cjs",
+  "prettier": "./packages/config/prettier.config.cjs",
   "eslintConfig": {
-    "extends": [
-      "./shared/config/.eslintrc"
-    ]
+    "extends": "./packages/config/.eslintrc"
   },
   "repository": {
     "url": "git://github.com/Dev-Siri/Tea-Share",
     "type": "git"
   },
   "license": "MIT",
-  "author": "Dev-Siri"
+  "author": "Dev-Siri",
+  "devDependencies": {
+    "eslint": "^8.37.0",
+    "prettier": "^2.8.7",
+    "prettier-plugin-tailwindcss": "^0.2.6"
+  }
 }
