@@ -113,3 +113,5 @@ apps/web/public/worker/worker-*.js
 apps/web/public/worker/sw.js.map
 apps/web/public/worker/workbox-*.js.map
 apps/web/public/worker/worker-*.js.map
+
+apps/future-pfp-generation-server/.vscode
