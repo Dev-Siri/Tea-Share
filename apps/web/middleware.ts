@@ -15,5 +15,13 @@ export const middleware: NextMiddleware = async request => {
 };
 
 export const config = {
-  matcher: ["/", "/((?!api|static|.*\\..*|_next).*)"],
+  matchers: [
+    "/",
+    "^/(?!_next|\\.).+",
+    "^/.*\\.(json|xml|txt)$",
+    {
+      src: "^/_next/images/(.+)",
+      headers: { "Cache-Control": "public, max-age=60" },
+    },
+  ],
 };
