@@ -14,7 +14,7 @@
     "build": "next build"
   },
   "engines": {
-    "node": "19.8.1"
+    "node": "18.x"
   },
   "keywords": [
     "initials",
