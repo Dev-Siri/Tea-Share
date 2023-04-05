@@ -11,11 +11,7 @@ const nextConfig = {
   },
   experimental: {
     appDir: true,
-  },
-  webpack(config, { isServer }) {
-    if (!isServer) config.optimization.splitChunks.minSize = 100000;
-
-    return config;
+    fallbackNodePolyfills: false,
   },
 };
 
