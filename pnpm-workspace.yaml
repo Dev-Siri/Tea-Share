@@ -1,5 +1,5 @@
 packages:
-  - "apps/pfp-generation-server/**"
+  - "apps/future-pfp-generation-server/**"
   - "apps/server/**"
   - "apps/web/**"
   - "packages/**"
