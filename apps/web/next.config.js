@@ -12,7 +12,12 @@ const nextConfig = {
   },
   experimental: {
     appDir: true,
-    fallbackNodePolyfills: false,
+    turbo: {
+      resolveAlias: {
+        react: "preact/compat",
+        "react-dom": "preact/compat",
+      },
+    },
   },
 };
 
