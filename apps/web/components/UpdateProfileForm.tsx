@@ -49,7 +49,7 @@ const UpdateProfileForm: FC = () => {
 
   return (
     <form
-      className="border-light-gray dark:border-semi-gray mt-[10px] h-fit w-[350px] rounded-md border-2 p-7 pb-10 dark:bg-black sm:w-[440px]"
+      className="border-light-gray dark:border-semi-gray mt-10px h-fit w-[350px] rounded-md border-2 p-7 pb-10 dark:bg-black sm:w-[440px]"
       onSubmit={handleUpdateProfile}
     >
       <h2 className="text-2xl font-bold">Your Profile</h2>
@@ -57,10 +57,10 @@ const UpdateProfileForm: FC = () => {
       <input onChange={event => setEmail(event.target.value)} value={email} className={inputStyles} placeholder="Email" type="email" />
       <input onChange={event => setImage(event.target.files?.[0] as File | null)} type="file" className={inputStyles} />
       <div className="ml-1 mt-5 flex">
-        <button type="submit" className="bg-primary ml-1 w-36 cursor-pointer rounded-md border-none p-[10px] text-white">
+        <button type="submit" className="bg-primary p-10px ml-1 w-36 cursor-pointer rounded-md border-none text-white">
           Update Profile
         </button>
-        <button type="button" className="bg-primary ml-2 w-36 cursor-pointer rounded-md border-none p-[10px] text-white" onClick={handleLogout}>
+        <button type="button" className="bg-primary p-10px ml-2 w-36 cursor-pointer rounded-md border-none text-white" onClick={handleLogout}>
           Logout
         </button>
       </div>

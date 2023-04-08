@@ -1,6 +1,3 @@
-import { PRIMARY_COLOR } from "@/constants/colors";
-import { IoMdThumbsUp } from "@react-icons/all-files/io/IoMdThumbsUp";
-
 import type { CreatePostSubmitHandler, LikedPeopleCalculator, LikePostHandler } from "@/types";
 
 export const CreatePost: CreatePostSubmitHandler = async formData => {
@@ -60,7 +57,7 @@ export const LikePost: LikePostHandler = async (setLikes, setLikeBTN, setisLikeB
   const user = await useSession();
 
   setLikes(!people.length ? "You liked this post" : people.length === 1 ? "You and 1 other" : `You and ${people.length} others`);
-  setLikeBTN(<IoMdThumbsUp size={30} color={PRIMARY_COLOR} />);
+  setLikeBTN(true);
   setisLikeButtonDisabled(true);
   await likePost(id, user.name, user.picture);
 };

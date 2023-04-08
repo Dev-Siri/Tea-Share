@@ -4,20 +4,16 @@ import { useTheme } from "next-themes";
 import type { ThemeOptionProps } from "@/types";
 import type { FC } from "react";
 
-import { IoMoon } from "@react-icons/all-files/io5/IoMoon";
-import { MdWbSunny } from "@react-icons/all-files/md/MdWbSunny";
-
-const ThemeOption: FC<ThemeOptionProps> = ({ title }) => {
+const ThemeOption: FC<ThemeOptionProps> = ({ children, type }) => {
   const { setTheme } = useTheme();
 
   return (
     <button
       type="button"
-      onClick={() => setTheme(title.toLowerCase())}
-      className="shadow-dark hover:bg-light-gray dark:shadow-light mt-[10px] flex h-[50px] w-full cursor-pointer items-center rounded-md border-none bg-white p-4 text-left duration-200"
+      onClick={() => setTheme(type.toLowerCase())}
+      className="shadow-dark hover:bg-light-gray dark:shadow-light mt-10px flex h-[50px] w-full cursor-pointer items-center rounded-md border-none bg-white p-4 text-left text-black duration-200"
     >
-      <span className="mr-[10px] mt-0.5 text-black">{title === "Dark" ? <IoMoon size={17} /> : <MdWbSunny size={17} />}</span>
-      <span className="text-black">{title}</span>
+      {children}
     </button>
   );
 };

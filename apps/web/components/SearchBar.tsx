@@ -2,9 +2,9 @@
 import { useRouter } from "next/navigation";
 import { useState, type FC, type KeyboardEventHandler } from "react";
 
-import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
+import type { WithChildren } from "@/types";
 
-const SearchBar: FC = () => {
+const SearchBar: FC<WithChildren> = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const router = useRouter();
@@ -23,8 +23,8 @@ const SearchBar: FC = () => {
         onKeyDown={handleSearch}
         onChange={event => setSearchTerm(event.target.value)}
       />
-      <button className="ml-auto min-[700px]:rounded-full" onClick={() => router.push(`/search?query=${searchTerm}`)}>
-        <AiOutlineSearch size={22} />
+      <button aria-label="Search" className="ml-auto min-[700px]:rounded-full" onClick={() => router.push(`/search?query=${searchTerm}`)}>
+        {children}
       </button>
     </div>
   );

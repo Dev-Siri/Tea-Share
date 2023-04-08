@@ -12,7 +12,7 @@ export type CreatePostSubmitHandler = (formData: Pick<PostFormData, "title" | "d
 export type LikedPeopleCalculator = (people: string[]) => Promise<string>;
 export type LikePostHandler = (
   setLikes: Dispatch<SetStateAction<string>>,
-  setLikeBTN: Dispatch<SetStateAction<JSX.Element>>,
+  setLikeBTN: Dispatch<SetStateAction<boolean>>,
   setisLikeButtonDisabled: Dispatch<SetStateAction<boolean>>,
   people: string[],
   id: string

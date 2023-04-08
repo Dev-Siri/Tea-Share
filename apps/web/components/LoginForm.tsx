@@ -45,7 +45,7 @@ const LoginForm: FC = () => {
           >
             {isSignup ? "Signup" : "Login"}
           </button>
-          <p className="ml-[10px] w-[390px] text-sm">
+          <p className="ml-10px w-[390px] text-sm">
             {isSignup ? "Already an user? " : "Don't have an account? "}
             <span
               className="text-primary hover:text-primary-dark cursor-pointer duration-200"

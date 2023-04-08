@@ -1,4 +1,4 @@
-import type { Dispatch, ReactElement, ReactNode, SetStateAction } from "react";
+import type { Dispatch, ReactElement, SetStateAction } from "react";
 import type { MongoDBUser, Post } from "./";
 
 // Parent Types
@@ -19,7 +19,7 @@ interface WithUsers {
 }
 
 interface WithChildren {
-  children: ReactNode;
+  children: any;
 }
 
 interface InfiniteItems<T = string> {
@@ -55,12 +55,8 @@ export interface PostProps extends WithPost {
   lazyLoadImage?: boolean;
 }
 
-export interface ErrorMessageProps extends Partial<WithChildren> {
-  type?: "not-found" | "exception";
-}
-
-export interface ThemeOptionProps {
-  title: "Light" | "Dark";
+export interface ThemeOptionProps extends WithChildren {
+  type: "Light" | "Dark";
 }
 
 export interface FormProps {
@@ -125,7 +121,7 @@ export interface SkeletonProps {
   className?: string;
 }
 
-export interface LikeButtonProps {
+export interface LikeButtonProps extends WithChildren {
   people: string[];
   postId: string;
 }

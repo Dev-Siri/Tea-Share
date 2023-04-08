@@ -4,8 +4,8 @@ import { notFound } from "next/navigation";
 import type { GenerateMetadata, PageComponent } from "@/types";
 
 import { fetchPostsByQuery } from "@/api/fetchers";
-import { getRelativeTime } from "@/utils/globals";
 import { PAGE_URL } from "@/constants/pageInfo";
+import { getRelativeTime } from "@/utils/globals";
 
 import UserList from "@/components/UserList";
 
@@ -61,7 +61,7 @@ const PostInfo: PageComponent = async ({ params: { id } }) => {
           <p className="border-b-semi-gray mb-2 border-b-[1px] pb-2 sm:max-w-full">{getRelativeTime(createdAt)}</p>
           <div className="border-b-semi-gray flex items-center border-b-[1px] pb-2">
             <Link href={`/people/${author}`}>
-              <Image height={30} width={30} src={authorImage} alt={author} className="mr-[10px] hidden h-[30px] rounded-full md:inline" />
+              <Image height={30} width={30} src={authorImage} alt={author} className="mr-10px hidden h-[30px] rounded-full md:inline" />
             </Link>
             <p>Posted by {author}</p>
           </div>

@@ -13,7 +13,7 @@ import type {
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL!;
 
-const headers = {
+const headers: Record<string, string> = {
   "Content-Type": "application/json",
 };
 

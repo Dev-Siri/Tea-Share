@@ -7,8 +7,6 @@ import UserList from "@/components/UserList";
 import { FaUserAltSlash } from "@react-icons/all-files/fa/FaUserAltSlash";
 import { FiCameraOff } from "@react-icons/all-files/fi/FiCameraOff";
 
-export const dynamic = "force-dynamic";
-
 export const generateMetadata: GenerateMetadata = ({ searchParams: { query } }) => ({
   title: `Search - ${query}`,
 });
