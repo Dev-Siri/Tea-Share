@@ -10,7 +10,7 @@
 **Optimizations** → _0%_ <br />
 
 <p style="font-size: 18px; font-weight: bold;">
-  Overall → <span style="font-style: italic; font-weight: normal;">~4%</span>
+  Overall → <span style="font-style: italic; font-weight: normal;">1.25%</span>
 </p>
 
 ## Why Replace The Existing Server?
