@@ -35,7 +35,7 @@ const LikeButton: FC<LikeButtonProps> = ({ children, people, postId }) => {
       type="button"
       onClick={handleLikePost}
       disabled={isLikeButtonDisabled}
-      className="text-primary mt-16 flex h-8 cursor-pointer items-center border-none text-xs"
+      className="text-primary flex h-8 cursor-pointer items-center border-none text-xs"
     >
       {isLiked ? children[0] : children[1]}
       <span className="text-primary mr-6  text-base md:w-full">&nbsp;{likes}</span>

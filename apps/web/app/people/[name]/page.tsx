@@ -7,8 +7,6 @@ import { fetchPostsByQuery, fetchUsersByName } from "@/api/fetchers";
 import PostList from "@/components/PostList";
 import UserInfo from "@/components/UserInfo";
 
-export const dynamic = "force-dynamic";
-
 export const generateMetadata: GenerateMetadata = async ({ params: { name } }) => {
   const user = (await fetchUsersByName(name, { cache: "no-store" }, true)) as MongoDBUser;
 

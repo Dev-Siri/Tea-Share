@@ -3,6 +3,8 @@ import lazy from "next/dynamic";
 import type { PageComponent } from "@/types";
 import type { Metadata } from "next";
 
+import banner from "./banner.webp";
+
 import Logo from "@/components/Logo";
 import { FcGoogle } from "@react-icons/all-files/fc/FcGoogle";
 
@@ -26,7 +28,8 @@ const Auth: PageComponent = () => (
       </GoogleLogin>
     </article>
     <Image
-      src="/images/banner.webp"
+      src={banner}
+      placeholder="blur"
       alt="Tea Share, The brand new social networking application."
       height={944}
       width={1100}

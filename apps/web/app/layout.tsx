@@ -1,21 +1,11 @@
-import "@/styles/globals.css";
 import lazy from "next/dynamic";
 import { Inter } from "next/font/google";
+import "./globals.css";
 
 import type { LayoutComponent } from "@/types";
 import type { Metadata } from "next";
 
-import {
-  PAGE_CREATOR,
-  PAGE_DESCRIPTION,
-  PAGE_FAVICON_ALT,
-  PAGE_FAVICON_PATH,
-  PAGE_KEYWORDS,
-  PAGE_OG_IMAGE_PATH,
-  PAGE_TITLE,
-  PAGE_TWITTER_IMAGE_PATH,
-  PAGE_URL,
-} from "@/constants/pageInfo";
+import { PAGE_CREATOR, PAGE_DESCRIPTION, PAGE_KEYWORDS, PAGE_TITLE, PAGE_URL } from "@/constants/pageInfo";
 import { APPLE_TOUCH_ICON, APPLE_TOUCH_STARTUP_IMAGE_SIZES } from "@/constants/pwa";
 
 import Logo from "@/components/Logo";
@@ -40,6 +30,7 @@ export const metadata: Metadata = {
   creator: PAGE_CREATOR,
   keywords: PAGE_KEYWORDS,
   applicationName: PAGE_TITLE,
+  metadataBase: new URL(PAGE_URL),
   robots: {
     index: true,
     follow: true,
@@ -55,13 +46,6 @@ export const metadata: Metadata = {
     description: PAGE_DESCRIPTION,
     url: PAGE_URL,
     siteName: PAGE_TITLE,
-    images: [
-      {
-        width: 600,
-        height: 600,
-        url: PAGE_OG_IMAGE_PATH,
-      },
-    ],
     locale: "en-US",
     type: "website",
   },
@@ -69,13 +53,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
-    images: {
-      url: PAGE_TWITTER_IMAGE_PATH,
-      alt: PAGE_FAVICON_ALT,
-    },
   },
   icons: {
-    shortcut: PAGE_FAVICON_PATH,
     apple: APPLE_TOUCH_ICON,
   },
   verification: {
@@ -85,7 +64,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     title: PAGE_TITLE,
     startupImage: APPLE_TOUCH_STARTUP_IMAGE_SIZES.map(({ height, width }) => ({
-      url: `/apple/splash/apple-splash-${width}-${height}`,
+      url: `../pwa/apple-splash/apple-splash-${width}-${height}`,
       media: `(device-width: ${width}px) and (device-height: ${height}px)`,
     })),
   },

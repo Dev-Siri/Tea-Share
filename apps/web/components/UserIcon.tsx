@@ -25,7 +25,7 @@ const UserIcon: FC = () => {
       <Image src={user.picture} alt={user.name} height={40} width={40} className="rounded-full" priority />
     </Link>
   ) : (
-    <div className="light-gradient dark:dark-gradient h-10 w-10 rounded-full" />
+    <div aria-busy className="light-gradient dark:dark-gradient h-10 w-10 rounded-full" />
   );
 };
 

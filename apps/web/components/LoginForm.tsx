@@ -4,8 +4,6 @@ import { useState, type FC, type FormEventHandler } from "react";
 
 import type { InfiniteItems } from "@/types";
 
-import { inputStyles } from "@/styles/commonStyles";
-
 const LoginForm: FC = () => {
   const [isSignup, setIsSignup] = useState(false);
 
@@ -34,10 +32,10 @@ const LoginForm: FC = () => {
     <>
       <h1 className="mb-7 ml-2 mt-3 h-px w-[310px] text-3xl font-bold">{isSignup ? "Signup" : "Login"}</h1>
       <form className="flex flex-col" onSubmit={loginWithEmail}>
-        {isSignup && <input className={inputStyles} placeholder="Username" name="username" required />}
-        <input className={inputStyles} placeholder="Email" type="email" name="email" required />
-        <input className={inputStyles} placeholder="Password" type="password" name="password" required />
-        {isSignup && <input type="file" name="image" aria-label="Profile Picture Upload" className={inputStyles} required />}
+        {isSignup && <input className="input" placeholder="Username" name="username" required />}
+        <input className="input" placeholder="Email" type="email" name="email" required />
+        <input className="input" placeholder="Password" type="password" name="password" required />
+        {isSignup && <input type="file" name="image" aria-label="Profile Picture Upload" className="input" required />}
         <div className="mt-[60px] flex h-fit items-center">
           <button
             type="submit"

@@ -11,6 +11,8 @@ import UserList from "@/components/UserList";
 
 const PostsPresenter = lazy(() => import("@/components/PostsPresenter"));
 
+export const runtime = "edge";
+
 export const metadata: Metadata = {
   title: "Home",
 };

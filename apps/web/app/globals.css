@@ -58,6 +58,24 @@ a {
   animation: loading-skeleton 1.5s ease-in-out infinite;
 }
 
+.track {
+  animation: marquee 15s linear infinite;
+}
+
+.track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @layer utilities {
   .dark-gradient {
     background: radial-gradient(circle at top, #3f6be9, #000000);
@@ -65,5 +83,10 @@ a {
 
   .light-gradient {
     background: radial-gradient(circle at top, #738cf2, #ffffff);
+  }
+
+  .input {
+    @apply border-light-gray focus:border-primary dark:border-semi-gray dark:bg-semi-gray
+    ml-1 mt-5 w-full rounded-md border-[1px] p-4 outline-none duration-200 dark:text-white;
   }
 }

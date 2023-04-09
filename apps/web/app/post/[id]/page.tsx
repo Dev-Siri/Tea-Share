@@ -3,11 +3,12 @@ import { notFound } from "next/navigation";
 
 import type { GenerateMetadata, PageComponent } from "@/types";
 
-import { fetchPostsByQuery } from "@/api/fetchers";
+import { fetchPosts, fetchPostsByQuery } from "@/api/fetchers";
 import { PAGE_URL } from "@/constants/pageInfo";
 import { getRelativeTime } from "@/utils/globals";
 
 import UserList from "@/components/UserList";
+import { INITIAL_PAGE_LIMIT, POST_LIMIT } from "@/constants/limit";
 
 const Image = lazy(() => import("next/image"));
 const Link = lazy(() => import("next/link"));
@@ -46,15 +47,18 @@ export const generateMetadata: GenerateMetadata = async ({ params: { id } }) => 
 };
 
 const PostInfo: PageComponent = async ({ params: { id } }) => {
-  const posts = await fetchPostsByQuery(id, { cache: "no-store" }, false);
+  const [posts, otherPosts] = await Promise.all([
+    fetchPostsByQuery(id, { cache: "no-store" }, false),
+    fetchPosts(INITIAL_PAGE_LIMIT, POST_LIMIT + 4, { cache: "no-store" }),
+  ]);
 
   if (!posts?.[0]) notFound();
 
-  const { title, description, createdAt, image, author, authorImage, people, peopleImage } = posts[0];
+  const { title, description, createdAt, image, author, authorImage, people, peopleImage, _id } = posts[0];
 
   return (
-    <article className="flex h-screen w-full flex-col items-center overflow-y-auto pb-[10%] pl-2 sm:pl-[60px] xl:flex-row xl:items-start">
-      <section className="mt-[30px] w-full pr-4 md:pr-14">
+    <article className="h-screen w-full items-center overflow-hidden overflow-y-auto xl:flex-row xl:items-start">
+      <section className="mt-[30px] w-full pl-2 pr-4 sm:pl-[60px] md:pr-14">
         <div className="border-light-gray dark:border-semi-gray mb-4 h-fit w-full rounded-md border-2 p-8 dark:bg-black xl:mb-0">
           <h1 className="text-4xl font-bold">{title}</h1>
           <p className="mt-4 w-[200px] sm:w-full">{description}</p>
@@ -69,7 +73,7 @@ const PostInfo: PageComponent = async ({ params: { id } }) => {
         <section className="flex flex-col justify-between md:flex-row">
           <div className="bg-light-gray dark:border-semi-gray mt-4 h-fit w-fit rounded-md border-2 p-8 dark:bg-black">
             <Image
-              height={300}
+              height={450}
               width={450}
               src={image}
               alt={title}
@@ -86,6 +90,33 @@ const PostInfo: PageComponent = async ({ params: { id } }) => {
             />
           </div>
         </section>
+      </section>
+      <section className="mt-[30px] w-full pl-2 pr-4 sm:pl-[60px] md:pr-14">
+        <div className="border-light-gray dark:border-semi-gray h-fit w-full rounded-md border-2 p-8 dark:bg-black xl:mb-0">
+          <h1 className="text-4xl font-bold">Other Posts</h1>
+        </div>
+      </section>
+      <section className="marquee relative h-full w-[180%] overflow-x-hidden">
+        <div className="track absolute w-[180%] whitespace-nowrap pb-4 pt-10 will-change-transform">
+          {otherPosts
+            .filter(post => post._id !== _id)
+            .map((post, index) => (
+              <Link
+                href={`/post/${post._id}`}
+                className="inline-block aspect-square h-[400px] w-[400px] pl-10 duration-200 hover:scale-105"
+                key={`${post._id}:${index}`}
+              >
+                <Image
+                  height={500}
+                  width={500}
+                  src={post.image}
+                  key={`${post._id}:${index}`}
+                  alt={post.title}
+                  className="aspect-square h-[400px] w-[400px] rounded-md object-cover "
+                />
+              </Link>
+            ))}
+        </div>
       </section>
     </article>
   );

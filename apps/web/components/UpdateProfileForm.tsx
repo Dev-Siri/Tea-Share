@@ -4,8 +4,6 @@ import { useEffect, useState, type FC } from "react";
 
 import type { MongoDBUser } from "@/types";
 
-import { inputStyles } from "@/styles/commonStyles";
-
 const UpdateProfileForm: FC = () => {
   const router = useRouter();
 
@@ -53,9 +51,9 @@ const UpdateProfileForm: FC = () => {
       onSubmit={handleUpdateProfile}
     >
       <h2 className="text-2xl font-bold">Your Profile</h2>
-      <input onChange={event => setUsername(event.target.value)} value={username} className={inputStyles} placeholder="Username" />
-      <input onChange={event => setEmail(event.target.value)} value={email} className={inputStyles} placeholder="Email" type="email" />
-      <input onChange={event => setImage(event.target.files?.[0] as File | null)} type="file" className={inputStyles} />
+      <input onChange={event => setUsername(event.target.value)} value={username} className="input" placeholder="Username" />
+      <input onChange={event => setEmail(event.target.value)} value={email} className="input" placeholder="Email" type="email" />
+      <input onChange={event => setImage(event.target.files?.[0] as File | null)} type="file" className="input" />
       <div className="ml-1 mt-5 flex">
         <button type="submit" className="bg-primary p-10px ml-1 w-36 cursor-pointer rounded-md border-none text-white">
           Update Profile
