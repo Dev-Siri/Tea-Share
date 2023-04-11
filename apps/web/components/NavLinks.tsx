@@ -2,9 +2,9 @@ import lazy from "next/dynamic";
 
 import type { FC } from "react";
 
-import { AiOutlinePlus } from "@react-icons/all-files/ai/AiOutlinePlus";
-import { BsFillPeopleFill } from "@react-icons/all-files/bs/BsFillPeopleFill";
-import { IoSettingsSharp } from "@react-icons/all-files/io5/IoSettingsSharp";
+import { AiOutlinePlus } from "react-icons/ai";
+import { BsFillPeopleFill } from "react-icons/bs";
+import { IoSettingsSharp } from "react-icons/io5";
 
 const UserIcon = lazy(() => import("@/components/UserIcon"));
 const Link = lazy(() => import("next/link"));

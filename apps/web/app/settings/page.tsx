@@ -3,8 +3,8 @@ import lazy from "next/dynamic";
 import type { PageComponent } from "@/types";
 import type { Metadata } from "next";
 
-import { IoMoon } from "@react-icons/all-files/io5/IoMoon";
-import { MdWbSunny } from "@react-icons/all-files/md/MdWbSunny";
+import { IoMoon } from "react-icons/io5";
+import { MdWbSunny } from "react-icons/md";
 
 const ThemeOption = lazy(() => import("@/components/ThemeOption"));
 const UpdateProfileForm = lazy(() => import("@/components/UpdateProfileForm"));
