@@ -80,10 +80,12 @@ const RootLayout: LayoutComponent = ({ children }) => (
         </SearchBar>
         <NavLinks />
       </Navbar>
-      <main className={`${inter.className} dark:bg-dark-gray dark:text-white`}>
-        <AppToaster />
-        <Provider>{children}</Provider>
-      </main>
+      <Provider>
+        <main className={`${inter.className} dark:bg-dark-gray dark:text-white`}>
+          <AppToaster />
+          {children}
+        </main>
+      </Provider>
     </body>
   </html>
 );
