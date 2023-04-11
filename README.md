@@ -16,7 +16,6 @@ Currently, even though the Flutter project has a **iOS** folder, the iOS version
 
 - Tailwindcss
 - TypeScript
-- JavaScript
 - Firebase
 - Next.js
 - Flutter
