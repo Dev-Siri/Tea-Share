@@ -1,7 +1,7 @@
 import lazy from "next/dynamic";
 
 import type { PageComponent } from "@/types";
-import type { Metadata } from "next";
+import type { Metadata, ServerRuntime } from "next";
 
 import { fetchPosts, fetchUsers } from "@/api/fetchers";
 import { INITIAL_PAGE_LIMIT, POST_LIMIT, USER_LIMIT } from "@/constants/limit";
@@ -11,7 +11,7 @@ import UserList from "@/components/UserList";
 
 const PostsPresenter = lazy(() => import("@/components/PostsPresenter"));
 
-export const runtime = "edge";
+export const runtime: ServerRuntime = "edge";
 
 export const metadata: Metadata = {
   title: "Home",
