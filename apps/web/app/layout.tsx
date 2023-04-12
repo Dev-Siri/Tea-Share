@@ -10,7 +10,7 @@ import { APPLE_TOUCH_ICON, APPLE_TOUCH_STARTUP_IMAGE_SIZES } from "@/constants/p
 
 import Logo from "@/components/Logo";
 import NavLinks from "@/components/NavLinks";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
 
 const AppToaster = lazy(() => import("@/components/AppToaster"));
 const SearchBar = lazy(() => import("@/components/SearchBar"));

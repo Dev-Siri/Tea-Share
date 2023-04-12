@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import banner from "./banner.webp";
 
 import Logo from "@/components/Logo";
-import { FcGoogle } from "react-icons/fc";
+import { FcGoogle } from "@react-icons/all-files/fc/FcGoogle";
 
 const GoogleLogin = lazy(() => import("@/components/GoogleLogin"));
 const LoginForm = lazy(() => import("@/components/LoginForm"));

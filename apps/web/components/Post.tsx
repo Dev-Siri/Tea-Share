@@ -6,8 +6,8 @@ import type { FC } from "react";
 import { PRIMARY_COLOR } from "@/constants/colors";
 import { getRelativeTime } from "@/utils/globals";
 
-import { IoMdThumbsUp } from "react-icons/io";
-import { RiThumbUpLine } from "react-icons/ri";
+import { IoMdThumbsUp } from "@react-icons/all-files/io/IoMdThumbsUp";
+import { RiThumbUpLine } from "@react-icons/all-files/ri/RiThumbUpLine";
 
 const LikeButton = lazy(() => import("@/components/LikeButton"));
 const Image = lazy(() => import("next/image"));

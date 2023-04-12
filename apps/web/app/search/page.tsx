@@ -4,8 +4,8 @@ import { fetchPostsByQuery, fetchUsersByName } from "@/api/fetchers";
 
 import PostList from "@/components/PostList";
 import UserList from "@/components/UserList";
-import { FaUserAltSlash } from "react-icons/fa";
-import { FiCameraOff } from "react-icons/fi";
+import { FaUserAltSlash } from "@react-icons/all-files/fa/FaUserAltSlash";
+import { FiCameraOff } from "@react-icons/all-files/fi/FiCameraOff";
 
 export const generateMetadata: GenerateMetadata = ({ searchParams: { query } }) => ({
   title: `Search - ${query}`,
