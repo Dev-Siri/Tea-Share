@@ -1,7 +1,5 @@
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-
-import 'package:tea_share/services/theme_service.dart' show DarkThemeService;
+import 'package:provider/provider.dart';
 import 'package:tea_share/services/users_service.dart';
 import 'package:tea_share/utils/error_dialog.dart';
 
@@ -36,44 +34,44 @@ class _AuthState extends State<Auth> with ErrorDialog {
     final String password = _passwordController.text.trim();
     
     if (_isSignup) {
-      final String? response = await context.read<UserService>().signUp(
+      final UsersServiceResponse response = await context.read<UserService>().signUp(
         username: _usernameController.text,
         email: email,
         password: password,
       );
       
-      if (response == 'Signed up') {
+      if (response.successful) {
         Navigator.pushReplacementNamed(context, '/');
         return;
       }
 
-      setState(() => _isLoading = false);
-      showErrorDialog(context, response ?? 'Error, could not log you in.');
+      showErrorDialog(context, response.errorMessage ?? 'An error occured. Failed to log you in.');
     } else {
-      final String? response = await context.read<UserService>().login(
+      final UsersServiceResponse response = await context.read<UserService>().login(
         email: email,
         password: password,
       );
       
-      if (response == 'Logged in') {
+      if (response.successful) {
         Navigator.pushReplacementNamed(context, '/');
         return;
       }
       
-      setState(() => _isLoading = false);
-      showErrorDialog(context, response ?? 'Error, could not log you in.');
+      showErrorDialog(context, response.errorMessage ?? 'An error occured. Failed to log you in.');
     }
+    
+    setState(() => _isLoading = false);
   }
 
   Future<void> _signInWithGoogle() async {
-    final String? response = await context.read<UserService>().signInWithGoogle();
+    final UsersServiceResponse response = await context.read<UserService>().signInWithGoogle();
     
-    if (response == 'Signed in with Google') {
+    if (response.successful) {
       Navigator.pushReplacementNamed(context, '/');
       return;
     }
     
-    showErrorDialog(context, response ?? 'Error, could not log you in.');
+    showErrorDialog(context, response.errorMessage ?? 'Error, could not log you in.');
   }
 
   @override
@@ -81,28 +79,33 @@ class _AuthState extends State<Auth> with ErrorDialog {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 5, top: 100),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Image.asset(
-                    context.read<DarkThemeService>().darkTheme ? 'assets/LogoWhite.gif' : 'assets/LogoPurple.gif',
-                    height: 130,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 25, top: 10),
-                  child: Text(_isSignup ? 'Sign up' : 'Login',
-                      style: const TextStyle(
-                      fontSize: 33
+          child: Center(
+            child: FractionallySizedBox(
+              widthFactor: 0.86,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 80),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(500)
+                      ),
+                      padding: const EdgeInsets.all(25),
+                      child: Image.asset('assets/LogoWhite.gif',
+                        height: 130,
+                      ),
                     ),
-                  ),
-                ),
-                Center(
-                  child: FractionallySizedBox(
-                    widthFactor: 0.86,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 25),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Text('Tea Share',
+                          style: TextStyle(
+                          fontSize: 44
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
                       child: Column(
                         children: <Widget>[
                           Visibility(
@@ -111,9 +114,11 @@ class _AuthState extends State<Auth> with ErrorDialog {
                               autocorrect: false,
                               controller: _usernameController,
                               keyboardType: TextInputType.name,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 labelText: 'Username',
-                                border: OutlineInputBorder(),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
                               ),
                             ),
                           ),
@@ -129,7 +134,9 @@ class _AuthState extends State<Auth> with ErrorDialog {
                               decoration: InputDecoration(
                                 labelText: 'Email',
                                 errorText: _isEmailInvalid ? 'Invalid Email' : null,
-                                border: const OutlineInputBorder()
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
                               ),
                             ),
                           ),
@@ -142,127 +149,131 @@ class _AuthState extends State<Auth> with ErrorDialog {
                               enableSuggestions: false,
                               obscureText: true,
                               controller: _passwordController,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 labelText: 'Password',
-                                border: OutlineInputBorder()
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
                               ),
                             ),
                           ),
                         ],
                       )
                     ),
-                  ),
-                ),
-                Center(
-                  child: FractionallySizedBox(
-                    widthFactor: 0.86,
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: SizedBox(
-                            height: 45,
-                            child: ElevatedButton(
-                              onPressed: _signInWithMail,
-                              style: const ButtonStyle(
-                                elevation: MaterialStatePropertyAll(10)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: SizedBox(
+                        height: 45,
+                        child: ElevatedButton(
+                          onPressed: _signInWithMail,
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(Theme.of(context).primaryColor),
+                            foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      left: _isLoading ? 16 : 0
-                                    ),
-                                    child: Text(_isSignup ? 'Signup' : 'Login',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      )
-                                    ),
-                                  ),
-                                  Visibility(
-                                    visible: _isLoading,
-                                    child: Container(
-                                      height: 20,
-                                      width: 30,
-                                      padding: const EdgeInsets.only(left: 10),
-                                      child: const CircularProgressIndicator(
-                                        color: Colors.white,
-                                        strokeWidth: 3,
-                                      ),
-                                    ),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: _isLoading ? 16 : 0
+                                ),
+                                child: Text(_isSignup ? 'Signup' : 'Login',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
                                   )
-                                ],
+                                ),
+                              ),
+                              Visibility(
+                                visible: _isLoading,
+                                child: Container(
+                                  height: 20,
+                                  width: 30,
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: const CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 3,
+                                  ),
+                                ),
                               )
-                            ),
-                          ),
+                            ],
+                          )
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: SizedBox(
-                            height: 45,
-                            child: ElevatedButton(
-                              onPressed: _signInWithGoogle,
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStatePropertyAll(Colors.grey.shade900),
-                                elevation: const MaterialStatePropertyAll(10)
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Image.asset('assets/GoogleIcon.png'),
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.only(right: 12),
-                                    child: Text('Sign in with Google',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(_isSignup ? 'Already have an account? ' : 'Don\'t have an account? ',
-                        style: const TextStyle(
-                          color: Colors.grey
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () => setState(() {
-                          _isSignup = !_isSignup;
-                          _isLoading = false;
-                        }),
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: const Size(3, 3),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap
-                        ),
-                        child: Text(_isSignup ? 'Login.' : 'Signup.',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: SizedBox(
+                        height: 45,
+                        child: ElevatedButton(
+                          onPressed: _signInWithGoogle,
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(Colors.grey.shade900),
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Image.asset('assets/GoogleIcon.png'),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(right: 12),
+                                child: Text('Sign in with Google',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                )
-              ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20, bottom: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(_isSignup ? 'Already have an account? ' : 'Don\'t have an account? ',
+                            style: const TextStyle(
+                              fontSize: 18
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () => setState(() {
+                              _isSignup = !_isSignup;
+                              _isLoading = false;
+                            }),
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: const Size(3, 3),
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap
+                            ),
+                            child: Text(_isSignup ? 'Login.' : 'Signup.',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 18
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
         ),

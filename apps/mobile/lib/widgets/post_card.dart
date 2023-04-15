@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:date_time_format/date_time_format.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:date_time_format/date_time_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tea_share/models/post_model.dart';
-
-import 'package:tea_share/services/users_service.dart';
 import 'package:tea_share/services/posts_service.dart';
 import 'package:tea_share/services/theme_service.dart';
+import 'package:tea_share/services/users_service.dart';
 import 'package:tea_share/utils/error_dialog.dart';
 
 class PostCard extends StatefulWidget {
@@ -108,6 +107,30 @@ class _PostCardState extends State<PostCard> with ErrorDialog {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 15,
+                left: 15,
+              ),
+              child: Text(widget.title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 10,
+                bottom: 10,
+                left: 19
+              ),
+              child: Text(DateTimeFormat.relative(DateTime.parse(widget.createdAt), appendIfAfter: "ago"),
+                style: TextStyle(
+                  color: context.read<DarkThemeService>().darkTheme ? Colors.grey.shade400 : Colors.grey.shade600
+                ),
+              )
+            ),
             MaterialButton(
               padding: EdgeInsets.zero,
               onPressed: () => Navigator.pushNamed(
@@ -141,98 +164,70 @@ class _PostCardState extends State<PostCard> with ErrorDialog {
                 )
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 15,
-                    left: 15,
-                  ),
-                  child: Text(widget.title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 10,
+                left: 17,
+              ),
+              child: Text(widget.description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: context.read<DarkThemeService>().darkTheme ? Colors.grey.shade400 : Colors.grey.shade600
+                ),
+              )
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 10),
+              child: Row(
+                children: <Widget>[
+                  MaterialButton(
+                    onPressed: _isLikeButtonDisabled ? null : _likePost,
+                    disabledTextColor: context.read<DarkThemeService>().darkTheme ? Colors.white : Colors.black,
+                    child: SizedBox(
+                      height: 48,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Icon(_thumbsUpIcon,
+                            color: Colors.deepPurple,
+                            size: 22
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: SizedBox(
+                              width: 135,
+                              child: Text(
+                                _likeText,
+                                overflow: TextOverflow.ellipsis
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                    left: 17,
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: SizedBox(
+                      width: 50,
+                      child: Text(
+                        widget.author,
+                        overflow: TextOverflow.ellipsis
+                      ),
+                    ),
                   ),
-                  child: Text(widget.description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: context.read<DarkThemeService>().darkTheme ? Colors.grey.shade400 : Colors.grey.shade600
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: CircleAvatar(
+                      backgroundImage: CachedNetworkImageProvider(widget.authorImage),
+                      radius: 15,
                     ),
                   )
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                    left: 19
-                  ),
-                  child: Text(DateTimeFormat.relative(DateTime.parse(widget.createdAt)),
-                    style: TextStyle(
-                      color: context.read<DarkThemeService>().darkTheme ? Colors.grey.shade400 : Colors.grey.shade600
-                    ),
-                  )
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: Row(
-                    children: <Widget>[
-                      MaterialButton(
-                        onPressed: _isLikeButtonDisabled ? null : _likePost,
-                        disabledTextColor: context.read<DarkThemeService>().darkTheme ? Colors.white : Colors.black,
-                        child: SizedBox(
-                          height: 48,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Icon(_thumbsUpIcon,
-                                color: Colors.deepPurple,
-                                size: 22
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: SizedBox(
-                                  width: 135,
-                                  child: Text(
-                                    _likeText,
-                                    overflow: TextOverflow.ellipsis
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: SizedBox(
-                          width: 50,
-                          child: Text(
-                            widget.author,
-                            overflow: TextOverflow.ellipsis
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: CircleAvatar(
-                          backgroundImage: CachedNetworkImageProvider(widget.authorImage),
-                          radius: 15,
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                ],
+              ),
             )
           ],
         ),

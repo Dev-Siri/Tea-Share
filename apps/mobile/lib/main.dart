@@ -1,15 +1,12 @@
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
-
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tea_share/firebase_options.dart';
 import 'package:tea_share/routes.dart';
-
 import 'package:tea_share/services/posts_service.dart';
-import 'package:tea_share/services/users_service.dart';
 import 'package:tea_share/services/theme_service.dart' show DarkThemeService;
+import 'package:tea_share/services/users_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,11 +40,6 @@ class StateWrapper extends StatefulWidget {
 class _StateWrapperState extends State<StateWrapper> {
   String _initialRoute = '/';
   
-  final ThemeData _themeData = ThemeData(
-    useMaterial3: true,
-    textTheme: GoogleFonts.interTextTheme(),
-  );
-
   @override
   void initState() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -59,14 +51,18 @@ class _StateWrapperState extends State<StateWrapper> {
   }
 
   Future<void> _setApplicationTheme() async => context.read<DarkThemeService>().darkTheme = await context.read<DarkThemeService>().darkThemePreference.getTheme();
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: _initialRoute,
       routes: routes,
-      theme: _themeData.copyWith(brightness: Brightness.light),
-      darkTheme: _themeData.copyWith(brightness: Brightness.dark),
+      theme: ThemeData.light(useMaterial3: true).copyWith(
+        primaryColor: const Color.fromARGB(255, 80, 55, 6)
+      ),
+      darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
+        primaryColor: const Color.fromARGB(255, 80, 55, 6)
+      ),
       themeMode: context.watch<DarkThemeService>().darkTheme ? ThemeMode.dark : ThemeMode.light,
     );
   }

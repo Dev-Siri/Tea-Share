@@ -3,19 +3,21 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:tea_share/constants.dart';
-
 import 'package:tea_share/env/secret_keys.dart' show BACKEND_URL;
 import 'package:tea_share/models/user_model.dart';
 import 'package:tea_share/utils/storage.dart';
 
-class UserServiceResponse {
-  UserServiceResponse.contructor() {
-    print("Walking...");
-  }
+class UsersServiceResponse {
+  final bool successful;
+  
+  List<UserModel>? users;
+  String? errorMessage;
 
-  UserServiceResponse.destructor() {
-    print("I'm in haeven now!");
-  }
+  UsersServiceResponse({
+    required this.successful,
+    this.users,
+    this.errorMessage,
+  });
 }
 
 class UserService with Storage {
@@ -30,13 +32,11 @@ class UserService with Storage {
   User? get user => _firebaseAuth.currentUser;
   
   Future<void> updateProfile({ required UserModel user }) async {
-    final StorageResponse? imageURL = await uploadImage(imagePath: user.image, type: "users");
+    final StorageResponse imageResponse = await uploadImage(imagePath: user.image, type: "users");
 
     await _firebaseAuth.currentUser!.updateDisplayName(user.username);
     await _firebaseAuth.currentUser!.updateEmail(user.email);
-    await _firebaseAuth.currentUser!.updatePhotoURL(imageURL!.imageUrl);
-
-    // TODO: Implement error handling
+    await _firebaseAuth.currentUser!.updatePhotoURL(imageResponse.imageUrl);
 
     await http.patch(
       Uri.parse("$BACKEND_URL/user/${user.id}"),
@@ -61,16 +61,21 @@ class UserService with Storage {
 
   Future<void> signOut() async => _firebaseAuth.signOut();
 
-  Future<String?> login({ required String email, required String password }) async {
+  Future<UsersServiceResponse> login({ required String email, required String password }) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-      return 'Logged in';
+      return UsersServiceResponse(
+        successful: true
+      );
     } on FirebaseAuthException catch (error) {
-      return error.message;
+      return UsersServiceResponse(
+        successful: false,
+        errorMessage: error.message
+      );
     }
   }
 
-  Future<String?> signUp({ required String email, required String password, required String username }) async {
+  Future<UsersServiceResponse> signUp({ required String email, required String password, required String username }) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       await _firebaseAuth.currentUser?.updatePhotoURL(DEFAULT_IMAGE_URL);
@@ -83,13 +88,18 @@ class UserService with Storage {
         )
       );
       
-      return 'Signed up';
+      return UsersServiceResponse(
+        successful: true
+      );
     } on FirebaseAuthException catch (error) {
-      return error.message;
+      return UsersServiceResponse(
+        successful: false,
+        errorMessage: error.message
+      );
     }
   }
 
-  Future<String?> signInWithGoogle() async {
+  Future<UsersServiceResponse> signInWithGoogle() async {
     try {
       await _firebaseAuth.signInWithProvider(GoogleAuthProvider());
       await _createUser(
@@ -100,35 +110,52 @@ class UserService with Storage {
         )
       );
       
-      return 'Signed in with Google';
+      return UsersServiceResponse(
+        successful: true
+      );
     } on FirebaseAuthException catch (error) {
-      return error.message;
+      return UsersServiceResponse(
+        successful: false,
+        errorMessage: error.message
+      );
     }
   }
 
-  Future<List<UserModel>> fetchUsers({ int? limit, int? page }) async {
+  Future<UsersServiceResponse> fetchUsers({ int? limit, int? page }) async {
     final http.Response response = await http.get(Uri.parse('$BACKEND_URL/users?page=$page&limit=$limit'));
 
     if (response.statusCode == 200) {
       final List body = jsonDecode(response.body);
       final List<UserModel> users = body.map((final user) => UserModel.fromJson(user)).toList();
 
-      return users;
+      return UsersServiceResponse(
+        successful: true,
+        users: users
+      );
     }
 
-    throw Error();
+    return UsersServiceResponse(
+      successful: false,
+      errorMessage: 'Failed to get people.\nThe server responded with a status code of ${response.statusCode}'
+    );
   }
 
-  Future<UserModel> fetchUserByQuery({ required String query }) async {
-    final http.Response response = await http.get(Uri.parse('$BACKEND_URL/users/search?query=$query'));
+  Future<UsersServiceResponse> fetchUserByName({ required String name, bool? exact = false }) async {
+    final http.Response response = await http.get(Uri.parse('$BACKEND_URL/users/search?name=$name&exact=$exact'));
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> body = jsonDecode(response.body);
-      final UserModel user = UserModel.fromJson(body);
+      final List body = jsonDecode(response.body);
+      final List<UserModel> users = body.map((final user) => UserModel.fromJson(user)).toList();
 
-      return user;
+      return UsersServiceResponse(
+        successful: true,
+        users: users
+      );
     }
 
-    throw Error();
+    return UsersServiceResponse(
+      successful: false,
+      errorMessage: 'Failed to get user with name.\nThe server responded with a status code of ${response.statusCode}'
+    );
   }
 }

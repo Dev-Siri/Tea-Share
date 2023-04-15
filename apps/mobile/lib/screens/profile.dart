@@ -1,9 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tea_share/models/post_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:tea_share/services/posts_service.dart';
 import 'package:tea_share/services/theme_service.dart';
 import 'package:tea_share/services/users_service.dart';
@@ -41,10 +40,7 @@ class _ProfileState extends State<Profile> {
         });
       }
 
-      context.read<PostService>().fetchPostsByQuery(
-        query: _username,
-        user: true
-      ).then((PostsServiceResponse postsResponse) {
+      context.read<PostService>().fetchPostsByQuery(query: _username).then((PostsServiceResponse postsResponse) {
         if (mounted) {
           setState(() {
             if (postsResponse.successful) {

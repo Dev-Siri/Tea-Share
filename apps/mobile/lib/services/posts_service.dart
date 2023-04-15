@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-
 import 'package:tea_share/env/secret_keys.dart';
 import 'package:tea_share/models/post_model.dart';
 import 'package:tea_share/utils/storage.dart';
@@ -43,13 +42,13 @@ class PostService with Storage {
     );
   }
 
-  Future<PostsServiceResponse> fetchPostsByQuery({ required String query, bool? user = false }) async {
-    final http.Response response = await http.get(Uri.parse('$BACKEND_URL/posts/search?query=$query&user=$user'));
+  Future<PostsServiceResponse> fetchPostsByQuery({ required String query, bool? fromUser = true }) async {
+    final http.Response response = await http.get(Uri.parse('$BACKEND_URL/posts/search?q=$query&fromUser=$fromUser'));
 
     if (response.statusCode == 200) {
       final List body = jsonDecode(response.body);
       final List<PostModel> posts = body.map((final post) => PostModel.fromJson(post)).toList();
-      
+
       return PostsServiceResponse(
         successful: true,
         posts: posts,
@@ -63,7 +62,14 @@ class PostService with Storage {
   }
 
   Future<PostsServiceResponse> likePost({ required String id, required String username, required String image }) async {
-    final http.Response response = await http.patch(Uri.parse("$BACKEND_URL/posts/$id/like?name=$username&image=$image"));
+    final http.Response response = await http.patch(
+      Uri.parse('$BACKEND_URL/posts/$id/like'),
+      headers: _headers,
+      body: jsonEncode({
+        'username': username,
+        'image': image,
+      })
+    );
   
     if (response.statusCode != 200) {
       return PostsServiceResponse(
@@ -72,7 +78,9 @@ class PostService with Storage {
       );
     }
 
-    return PostsServiceResponse(successful: true);
+    return PostsServiceResponse(
+      successful: true
+    );
   }
 
   Future<PostsServiceResponse> createPost({ required PostModel post }) async {
@@ -86,7 +94,7 @@ class PostService with Storage {
     }
     
     final http.Response response = await http.post(
-      Uri.parse("$BACKEND_URL/posts"),
+      Uri.parse('$BACKEND_URL/posts'),
       headers: _headers,
       body: jsonEncode({
         'title': post.title,

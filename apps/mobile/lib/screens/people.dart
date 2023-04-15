@@ -1,8 +1,7 @@
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-
-import 'package:tea_share/services/users_service.dart';
+import 'package:provider/provider.dart';
 import 'package:tea_share/models/user_model.dart';
+import 'package:tea_share/services/users_service.dart';
 import 'package:tea_share/widgets/user_tile.dart';
 
 class People extends StatefulWidget {
@@ -54,12 +53,12 @@ class _PeopleState extends State<People> {
     
     const int limit = 13;
 
-    context.read<UserService>().fetchUsers(limit: limit, page: page).then((List<UserModel> users) {
-      if (mounted) {
+    context.read<UserService>().fetchUsers(limit: limit, page: page).then((UsersServiceResponse usersResponse) {
+      if (mounted && usersResponse.successful) {
         setState(() {
           _isLoadingUsers = false;
           
-          for (UserModel user in users) {
+          for (UserModel user in usersResponse.users!) {
             delay = delay.then((_) => Future.delayed(const Duration(milliseconds: 50), () {
                 _users.add(UserTile(user: user));
                 _userListState.currentState?.insertItem(_users.length - 1);

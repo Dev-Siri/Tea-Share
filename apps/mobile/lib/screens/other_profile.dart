@@ -1,9 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tea_share/models/post_model.dart';
 import 'package:tea_share/models/user_model.dart';
-
 import 'package:tea_share/services/posts_service.dart';
 import 'package:tea_share/services/theme_service.dart';
 import 'package:tea_share/widgets/error_message.dart';
@@ -30,10 +29,7 @@ class _OtherProfileState extends State<OtherProfile> {
 
       setState(() => _isLoading = true);
 
-      context.read<PostService>().fetchPostsByQuery(
-        query: user.username,
-        user: true
-      ).then((PostsServiceResponse postsResponse) {
+      context.read<PostService>().fetchPostsByQuery(query: user.username).then((PostsServiceResponse postsResponse) {
         setState(() {
           if (postsResponse.successful) {
             _posts = postsResponse.posts!;
@@ -63,7 +59,7 @@ class _OtherProfileState extends State<OtherProfile> {
         visible: _errorMessage == null,
         replacement: ErrorMessage(
           icon: Icons.error,
-          message: _errorMessage!,
+          message: _errorMessage ?? 'An Error occured when trying to load ${user.username}\'s profile.',
         ),
         child: ListView(
           addAutomaticKeepAlives: false,

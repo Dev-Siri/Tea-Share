@@ -1,11 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:tea_share/models/user_model.dart';
 import 'package:tea_share/services/users_service.dart';
 import 'package:tea_share/utils/error_dialog.dart';
@@ -20,13 +19,12 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> with ErrorDialog {
   final TextEditingController _usernameInputController = TextEditingController();
   final TextEditingController _emailInputController = TextEditingController();
-  
+
   final GlobalKey<ExpandableFabState> _expandableFabKey = GlobalKey<ExpandableFabState>();
 
   late UserModel _mongoUser;
 
   XFile? _newPicture;
-  bool _isLoading = false;
 
   @override
   void initState() {
@@ -35,14 +33,15 @@ class _EditProfileState extends State<EditProfile> with ErrorDialog {
     _usernameInputController.text = user.displayName!;
     _emailInputController.text = user.email!;
 
-    context.read<UserService>().fetchUserByQuery(
-      query: user.displayName!
-    ).then((UserModel fetchedUser) {
+    context.read<UserService>().fetchUserByName(
+      name: user.displayName!,
+      exact: true
+    ).then((UsersServiceResponse userResponse) {
       if (mounted) {
-        setState(() => _mongoUser = fetchedUser);
+        setState(() => _mongoUser = userResponse.users![0]);
       }
     });
-      
+
     super.initState();
   }
 
@@ -73,11 +72,7 @@ class _EditProfileState extends State<EditProfile> with ErrorDialog {
   Future<void> _pickImage(String imageInputOption) async {
     final ImagePicker imagePicker = ImagePicker();
 
-    final XFile? image = await imagePicker.pickImage(
-      source: imageInputOption == "Gallery" ? ImageSource.gallery : ImageSource.camera,
-      maxHeight: 300,
-      maxWidth: 300,
-    );
+    final XFile? image = await imagePicker.pickImage(source: imageInputOption == "Gallery" ? ImageSource.gallery : ImageSource.camera);
     
     if (image != null) setState(() => _newPicture = image);
 
@@ -91,10 +86,7 @@ class _EditProfileState extends State<EditProfile> with ErrorDialog {
         leading: BackButton(
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Edit Profile',
-          style: TextStyle(
-          ),
-        ),
+        title: const Text('Edit Profile'),
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
