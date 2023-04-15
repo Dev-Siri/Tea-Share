@@ -1,7 +1,0 @@
-{
-  "name": "@tea-share/apps-mobile",
-  "description": "Tea Share mobile app made with Flutter",
-  "license": "MIT",
-  "type": "module",
-  "private": true
-}
