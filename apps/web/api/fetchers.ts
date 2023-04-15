@@ -40,7 +40,7 @@ export const fetchUsers: FetchUsersAPI = async (page, limit, cacheBehaviour) => 
 export const fetchPostsByQuery: FetchPostsByQuery = async (query, cacheBehaviour, fromUser = true) => {
   try {
     const response = await fetch(`${url}/posts/search?q=${query}&fromUser=${fromUser}`, cacheBehaviour);
-    const posts = await response.json();
+    const posts: Post[] = await response.json();
 
     return posts;
   } catch {
@@ -51,7 +51,7 @@ export const fetchPostsByQuery: FetchPostsByQuery = async (query, cacheBehaviour
 export const fetchUsersByName: FetchUsersByName = async (name, cacheBehaviour, exact = false) => {
   try {
     const response = await fetch(`${url}/users/search?name=${name}&exact=${exact}`, cacheBehaviour);
-    const users: MongoDBUser = await response.json();
+    const users: MongoDBUser[] = await response.json();
 
     return users;
   } catch {

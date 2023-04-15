@@ -2,8 +2,6 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FC } from "react";
 
-import type { MongoDBUser } from "@/types";
-
 const UpdateProfileForm: FC = () => {
   const router = useRouter();
 
@@ -23,9 +21,11 @@ const UpdateProfileForm: FC = () => {
       setEmail(user.email);
 
       const { fetchUsersByName } = await import("@/api/fetchers");
-      const fetchedUser = (await fetchUsersByName(user.name, { cache: "no-store" }, true)) as MongoDBUser;
+      const fetchedUsers = await fetchUsersByName(user.name, { cache: "no-store" }, true);
 
-      setUserID(fetchedUser._id);
+      if (!fetchedUsers) throw new Error("Failed to fetch your information. Please try again later.")
+
+      setUserID(fetchedUsers[0]._id);
     };
 
     setupUserStates();

@@ -1,4 +1,4 @@
-import type { GenerateMetadata, MongoDBUser, PageComponent } from "@/types";
+import type { GenerateMetadata, PageComponent } from "@/types";
 
 import { fetchPostsByQuery, fetchUsersByName } from "@/api/fetchers";
 
@@ -27,8 +27,8 @@ const Search: PageComponent = async ({ searchParams: { query } }) => {
         )}
       </section>
       <section className="h-2/5 w-full p-4 min-[1002px]:h-3/5 min-[1002px]:w-[30%] min-[1002px]:px-0">
-        {(users as MongoDBUser[] | null)?.length ? (
-          <UserList title="People" users={users as MongoDBUser[]} />
+        {users ? (
+          <UserList title="People" users={users} />
         ) : (
           <aside className="border-light-gray dark:border-semi-gray grid w-full place-items-center rounded-xl border-2 bg-white py-4 dark:bg-black">
             <FaUserAltSlash size={44} />

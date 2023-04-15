@@ -56,7 +56,7 @@ export interface PostProps extends WithPost {
 }
 
 export interface ThemeOptionProps extends WithChildren {
-  type: "Light" | "Dark";
+  type: "light" | "dark";
 }
 
 export interface FormProps {

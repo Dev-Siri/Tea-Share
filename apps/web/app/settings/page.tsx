@@ -18,13 +18,13 @@ const Settings: PageComponent = () => (
     <UpdateProfileForm />
     <section className="border-light-gray dark:border-semi-gray mt-10px h-fit w-[350px] rounded-md border-2 p-7 dark:bg-black sm:w-[410px]">
       <h2 className="text-2xl font-bold">Theme mode</h2>
-      <ThemeOption type="Dark">
+      <ThemeOption type="dark">
         <p className="mr-10px mt-0.5 text-black">
           <IoMoon size={17} />
         </p>
         <p>Dark</p>
       </ThemeOption>
-      <ThemeOption type="Light">
+      <ThemeOption type="light">
         <p className="mr-10px mt-0.5">
           <MdWbSunny size={17} />
         </p>

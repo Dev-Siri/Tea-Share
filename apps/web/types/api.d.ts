@@ -9,7 +9,7 @@ export type FetchUsersByName = (
   query: string,
   cacheBehaviour?: CacheBehaviour,
   exactOrFromUser?: boolean
-) => Promise<MongoDBUser | MongoDBUser[] | null>;
+) => Promise<MongoDBUser[] | null>;
 export type FetchPostsByQuery = (query: string, cacheBehaviour?: CacheBehaviour, exactOrFromUser?: boolean) => Promise<Post[] | null>;
 export type CreatePostAPI = (formdata: PostFormData) => Promise<Response>;
 export type LikePostAPI = (id: string, name: string, image: string) => Promise<Response>;
