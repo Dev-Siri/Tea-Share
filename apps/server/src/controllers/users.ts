@@ -43,14 +43,14 @@ export const createUser: RequestHandler<DatabaseDocument<User>, User> = async (r
   }
 };
 
-export const getUserByName: RequestHandler<User | User[]> = async (req, res) => {
+export const getUserByName: RequestHandler<User[]> = async (req, res) => {
   const { name, exact } = req.query;
 
   try {
     const users: User[] = await UserModel.find({ username: exact === "true" ? name : new RegExp(name, "i") }).lean();
 
     res.code(200);
-    return exact === "true" ? users[0] : users;
+    return users;
   } catch (error: any) {
     res.code(404);
     return error.message as string;
