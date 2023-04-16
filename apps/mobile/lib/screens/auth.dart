@@ -92,7 +92,7 @@ class _AuthState extends State<Auth> with ErrorDialog {
                         borderRadius: BorderRadius.circular(500)
                       ),
                       padding: const EdgeInsets.all(25),
-                      child: Image.asset('assets/LogoWhite.gif',
+                      child: Image.asset('assets/Logo.gif',
                         height: 130,
                       ),
                     ),
