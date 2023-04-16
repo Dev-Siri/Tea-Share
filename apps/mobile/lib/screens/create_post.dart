@@ -1,15 +1,14 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:tea_share/models/post_model.dart';
-import 'package:tea_share/utils/error_dialog.dart';
 import 'package:tea_share/services/posts_service.dart';
 import 'package:tea_share/services/users_service.dart';
+import 'package:tea_share/utils/error_dialog.dart';
 
 class Create extends StatefulWidget {
   const Create({ super.key });

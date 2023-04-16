@@ -74,11 +74,11 @@ class _PostCardState extends State<PostCard> with ErrorDialog {
   }
 
   Future<void> _likePost() async {
-    final User? user = context.read<UserService>().user;
+    final User user = context.read<UserService>().user!;
     
     final PostsServiceResponse response = await context.read<PostService>().likePost(
       id: widget.id,
-      username: user!.displayName! ,
+      username: user.displayName ?? "Null",
       image: user.photoURL!,
     );
 

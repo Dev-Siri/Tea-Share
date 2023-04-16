@@ -84,7 +84,10 @@ class PostService with Storage {
   }
 
   Future<PostsServiceResponse> createPost({ required PostModel post }) async {
-    final StorageResponse uploadedImageResponse = await uploadImage(imagePath: post.image, type: "posts");
+    final StorageResponse uploadedImageResponse = await uploadImage(
+      imagePath: post.image,
+      type: "posts"
+    );
     
     if (!uploadedImageResponse.successful) {
       return PostsServiceResponse(
@@ -99,7 +102,7 @@ class PostService with Storage {
       body: jsonEncode({
         'title': post.title,
         'description': post.description,
-        'image': uploadedImageResponse,
+        'image': uploadedImageResponse.imageUrl,
         'author': post.author,
         'authorImage': post.authorImage,
       })

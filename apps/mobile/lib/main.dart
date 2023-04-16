@@ -58,10 +58,10 @@ class _StateWrapperState extends State<StateWrapper> {
       initialRoute: _initialRoute,
       routes: routes,
       theme: ThemeData.light(useMaterial3: true).copyWith(
-        primaryColor: const Color.fromARGB(255, 80, 55, 6)
+        primaryColor: const Color.fromARGB(255, 59, 41, 94)
       ),
       darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
-        primaryColor: const Color.fromARGB(255, 80, 55, 6)
+        primaryColor: const Color.fromARGB(255, 59, 41, 94)
       ),
       themeMode: context.watch<DarkThemeService>().darkTheme ? ThemeMode.dark : ThemeMode.light,
     );

@@ -116,7 +116,7 @@ class _SearchState extends State<Search> {
                     onPressed: _isLoading ? null : _search,
                     child: _isLoading ? const CircularProgressIndicator(strokeWidth: 4) : const Icon(Icons.search)
                   ),
-                  hintText: 'Search for people.'
+                  hintText: 'Search'
                 ),
               ),
               const Padding(
@@ -148,7 +148,7 @@ class _SearchState extends State<Search> {
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 20, left: 20),
-                child: Text('Posts by People',
+                child: Text('Posts',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
