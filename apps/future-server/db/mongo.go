@@ -24,4 +24,10 @@ func Connect(url, dbName string) error {
 	return nil
 }
 
-func GetDB() *mongo.Database { return db }
+func PostsCollection() *mongo.Collection {
+	return db.Collection("postmessages")
+}
+
+func UsersCollection() *mongo.Collection {
+	return db.Collection("registeredusers")
+}

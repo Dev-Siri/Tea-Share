@@ -14,7 +14,7 @@ import (
 
 func main() {
 	if err := godotenv.Load(); err != nil {
-		log.Fatal(err)
+		log.Printf("%v", err)
 		return
 	}
 
@@ -31,7 +31,8 @@ func main() {
 	dbURL := os.Getenv("MONGO_CONNECTION_URL")
 
 	if err := db.Connect(dbURL, "Tea-Share"); err != nil {
-		log.Fatal(err)
+		log.Printf("%v", err)
+		return
 	}
 
 	go http.HandleFunc("/", controllers.NotFound)
@@ -40,6 +41,6 @@ func main() {
 	go routes.RegisterUserRoutes()
 
 	if err := http.ListenAndServe(addr, nil); err != nil {
-		log.Fatal(err)
+		log.Printf("%v", err)
 	}
 }
