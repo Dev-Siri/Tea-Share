@@ -78,7 +78,7 @@ class _PostCardState extends State<PostCard> with ErrorDialog {
     
     final PostsServiceResponse response = await context.read<PostService>().likePost(
       id: widget.id,
-      username: user.displayName ?? "Null",
+      username: user.displayName!,
       image: user.photoURL!,
     );
 
