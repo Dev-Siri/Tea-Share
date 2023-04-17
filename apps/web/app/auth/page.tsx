@@ -3,7 +3,7 @@ import lazy from "next/dynamic";
 import type { PageComponent } from "@/types";
 import type { Metadata } from "next";
 
-import banner from "./banner.webp";
+import banner from "./banner.avif";
 
 import Logo from "@/components/Logo";
 import { FcGoogle } from "@react-icons/all-files/fc/FcGoogle";

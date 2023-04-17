@@ -10,7 +10,7 @@ import UserInfo from "@/components/UserInfo";
 export const generateMetadata: GenerateMetadata = async ({ params: { name } }) => {
   const users = await fetchUsersByName(name, { cache: "no-store" }, true);
 
-  if (!users) notFound();
+  if (!users?.[0]) notFound();
 
   const { username, image } = users[0];
   const title = `${username}'s Profile`;
@@ -44,7 +44,7 @@ export const generateMetadata: GenerateMetadata = async ({ params: { name } }) =
 const Profile: PageComponent = async ({ params: { name } }) => {
   const [posts, users] = await Promise.all([fetchPostsByQuery(name, { cache: "no-store" }), fetchUsersByName(name, { cache: "no-store" }, true)]);
 
-  if (!users) notFound();
+  if (!users?.[0]) notFound();
 
   return (
     <article className="grid h-screen place-items-center overflow-y-auto">
