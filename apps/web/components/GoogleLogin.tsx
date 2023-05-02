@@ -11,6 +11,7 @@ const GoogleLogin: FC<WithChildren> = ({ children }) => {
     const { GoogleAuth } = await import("@/utils/auth");
 
     await GoogleAuth();
+    router.refresh();
     router.replace("/");
   };
 

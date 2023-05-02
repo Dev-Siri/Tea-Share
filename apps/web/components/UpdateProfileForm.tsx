@@ -23,7 +23,7 @@ const UpdateProfileForm: FC = () => {
       const { fetchUsersByName } = await import("@/api/fetchers");
       const fetchedUsers = await fetchUsersByName(user.name, { cache: "no-store" }, true);
 
-      if (!fetchedUsers) throw new Error("Failed to fetch your information. Please try again later.")
+      if (!fetchedUsers) throw new Error("Failed to fetch your information. Please try again later.");
 
       setUserID(fetchedUsers[0]._id);
     };

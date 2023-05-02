@@ -24,8 +24,8 @@ const LoginForm: FC = () => {
       await Login(email, password);
     }
 
-    router.replace("/");
     router.refresh();
+    router.replace("/");
   };
 
   return (

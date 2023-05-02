@@ -134,3 +134,7 @@ export interface RelativeTimeProps {
 export interface LogoProps {
   bigger?: boolean;
 }
+
+export interface ShowNavbarProps extends WithChildren {
+  whenPathnameIsNot: string;
+}

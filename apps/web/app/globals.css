@@ -2,60 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  overflow-y: hidden;
-}
-
-a {
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
-  scrollbar-width: none;
-  outline-width: 1px;
-  outline: #29d;
-}
-
 *::-webkit-scrollbar {
   display: none;
 }
 
 ::selection {
   background: rgba(0, 153, 255, 0.247);
-}
-
-@keyframes loading-skeleton {
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.loading-skeleton {
-  --bg-color: hsl(0, 11%, 96%);
-  --flash-color: hsl(0, 0%, 90%);
-  display: block;
-  line-height: 1;
-  margin: 4px;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.loading-skeleton::after {
-  content: " ";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-image: linear-gradient(90deg, var(--bg-color), var(--flash-color), var(--bg-color));
-  transform: translateX(-100%);
-  animation: loading-skeleton 1.5s ease-in-out infinite;
 }
 
 .track {
@@ -73,6 +25,17 @@ a {
 
   to {
     transform: translateX(-50%);
+  }
+}
+
+@layer base {
+  a {
+    @apply no-underline;
+  }
+
+  * {
+    @apply box-border outline-1 outline-[#29d];
+    scrollbar-width: none;
   }
 }
 

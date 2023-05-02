@@ -8,14 +8,11 @@ import type { Metadata } from "next";
 import { PAGE_CREATOR, PAGE_DESCRIPTION, PAGE_KEYWORDS, PAGE_TITLE, PAGE_URL } from "@/constants/pageInfo";
 import { APPLE_TOUCH_ICON, APPLE_TOUCH_STARTUP_IMAGE_SIZES } from "@/constants/pwa";
 
-import Logo from "@/components/Logo";
-import NavLinks from "@/components/NavLinks";
-import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
+import Navbar from "@/components/Navbar";
 
+const ShowNavbar = lazy(() => import("@/components/ShowNavbar"));
 const AppToaster = lazy(() => import("@/components/AppToaster"));
-const SearchBar = lazy(() => import("@/components/SearchBar"));
 const Provider = lazy(() => import("@/components/Provider"));
-const Navbar = lazy(() => import("@/components/Navbar"));
 
 const inter = Inter({
   preload: true,
@@ -72,14 +69,11 @@ export const metadata: Metadata = {
 
 const RootLayout: LayoutComponent = ({ children }) => (
   <html lang="en" suppressHydrationWarning>
-    <body>
-      <Navbar>
-        <Logo />
-        <SearchBar>
-          <AiOutlineSearch size={22} />
-        </SearchBar>
-        <NavLinks />
-      </Navbar>
+    <body className="m-0 overflow-y-hidden p-0">
+      <ShowNavbar whenPathnameIsNot="/auth">
+        <Navbar />
+      </ShowNavbar>
+      <Navbar />
       <Provider>
         <main className={`${inter.className} dark:bg-dark-gray dark:text-white`}>
           <AppToaster />

@@ -10,6 +10,27 @@ const nextConfig = {
     domains: ["firebasestorage.googleapis.com", "localhost", "lh3.googleusercontent.com", "source.unsplash.com"],
     minimumCacheTTL: 60,
   },
+  webpack(config, { dev }) {
+    if (!dev)
+      config.optimization = {
+        ...config.optimization,
+        minimize: true,
+        splitChunks: {
+          ...config.optimization.splitChunks,
+          chunks: "all",
+          cacheGroups: {
+            ...config.optimization.splitChunks.cacheGroups,
+            vendors: false,
+          },
+        },
+        runtimeChunk: false,
+        usedExports: true,
+        sideEffects: true,
+        moduleIds: "deterministic",
+      };
+
+    return config;
+  },
 };
 
 const withBundleAnalyzer = configureBundleAnalyzer({ enabled: process.env.ANALYZE_BUNDLE === "true" });

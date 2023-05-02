@@ -1,19 +1,13 @@
 import type { SkeletonProps } from "@/types";
-import type { CSSProperties, FC } from "react";
-
-import { DARK_GRAY, SEMI_GRAY } from "@/constants/colors";
+import type { FC } from "react";
 
 const Skeleton: FC<SkeletonProps> = ({ className = "" }) => (
   <span
     aria-live="polite"
     aria-busy
-    className={`loading-skeleton bg-light-gray dark:bg-dark-gray ${className.includes("rounded-full") ? className : `${className} rounded-md`}`}
-    style={
-      {
-        "--bg-color": DARK_GRAY,
-        "--flash-color": SEMI_GRAY,
-      } as CSSProperties
-    }
+    className={`bg-light-gray dark:bg-dark-gray relative z-[1] m-1 block overflow-hidden bg-[linear-gradient(90,hsl(0,0%,90%),hsl(0,11%,96%),hsl(0,0%,90%))] leading-[1] ${
+      className.includes("rounded-full") ? className : `${className} rounded-md`
+    }`}
   >
     &zwnj;
     <br />

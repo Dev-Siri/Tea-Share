@@ -4,7 +4,7 @@ import type { FC } from "react";
 import Skeleton from "@/components/Skeleton";
 
 const PostsListSkeleton: FC<PostsListSkeletonProps> = ({ numberOfItems }) => (
-  <ul className="h-screen w-full px-4 pb-10 pt-3">
+  <ul className="h-screen w-full overflow-auto px-4 pb-10 pt-3">
     {[...Array(numberOfItems).keys()].map(index => (
       <li key={index} className="border-light-gray dark:border-semi-gray mb-10 h-[824px] w-full rounded-xl border-2 bg-white p-6 dark:bg-black">
         <Skeleton className="h-8 w-4/5 md:w-2/5" />
