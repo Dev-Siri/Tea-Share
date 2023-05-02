@@ -73,7 +73,6 @@ const RootLayout: LayoutComponent = ({ children }) => (
       <ShowNavbar whenPathnameIsNot="/auth">
         <Navbar />
       </ShowNavbar>
-      <Navbar />
       <Provider>
         <main className={`${inter.className} dark:bg-dark-gray dark:text-white`}>
           <AppToaster />
