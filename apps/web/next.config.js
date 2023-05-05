@@ -3,9 +3,6 @@ import configureBundleAnalyzer from "@next/bundle-analyzer";
 
 /** @type {import("next").NextConfig} **/
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   images: {
     domains: ["firebasestorage.googleapis.com", "localhost", "lh3.googleusercontent.com", "source.unsplash.com"],
     minimumCacheTTL: 60,
@@ -20,6 +17,7 @@ const nextConfig = {
           chunks: "all",
           cacheGroups: {
             ...config.optimization.splitChunks.cacheGroups,
+            defaults: false,
             vendors: false,
           },
         },

@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import type { GenerateMetadata, PageComponent, Post } from "@/types";
 
-import { fetchPostsByQuery, fetchUsersByName } from "@/api/fetchers";
+import { fetchPostsByQuery, fetchUsersByName } from "@/services/fetchers";
 
 import PostList from "@/components/PostList";
 import UserInfo from "@/components/UserInfo";

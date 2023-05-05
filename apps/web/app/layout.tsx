@@ -6,7 +6,6 @@ import type { LayoutComponent } from "@/types";
 import type { Metadata } from "next";
 
 import { PAGE_CREATOR, PAGE_DESCRIPTION, PAGE_KEYWORDS, PAGE_TITLE, PAGE_URL } from "@/constants/pageInfo";
-import { APPLE_TOUCH_ICON, APPLE_TOUCH_STARTUP_IMAGE_SIZES } from "@/constants/pwa";
 
 import Navbar from "@/components/Navbar";
 
@@ -52,7 +51,7 @@ export const metadata: Metadata = {
     description: PAGE_DESCRIPTION,
   },
   icons: {
-    apple: APPLE_TOUCH_ICON,
+    apple: "/apple/apple-icon.png",
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION_TOKEN,
@@ -60,10 +59,6 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     title: PAGE_TITLE,
-    startupImage: APPLE_TOUCH_STARTUP_IMAGE_SIZES.map(({ height, width }) => ({
-      url: `../pwa/apple-splash/apple-splash-${width}-${height}`,
-      media: `(device-width: ${width}px) and (device-height: ${height}px)`,
-    })),
   },
 };
 

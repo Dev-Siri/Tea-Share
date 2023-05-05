@@ -3,8 +3,8 @@ import { useState, type FC, type UIEventHandler } from "react";
 
 import type { MongoDBUser, UserPresenterProps } from "@/types";
 
-import { fetchUsers } from "@/api/fetchers";
 import { INITIAL_PAGE_LIMIT } from "@/constants/limit";
+import { fetchUsers } from "@/services/fetchers";
 
 import UserListItem from "@/components/UserListItem";
 

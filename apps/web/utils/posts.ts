@@ -6,8 +6,8 @@ export const CreatePost: CreatePostSubmitHandler = async formData => {
   const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
   const { default: useSession } = await import("@/hooks/useSession");
   const { getRandomString } = await import("./globals");
-  const { createPost } = await import("@/api/fetchers");
-  const { storage } = await import("@/api/firebase");
+  const { createPost } = await import("@/services/fetchers");
+  const { storage } = await import("@/services/firebase");
   const { toast } = await import("react-hot-toast");
 
   const user = await useSession();
@@ -51,13 +51,10 @@ export const LikedPeople: LikedPeopleCalculator = async people => {
   return `${people[0]} and ${people.length - 1} others`;
 };
 
-export const LikePost: LikePostHandler = async (setLikes, setLikeBTN, setisLikeButtonDisabled, people, id) => {
+export const LikePost: LikePostHandler = async id => {
   const { default: useSession } = await import("@/hooks/useSession");
-  const { likePost } = await import("@/api/fetchers");
+  const { likePost } = await import("@/services/fetchers");
   const user = await useSession();
 
-  setLikes(!people.length ? "You liked this post" : people.length === 1 ? "You and 1 other" : `You and ${people.length} others`);
-  setLikeBTN(true);
-  setisLikeButtonDisabled(true);
   await likePost(id, user.name, user.picture);
 };

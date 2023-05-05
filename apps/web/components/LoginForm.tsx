@@ -24,6 +24,10 @@ const LoginForm: FC = () => {
       await Login(email, password);
     }
 
+    const { toast } = await import("react-hot-toast");
+
+    toast.remove();
+
     router.refresh();
     router.replace("/");
   };

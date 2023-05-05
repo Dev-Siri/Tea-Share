@@ -4,8 +4,8 @@ export const Signup: SignupHandler = async (username, image, email, password) =>
   const { createUserWithEmailAndPassword, updateProfile, getIdToken } = await import("firebase/auth");
   const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
   const { getRandomString } = await import("./globals");
-  const { storage, auth } = await import("@/api/firebase");
-  const { createUser } = await import("@/api/fetchers");
+  const { storage, auth } = await import("@/services/firebase");
+  const { createUser } = await import("@/services/fetchers");
   const { toast } = await import("react-hot-toast");
   const { setCookie } = await import("./cookies");
 
@@ -20,7 +20,7 @@ export const Signup: SignupHandler = async (username, image, email, password) =>
 
     await uploadBytes(imageRef, image);
 
-    const imageLink: string = await getDownloadURL(imageRef);
+    const imageLink = await getDownloadURL(imageRef);
 
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(user, {
@@ -33,7 +33,7 @@ export const Signup: SignupHandler = async (username, image, email, password) =>
       email,
     });
 
-    const authToken: string = await getIdToken(user);
+    const authToken = await getIdToken(user);
 
     setCookie("auth_token", authToken);
   } catch (error: any) {
@@ -49,7 +49,7 @@ export const Login: LoginHandler = async (email, password) => {
   const { signInWithEmailAndPassword, getIdToken } = await import("firebase/auth");
   const { toast } = await import("react-hot-toast");
   const { setCookie } = await import("./cookies");
-  const { auth } = await import("@/api/firebase");
+  const { auth } = await import("@/services/firebase");
 
   const loading = toast.loading("Logging you in...");
 
@@ -70,10 +70,10 @@ export const Login: LoginHandler = async (email, password) => {
 
 export const GoogleAuth: GoogleAuthHandler = async () => {
   const { signInWithPopup, getIdToken, GoogleAuthProvider } = await import("firebase/auth");
-  const { createUser } = await import("@/api/fetchers");
+  const { createUser } = await import("@/services/fetchers");
   const { toast } = await import("react-hot-toast");
   const { setCookie } = await import("./cookies");
-  const { auth } = await import("@/api/firebase");
+  const { auth } = await import("@/services/firebase");
 
   const loading = toast.loading("Logging you in...");
 
@@ -103,7 +103,7 @@ export const GoogleAuth: GoogleAuthHandler = async () => {
 export const Logout: LogoutHandler = async () => {
   const { removeCookie } = await import("./cookies");
   const { toast } = await import("react-hot-toast");
-  const { auth } = await import("@/api/firebase");
+  const { auth } = await import("@/services/firebase");
 
   const loading = toast.loading("Logging you out...");
 
@@ -119,8 +119,8 @@ export const Logout: LogoutHandler = async () => {
 export const UpdateProfile: UpdateProfileHandler = async (email, username, image, id) => {
   const { updateEmail, updateProfile, getIdToken } = await import("firebase/auth");
   const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
-  const { updateProfile: updateProfileAPI } = await import("@/api/fetchers");
-  const { storage, auth } = await import("@/api/firebase");
+  const { updateProfile: updateProfileAPI } = await import("@/services/fetchers");
+  const { storage, auth } = await import("@/services/firebase");
   const { getRandomString } = await import("./globals");
   const { toast } = await import("react-hot-toast");
   const { setCookie } = await import("./cookies");

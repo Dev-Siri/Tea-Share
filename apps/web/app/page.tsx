@@ -3,8 +3,8 @@ import lazy from "next/dynamic";
 import type { PageComponent } from "@/types";
 import type { Metadata, ServerRuntime } from "next";
 
-import { fetchPosts, fetchUsers } from "@/api/fetchers";
 import { INITIAL_PAGE_LIMIT, POST_LIMIT, USER_LIMIT } from "@/constants/limit";
+import { fetchPosts, fetchUsers } from "@/services/fetchers";
 
 import PostList from "@/components/PostList";
 import UserList from "@/components/UserList";

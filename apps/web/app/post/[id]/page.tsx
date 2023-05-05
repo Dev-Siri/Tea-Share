@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 
 import type { GenerateMetadata, PageComponent } from "@/types";
 
-import { fetchPosts, fetchPostsByQuery } from "@/api/fetchers";
 import { PAGE_URL } from "@/constants/pageInfo";
+import { fetchPosts, fetchPostsByQuery } from "@/services/fetchers";
 import { getRelativeTime } from "@/utils/globals";
 
 import UserList from "@/components/UserList";

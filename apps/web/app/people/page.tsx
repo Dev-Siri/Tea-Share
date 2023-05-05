@@ -3,8 +3,8 @@ import lazy from "next/dynamic";
 import type { PageComponent } from "@/types";
 import type { Metadata } from "next";
 
-import { fetchUsers } from "@/api/fetchers";
 import { INITIAL_PAGE_LIMIT, USER_LIMIT } from "@/constants/limit";
+import { fetchUsers } from "@/services/fetchers";
 
 const UserPresentor = lazy(() => import("@/components/UserPresenter"));
 

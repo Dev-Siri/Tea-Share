@@ -1,6 +1,6 @@
 import type { GenerateMetadata, PageComponent } from "@/types";
 
-import { fetchPostsByQuery, fetchUsersByName } from "@/api/fetchers";
+import { fetchPostsByQuery, fetchUsersByName } from "@/services/fetchers";
 
 import PostList from "@/components/PostList";
 import UserList from "@/components/UserList";

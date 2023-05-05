@@ -15,7 +15,7 @@
     "build": "next build"
   },
   "engines": {
-    "node": "18.x"
+    "node": ">=18"
   },
   "keywords": [
     "initials",
@@ -25,14 +25,14 @@
   "author": "Dev-Siri",
   "license": "ISC",
   "dependencies": {
-    "@vercel/og": "^0.5.0",
-    "next": "13.3.0"
+    "@vercel/og": "^0.5.4",
+    "next": "13.4.0"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "13.3.0",
+    "@next/bundle-analyzer": "13.4.0",
     "@tea-share/packages": "workspace:*",
-    "eslint-config-next": "13.3.0",
-    "typescript": "^5.0.3",
-    "vercel": "^28.18.3"
+    "eslint-config-next": "13.4.0",
+    "typescript": "^5.0.4",
+    "vercel": "^29.1.1"
   }
 }
