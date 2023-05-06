@@ -12,9 +12,20 @@ const GoogleLogin = lazy(() => import("@/components/GoogleLogin"));
 const LoginForm = lazy(() => import("@/components/LoginForm"));
 const Image = lazy(() => import("next/image"));
 
+const title = "Login | Sign up";
+const description = "Login to Tea Share to connect and share posts with your friends online.";
+
 export const metadata: Metadata = {
-  title: "Login | Sign up",
-  description: "Login to Tea Share to connect and share posts with your friends online.",
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+  },
+  twitter: {
+    title,
+    description,
+  },
 };
 
 const Auth: PageComponent = () => (

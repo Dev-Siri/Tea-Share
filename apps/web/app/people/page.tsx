@@ -10,6 +10,12 @@ const UserPresentor = lazy(() => import("@/components/UserPresenter"));
 
 export const metadata: Metadata = {
   title: "People",
+  openGraph: {
+    title: "People",
+  },
+  twitter: {
+    title: "People",
+  },
 };
 
 const People: PageComponent = async () => {

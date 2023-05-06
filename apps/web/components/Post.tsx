@@ -1,6 +1,6 @@
 import lazy from "next/dynamic";
 
-import type { PostProps } from "@/types";
+import type { Post } from "@/types";
 import type { FC } from "react";
 
 import { PRIMARY_COLOR } from "@/constants/colors";
@@ -12,6 +12,11 @@ import { RiThumbUpLine } from "@react-icons/all-files/ri/RiThumbUpLine";
 const LikeButton = lazy(() => import("@/components/LikeButton"));
 const Image = lazy(() => import("next/image"));
 const Link = lazy(() => import("next/link"));
+
+interface PostProps {
+  post: Post;
+  lazyLoadImage?: boolean;
+}
 
 const likeBTNProps = {
   size: 30,

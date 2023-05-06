@@ -3,7 +3,6 @@ import type { GoogleAuthHandler, LoginHandler, LogoutHandler, SignupHandler, Upd
 export const Signup: SignupHandler = async (username, image, email, password) => {
   const { createUserWithEmailAndPassword, updateProfile, getIdToken } = await import("firebase/auth");
   const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
-  const { getRandomString } = await import("./globals");
   const { storage, auth } = await import("@/services/firebase");
   const { createUser } = await import("@/services/fetchers");
   const { toast } = await import("react-hot-toast");
@@ -14,7 +13,7 @@ export const Signup: SignupHandler = async (username, image, email, password) =>
   const loading = toast.loading("Creating your account...");
 
   try {
-    const imageName = getRandomString();
+    const imageName = crypto.randomUUID();
 
     const imageRef = ref(storage, `users/${imageName}`);
 
@@ -121,13 +120,11 @@ export const UpdateProfile: UpdateProfileHandler = async (email, username, image
   const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
   const { updateProfile: updateProfileAPI } = await import("@/services/fetchers");
   const { storage, auth } = await import("@/services/firebase");
-  const { getRandomString } = await import("./globals");
   const { toast } = await import("react-hot-toast");
   const { setCookie } = await import("./cookies");
 
   try {
-    const imageName = getRandomString();
-
+    const imageName = crypto.randomUUID();
     const imageRef = ref(storage, `users/${imageName}`);
 
     await uploadBytes(imageRef, image as File);

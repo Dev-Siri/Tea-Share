@@ -1,6 +1,6 @@
 import { TIME_UNITS, TIME_UNIT_SECONDS } from "@/constants/date";
 
-import type { HandleGetter, RandomStringGetter, RelativeTimeGetter } from "@/types";
+import type { HandleGetter, RelativeTimeGetter } from "@/types";
 
 /**
  * @param date - The Date object to calculate the time
@@ -23,19 +23,3 @@ export const getRelativeTime: RelativeTimeGetter = dateString => {
  * @returns A string with the username formatted with '@'
  */
 export const getHandle: HandleGetter = username => `@${username?.toLowerCase()?.split(" ")?.join("-")}`;
-
-/**
- * Generates a random string of characters from a pre-defined set.
- *
- * @returns A randomly generated string.
- */
-export const getRandomString: RandomStringGetter = () => {
-  const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" as const;
-  let randomString = "";
-
-  for (let i = 0; i < characters.length; i++) {
-    randomString += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-
-  return randomString;
-};

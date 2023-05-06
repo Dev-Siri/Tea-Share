@@ -17,7 +17,13 @@ export const metadata: Metadata = {
   title: "Home",
 };
 
-const Home: PageComponent = async ({ searchParams: { page = 1 } }) => {
+interface Props {
+  searchParams: {
+    page: number;
+  };
+}
+
+const Home: PageComponent<Props> = async ({ searchParams: { page = 1 } }) => {
   const [posts, users] = await Promise.all([fetchPosts(page, POST_LIMIT, { cache: "no-store" }), fetchUsers(INITIAL_PAGE_LIMIT, USER_LIMIT - 2)]);
 
   return (

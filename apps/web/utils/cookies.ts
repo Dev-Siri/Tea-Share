@@ -1,7 +1,7 @@
-import type { CookieGetter, CookieRemover, CookieSetter, InfiniteItems } from "@/types";
+import type { CookieGetter, CookieRemover, CookieSetter } from "@/types";
 
 // To speedup the `getCookie()` function, it is cached in memory
-const cachedCookies: InfiniteItems = {};
+const cachedCookies: Record<string, string> = {};
 
 /**
  * @param key The name of the cookie

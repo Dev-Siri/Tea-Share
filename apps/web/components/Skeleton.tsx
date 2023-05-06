@@ -1,7 +1,10 @@
-import type { SkeletonProps } from "@/types";
 import type { FC } from "react";
 
-const Skeleton: FC<SkeletonProps> = ({ className = "" }) => (
+interface Props {
+  className?: string;
+}
+
+const Skeleton: FC<Props> = ({ className = "" }) => (
   <span
     aria-live="polite"
     aria-busy

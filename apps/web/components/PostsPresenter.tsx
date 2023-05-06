@@ -1,10 +1,13 @@
 "use client";
 import { useRouter } from "next/navigation";
 
-import type { PostsPresenterProps } from "@/types";
-import type { FC, UIEventHandler } from "react";
+import type { FC, PropsWithChildren, UIEventHandler } from "react";
 
-const PostsPresenter: FC<PostsPresenterProps> = ({ children, currentPage }) => {
+interface Props extends PropsWithChildren {
+  currentPage: number;
+}
+
+const PostsPresenter: FC<Props> = ({ children, currentPage }) => {
   const router = useRouter();
 
   const onPostListScroll: UIEventHandler<HTMLElement> = async (event: any) => {

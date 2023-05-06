@@ -1,9 +1,8 @@
 "use client";
 import { ThemeProvider } from "next-themes";
 
-import type { WithChildren } from "@/types";
-import type { FC } from "react";
+import type { FC, PropsWithChildren } from "react";
 
-const Provider: FC<WithChildren> = ({ children }) => <ThemeProvider attribute="class">{children}</ThemeProvider>;
+const Provider: FC<PropsWithChildren> = ({ children }) => <ThemeProvider attribute="class">{children}</ThemeProvider>;
 
 export default Provider;

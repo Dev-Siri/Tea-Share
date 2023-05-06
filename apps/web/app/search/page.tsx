@@ -7,11 +7,23 @@ import UserList from "@/components/UserList";
 import { FaUserAltSlash } from "@react-icons/all-files/fa/FaUserAltSlash";
 import { FiCameraOff } from "@react-icons/all-files/fi/FiCameraOff";
 
-export const generateMetadata: GenerateMetadata = ({ searchParams: { query } }) => ({
+interface Props {
+  searchParams: {
+    query: string;
+  };
+}
+
+export const generateMetadata: GenerateMetadata<Props> = ({ searchParams: { query } }) => ({
   title: `Search - ${query}`,
+  openGraph: {
+    title: `Search - ${query}`,
+  },
+  twitter: {
+    title: `Search - ${query}`,
+  },
 });
 
-const Search: PageComponent = async ({ searchParams: { query } }) => {
+const Search: PageComponent<Props> = async ({ searchParams: { query } }) => {
   const [posts, users] = await Promise.all([fetchPostsByQuery(query, { cache: "no-store" }, false), fetchUsersByName(query, { cache: "no-store" })]);
 
   return (

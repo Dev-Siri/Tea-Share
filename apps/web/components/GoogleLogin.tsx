@@ -1,16 +1,18 @@
 "use client";
 import { useRouter } from "next/navigation";
 
-import type { WithChildren } from "@/types";
-import type { FC } from "react";
+import type { FC, PropsWithChildren } from "react";
 
-const GoogleLogin: FC<WithChildren> = ({ children }) => {
+const GoogleLogin: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
 
   const loginWithGoogle = async () => {
+    const { toast } = await import("react-hot-toast");
     const { GoogleAuth } = await import("@/utils/auth");
 
     await GoogleAuth();
+
+    toast.remove();
     router.refresh();
     router.replace("/");
   };

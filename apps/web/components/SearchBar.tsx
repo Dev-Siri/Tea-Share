@@ -1,10 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState, type FC } from "react";
+import { useState, type FC, type PropsWithChildren } from "react";
 
-import type { WithChildren } from "@/types";
-
-const SearchBar: FC<WithChildren> = ({ children }) => {
+const SearchBar: FC<PropsWithChildren> = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const router = useRouter();

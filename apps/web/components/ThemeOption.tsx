@@ -1,10 +1,13 @@
 "use client";
 import { useTheme } from "next-themes";
 
-import type { ThemeOptionProps } from "@/types";
-import type { FC } from "react";
+import type { FC, PropsWithChildren } from "react";
 
-const ThemeOption: FC<ThemeOptionProps> = ({ children, type }) => {
+interface Props extends PropsWithChildren {
+  type: "light" | "dark";
+}
+
+const ThemeOption: FC<Props> = ({ children, type }) => {
   const { setTheme } = useTheme();
 
   return (

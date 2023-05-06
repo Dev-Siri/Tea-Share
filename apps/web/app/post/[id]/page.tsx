@@ -13,7 +13,13 @@ import { INITIAL_PAGE_LIMIT, POST_LIMIT } from "@/constants/limit";
 const Image = lazy(() => import("next/image"));
 const Link = lazy(() => import("next/link"));
 
-export const generateMetadata: GenerateMetadata = async ({ params: { id } }) => {
+interface Props {
+  params: {
+    id: string;
+  };
+}
+
+export const generateMetadata: GenerateMetadata<Props> = async ({ params: { id } }) => {
   const posts = await fetchPostsByQuery(id, { cache: "no-store" }, false);
 
   if (!posts?.[0]) notFound();
@@ -46,7 +52,7 @@ export const generateMetadata: GenerateMetadata = async ({ params: { id } }) => 
   };
 };
 
-const PostInfo: PageComponent = async ({ params: { id } }) => {
+const PostInfo: PageComponent<Props> = async ({ params: { id } }) => {
   const [posts, otherPosts] = await Promise.all([
     fetchPostsByQuery(id, { cache: "no-store" }, false),
     fetchPosts(INITIAL_PAGE_LIMIT, POST_LIMIT + 4, { cache: "no-store" }),

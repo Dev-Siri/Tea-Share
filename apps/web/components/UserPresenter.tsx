@@ -1,7 +1,7 @@
 "use client";
 import { useState, type FC, type UIEventHandler } from "react";
 
-import type { MongoDBUser, UserPresenterProps } from "@/types";
+import type { MongoDBUser } from "@/types";
 
 import { INITIAL_PAGE_LIMIT } from "@/constants/limit";
 import { fetchUsers } from "@/services/fetchers";
@@ -10,7 +10,13 @@ import UserListItem from "@/components/UserListItem";
 
 let currentPage: number = INITIAL_PAGE_LIMIT;
 
-const UserList: FC<UserPresenterProps> = ({ title, limit, initialUsers }) => {
+interface Props {
+  title: string;
+  limit?: number;
+  initialUsers: Pick<MongoDBUser, "username" | "image">[];
+}
+
+const UserList: FC<Props> = ({ title, limit, initialUsers }) => {
   const [users, setUsers] = useState<Pick<MongoDBUser, "username" | "image">[]>(initialUsers);
 
   const handleListScroll: UIEventHandler<HTMLElement> = async (event: any) => {

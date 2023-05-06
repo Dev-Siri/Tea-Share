@@ -3,7 +3,7 @@ import lazy from "next/dynamic";
 
 import type { ErrorComponent } from "@/types";
 
-import icon from "./icon.svg";
+import icon from "./logo.svg";
 
 const Image = lazy(() => import("next/image"));
 

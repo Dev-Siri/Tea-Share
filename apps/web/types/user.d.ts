@@ -25,7 +25,7 @@ export interface FirebaseUser {
   email_verified: boolean;
   firebase: {
     identities: {
-      email: [Array];
+      email: string[];
     };
     sign_in_provider: string;
   };

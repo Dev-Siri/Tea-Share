@@ -13,7 +13,6 @@ export type LikePostHandler = (id: string) => Promise<void>;
 
 export type RelativeTimeGetter = (date: string) => string;
 export type HandleGetter = (username?: string) => string;
-export type RandomStringGetter = () => string;
 
 export type CookieSetter = (key: string, value: string) => void;
 export type CookieGetter = (key: string) => string;

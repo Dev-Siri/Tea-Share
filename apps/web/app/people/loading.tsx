@@ -1,10 +1,8 @@
-import lazy from "next/dynamic";
-
 import type { LoadingComponent } from "@/types";
 
 import { USER_LIMIT } from "@/constants/limit";
 
-const UserListSkeleton = lazy(() => import("@/components/UserListSkeleton"));
+import UserListSkeleton from "@/components/UserListSkeleton";
 
 const PeopleLoading: LoadingComponent = () => (
   <article className="mt-4 h-screen w-screen">

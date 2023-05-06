@@ -1,12 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
-
-import type { LikeButtonProps } from "@/types";
-import type { FC } from "react";
+import { useEffect, useState, type FC } from "react";
 
 import { LikedPeople } from "@/utils/posts";
 
-const LikeButton: FC<LikeButtonProps> = ({ children, people, postId }) => {
+interface Props {
+  children: any;
+  people: string[];
+  postId: string;
+}
+
+const LikeButton: FC<Props> = ({ children, people, postId }) => {
   const [likes, setLikes] = useState("Loading...");
   const [isLiked, setIsLiked] = useState(false);
 

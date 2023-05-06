@@ -5,17 +5,14 @@ export const CreatePost: CreatePostSubmitHandler = async formData => {
 
   const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
   const { default: useSession } = await import("@/hooks/useSession");
-  const { getRandomString } = await import("./globals");
   const { createPost } = await import("@/services/fetchers");
   const { storage } = await import("@/services/firebase");
   const { toast } = await import("react-hot-toast");
 
   const user = await useSession();
-
   const loadingToast = toast.loading("Creating post...");
 
-  const imageName = getRandomString();
-
+  const imageName = crypto.randomUUID();
   const imageRef = ref(storage, `posts/${imageName}`);
 
   await uploadBytes(imageRef, formData.image as File);

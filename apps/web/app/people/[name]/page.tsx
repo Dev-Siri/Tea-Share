@@ -7,7 +7,13 @@ import { fetchPostsByQuery, fetchUsersByName } from "@/services/fetchers";
 import PostList from "@/components/PostList";
 import UserInfo from "@/components/UserInfo";
 
-export const generateMetadata: GenerateMetadata = async ({ params: { name } }) => {
+interface Props {
+  params: {
+    name: string;
+  };
+}
+
+export const generateMetadata: GenerateMetadata<Props> = async ({ params: { name } }) => {
   const users = await fetchUsersByName(name, { cache: "no-store" }, true);
 
   if (!users?.[0]) notFound();
@@ -41,7 +47,7 @@ export const generateMetadata: GenerateMetadata = async ({ params: { name } }) =
   };
 };
 
-const Profile: PageComponent = async ({ params: { name } }) => {
+const Profile: PageComponent<Props> = async ({ params: { name } }) => {
   const [posts, users] = await Promise.all([fetchPostsByQuery(name, { cache: "no-store" }), fetchUsersByName(name, { cache: "no-store" }, true)]);
 
   if (!users?.[0]) notFound();

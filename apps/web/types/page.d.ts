@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
-import type { ErrorProps, GenerateMetadataProps, LayoutProps, PageProps } from "./props";
+import type { PropsWithChildren, ReactNode } from "react";
 
-export type PageComponent = (props: PageProps) => ReactNode | Promise<ReactNode>;
-export type LayoutComponent = (props: LayoutProps) => ReactNode | Promise<ReactNode>;
+interface DefaultProps {
+  params: Record<string, string>;
+  searchParams: Record<string, string>;
+}
+
+export type PageComponent<P = DefaultProps> = (props: P) => ReactNode | Promise<ReactNode>;
+
+export type LayoutComponent<P = {}> = (
+  props: PropsWithChildren & {
+    params: Record<string, string>;
+  }
+) => ReactNode | Promise<ReactNode>;
+
 export type LoadingComponent = () => ReactNode;
-export type ErrorComponent = (props: ErrorProps) => ReactNode;
+export type ErrorComponent = (props: { error: Error; reset(): void }) => ReactNode;
 
-export type GenerateMetadata = (props: GenerateMetadataProps) => Metadata | Promise<Metadata>;
+export type GenerateMetadata<P = DefaultProps> = (props: P) => Metadata | Promise<Metadata>;

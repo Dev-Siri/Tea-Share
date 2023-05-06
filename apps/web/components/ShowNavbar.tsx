@@ -1,13 +1,16 @@
 "use client";
 import { usePathname } from "next/navigation";
 
-import type { ShowNavbarProps } from "@/types";
-import type { FC } from "react";
+import type { FC, PropsWithChildren, ReactElement } from "react";
 
-const ShowNavbar: FC<ShowNavbarProps> = ({ children, whenPathnameIsNot }) => {
+interface Props extends PropsWithChildren {
+  whenPathnameIsNot: string;
+}
+
+const ShowNavbar: FC<Props> = ({ children, whenPathnameIsNot }) => {
   const pathname = usePathname();
 
-  return whenPathnameIsNot !== pathname && children;
+  return (whenPathnameIsNot !== pathname && children) as ReactElement<any, any>;
 };
 
 export default ShowNavbar;

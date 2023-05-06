@@ -2,8 +2,6 @@
 import { useRouter } from "next/navigation";
 import { useState, type FC, type FormEventHandler } from "react";
 
-import type { InfiniteItems } from "@/types";
-
 const LoginForm: FC = () => {
   const [isSignup, setIsSignup] = useState(false);
 
@@ -12,7 +10,7 @@ const LoginForm: FC = () => {
   const loginWithEmail: FormEventHandler<HTMLFormElement> = async event => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const { username, email, password, image } = Object.fromEntries(form.entries()) as InfiniteItems & { image: File | null };
+    const { username, email, password, image } = Object.fromEntries(form.entries()) as Record<string, string> & { image: File | null };
 
     if (isSignup) {
       const { Signup } = await import("@/utils/auth");
