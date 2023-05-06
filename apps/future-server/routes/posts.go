@@ -2,18 +2,19 @@ package routes
 
 import (
 	"net/http"
-	"tea-share/controllers"
+	error_handlers "tea-share/controllers/errors"
+	post_controllers "tea-share/controllers/posts"
 )
 
 func RegisterPostRoutes() {
 	http.HandleFunc("/posts", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			controllers.GetPosts(w, r)
+			post_controllers.GetPosts(w, r)
 		case http.MethodPost:
-			controllers.CreatePost(w, r)
+			post_controllers.CreatePost(w, r)
 		default:
-			controllers.MethodNotAllowed(w, r)
+			error_handlers.MethodNotAllowed(w, r)
 		}
 	})
 }

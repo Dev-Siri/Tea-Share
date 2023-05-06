@@ -1,8 +1,7 @@
 package routes
 
 /**
- * ? Brotli compression ?
- * ! WARNING: NOT YET IMPLEMENTED CORRECTLY NOR USED ANYWHERE !
+ * ! WARNING: THIS IS NOT YET IMPLEMENTED CORRECTLY NOR USED ANYWHERE !
  */
 
 // import (

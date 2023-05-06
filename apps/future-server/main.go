@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"tea-share/controllers"
+	error_handlers "tea-share/controllers/errors"
 	"tea-share/db"
 	"tea-share/routes"
 
@@ -35,7 +35,7 @@ func main() {
 		return
 	}
 
-	go http.HandleFunc("/", controllers.NotFound)
+	go http.HandleFunc("/", error_handlers.NotFound)
 
 	go routes.RegisterPostRoutes()
 	go routes.RegisterUserRoutes()

@@ -1,4 +1,4 @@
-package controllers
+package user_controllers
 
 import (
 	"encoding/json"
@@ -13,7 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func GetPosts(w http.ResponseWriter, r *http.Request) {
+func GetUsers(w http.ResponseWriter, r *http.Request) {
 	searchParams := r.URL.Query()
 
 	limitParam := searchParams.Get("limit")
@@ -22,7 +22,7 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 	limit, limitParseError := strconv.Atoi(limitParam)
 
 	if limitParseError != nil {
-		w.WriteHeader(400)
+		w.WriteHeader(http.StatusBadRequest)
 		log.Printf("Failed to parse `limit` as integer")
 		return
 	}
@@ -30,60 +30,52 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 	page, pageParseError := strconv.Atoi(pageParam)
 
 	if pageParseError != nil {
-		w.WriteHeader(400)
+		w.WriteHeader(http.StatusBadRequest)
 		log.Printf("Failed to parse `page` as integer")
 		return
 	}
 
 	startIndex := (page - 1) * limit
 
-	cursor, postsFetchError := db.PostsCollection().Find(
+	cursor, usersFetchError := db.UsersCollection().Find(
 		r.Context(), bson.D{},
 		options.Find().SetSkip(int64(startIndex)),
 		options.Find().SetLimit(int64(limit)),
-		options.Find().SetSort(bson.D{{
-			Key:   "createdAt",
-			Value: -1,
-		}}),
 	)
 
-	if postsFetchError != nil {
-		w.WriteHeader(500)
-		log.Printf("%v", postsFetchError)
+	if usersFetchError != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Printf("%v", usersFetchError)
 		return
 	}
 
 	defer cursor.Close(r.Context())
 
-	var posts []models.Post
+	var users []models.User
 
 	for cursor.Next(r.Context()) {
-		var post models.Post
+		var user models.User
 
-		postDecodeError := cursor.Decode(&post)
+		postDecodeError := cursor.Decode(&user)
 
 		if postDecodeError != nil {
-			w.WriteHeader(500)
+			w.WriteHeader(http.StatusInternalServerError)
 			log.Printf("%v", postDecodeError)
 			return
 		}
 
-		posts = append(posts, post)
+		users = append(users, user)
 	}
 
-	postJSONBytes, jsonError := json.Marshal(posts)
+	userJSONBytes, jsonError := json.Marshal(users)
 
 	if jsonError != nil {
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v", jsonError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 
-	fmt.Fprintf(w, "%s", postJSONBytes)
-}
-
-func CreatePost(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Create a post")
+	fmt.Fprintf(w, "%s", userJSONBytes)
 }

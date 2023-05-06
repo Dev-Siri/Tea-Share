@@ -1,0 +1,43 @@
+package post_controllers
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"tea-share/db"
+	"tea-share/models"
+	"time"
+)
+
+func CreatePost(w http.ResponseWriter, r *http.Request) {
+	body, bodyReadError := io.ReadAll(r.Body)
+
+	if bodyReadError != nil {
+		w.WriteHeader(400)
+		log.Printf("Failed to read request body")
+		return
+	}
+
+	var post models.Post = models.Post{
+		CreatedAt:   time.Now().UTC(),
+		People:      []string {},
+		PeopleImage: []string{},
+	}
+
+	if bodyParseError := json.Unmarshal(body, &post); bodyParseError != nil {
+		w.WriteHeader(500)
+		log.Printf("Failed to parse request body")
+	}
+
+	result, dbInsertError := db.PostsCollection().InsertOne(r.Context(), post)
+
+	if dbInsertError != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Printf("Failed to create post")
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	fmt.Fprintf(w, "Inserted post with ID: %v", result.InsertedID)
+}
