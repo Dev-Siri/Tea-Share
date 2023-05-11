@@ -1,5 +1,5 @@
 {
-  "extends": ["next/core-web-vitals", "next", "@tea-share/packages/config/.eslintrc"],
+  "extends": ["next/core-web-vitals", "next", "./node_modules/@tea-share/packages/config/.eslintrc"],
   "rules": {
     "no-html-link-for-pages": "off",
     "react-hooks/rules-of-hooks": "off"
