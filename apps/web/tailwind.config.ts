@@ -23,6 +23,9 @@ export default {
       padding: {
         "10px": "10px",
       },
+      borderWidth: {
+        px: "1px",
+      },
     },
   },
   future: {
