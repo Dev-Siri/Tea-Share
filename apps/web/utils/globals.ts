@@ -15,7 +15,12 @@ export const getRelativeTime: RelativeTimeGetter = dateString => {
   const divisor = unitIndex ? TIME_UNIT_SECONDS[unitIndex - 1] : 1;
   const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
 
-  return rtf.format(Math.floor(deltaSeconds / divisor), TIME_UNITS[unitIndex]);
+  try {
+    return rtf.format(Math.floor(deltaSeconds / divisor), TIME_UNITS[unitIndex]);
+  } catch (error) {
+    console.error(error);
+    return "Error parsing date";
+  }
 };
 
 /**

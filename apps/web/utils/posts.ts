@@ -4,8 +4,8 @@ export const CreatePost: CreatePostSubmitHandler = async formData => {
   if (!formData.title || (!formData.image && formData.title.length > 3)) return;
 
   const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
+  const { default: queryClient } = await import("@/services/queryClient");
   const { default: useSession } = await import("@/hooks/useSession");
-  const { createPost } = await import("@/services/fetchers");
   const { storage } = await import("@/services/firebase");
   const { toast } = await import("react-hot-toast");
 
@@ -19,11 +19,14 @@ export const CreatePost: CreatePostSubmitHandler = async formData => {
 
   const imageLink = await getDownloadURL(imageRef);
 
-  await createPost({
-    ...formData,
-    image: imageLink,
-    author: user.name,
-    authorImage: user.picture,
+  await queryClient("/posts", {
+    method: "POST",
+    body: {
+      ...formData,
+      image: imageLink,
+      author: user.name,
+      authorImage: user.picture,
+    },
   });
 
   toast.remove(loadingToast);
@@ -50,8 +53,15 @@ export const LikedPeople: LikedPeopleCalculator = async people => {
 
 export const LikePost: LikePostHandler = async id => {
   const { default: useSession } = await import("@/hooks/useSession");
-  const { likePost } = await import("@/services/fetchers");
-  const user = await useSession();
+  const { default: queryClient } = await import("@/services/queryClient");
 
-  await likePost(id, user.name, user.picture);
+  const { name, picture } = await useSession();
+
+  await queryClient(`/posts/${id}/like`, {
+    method: "PATCH",
+    body: {
+      name,
+      image: picture,
+    },
+  });
 };

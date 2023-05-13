@@ -1,10 +1,10 @@
 import lazy from "next/dynamic";
 import { notFound } from "next/navigation";
 
-import type { GenerateMetadata, PageComponent } from "@/types";
+import type { GenerateMetadata, PageComponent, Post } from "@/types";
 
 import { PAGE_URL } from "@/constants/pageInfo";
-import { fetchPosts, fetchPostsByQuery } from "@/services/fetchers";
+import queryClient from "@/services/queryClient";
 import { getRelativeTime } from "@/utils/globals";
 
 import UserList from "@/components/UserList";
@@ -20,7 +20,13 @@ interface Props {
 }
 
 export const generateMetadata: GenerateMetadata<Props> = async ({ params: { id } }) => {
-  const posts = await fetchPostsByQuery(id, { cache: "no-store" }, false);
+  const posts = await queryClient<Post[] | null>("/posts/search", {
+    cache: "no-store",
+    searchParams: {
+      q: id,
+      fromUser: false,
+    },
+  });
 
   if (!posts?.[0]) notFound();
 
@@ -54,8 +60,20 @@ export const generateMetadata: GenerateMetadata<Props> = async ({ params: { id }
 
 const PostInfo: PageComponent<Props> = async ({ params: { id } }) => {
   const [posts, otherPosts] = await Promise.all([
-    fetchPostsByQuery(id, { cache: "no-store" }, false),
-    fetchPosts(INITIAL_PAGE_LIMIT, POST_LIMIT + 4, { cache: "no-store" }),
+    queryClient<Post[] | null>("/posts/search", {
+      cache: "no-store",
+      searchParams: {
+        q: id,
+        fromUser: false,
+      },
+    }),
+    queryClient<Post[]>("/posts", {
+      cache: "no-store",
+      searchParams: {
+        page: INITIAL_PAGE_LIMIT,
+        limit: POST_LIMIT + 4,
+      },
+    }),
   ]);
 
   if (!posts?.[0]) notFound();

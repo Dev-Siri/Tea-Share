@@ -1,3 +1,3 @@
 import type { FirebaseUser } from "./user";
 
-export type SessionHook = () => Promise<FirebaseUser>;
+export type SessionHook = () => FirebaseUser;

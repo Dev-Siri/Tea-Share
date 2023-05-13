@@ -1,10 +1,10 @@
 import lazy from "next/dynamic";
 
-import type { PageComponent } from "@/types";
+import type { MongoDBUser, PageComponent } from "@/types";
 import type { Metadata } from "next";
 
 import { INITIAL_PAGE_LIMIT, USER_LIMIT } from "@/constants/limit";
-import { fetchUsers } from "@/services/fetchers";
+import queryClient from "@/services/queryClient";
 
 const UserPresentor = lazy(() => import("@/components/UserPresenter"));
 
@@ -19,7 +19,13 @@ export const metadata: Metadata = {
 };
 
 const People: PageComponent = async () => {
-  const initialUsers = await fetchUsers(INITIAL_PAGE_LIMIT, USER_LIMIT, { next: { revalidate: 10 } });
+  const initialUsers = await queryClient<MongoDBUser[]>("/users", {
+    revalidate: 10,
+    searchParams: {
+      page: INITIAL_PAGE_LIMIT,
+      limit: USER_LIMIT,
+    },
+  });
 
   return (
     <article className="mt-4 h-screen w-screen">

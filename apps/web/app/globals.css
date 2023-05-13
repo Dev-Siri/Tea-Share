@@ -50,6 +50,11 @@
 
   .input {
     @apply border-light-gray focus:border-primary dark:border-semi-gray dark:bg-semi-gray
-    ml-1 mt-5 w-full rounded-md border-[1px] p-4 outline-none duration-200 dark:text-white;
+    border-px ml-1 mt-5 w-full rounded-md p-4 outline-none duration-200 dark:text-white;
+  }
+
+  .btn {
+    @apply bg-primary p-10px hover:bg-primary-dark border-px border-primary w-36
+    cursor-pointer rounded-md text-white duration-200;
   }
 }

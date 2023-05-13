@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useState, type FC } from "react";
+import { useEffect, useState, type FC, type ReactNode } from "react";
 
 import { LikedPeople } from "@/utils/posts";
 
 interface Props {
-  children: any;
+  children: ReactNode[];
   people: string[];
   postId: string;
 }
@@ -28,7 +28,7 @@ const LikeButton: FC<Props> = ({ children, people, postId }) => {
   const handleLikePost = async () => {
     const { LikePost } = await import("@/utils/posts");
 
-    setLikes(!people.length ? "You liked this post" : people.length === 1 ? "You and 1 other" : `You and ${people.length} others`);
+    setLikes(await LikedPeople(people));
     setIsLiked(true);
 
     LikePost(postId);

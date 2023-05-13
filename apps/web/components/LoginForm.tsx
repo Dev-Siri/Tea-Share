@@ -39,10 +39,7 @@ const LoginForm: FC = () => {
         <input className="input" placeholder="Password" type="password" name="password" required />
         {isSignup && <input type="file" name="image" aria-label="Profile Picture Upload" className="input" required />}
         <div className="mt-[60px] flex h-fit items-center">
-          <button
-            type="submit"
-            className="border-primary bg-primary hover:bg-primary-dark ml-2 h-10 w-[150px] cursor-pointer rounded-md border-[1px] text-white duration-200"
-          >
+          <button type="submit" className="btn ml-2 h-10 w-[150px]">
             {isSignup ? "Signup" : "Login"}
           </button>
           <p className="ml-10px w-[390px] text-sm">

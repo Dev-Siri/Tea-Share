@@ -1,6 +1,6 @@
-import type { GenerateMetadata, PageComponent } from "@/types";
+import type { GenerateMetadata, MongoDBUser, PageComponent, Post } from "@/types";
 
-import { fetchPostsByQuery, fetchUsersByName } from "@/services/fetchers";
+import queryClient from "@/services/queryClient";
 
 import PostList from "@/components/PostList";
 import UserList from "@/components/UserList";
@@ -15,16 +15,34 @@ interface Props {
 
 export const generateMetadata: GenerateMetadata<Props> = ({ searchParams: { query } }) => ({
   title: `Search - ${query}`,
+  description: "Posts & People who have `${query}` in their names and titles.",
   openGraph: {
     title: `Search - ${query}`,
+    description: "Posts & People who have `${query}` in their names and titles.",
   },
   twitter: {
     title: `Search - ${query}`,
+    description: "Posts & People who have `${query}` in their names and titles.",
   },
 });
 
 const Search: PageComponent<Props> = async ({ searchParams: { query } }) => {
-  const [posts, users] = await Promise.all([fetchPostsByQuery(query, { cache: "no-store" }, false), fetchUsersByName(query, { cache: "no-store" })]);
+  const [posts, users] = await Promise.all([
+    queryClient<Post[]>("/posts/search", {
+      cache: "no-store",
+      searchParams: {
+        q: query,
+        fromUser: false,
+      },
+    }),
+    queryClient<MongoDBUser[]>("/users/search", {
+      cache: "no-store",
+      searchParams: {
+        q: query,
+        exact: false,
+      },
+    }),
+  ]);
 
   return (
     <aside className="flex h-screen w-full flex-col-reverse min-[1002px]:flex-row min-[1002px]:pr-4">

@@ -34,8 +34,6 @@ const Post: FC<PostProps> = ({ post: { image, title, people, description, _id, a
         alt={title}
         height={1000}
         width={1000}
-        placeholder="blur"
-        blurDataURL={image}
         className="border-light-gray dark:border-semi-gray h-[500px] w-full rounded-lg border-2 object-contain"
       />
     </Link>

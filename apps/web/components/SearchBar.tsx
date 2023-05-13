@@ -1,28 +1,25 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useState, type FC, type PropsWithChildren } from "react";
+import { redirect } from "next/navigation";
+
+import type { FC, PropsWithChildren } from "react";
 
 const SearchBar: FC<PropsWithChildren> = ({ children }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const search = async (formData: FormData) => {
+    "use server";
+    const searchTerm = formData.get("query");
 
-  const router = useRouter();
-
-  const search = () => router.push(`/search?query=${searchTerm}`);
+    if (searchTerm) redirect(`/search?query=${searchTerm}`);
+  };
 
   return (
-    <div className="bg-light-gray dark:bg-semi-gray absolute mt-24 flex w-screen px-4 min-[700px]:static min-[700px]:ml-auto min-[700px]:mr-2 min-[700px]:mt-0 min-[700px]:w-fit min-[700px]:items-center min-[700px]:rounded-full">
-      <input
-        type="text"
-        placeholder="Search"
-        className="bg-light-gray dark:bg-semi-gray rounded-full p-2 outline-none"
-        value={searchTerm}
-        onKeyDown={event => event.key === "Enter" && search()}
-        onChange={event => setSearchTerm(event.target.value)}
-      />
-      <button aria-label="Search" className="ml-auto min-[700px]:rounded-full" onClick={search}>
+    <form
+      action={search}
+      className="bg-light-gray dark:bg-semi-gray absolute mt-24 flex w-screen px-4 min-[700px]:static min-[700px]:ml-auto min-[700px]:mr-2 min-[700px]:mt-0 min-[700px]:w-fit min-[700px]:items-center min-[700px]:rounded-full"
+    >
+      <input type="text" placeholder="Search" name="query" className="bg-light-gray dark:bg-semi-gray rounded-full p-2 outline-none" />
+      <button type="submit" aria-label="Search" className="ml-auto min-[700px]:rounded-full">
         {children}
       </button>
-    </div>
+    </form>
   );
 };
 

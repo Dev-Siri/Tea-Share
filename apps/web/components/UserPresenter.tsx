@@ -4,7 +4,6 @@ import { useState, type FC, type UIEventHandler } from "react";
 import type { MongoDBUser } from "@/types";
 
 import { INITIAL_PAGE_LIMIT } from "@/constants/limit";
-import { fetchUsers } from "@/services/fetchers";
 
 import UserListItem from "@/components/UserListItem";
 
@@ -26,8 +25,14 @@ const UserList: FC<Props> = ({ title, limit, initialUsers }) => {
 
     if (didScrollToBottom) {
       currentPage++;
+      const { default: queryClient } = await import("@/services/queryClient");
 
-      const users: MongoDBUser[] = await fetchUsers(currentPage, limit!, { cache: "no-store" });
+      const users: MongoDBUser[] = await queryClient("/users", {
+        searchParams: {
+          page: currentPage,
+          limit,
+        },
+      });
 
       setUsers(prevUsers => [...prevUsers, ...users]);
     }

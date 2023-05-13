@@ -1,10 +1,10 @@
 import lazy from "next/dynamic";
 
-import type { PageComponent } from "@/types";
+import type { MongoDBUser, PageComponent, Post } from "@/types";
 import type { Metadata, ServerRuntime } from "next";
 
 import { INITIAL_PAGE_LIMIT, POST_LIMIT, USER_LIMIT } from "@/constants/limit";
-import { fetchPosts, fetchUsers } from "@/services/fetchers";
+import queryClient from "@/services/queryClient";
 
 import PostList from "@/components/PostList";
 import UserList from "@/components/UserList";
@@ -24,7 +24,21 @@ interface Props {
 }
 
 const Home: PageComponent<Props> = async ({ searchParams: { page = 1 } }) => {
-  const [posts, users] = await Promise.all([fetchPosts(page, POST_LIMIT, { cache: "no-store" }), fetchUsers(INITIAL_PAGE_LIMIT, USER_LIMIT - 2)]);
+  const [posts, users] = await Promise.all([
+    queryClient<Post[]>("/posts", {
+      cache: "no-store",
+      searchParams: {
+        page: INITIAL_PAGE_LIMIT,
+        limit: POST_LIMIT,
+      },
+    }),
+    queryClient<MongoDBUser[]>("/users", {
+      searchParams: {
+        page: INITIAL_PAGE_LIMIT,
+        limit: USER_LIMIT - 2,
+      },
+    }),
+  ]);
 
   return (
     <aside className="flex w-full min-[1002px]:pr-4">

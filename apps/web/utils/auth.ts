@@ -3,8 +3,8 @@ import type { GoogleAuthHandler, LoginHandler, LogoutHandler, SignupHandler, Upd
 export const Signup: SignupHandler = async (username, image, email, password) => {
   const { createUserWithEmailAndPassword, updateProfile, getIdToken } = await import("firebase/auth");
   const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
+  const { default: queryClient } = await import("@/services/queryClient");
   const { storage, auth } = await import("@/services/firebase");
-  const { createUser } = await import("@/services/fetchers");
   const { toast } = await import("react-hot-toast");
   const { setCookie } = await import("./cookies");
 
@@ -22,14 +22,19 @@ export const Signup: SignupHandler = async (username, image, email, password) =>
     const imageLink = await getDownloadURL(imageRef);
 
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
+
     await updateProfile(user, {
       displayName: username,
       photoURL: imageLink,
     });
-    await createUser({
-      username,
-      image: imageLink,
-      email,
+
+    await queryClient("/users", {
+      method: "POST",
+      body: {
+        username,
+        image: imageLink,
+        email,
+      },
     });
 
     const authToken = await getIdToken(user);
@@ -69,10 +74,10 @@ export const Login: LoginHandler = async (email, password) => {
 
 export const GoogleAuth: GoogleAuthHandler = async () => {
   const { signInWithPopup, getIdToken, GoogleAuthProvider } = await import("firebase/auth");
-  const { createUser } = await import("@/services/fetchers");
+  const { default: queryClient } = await import("@/services/queryClient");
+  const { auth } = await import("@/services/firebase");
   const { toast } = await import("react-hot-toast");
   const { setCookie } = await import("./cookies");
-  const { auth } = await import("@/services/firebase");
 
   const loading = toast.loading("Logging you in...");
 
@@ -81,10 +86,13 @@ export const GoogleAuth: GoogleAuthHandler = async () => {
 
     const { user } = await signInWithPopup(auth, provider);
 
-    await createUser({
-      email: user.email!,
-      username: user.displayName!,
-      image: user.photoURL!,
+    await queryClient("/users", {
+      method: "POST",
+      body: {
+        email: user.email!,
+        username: user.displayName!,
+        image: user.photoURL!,
+      },
     });
 
     const authToken = await getIdToken(user);
@@ -118,7 +126,7 @@ export const Logout: LogoutHandler = async () => {
 export const UpdateProfile: UpdateProfileHandler = async (email, username, image, id) => {
   const { updateEmail, updateProfile, getIdToken } = await import("firebase/auth");
   const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
-  const { updateProfile: updateProfileAPI } = await import("@/services/fetchers");
+  const { default: queryClient } = await import("@/services/queryClient");
   const { storage, auth } = await import("@/services/firebase");
   const { toast } = await import("react-hot-toast");
   const { setCookie } = await import("./cookies");
@@ -132,6 +140,7 @@ export const UpdateProfile: UpdateProfileHandler = async (email, username, image
     const uploadedImage = await getDownloadURL(imageRef);
 
     toast.loading("Updating your profile...", { id: "update-profile" });
+
     await updateProfile(auth.currentUser!, {
       displayName: username,
       photoURL: uploadedImage,
@@ -139,7 +148,15 @@ export const UpdateProfile: UpdateProfileHandler = async (email, username, image
 
     await updateEmail(auth.currentUser!, email);
 
-    await updateProfileAPI(id, { _id: id, image: uploadedImage, username, email });
+    await queryClient(`/users/${id}`, {
+      method: "PATCH",
+      body: {
+        _id: id,
+        image: uploadedImage,
+        username,
+        email,
+      },
+    });
 
     const authToken = await getIdToken(auth.currentUser!);
 
@@ -149,6 +166,7 @@ export const UpdateProfile: UpdateProfileHandler = async (email, username, image
     toast.success("Successfully updated your profile.");
     location.reload();
   } catch (error: any) {
+    toast.remove();
     toast.error(`Failed to update your profile, ${error.message}`);
   }
 };

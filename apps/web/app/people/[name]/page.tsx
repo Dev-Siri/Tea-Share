@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 
-import type { GenerateMetadata, PageComponent, Post } from "@/types";
+import type { GenerateMetadata, MongoDBUser, PageComponent, Post } from "@/types";
 
-import { fetchPostsByQuery, fetchUsersByName } from "@/services/fetchers";
+import queryClient from "@/services/queryClient";
 
 import PostList from "@/components/PostList";
 import UserInfo from "@/components/UserInfo";
@@ -14,7 +14,13 @@ interface Props {
 }
 
 export const generateMetadata: GenerateMetadata<Props> = async ({ params: { name } }) => {
-  const users = await fetchUsersByName(name, { cache: "no-store" }, true);
+  const users = await queryClient<MongoDBUser[] | null>("/users/search", {
+    cache: "no-store",
+    searchParams: {
+      name,
+      exact: true,
+    },
+  });
 
   if (!users?.[0]) notFound();
 
@@ -48,7 +54,24 @@ export const generateMetadata: GenerateMetadata<Props> = async ({ params: { name
 };
 
 const Profile: PageComponent<Props> = async ({ params: { name } }) => {
-  const [posts, users] = await Promise.all([fetchPostsByQuery(name, { cache: "no-store" }), fetchUsersByName(name, { cache: "no-store" }, true)]);
+  const [posts, users] = await Promise.all([
+    queryClient<Post[] | null>("/posts/search", {
+      cache: "no-store",
+      searchParams: {
+        q: name,
+        fromUser: true,
+      },
+    }),
+    queryClient<MongoDBUser[] | null>("/users/search", {
+      cache: "no-store",
+      searchParams: {
+        name,
+        exact: true,
+      },
+    }),
+  ]);
+
+  console.log({ posts, users });
 
   if (!users?.[0]) notFound();
 

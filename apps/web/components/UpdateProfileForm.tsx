@@ -2,6 +2,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FC } from "react";
 
+import type { MongoDBUser } from "@/types";
+
 const UpdateProfileForm: FC = () => {
   const router = useRouter();
 
@@ -14,14 +16,20 @@ const UpdateProfileForm: FC = () => {
     const setupUserStates = async () => {
       const { default: useSession } = await import("@/hooks/useSession");
 
-      const user = await useSession();
+      const { name, picture, email } = await useSession();
 
-      setImage(user.picture);
-      setUsername(user.name);
-      setEmail(user.email);
+      setImage(picture);
+      setUsername(name);
+      setEmail(email);
 
-      const { fetchUsersByName } = await import("@/services/fetchers");
-      const fetchedUsers = await fetchUsersByName(user.name, { cache: "no-store" }, true);
+      const { default: queryClient } = await import("@/services/queryClient");
+      const fetchedUsers = await queryClient<MongoDBUser[] | null>("/users/search", {
+        cache: "no-store",
+        searchParams: {
+          name,
+          exact: true,
+        },
+      });
 
       if (!fetchedUsers) throw new Error("Failed to fetch your information. Please try again later.");
 
@@ -42,6 +50,10 @@ const UpdateProfileForm: FC = () => {
     const { Logout } = await import("@/utils/auth");
 
     await Logout();
+
+    const { toast } = await import("react-hot-toast");
+
+    toast.remove();
     router.replace("/auth");
   };
 
