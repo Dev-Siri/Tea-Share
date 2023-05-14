@@ -29,6 +29,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	if bodyParseError := json.Unmarshal(body, &post); bodyParseError != nil {
 		w.WriteHeader(500)
 		log.Printf("Failed to parse request body")
+		return
 	}
 
 	result, dbInsertError := db.PostsCollection().InsertOne(r.Context(), post)
@@ -36,6 +37,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	if dbInsertError != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Printf("Failed to create post")
+		return
 	}
 
 	w.WriteHeader(http.StatusCreated)

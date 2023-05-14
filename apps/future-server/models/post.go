@@ -11,7 +11,7 @@ type Post struct {
 	Title       string             `json:"title" bson:"title"`
 	Description string             `json:"description" bson:"description"`
 	Author      string             `json:"author" bson:"author"`
-	AuthorImage string             `json:"authorimage" bson:"authorimage"`
+	AuthorImage string             `json:"authorImage" bson:"authorImage"`
 	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
 	People      []string           `json:"people" bson:"people"`
 	PeopleImage []string           `json:"peopleImage" bson:"peopleImage"`

@@ -5,52 +5,65 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 	"tea-share/db"
 	"tea-share/models"
+	"tea-share/utils"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func GetPosts(w http.ResponseWriter, r *http.Request) {
+func GetPostsBySearchTerm(w http.ResponseWriter, r *http.Request) {
 	searchParams := r.URL.Query()
 
-	limitParam := searchParams.Get("limit")
-	pageParam := searchParams.Get("page")
+	q := searchParams.Get("q")
+	fromUser := searchParams.Get("fromUser")
 
-	limit, limitParseError := strconv.Atoi(limitParam)
+  if q == "" {
+    w.WriteHeader(400)
+    log.Printf("Search param `q` not provided")
+    return
+  }
 
-	if limitParseError != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		log.Printf("Failed to parse `limit` as integer")
-		return
+	filter := bson.D{{
+		Key: "$or",
+    Value: bson.A{
+      bson.M{
+        "title": bson.M{"$regex": q},
+      },
+      bson.M{
+        "description": bson.M{"$regex": q},
+      },
+    },
+	}}
+
+	if fromUser == "true" {
+		filter = bson.D{{
+      Key: "author",
+      Value: q,
+    }}
 	}
 
-	page, pageParseError := strconv.Atoi(pageParam)
-
-	if pageParseError != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		log.Printf("Failed to parse `page` as integer")
-		return
+	if utils.IsValidObjectID(q) {
+    id, _ := primitive.ObjectIDFromHex(q)
+    
+		filter = bson.D{{
+      Key: "_id",
+      Value: id,
+    }}
 	}
-
-	startIndex := (page - 1) * limit
 
 	cursor, postsFetchError := db.PostsCollection().Find(
-		r.Context(), bson.D{},
-		options.Find().SetSkip(int64(startIndex)),
-		options.Find().SetLimit(int64(limit)),
-		options.Find().SetSort(bson.M{"createdAt": -1}),
+		r.Context(), filter,
+    options.Find().SetSort(bson.M{"createdAt": -1}),
 	)
 
 	if postsFetchError != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v", postsFetchError)
-		return
+    return
 	}
-
-	defer cursor.Close(r.Context())
 
 	var posts []models.Post
 
@@ -77,6 +90,6 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-
+	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "%s", postJSONBytes)
 }

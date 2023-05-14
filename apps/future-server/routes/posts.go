@@ -17,4 +17,20 @@ func RegisterPostRoutes() {
 			error_handlers.MethodNotAllowed(w, r)
 		}
 	})
+
+	http.HandleFunc("/posts/search", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			post_controllers.GetPostsBySearchTerm(w, r)
+		} else {
+			error_handlers.MethodNotAllowed(w, r)
+		}
+	})
+
+	http.HandleFunc("/posts/like", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPatch {
+			post_controllers.LikePost(w, r)
+		} else {
+			error_handlers.MethodNotAllowed(w, r)
+		}
+	})
 }
