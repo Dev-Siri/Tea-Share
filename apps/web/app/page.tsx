@@ -28,7 +28,7 @@ const Home: PageComponent<Props> = async ({ searchParams: { page = 1 } }) => {
     queryClient<Post[]>("/posts", {
       cache: "no-store",
       searchParams: {
-        page: INITIAL_PAGE_LIMIT,
+        page,
         limit: POST_LIMIT,
       },
     }),
