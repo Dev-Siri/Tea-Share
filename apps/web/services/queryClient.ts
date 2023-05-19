@@ -1,5 +1,6 @@
 import type { QueryClient } from "@/types";
 
+/** A type-safe, ultralightweight and error aware fetch wrapper */
 const queryClient: QueryClient = async (endpoint, { method = "GET", body, cache, revalidate, searchParams }) => {
   const url = new URL(endpoint, process.env.NEXT_PUBLIC_BACKEND_URL!);
   const headers: Record<string, string> = {

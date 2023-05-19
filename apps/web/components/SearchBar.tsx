@@ -1,8 +1,10 @@
 import { redirect } from "next/navigation";
 
-import type { FC, PropsWithChildren } from "react";
+import type { FC } from "react";
 
-const SearchBar: FC<PropsWithChildren> = ({ children }) => {
+import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
+
+const SearchBar: FC = () => {
   const search = async (formData: FormData) => {
     "use server";
     const searchTerm = formData.get("query");
@@ -17,7 +19,7 @@ const SearchBar: FC<PropsWithChildren> = ({ children }) => {
     >
       <input type="text" placeholder="Search" name="query" className="bg-light-gray dark:bg-semi-gray rounded-full p-2 outline-none" />
       <button type="submit" aria-label="Search" className="ml-auto min-[700px]:rounded-full">
-        {children}
+        <AiOutlineSearch size={22} />
       </button>
     </form>
   );

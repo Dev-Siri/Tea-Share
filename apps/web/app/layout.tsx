@@ -7,9 +7,6 @@ import type { Metadata } from "next";
 
 import { PAGE_CREATOR, PAGE_DESCRIPTION, PAGE_KEYWORDS, PAGE_TITLE, PAGE_URL } from "@/constants/pageInfo";
 
-import Navbar from "@/components/Navbar";
-
-const ShowNavbar = lazy(() => import("@/components/ShowNavbar"));
 const AppToaster = lazy(() => import("@/components/AppToaster"));
 const Provider = lazy(() => import("@/components/Provider"));
 
@@ -63,16 +60,11 @@ export const metadata: Metadata = {
 };
 
 const RootLayout: LayoutComponent = ({ children }) => (
-  <html lang="en" suppressHydrationWarning>
+  <html lang="en" className={inter.className} suppressHydrationWarning>
     <body className="m-0 overflow-y-hidden p-0">
-      <ShowNavbar whenPathnameIsNot="/auth">
-        <Navbar />
-      </ShowNavbar>
       <Provider>
-        <main className={`${inter.className} dark:bg-dark-gray dark:text-white`}>
-          <AppToaster />
-          {children}
-        </main>
+        <AppToaster />
+        {children}
       </Provider>
     </body>
   </html>

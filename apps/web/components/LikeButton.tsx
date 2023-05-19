@@ -1,37 +1,35 @@
 "use client";
 import { useEffect, useState, type FC, type ReactNode } from "react";
 
+import { likePost } from "@/actions/posts";
+import useSession from "@/hooks/useSession";
 import { LikedPeople } from "@/utils/posts";
 
 interface Props {
-  children: ReactNode[];
   people: string[];
   postId: string;
+  likedIcon: ReactNode;
+  unlikedIcon: ReactNode;
 }
 
-const LikeButton: FC<Props> = ({ children, people, postId }) => {
+const LikeButton: FC<Props> = ({ people, postId, likedIcon, unlikedIcon }) => {
   const [likes, setLikes] = useState("Loading...");
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-    const setupStates = async () => {
-      const { default: useSession } = await import("@/hooks/useSession");
-      const user = await useSession();
+    const user = useSession();
 
-      setLikes(await LikedPeople(people));
-      setIsLiked(people.includes(user.name));
-    };
-
-    setupStates();
-  }, [people]);
+    setLikes(LikedPeople(people));
+    setIsLiked(people.includes(user.name));
+  }, []);
 
   const handleLikePost = async () => {
-    const { LikePost } = await import("@/utils/posts");
+    const { name, picture } = useSession();
 
-    setLikes(await LikedPeople(people));
+    setLikes(LikedPeople([...people, name]));
     setIsLiked(true);
 
-    LikePost(postId);
+    likePost(postId, name, picture);
   };
 
   return (
@@ -39,9 +37,9 @@ const LikeButton: FC<Props> = ({ children, people, postId }) => {
       type="button"
       onClick={handleLikePost}
       disabled={isLiked}
-      className="text-primary flex h-8 cursor-pointer items-center border-none text-xs"
+      className="flex h-8 cursor-pointer items-center border-none text-xs text-[#E8E8E8]"
     >
-      {isLiked ? children[0] : children[1]}
+      {isLiked ? likedIcon : unlikedIcon}
       <span className="text-primary mr-6 text-base md:w-full">&nbsp;{likes}</span>
     </button>
   );

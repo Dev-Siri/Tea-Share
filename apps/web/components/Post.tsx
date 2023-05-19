@@ -32,17 +32,14 @@ const Post: FC<PostProps> = ({ post: { image, title, people, description, _id, a
         src={image}
         priority={!lazyLoadImage}
         alt={title}
-        height={1000}
-        width={1000}
+        height={500}
+        width={500}
         className="border-light-gray dark:border-semi-gray h-[500px] w-full rounded-lg border-2 object-contain"
       />
     </Link>
     <p className="mx-1 mt-8 h-16 overflow-y-auto break-words pb-5 text-gray-500">{description}</p>
     <section className="mt-16 flex items-center">
-      <LikeButton people={people} postId={_id}>
-        <IoMdThumbsUp {...likeBTNProps} />
-        <RiThumbUpLine {...likeBTNProps} />
-      </LikeButton>
+      <LikeButton people={people} postId={_id} likedIcon={<IoMdThumbsUp {...likeBTNProps} />} unlikedIcon={<RiThumbUpLine {...likeBTNProps} />} />
       <div className="ml-auto flex items-center">
         <p>Posted by {author}</p>
         <Link href={`/people/${author}`} className="hidden md:block">

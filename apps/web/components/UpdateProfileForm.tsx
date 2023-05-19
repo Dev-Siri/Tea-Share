@@ -4,6 +4,8 @@ import { useEffect, useState, type FC } from "react";
 
 import type { MongoDBUser } from "@/types";
 
+import useSession from "@/hooks/useSession";
+
 const UpdateProfileForm: FC = () => {
   const router = useRouter();
 
@@ -14,9 +16,7 @@ const UpdateProfileForm: FC = () => {
 
   useEffect(() => {
     const setupUserStates = async () => {
-      const { default: useSession } = await import("@/hooks/useSession");
-
-      const { name, picture, email } = await useSession();
+      const { name, picture, email } = useSession();
 
       setImage(picture);
       setUsername(name);
