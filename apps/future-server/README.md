@@ -4,13 +4,13 @@
 
 ## Progress
 
-**API** → _53%_ <br />
-**Database** → _62.8%_ <br />
-**Logic** → _52.1%_ <br />
+**API** → _100%_ <br />
+**Database** → _100%_ <br />
+**Logic** → _89%_ <br />
 **Optimizations** → _1%_ <br />
 
 <p style="font-size: 18px; font-weight: bold;">
-  Overall → <span style="font-style: italic; font-weight: normal;">69% (nice)</span>
+  Overall → <span style="font-style: italic; font-weight: normal;">94% (nice)</span>
 </p>
 
 ## Why Replace The Existing Server?

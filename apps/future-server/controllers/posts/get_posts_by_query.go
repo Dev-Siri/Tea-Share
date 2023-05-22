@@ -20,49 +20,42 @@ func GetPostsBySearchTerm(w http.ResponseWriter, r *http.Request) {
 	q := searchParams.Get("q")
 	fromUser := searchParams.Get("fromUser")
 
-  if q == "" {
-    w.WriteHeader(400)
-    log.Printf("Search param `q` not provided")
-    return
-  }
+	if q == "" {
+		w.WriteHeader(http.StatusOK)
+		log.Printf("Search param `q` not provided")
+		return
+	}
 
-	filter := bson.D{{
-		Key: "$or",
-    Value: bson.A{
-      bson.M{
-        "title": bson.M{"$regex": q},
-      },
-      bson.M{
-        "description": bson.M{"$regex": q},
-      },
-    },
-	}}
+	filter := bson.M{
+		"$or": bson.A{
+			bson.M{
+				"title": bson.M{"$regex": q},
+			},
+			bson.M{
+				"description": bson.M{"$regex": q},
+			},
+		},
+	}
 
 	if fromUser == "true" {
-		filter = bson.D{{
-      Key: "author",
-      Value: q,
-    }}
+		filter = bson.M{"author": q}
 	}
 
 	if utils.IsValidObjectID(q) {
-    id, _ := primitive.ObjectIDFromHex(q)
-    
-		filter = bson.D{{
-      Key: "_id",
-      Value: id,
-    }}
+		id, _ := primitive.ObjectIDFromHex(q)
+
+		filter = bson.M{"_id": id}
 	}
 
 	cursor, postsFetchError := db.PostsCollection().Find(
 		r.Context(), filter,
-    options.Find().SetSort(bson.M{"createdAt": -1}),
+		options.Find().SetSort(bson.M{"createdAt": -1}),
 	)
 
 	if postsFetchError != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Printf("%v", postsFetchError)
-    return
+		return
 	}
 
 	var posts []models.Post

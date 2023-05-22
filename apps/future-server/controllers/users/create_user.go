@@ -14,7 +14,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	body, bodyReadError := io.ReadAll(r.Body)
 
 	if bodyReadError != nil {
-		w.WriteHeader(400)
+		w.WriteHeader(http.StatusOK)
 		log.Printf("Failed to read request body")
 		return
 	}
@@ -22,7 +22,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 
 	if bodyParseError := json.Unmarshal(body, &user); bodyParseError != nil {
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
 		log.Printf("Failed to parse request body")
 	}
 

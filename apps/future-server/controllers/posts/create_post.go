@@ -15,19 +15,19 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	body, bodyReadError := io.ReadAll(r.Body)
 
 	if bodyReadError != nil {
-		w.WriteHeader(400)
+		w.WriteHeader(http.StatusOK)
 		log.Printf("Failed to read request body")
 		return
 	}
 
 	var post models.Post = models.Post{
 		CreatedAt:   time.Now().UTC(),
-		People:      []string {},
+		People:      []string{},
 		PeopleImage: []string{},
 	}
 
 	if bodyParseError := json.Unmarshal(body, &post); bodyParseError != nil {
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
 		log.Printf("Failed to parse request body")
 		return
 	}
