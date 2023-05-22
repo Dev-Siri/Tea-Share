@@ -41,7 +41,6 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	w.Header().Set("Content-Encoding", "br")
 
 	fmt.Fprintf(w, "Inserted post with ID: %v", result.InsertedID)
 }

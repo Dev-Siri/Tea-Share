@@ -84,7 +84,6 @@ func LikePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Content-Encoding", "br")
 
 	w.WriteHeader(http.StatusOK)
 
