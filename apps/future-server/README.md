@@ -6,11 +6,11 @@
 
 **API** → _100%_ <br />
 **Database** → _100%_ <br />
-**Logic** → _89%_ <br />
-**Optimizations** → _1%_ <br />
+**Logic** → _74%_ <br />
+**Optimizations** → _16.2%_ <br />
 
 <p style="font-size: 18px; font-weight: bold;">
-  Overall → <span style="font-style: italic; font-weight: normal;">94% (nice)</span>
+  Overall → <span style="font-style: italic; font-weight: normal;">87%</span>
 </p>
 
 ## Why Replace The Existing Server?
