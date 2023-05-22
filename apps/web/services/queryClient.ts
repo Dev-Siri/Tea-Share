@@ -1,7 +1,14 @@
-import type { QueryClient } from "@/types";
+type Method = "GET" | "POST" | "PUT" | "DELETE" | "OPTIONS" | "HEAD" | "TRACE" | "CONNECT" | "PATCH";
 
-/** A type-safe, ultralightweight and error aware fetch wrapper */
-const queryClient: QueryClient = async (endpoint, { method = "GET", body, cache, revalidate, searchParams }) => {
+interface Options {
+  method: Method;
+  body: Record<string, any>;
+  cache: RequestCache;
+  revalidate: number;
+  searchParams: Record<string, any>;
+}
+
+const queryClient = async <T>(endpoint: string, { method = "GET", body, cache, revalidate, searchParams }: Partial<Options>) => {
   const url = new URL(endpoint, process.env.NEXT_PUBLIC_BACKEND_URL!);
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
@@ -20,7 +27,7 @@ const queryClient: QueryClient = async (endpoint, { method = "GET", body, cache,
 
     if (!response.ok) throw new Error(`Failed to fetch, The server returned a status code of ${response.status}.`);
 
-    if (response.headers.get("Content-Type")?.includes("application/json")) return await response.json();
+    if (response.headers.get("Content-Type")?.includes("application/json")) return (await response.json()) as T;
   } catch (error) {
     // Print the error message on the server, only trigger the error.tsx on the client.
     // Extra validation to make sure actual error objects are never printed in the browser.
