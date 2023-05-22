@@ -9,7 +9,6 @@ import (
 	"tea-share/models"
 	"tea-share/utils"
 
-	"github.com/andybalholm/brotli"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -87,9 +86,5 @@ func GetPostsBySearchTerm(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Encoding", "br")
 	w.WriteHeader(http.StatusOK)
 
-	brotliWriter := brotli.NewWriter(w)
-
-	fmt.Fprintf(brotliWriter, "%s", postJSONBytes)
-
-	brotliWriter.Close()
+	fmt.Fprintf(w, "%s", postJSONBytes)
 }

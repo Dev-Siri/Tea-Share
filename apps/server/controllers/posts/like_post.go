@@ -10,7 +10,6 @@ import (
 	"tea-share/models"
 	"tea-share/utils"
 
-	"github.com/andybalholm/brotli"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -89,9 +88,5 @@ func LikePost(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 
-	brotliWriter := brotli.NewWriter(w)
-
-	fmt.Fprintf(brotliWriter, "%s", jsonBytes)
-
-	brotliWriter.Close()
+	fmt.Fprintf(w, "%s", jsonBytes)
 }

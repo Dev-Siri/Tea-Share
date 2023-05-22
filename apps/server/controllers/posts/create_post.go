@@ -9,8 +9,6 @@ import (
 	"tea-share/db"
 	"tea-share/models"
 	"time"
-
-	"github.com/andybalholm/brotli"
 )
 
 func CreatePost(w http.ResponseWriter, r *http.Request) {
@@ -45,8 +43,5 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Encoding", "br")
 
-	brotliWriter := brotli.NewWriter(w)
-	fmt.Fprintf(brotliWriter, "Inserted post with ID: %v", result.InsertedID)
-
-	brotliWriter.Close()
+	fmt.Fprintf(w, "Inserted post with ID: %v", result.InsertedID)
 }
