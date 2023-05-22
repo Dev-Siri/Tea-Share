@@ -6,11 +6,11 @@ import useServerSession from "@/hooks/useServerSession";
 import { storage } from "@/services/firebase";
 import queryClient from "@/services/queryClient";
 
-export const likePost = async (id: string, name: string, image: string) =>
+export const likePost = async (id: string, username: string, image: string) =>
   await queryClient(`/posts/${id}/like`, {
     method: "PATCH",
     body: {
-      name,
+      username,
       image,
     },
   });

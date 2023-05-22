@@ -149,7 +149,7 @@ export const UpdateProfile: UpdateProfileHandler = async (email, username, image
     await updateEmail(auth.currentUser!, email);
 
     await queryClient(`/users/${id}`, {
-      method: "PATCH",
+      method: "PUT",
       body: {
         _id: id,
         image: uploadedImage,
