@@ -9,6 +9,7 @@ import (
 	"tea-share/db"
 	"tea-share/models"
 
+	"github.com/andybalholm/brotli"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -76,6 +77,11 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Encoding", "br")
 
-	fmt.Fprintf(w, "%s", userJSONBytes)
+	brotliWriter := brotli.NewWriter(w)
+
+	fmt.Fprintf(brotliWriter, "%s", userJSONBytes)
+
+	brotliWriter.Close()
 }

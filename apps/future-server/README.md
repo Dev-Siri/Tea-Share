@@ -6,11 +6,11 @@
 
 **API** → _100%_ <br />
 **Database** → _100%_ <br />
-**Logic** → _74%_ <br />
-**Optimizations** → _16.2%_ <br />
+**Logic** → _100%_ <br />
+**Optimizations** → _100%_ <br />
 
 <p style="font-size: 18px; font-weight: bold;">
-  Overall → <span style="font-style: italic; font-weight: normal;">87%</span>
+  Overall → <span style="font-style: italic; font-weight: normal;">100% (Preparing for deployment & replacement for `/apps/server`)</span>
 </p>
 
 ## Why Replace The Existing Server?

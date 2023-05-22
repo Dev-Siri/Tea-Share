@@ -10,13 +10,14 @@ import (
 	"tea-share/models"
 	"tea-share/utils"
 
+	"github.com/andybalholm/brotli"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func LikePost(w http.ResponseWriter, r *http.Request) {
-  id := r.URL.Query().Get("id")
-	
+	id := r.URL.Query().Get("id")
+
 	body, bodyReadError := io.ReadAll(r.Body)
 
 	if bodyReadError != nil {
@@ -33,11 +34,11 @@ func LikePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-  if !utils.IsValidObjectID(id) {
-    w.WriteHeader(http.StatusBadRequest)
+	if !utils.IsValidObjectID(id) {
+		w.WriteHeader(http.StatusBadRequest)
 		log.Printf("No posts with that ID")
-    return
-  }
+		return
+	}
 
 	var updatedPost models.Post
 
@@ -49,7 +50,7 @@ func LikePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-  post := db.PostsCollection().FindOne(r.Context(), bson.M{"_id": postID})
+	post := db.PostsCollection().FindOne(r.Context(), bson.M{"_id": postID})
 	postDecodeError := post.Decode(&updatedPost)
 
 	if postDecodeError != nil {
@@ -58,23 +59,23 @@ func LikePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-  alreadyLiked := utils.Contains(updatedPost.People, user.Username)
+	alreadyLiked := utils.Contains(updatedPost.People, user.Username)
 
-  if alreadyLiked {
+	if alreadyLiked {
 		w.WriteHeader(http.StatusNotModified)
 		return
 	}
 
-  db.PostsCollection().FindOneAndUpdate(
+	db.PostsCollection().FindOneAndUpdate(
 		r.Context(), bson.M{"_id": postID},
 		bson.M{
 			"$set": bson.M{
-				"people": append(updatedPost.People, user.Username),
+				"people":      append(updatedPost.People, user.Username),
 				"peopleImage": append(updatedPost.PeopleImage, user.Image),
 			},
 		},
 	)
-  
+
 	jsonBytes, jsonParseError := json.Marshal(updatedPost)
 
 	if jsonParseError != nil {
@@ -84,6 +85,13 @@ func LikePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Encoding", "br")
+
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "%s", jsonBytes)
-};
+
+	brotliWriter := brotli.NewWriter(w)
+
+	fmt.Fprintf(brotliWriter, "%s", jsonBytes)
+
+	brotliWriter.Close()
+}
