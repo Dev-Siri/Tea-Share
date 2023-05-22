@@ -27,7 +27,11 @@ const queryClient = async <T>(endpoint: string, { method = "GET", body, cache, r
 
     if (!response.ok) throw new Error(`Failed to fetch, The server returned a status code of ${response.status}.`);
 
-    if (response.headers.get("Content-Type")?.includes("application/json")) return (await response.json()) as T;
+    if (response.headers.get("Content-Type")?.includes("application/json")) {
+      return (await response.json()) as T;
+    } else {
+      return (await response.text()) as T;
+    }
   } catch (error) {
     // Print the error message on the server, only trigger the error.tsx on the client.
     // Extra validation to make sure actual error objects are never printed in the browser.
