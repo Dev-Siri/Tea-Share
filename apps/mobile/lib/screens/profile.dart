@@ -116,10 +116,10 @@ class _ProfileState extends State<Profile> {
             visible: _isLoading,
             replacement: Visibility(
               visible: _posts.isNotEmpty,
-              replacement: Padding(
-                padding: const EdgeInsets.only(top: 120),
+              replacement: const Padding(
+                padding: EdgeInsets.only(top: 120),
                 child: Column(
-                  children: const <Widget>[
+                  children: <Widget>[
                     Icon(Icons.add_a_photo,
                       size: 80,
                     ),

@@ -66,7 +66,7 @@ class PostService with Storage {
       Uri.parse('$BACKEND_URL/posts/$id/like'),
       headers: _headers,
       body: jsonEncode({
-        'name': username,
+        'username': username,
         'image': image,
       })
     );
