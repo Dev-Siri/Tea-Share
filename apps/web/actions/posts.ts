@@ -7,7 +7,7 @@ import { storage } from "@/services/firebase";
 import queryClient from "@/services/queryClient";
 
 export const likePost = async (id: string, username: string, image: string) =>
-  await queryClient(`/posts/${id}/like`, {
+  await queryClient(`/posts/like?id=${id}`, {
     method: "PATCH",
     body: {
       username,

@@ -63,7 +63,7 @@ class PostService with Storage {
 
   Future<PostsServiceResponse> likePost({ required String id, required String username, required String image }) async {
     final http.Response response = await http.patch(
-      Uri.parse('$BACKEND_URL/posts/$id/like'),
+      Uri.parse('$BACKEND_URL/posts/like?id=$id'),
       headers: _headers,
       body: jsonEncode({
         'username': username,

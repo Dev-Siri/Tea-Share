@@ -39,7 +39,7 @@ class UserService with Storage {
     await _firebaseAuth.currentUser!.updatePhotoURL(imageResponse.imageUrl);
 
     await http.put(
-      Uri.parse("$BACKEND_URL/user/${user.id}"),
+      Uri.parse("$BACKEND_URL/user?id=${user.id}"),
       headers: _headers,
       body: jsonEncode({
         'username': user.username,

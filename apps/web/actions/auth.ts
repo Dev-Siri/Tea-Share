@@ -55,8 +55,8 @@ export const updateUserProfile = async (formData: FormData) => {
 
   await updateEmail(auth.currentUser!, email);
 
-  await queryClient(`/users/${id}`, {
-    method: "PATCH",
+  await queryClient(`/users?id=${id}`, {
+    method: "PUT",
     body: {
       _id: id,
       image: uploadedImage,

@@ -148,7 +148,7 @@ export const UpdateProfile: UpdateProfileHandler = async (email, username, image
 
     await updateEmail(auth.currentUser!, email);
 
-    await queryClient(`/users/${id}`, {
+    await queryClient(`/users?id=${id}`, {
       method: "PUT",
       body: {
         _id: id,
