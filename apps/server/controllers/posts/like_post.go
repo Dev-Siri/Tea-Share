@@ -33,19 +33,13 @@ func LikePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !utils.IsValidObjectID(id) {
-		w.WriteHeader(http.StatusBadRequest)
-		log.Printf("No posts with that ID")
-		return
-	}
-
 	var updatedPost models.Post
 
 	postID, idParseError := primitive.ObjectIDFromHex(id)
 
 	if idParseError != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("Failed to parse post ID")
+		w.WriteHeader(http.StatusBadRequest)
+		log.Printf("No posts with that ID")
 		return
 	}
 
