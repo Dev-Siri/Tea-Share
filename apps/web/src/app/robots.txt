@@ -1,2 +1,4 @@
 User-agent: *
+
+Host: https://tea-share.vercel.app
 Sitemap: https://tea-share.vercel.app/sitemap.xml
