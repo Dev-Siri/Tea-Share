@@ -11,9 +11,6 @@
     "isolatedModules": true,
     "moduleResolution": "Node",
     "jsx": "preserve",
-    "baseUrl": "../../apps/web",
-    "paths": {
-      "@/*": ["./*"]
-    }
+    "baseUrl": "../../apps/web"
   }
 }
