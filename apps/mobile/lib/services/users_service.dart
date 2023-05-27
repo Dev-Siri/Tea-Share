@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:tea_share/constants.dart';
 import 'package:tea_share/env/secret_keys.dart' show BACKEND_URL;
@@ -30,9 +31,19 @@ class UserService with Storage {
   };
 
   User? get user => _firebaseAuth.currentUser;
+
+  List<UserModel> _decodeUsers(http.Response response) {
+    final List body = jsonDecode(response.body);
+    final List<UserModel> users = body.map((final user) => UserModel.fromJson(user)).toList();
+
+    return users;
+  }
   
   Future<void> updateProfile({ required UserModel user }) async {
-    final StorageResponse imageResponse = await uploadImage(imagePath: user.image, type: "users");
+    final StorageResponse imageResponse = await uploadImage(
+      imagePath: user.image,
+      type: "users"
+    );
 
     await _firebaseAuth.currentUser!.updateDisplayName(user.username);
     await _firebaseAuth.currentUser!.updateEmail(user.email);
@@ -64,6 +75,7 @@ class UserService with Storage {
   Future<UsersServiceResponse> login({ required String email, required String password }) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+
       return UsersServiceResponse(
         successful: true
       );
@@ -80,6 +92,7 @@ class UserService with Storage {
       await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       await _firebaseAuth.currentUser?.updatePhotoURL(DEFAULT_IMAGE_URL);
       await _firebaseAuth.currentUser?.updateDisplayName(username);
+
       await _createUser(
         UserModel(
           email: email,
@@ -125,8 +138,7 @@ class UserService with Storage {
     final http.Response response = await http.get(Uri.parse('$BACKEND_URL/users?page=$page&limit=$limit'));
 
     if (response.statusCode == 200) {
-      final List body = jsonDecode(response.body);
-      final List<UserModel> users = body.map((final user) => UserModel.fromJson(user)).toList();
+      final List<UserModel> users = await compute(_decodeUsers, response);
 
       return UsersServiceResponse(
         successful: true,
@@ -144,8 +156,7 @@ class UserService with Storage {
     final http.Response response = await http.get(Uri.parse('$BACKEND_URL/users/search?name=$name&exact=$exact'));
 
     if (response.statusCode == 200) {
-      final List body = jsonDecode(response.body);
-      final List<UserModel> users = body.map((final user) => UserModel.fromJson(user)).toList();
+      final List<UserModel> users = await compute(_decodeUsers, response);
 
       return UsersServiceResponse(
         successful: true,

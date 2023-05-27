@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tea_share/models/user_model.dart';
 import 'package:tea_share/services/users_service.dart';
+import 'package:tea_share/widgets/skeletons/users_skeleton.dart';
 import 'package:tea_share/widgets/user_tile.dart';
 
 class People extends StatefulWidget {
@@ -72,9 +73,11 @@ class _PeopleState extends State<People> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoadingUsers ? const Center(
-      child: CircularProgressIndicator(),
-    ) : AnimatedList(
+    if (_isLoadingUsers) {
+      return const UsersSkeleton();
+    }
+    
+    return AnimatedList(
       initialItemCount: _users.length,
       key: _userListState,
       controller: _userListController,

@@ -1,14 +1,13 @@
+import 'package:bottom_bar_page_transition/bottom_bar_page_transition.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:bottom_bar_page_transition/bottom_bar_page_transition.dart';
-
-import 'package:tea_share/services/users_service.dart';
 import 'package:tea_share/screens/home.dart';
-import 'package:tea_share/screens/profile.dart';
 import 'package:tea_share/screens/people.dart';
+import 'package:tea_share/screens/profile.dart';
 import 'package:tea_share/screens/settings.dart';
+import 'package:tea_share/services/users_service.dart';
 
 class MainScreens extends StatefulWidget {
   const MainScreens({ super.key });

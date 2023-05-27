@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:tea_share/env/secret_keys.dart';
 import 'package:tea_share/models/post_model.dart';
@@ -23,12 +25,18 @@ class PostService with Storage {
     'Content-Type': 'application/json; charset=UTF-8',
   };
 
+  List<PostModel> _decodePosts(http.Response response) {
+    final List body = jsonDecode(response.body);
+    final List<PostModel> posts = body.map((final post) => PostModel.fromJson(post)).toList();
+
+    return posts;
+  }
+
   Future<PostsServiceResponse> fetchPosts({ required int limit, required int page }) async {
     final http.Response response = await http.get(Uri.parse('$BACKEND_URL/posts?page=$page&limit=$limit'));
 
     if (response.statusCode == 200) {
-      final List body = jsonDecode(response.body);
-      final List<PostModel> posts = body.map((final post) => PostModel.fromJson(post)).toList();
+      final List<PostModel> posts = await compute(_decodePosts, response);
       
       return PostsServiceResponse(
         successful: true,
@@ -46,8 +54,7 @@ class PostService with Storage {
     final http.Response response = await http.get(Uri.parse('$BACKEND_URL/posts/search?q=$query&fromUser=$fromUser'));
 
     if (response.statusCode == 200) {
-      final List body = jsonDecode(response.body);
-      final List<PostModel> posts = body.map((final post) => PostModel.fromJson(post)).toList();
+      final List<PostModel> posts = await compute(_decodePosts, response);
 
       return PostsServiceResponse(
         successful: true,

@@ -3,6 +3,7 @@ import 'package:date_time_format/date_time_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:tea_share/models/post_model.dart';
 import 'package:tea_share/services/posts_service.dart';
 import 'package:tea_share/services/theme_service.dart';
@@ -156,8 +157,12 @@ class _PostCardState extends State<PostCard> with ErrorDialog {
                     tag: widget.title,
                     child: CachedNetworkImage(
                       imageUrl: widget.image,
-                      progressIndicatorBuilder: (BuildContext context, String url, DownloadProgress progress) => const CircularProgressIndicator(),
-                      height: 300,
+                      progressIndicatorBuilder: (BuildContext context, String url, DownloadProgress progress) => SkeletonLine(
+                        style: SkeletonLineStyle(
+                          height: 300,
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
                       fit: BoxFit.fill
                     ),
                   ),
