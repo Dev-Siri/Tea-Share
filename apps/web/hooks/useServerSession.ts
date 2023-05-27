@@ -1,12 +1,12 @@
 import jwtDecode from "jwt-decode";
 import { cookies } from "next/headers";
 
-import type { FirebaseUser, SessionHook } from "@/types";
+import type { FirebaseUser } from "@/types";
 
 /**
  * Using this will automatically cause the page to do dynamic rendering
  */
-const useServerSession: SessionHook = () => {
+const useServerSession = () => {
   const nextCookies = cookies();
   const authToken = nextCookies.get("auth_token")?.value!;
 

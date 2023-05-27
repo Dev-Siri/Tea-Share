@@ -71,8 +71,6 @@ const Profile: PageComponent<Props> = async ({ params: { name } }) => {
     }),
   ]);
 
-  console.log({ posts, users });
-
   if (!users?.[0]) notFound();
 
   return (

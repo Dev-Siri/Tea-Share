@@ -1,5 +1,5 @@
-import lazy from "next/dynamic";
 import { Inter } from "next/font/google";
+import { lazy } from "react";
 import "./globals.css";
 
 import type { LayoutComponent } from "@/types";

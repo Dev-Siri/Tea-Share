@@ -5,12 +5,6 @@ export interface MongoDBUser {
   email: string;
 }
 
-export interface UserFormData {
-  username: string;
-  image: string;
-  email: string;
-}
-
 export interface FirebaseUser {
   name: string;
   picture: string;
@@ -31,7 +25,9 @@ export interface FirebaseUser {
   };
 }
 
-export interface UserSubmitFormData extends Omit<UserFormData, "image"> {
+export interface UserSubmitFormData {
+  username: string;
+  email: string;
   password: string;
   photoURL: File | string | undefined | null;
 }

@@ -1,4 +1,4 @@
-import lazy from "next/dynamic";
+import { lazy } from "react";
 
 import type { PageComponent } from "@/types";
 import type { Metadata } from "next";

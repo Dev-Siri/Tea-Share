@@ -12,7 +12,6 @@ export default {
       colors: {
         primary: "hsl(257, 39%, 53%)",
         "primary-dark": "rgb(57, 42, 96)",
-        "medium-blue": "rgb(0, 102, 255)",
         "light-gray": "hsl(0, 0%, 90%)",
         "semi-gray": "rgb(51, 51, 51)",
         "dark-gray": "rgb(17, 17, 17)",

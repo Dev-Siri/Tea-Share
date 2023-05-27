@@ -1,11 +1,9 @@
-import lazy from "next/dynamic";
-
+import type { MongoDBUser } from "@/types";
 import type { FC } from "react";
 
-import { MongoDBUser } from "@/types";
 import { getHandle } from "@/utils/globals";
 
-const Image = lazy(() => import("next/image"));
+import Image from "next/image";
 
 export interface Props {
   user: Pick<MongoDBUser, "username" | "image">;

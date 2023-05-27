@@ -1,6 +1,4 @@
-import lazy from "next/dynamic";
-
-import type { FC } from "react";
+import { lazy, type FC } from "react";
 
 import { AiOutlinePlus } from "@react-icons/all-files/ai/AiOutlinePlus";
 import { BsFillPeopleFill } from "@react-icons/all-files/bs/BsFillPeopleFill";
@@ -8,8 +6,9 @@ import { IoSettingsSharp } from "@react-icons/all-files/io5/IoSettingsSharp";
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 
+import Link from "next/link";
+
 const UserIcon = lazy(() => import("@/components/UserIcon"));
-const Link = lazy(() => import("next/link"));
 
 const Navbar: FC = () => (
   <nav className="bg-light-gray mb-9 flex h-16 items-center justify-between dark:bg-black dark:text-white min-[700px]:mb-0">

@@ -1,10 +1,7 @@
-import lazy from "next/dynamic";
-
 import type { FC } from "react";
 
+import Link from "next/link";
 import Icon from "./icons/AppIcon";
-
-const Link = lazy(() => import("next/link"));
 
 interface Props {
   bigger?: boolean;

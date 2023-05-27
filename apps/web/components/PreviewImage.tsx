@@ -1,9 +1,7 @@
 "use client";
-import lazy from "next/dynamic";
-
 import { useState, type FC } from "react";
 
-const Image = lazy(() => import("next/image"));
+import Image from "next/image";
 
 const PreviewImage: FC = () => {
   const [previewImage, setPreviewImage] = useState<File | null>(null);

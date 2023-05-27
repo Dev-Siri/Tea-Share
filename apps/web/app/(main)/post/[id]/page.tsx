@@ -1,17 +1,16 @@
-import lazy from "next/dynamic";
 import { notFound } from "next/navigation";
 
 import type { GenerateMetadata, PageComponent, Post } from "@/types";
 
+import { INITIAL_PAGE_LIMIT, POST_LIMIT } from "@/constants/limit";
 import { PAGE_URL } from "@/constants/pageInfo";
 import queryClient from "@/services/queryClient";
 import { getRelativeTime } from "@/utils/globals";
 
 import UserList from "@/components/UserList";
-import { INITIAL_PAGE_LIMIT, POST_LIMIT } from "@/constants/limit";
 
-const Image = lazy(() => import("next/image"));
-const Link = lazy(() => import("next/link"));
+import Image from "next/image";
+import Link from "next/link";
 
 interface Props {
   params: {

@@ -38,7 +38,7 @@ const Search: PageComponent<Props> = async ({ searchParams: { query } }) => {
     queryClient<MongoDBUser[]>("/users/search", {
       cache: "no-store",
       searchParams: {
-        q: query,
+        name: query,
         exact: false,
       },
     }),

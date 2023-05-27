@@ -9,12 +9,7 @@ interface DefaultProps {
 export type PageComponent<P = DefaultProps> = (props: P) => ReactNode | Promise<ReactNode>;
 
 /** @type Add slot props by extending the P generic */
-export type LayoutComponent<P = {}> = (
-  props: PropsWithChildren &
-    P & {
-      params: Record<string, string>;
-    }
-) => ReactNode | Promise<ReactNode>;
+export type LayoutComponent<P = {}> = (props: PropsWithChildren & P & Pick<DefaultProps, "params">) => ReactNode | Promise<ReactNode>;
 
 export type LoadingComponent = () => ReactNode;
 export type ErrorComponent = (props: { error: Error; reset(): void }) => ReactNode;

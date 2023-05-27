@@ -1,17 +1,16 @@
-import lazy from "next/dynamic";
+import { lazy, type FC } from "react";
 
 import type { Post } from "@/types";
-import type { FC } from "react";
 
 import { PRIMARY_COLOR } from "@/constants/colors";
 import { getRelativeTime } from "@/utils/globals";
 
 import { IoMdThumbsUp } from "@react-icons/all-files/io/IoMdThumbsUp";
 import { RiThumbUpLine } from "@react-icons/all-files/ri/RiThumbUpLine";
+import Image from "next/image";
+import Link from "next/link";
 
 const LikeButton = lazy(() => import("@/components/LikeButton"));
-const Image = lazy(() => import("next/image"));
-const Link = lazy(() => import("next/link"));
 
 interface PostProps {
   post: Post;

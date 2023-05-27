@@ -3,7 +3,6 @@ import { useEffect, useState, type FC, type ReactNode } from "react";
 
 import { likePost } from "@/actions/posts";
 import useSession from "@/hooks/useSession";
-import { LikedPeople } from "@/utils/posts";
 
 interface Props {
   people: string[];
@@ -12,6 +11,22 @@ interface Props {
   unlikedIcon: ReactNode;
 }
 
+const formatLikes = (people: string[]) => {
+  const user = useSession();
+
+  if (!people.length) return "0 Likes";
+
+  if (people.includes(user.name)) {
+    if (people.length === 1) return "You liked this post";
+
+    return `You and ${people.length - 1} ${people.length - 1 === 1 ? "other" : "others"}`;
+  }
+
+  if (people.length - 1 === 0) return `${people[0]} liked this post`;
+
+  return `${people[0]} and ${people.length - 1} others`;
+};
+
 const LikeButton: FC<Props> = ({ people, postId, likedIcon, unlikedIcon }) => {
   const [likes, setLikes] = useState("Loading...");
   const [isLiked, setIsLiked] = useState(false);
@@ -19,14 +34,14 @@ const LikeButton: FC<Props> = ({ people, postId, likedIcon, unlikedIcon }) => {
   useEffect(() => {
     const user = useSession();
 
-    setLikes(LikedPeople(people));
+    setLikes(formatLikes(people));
     setIsLiked(people.includes(user.name));
   }, []);
 
   const handleLikePost = async () => {
     const { name, picture } = useSession();
 
-    setLikes(LikedPeople([...people, name]));
+    setLikes(formatLikes([...people, name]));
     setIsLiked(true);
 
     likePost(postId, name, picture);

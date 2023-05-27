@@ -1,12 +1,10 @@
 import { TIME_UNITS, TIME_UNIT_SECONDS } from "@/constants/date";
 
-import type { HandleGetter, RelativeTimeGetter } from "@/types";
-
 /**
  * @param date - The Date object to calculate the time
  * @returns A relative time string.
  */
-export const getRelativeTime: RelativeTimeGetter = dateString => {
+export const getRelativeTime = (dateString: string) => {
   const date = new Date(dateString);
   const timeMs = date.getTime();
   const deltaSeconds = Math.round((timeMs - Date.now()) / 1000);
@@ -27,4 +25,4 @@ export const getRelativeTime: RelativeTimeGetter = dateString => {
  * @param username A user's displayName
  * @returns A string with the username formatted with '@'
  */
-export const getHandle: HandleGetter = username => `@${username?.toLowerCase()?.split(" ")?.join("-")}`;
+export const getHandle = (username?: string) => `@${username?.toLowerCase()?.split(" ")?.join("-")}`;

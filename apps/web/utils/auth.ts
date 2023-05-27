@@ -1,78 +1,4 @@
-import type { GoogleAuthHandler, LoginHandler, LogoutHandler, SignupHandler, UpdateProfileHandler } from "@/types";
-
-export const Signup: SignupHandler = async (username, image, email, password) => {
-  const { createUserWithEmailAndPassword, updateProfile, getIdToken } = await import("firebase/auth");
-  const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
-  const { default: queryClient } = await import("@/services/queryClient");
-  const { storage, auth } = await import("@/services/firebase");
-  const { toast } = await import("react-hot-toast");
-  const { setCookie } = await import("./cookies");
-
-  if (!username || !image) return toast.error("All the fields were not provided for sign up.") as unknown as void;
-
-  const loading = toast.loading("Creating your account...");
-
-  try {
-    const imageName = crypto.randomUUID();
-
-    const imageRef = ref(storage, `users/${imageName}`);
-
-    await uploadBytes(imageRef, image);
-
-    const imageLink = await getDownloadURL(imageRef);
-
-    const { user } = await createUserWithEmailAndPassword(auth, email, password);
-
-    await updateProfile(user, {
-      displayName: username,
-      photoURL: imageLink,
-    });
-
-    await queryClient("/users", {
-      method: "POST",
-      body: {
-        username,
-        image: imageLink,
-        email,
-      },
-    });
-
-    const authToken = await getIdToken(user);
-
-    setCookie("auth_token", authToken);
-  } catch (error: any) {
-    const { mailAuthErrorFormater } = await import("./errors");
-    const errorMessage = mailAuthErrorFormater(error.message);
-
-    toast.remove(loading);
-    toast.error(`Failed to create your account, ${errorMessage}`);
-  }
-};
-
-export const Login: LoginHandler = async (email, password) => {
-  const { signInWithEmailAndPassword, getIdToken } = await import("firebase/auth");
-  const { toast } = await import("react-hot-toast");
-  const { setCookie } = await import("./cookies");
-  const { auth } = await import("@/services/firebase");
-
-  const loading = toast.loading("Logging you in...");
-
-  try {
-    const { user } = await signInWithEmailAndPassword(auth, email, password);
-
-    const authToken = await getIdToken(user);
-
-    setCookie("auth_token", authToken);
-  } catch (error: any) {
-    const { mailAuthErrorFormater } = await import("./errors");
-    const errorMessage = mailAuthErrorFormater(error.message);
-
-    toast.remove(loading);
-    toast.error(`Failed to login, ${errorMessage}`);
-  }
-};
-
-export const GoogleAuth: GoogleAuthHandler = async () => {
+export const GoogleAuth = async () => {
   const { signInWithPopup, getIdToken, GoogleAuthProvider } = await import("firebase/auth");
   const { default: queryClient } = await import("@/services/queryClient");
   const { auth } = await import("@/services/firebase");
@@ -107,7 +33,7 @@ export const GoogleAuth: GoogleAuthHandler = async () => {
   }
 };
 
-export const Logout: LogoutHandler = async () => {
+export const Logout = async () => {
   const { removeCookie } = await import("./cookies");
   const { toast } = await import("react-hot-toast");
   const { auth } = await import("@/services/firebase");
@@ -123,7 +49,7 @@ export const Logout: LogoutHandler = async () => {
   }
 };
 
-export const UpdateProfile: UpdateProfileHandler = async (email, username, image, id) => {
+export const UpdateProfile = async (email: string, username: string, image: File | string | null, id: string) => {
   const { updateEmail, updateProfile, getIdToken } = await import("firebase/auth");
   const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
   const { default: queryClient } = await import("@/services/queryClient");

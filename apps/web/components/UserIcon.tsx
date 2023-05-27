@@ -1,13 +1,12 @@
 "use client";
-import lazy from "next/dynamic";
 import { useEffect, useState, type FC } from "react";
 
 import type { FirebaseUser } from "@/types";
 
 import useSession from "@/hooks/useSession";
 
-const Image = lazy(() => import("next/image"));
-const Link = lazy(() => import("next/link"));
+import Image from "next/image";
+import Link from "next/link";
 
 const UserIcon: FC = () => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
