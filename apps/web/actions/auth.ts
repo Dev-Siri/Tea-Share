@@ -6,8 +6,6 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
-import type { RequestCookies } from "next/dist/compiled/@edge-runtime/cookies";
-
 import { auth, storage } from "@/services/firebase";
 import queryClient from "@/services/queryClient";
 import { redirect } from "next/navigation";
@@ -19,11 +17,10 @@ import { redirect } from "next/navigation";
 //   author: string;
 //   authorImage: string;
 // }
-const nextCookies = cookies() as RequestCookies;
 
 export const logout = async () => {
   await auth.signOut();
-  nextCookies.delete("auth_token");
+  cookies().delete("auth_token");
 
   redirect("/auth");
 };
@@ -67,7 +64,7 @@ export const updateUserProfile = async (formData: FormData) => {
 
   const authToken = await auth.currentUser!.getIdToken();
 
-  nextCookies.set("auth_token", authToken);
+  cookies().set("auth_token", authToken);
 
   revalidatePath("/settings");
 };
@@ -81,7 +78,7 @@ export const login = async (formData: FormData) => {
   const { user } = await signInWithEmailAndPassword(auth, email, password);
   const authToken = await user.getIdToken();
 
-  nextCookies.set("auth_token", authToken);
+  cookies().set("auth_token", authToken);
   redirect("/");
 };
 
@@ -127,6 +124,6 @@ export const signup = async (formData: FormData) => {
 
   const authToken = await getIdToken(user);
 
-  nextCookies.set("auth_token", authToken);
+  cookies().set("auth_token", authToken);
   redirect("/");
 };

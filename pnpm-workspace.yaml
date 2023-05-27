@@ -1,5 +1,4 @@
 packages:
   - "apps/future-pfp-generation-server/**"
-  - "apps/server/**"
   - "apps/web/**"
   - "packages/**"
