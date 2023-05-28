@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-import Skeleton from "@/components/Skeleton";
+import Skeleton from "./Skeleton";
 
 interface Props {
   numberOfItems: number;

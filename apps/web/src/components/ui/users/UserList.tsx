@@ -1,7 +1,7 @@
 import type { MongoDBUser } from "@/types";
 import type { FC } from "react";
 
-import UserListItem from "@/components/UserListItem";
+import UserListItem from "./UserListItem";
 
 interface Props {
   title: string;
@@ -14,7 +14,7 @@ const UserList: FC<Props> = ({ title, users }) => (
       <h1 className="ml-2 mt-2 hidden text-xl font-medium min-[500px]:block">{title}</h1>
     </section>
     <section role="list">
-      {users.map((user: Pick<MongoDBUser, "username" | "image">, index: number) => (
+      {users.map((user, index) => (
         <UserListItem key={`${user.username}:${index}`} {...user} />
       ))}
     </section>

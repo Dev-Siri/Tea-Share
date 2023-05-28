@@ -7,8 +7,8 @@ import type { Metadata } from "next";
 
 import { PAGE_CREATOR, PAGE_DESCRIPTION, PAGE_KEYWORDS, PAGE_TITLE, PAGE_URL } from "@/constants/pageInfo";
 
-const AppToaster = lazy(() => import("@/components/AppToaster"));
-const Provider = lazy(() => import("@/components/Provider"));
+const AppToaster = lazy(() => import("@/components/ui/AppToaster"));
+const Provider = lazy(() => import("@/components/ui/Provider"));
 
 const inter = Inter({
   preload: true,

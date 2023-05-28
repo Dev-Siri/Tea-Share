@@ -4,8 +4,8 @@ import type { GenerateMetadata, MongoDBUser, PageComponent, Post } from "@/types
 
 import queryClient from "@/services/queryClient";
 
-import PostList from "@/components/PostList";
-import UserInfo from "@/components/UserInfo";
+import PostList from "@/components/ui/posts/PostList";
+import UserInfo from "@/components/ui/users/UserInfo";
 
 interface Props {
   params: {

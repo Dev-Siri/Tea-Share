@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { INITIAL_PAGE_LIMIT, USER_LIMIT } from "@/constants/limit";
 import queryClient from "@/services/queryClient";
 
-const UserPresentor = lazy(() => import("@/components/UserPresenter"));
+const UserPresentor = lazy(() => import("@/components/ui/users/UserPresenter"));
 
 export const metadata: Metadata = {
   title: "People",

@@ -10,7 +10,7 @@ import { RiThumbUpLine } from "@react-icons/all-files/ri/RiThumbUpLine";
 import Image from "next/image";
 import Link from "next/link";
 
-const LikeButton = lazy(() => import("@/components/LikeButton"));
+const LikeButton = lazy(() => import("./LikeButton"));
 
 interface PostProps {
   post: Post;

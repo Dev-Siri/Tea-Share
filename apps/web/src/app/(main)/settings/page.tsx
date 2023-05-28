@@ -6,8 +6,8 @@ import type { Metadata } from "next";
 import { IoMoon } from "@react-icons/all-files/io5/IoMoon";
 import { MdWbSunny } from "@react-icons/all-files/md/MdWbSunny";
 
-const ThemeOption = lazy(() => import("@/components/ThemeOption"));
-const UpdateProfileForm = lazy(() => import("@/components/UpdateProfileForm"));
+const UpdateProfileForm = lazy(() => import("@/components/forms/UpdateProfileForm"));
+const ThemeOption = lazy(() => import("@/components/ui/ThemeOption"));
 
 export const metadata: Metadata = {
   title: "Settings",

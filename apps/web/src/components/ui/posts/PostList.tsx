@@ -1,7 +1,7 @@
 import type { Post as PostType } from "@/types";
 import type { FC } from "react";
 
-import Post from "@/components/Post";
+import Post from "./Post";
 
 interface Props {
   posts: PostType[];

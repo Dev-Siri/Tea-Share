@@ -7,8 +7,8 @@ import queryClient from "@/services/queryClient";
 import { AiOutlineArrowLeft } from "@react-icons/all-files/ai/AiOutlineArrowLeft";
 import { AiOutlineArrowRight } from "@react-icons/all-files/ai/AiOutlineArrowRight";
 
-import PostList from "@/components/PostList";
-import UserList from "@/components/UserList";
+import PostList from "@/components/ui/posts/PostList";
+import UserList from "@/components/ui/users/UserList";
 import Link from "next/link";
 
 export const runtime: ServerRuntime = "edge";

@@ -2,8 +2,8 @@ import type { GenerateMetadata, MongoDBUser, PageComponent, Post } from "@/types
 
 import queryClient from "@/services/queryClient";
 
-import PostList from "@/components/PostList";
-import UserList from "@/components/UserList";
+import PostList from "@/components/ui/posts/PostList";
+import UserList from "@/components/ui/users/UserList";
 import { FaUserAltSlash } from "@react-icons/all-files/fa/FaUserAltSlash";
 import { FiCameraOff } from "@react-icons/all-files/fi/FiCameraOff";
 

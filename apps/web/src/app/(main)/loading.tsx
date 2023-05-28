@@ -2,8 +2,8 @@ import type { LoadingComponent } from "@/types";
 
 import { POST_LIMIT, USER_LIMIT } from "@/constants/limit";
 
-import PostsListSkeleton from "@/components/PostsListSkeleton";
-import UserListSkeleton from "@/components/UserListSkeleton";
+import PostsListSkeleton from "@/components/skeletons/PostsListSkeleton";
+import UserListSkeleton from "@/components/skeletons/UserListSkeleton";
 
 const HomeLoading: LoadingComponent = () => (
   <aside className="flex w-full min-[1002px]:pr-4">

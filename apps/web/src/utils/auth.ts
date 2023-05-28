@@ -1,5 +1,5 @@
 export const GoogleAuth = async () => {
-  const { signInWithPopup, getIdToken, GoogleAuthProvider } = await import("firebase/auth");
+  const { signInWithPopup, GoogleAuthProvider } = await import("firebase/auth");
   const { default: queryClient } = await import("@/services/queryClient");
   const { auth } = await import("@/services/firebase");
   const { toast } = await import("react-hot-toast");
@@ -21,7 +21,7 @@ export const GoogleAuth = async () => {
       },
     });
 
-    const authToken = await getIdToken(user);
+    const authToken = await user.getIdToken();
 
     setCookie("auth_token", authToken);
   } catch (error: any) {
@@ -50,9 +50,9 @@ export const Logout = async () => {
 };
 
 export const UpdateProfile = async (email: string, username: string, image: File | string | null, id: string) => {
-  const { updateEmail, updateProfile, getIdToken } = await import("firebase/auth");
   const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
   const { default: queryClient } = await import("@/services/queryClient");
+  const { updateEmail, updateProfile } = await import("firebase/auth");
   const { storage, auth } = await import("@/services/firebase");
   const { toast } = await import("react-hot-toast");
   const { setCookie } = await import("./cookies");
@@ -84,7 +84,7 @@ export const UpdateProfile = async (email: string, username: string, image: File
       },
     });
 
-    const authToken = await getIdToken(auth.currentUser!);
+    const authToken = await auth.currentUser!.getIdToken();
 
     setCookie("auth_token", authToken);
 

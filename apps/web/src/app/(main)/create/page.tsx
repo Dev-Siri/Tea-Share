@@ -4,10 +4,10 @@ import type { PageComponent } from "@/types";
 
 import { createPost } from "@/actions/posts";
 
-import LoadingSpinner from "@/components/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
-const SubmitButton = lazy(() => import("@/components/SubmitButton"));
-const PreviewImage = lazy(() => import("@/components/PreviewImage"));
+const SubmitButton = lazy(() => import("@/components/forms/buttons/SubmitButton"));
+const PreviewImage = lazy(() => import("@/components/ui/PreviewImage"));
 
 const Create: PageComponent = () => (
   <section className="h-screen w-full overflow-y-scroll">

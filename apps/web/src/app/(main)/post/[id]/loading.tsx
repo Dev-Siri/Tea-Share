@@ -1,7 +1,7 @@
 import type { LoadingComponent } from "@/types";
 
-import Skeleton from "@/components/Skeleton";
-import UserListSkeleton from "@/components/UserListSkeleton";
+import Skeleton from "@/components/skeletons/Skeleton";
+import UserListSkeleton from "@/components/skeletons/UserListSkeleton";
 
 const PostInfoLoading: LoadingComponent = () => (
   <article className="flex h-screen w-full flex-col items-center overflow-y-auto pb-[10%] pl-2 sm:pl-[60px] xl:flex-row xl:items-start">

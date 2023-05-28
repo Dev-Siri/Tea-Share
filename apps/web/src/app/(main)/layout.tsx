@@ -1,6 +1,6 @@
 import type { LayoutComponent } from "@/types";
 
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/ui/Navbar";
 
 const MainLayout: LayoutComponent = ({ children }) => {
   return (

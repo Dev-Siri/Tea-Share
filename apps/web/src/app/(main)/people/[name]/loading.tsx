@@ -1,7 +1,7 @@
 import type { LoadingComponent } from "@/types";
 
-import PostsListSkeleton from "@/components/PostsListSkeleton";
-import UserInfoSkeleton from "@/components/UserInfoSkeleton";
+import PostsListSkeleton from "@/components/skeletons/PostsListSkeleton";
+import UserInfoSkeleton from "@/components/skeletons/UserInfoSkeleton";
 
 const ProfileLoading: LoadingComponent = () => (
   <article className="grid h-screen place-items-center overflow-y-auto">

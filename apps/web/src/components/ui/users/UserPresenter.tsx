@@ -5,9 +5,9 @@ import type { MongoDBUser } from "@/types";
 
 import { INITIAL_PAGE_LIMIT } from "@/constants/limit";
 
-import UserListItem from "@/components/UserListItem";
+import UserListItem from "./UserListItem";
 
-let currentPage: number = INITIAL_PAGE_LIMIT;
+let currentPage = INITIAL_PAGE_LIMIT;
 
 interface Props {
   title: string;

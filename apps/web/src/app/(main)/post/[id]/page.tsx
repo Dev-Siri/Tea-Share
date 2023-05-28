@@ -7,7 +7,7 @@ import { PAGE_URL } from "@/constants/pageInfo";
 import queryClient from "@/services/queryClient";
 import { getRelativeTime } from "@/utils/globals";
 
-import UserList from "@/components/UserList";
+import UserList from "@/components/ui/users/UserList";
 
 import Image from "next/image";
 import Link from "next/link";

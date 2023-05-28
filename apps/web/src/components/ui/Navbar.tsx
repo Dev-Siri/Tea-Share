@@ -8,7 +8,7 @@ import SearchBar from "./SearchBar";
 
 import Link from "next/link";
 
-const UserIcon = lazy(() => import("@/components/UserIcon"));
+const UserIcon = lazy(() => import("./users/UserIcon"));
 
 const Navbar: FC = () => (
   <nav className="bg-light-gray mb-9 flex h-16 items-center justify-between dark:bg-black dark:text-white min-[700px]:mb-0">

@@ -1,7 +1,7 @@
 import type { FC } from "react";
 
+import Icon from "@/components/icons/AppIcon";
 import Link from "next/link";
-import Icon from "./icons/AppIcon";
 
 interface Props {
   bigger?: boolean;

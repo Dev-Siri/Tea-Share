@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-import Skeleton from "@/components/Skeleton";
+import Skeleton from "./Skeleton";
 
 const UserInfoSkeleton: FC = () => (
   <article className="border-light-gray dark:border-semi-gray mt-10 flex w-[80%] flex-col items-center rounded-md border-2 bg-white p-12 dark:bg-black sm:ml-5 md:ml-0 md:w-[30%] md:flex-row md:items-start lg:w-1/2">

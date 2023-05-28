@@ -3,12 +3,12 @@ import { lazy } from "react";
 import type { PageComponent } from "@/types";
 import type { Metadata } from "next";
 
-import LoadingSpinner from "@/components/LoadingSpinner";
-import Logo from "@/components/Logo";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import Logo from "@/components/ui/Logo";
 import { FcGoogle } from "@react-icons/all-files/fc/FcGoogle";
 
-const GoogleLogin = lazy(() => import("@/components/GoogleLogin"));
-const LoginForm = lazy(() => import("@/components/LoginForm"));
+const GoogleLogin = lazy(() => import("@/components/forms/buttons/GoogleLogin"));
+const LoginForm = lazy(() => import("@/components/forms/LoginForm"));
 
 const description = "Login to Tea Share to connect and share posts with your friends online.";
 
