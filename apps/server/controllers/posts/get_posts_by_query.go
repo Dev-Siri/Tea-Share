@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"tea-share/db"
 	"tea-share/models"
-	"tea-share/utils"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -41,9 +40,9 @@ func GetPostsBySearchTerm(w http.ResponseWriter, r *http.Request) {
 		filter = bson.M{"author": q}
 	}
 
-	if utils.IsValidObjectID(q) {
-		id, _ := primitive.ObjectIDFromHex(q)
+	id, idParseError := primitive.ObjectIDFromHex(q)
 
+	if idParseError == nil {
 		filter = bson.M{"_id": id}
 	}
 

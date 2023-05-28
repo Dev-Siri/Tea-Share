@@ -3,7 +3,6 @@ module tea-share
 go 1.20
 
 require (
-	github.com/andybalholm/brotli v1.0.5
 	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver v1.11.4
 )

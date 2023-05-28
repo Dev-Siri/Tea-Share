@@ -7,7 +7,9 @@ import (
 )
 
 func RegisterUserRoutes() {
-	http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+	go http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "https://tea-share.vercel.app")
+
 		switch r.Method {
 		case http.MethodGet:
 			user_controllers.GetUsers(w, r)
@@ -20,7 +22,9 @@ func RegisterUserRoutes() {
 		}
 	})
 
-	http.HandleFunc("/users/search", func(w http.ResponseWriter, r *http.Request) {
+	go http.HandleFunc("/users/search", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "https://tea-share.vercel.app")
+
 		if r.Method == http.MethodGet {
 			user_controllers.GetUsersByName(w, r)
 		} else {

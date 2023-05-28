@@ -7,7 +7,9 @@ import (
 )
 
 func RegisterPostRoutes() {
-	http.HandleFunc("/posts", func(w http.ResponseWriter, r *http.Request) {
+	go http.HandleFunc("/posts", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "https://tea-share.vercel.app")
+
 		switch r.Method {
 		case http.MethodGet:
 			post_controllers.GetPosts(w, r)
@@ -18,7 +20,9 @@ func RegisterPostRoutes() {
 		}
 	})
 
-	http.HandleFunc("/posts/search", func(w http.ResponseWriter, r *http.Request) {
+	go http.HandleFunc("/posts/search", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "https://tea-share.vercel.app")
+
 		if r.Method == http.MethodGet {
 			post_controllers.GetPostsBySearchTerm(w, r)
 		} else {
@@ -26,7 +30,9 @@ func RegisterPostRoutes() {
 		}
 	})
 
-	http.HandleFunc("/posts/like", func(w http.ResponseWriter, r *http.Request) {
+	go http.HandleFunc("/posts/like", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "https://tea-share.vercel.app")
+
 		if r.Method == http.MethodPatch {
 			post_controllers.LikePost(w, r)
 		} else {
