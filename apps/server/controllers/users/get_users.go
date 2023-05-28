@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"sync"
 	"tea-share/db"
 	"tea-share/models"
 
@@ -52,33 +51,21 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 
 	defer cursor.Close(r.Context())
 
-	var wg sync.WaitGroup
-	var mu sync.Mutex
 	var users []models.User
 
-	for cursor.Next(r.Context()) {		
-		wg.Add(1)
-		
-		go func() {
-			defer wg.Done()
+	for cursor.Next(r.Context()) {
+		var user models.User
 
-			var user models.User
-	
-			postDecodeError := cursor.Decode(&user)
+		postDecodeError := cursor.Decode(&user)
 
-			if postDecodeError != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				log.Printf("%v", postDecodeError)
-				return
-			}
+		if postDecodeError != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			log.Printf("%v", postDecodeError)
+			return
+		}
 
-			mu.Lock()
-			users = append(users, user)
-			mu.Unlock()
-		}()
+		users = append(users, user)
 	}
-
-	wg.Wait()
 
 	userJSONBytes, jsonError := json.Marshal(users)
 

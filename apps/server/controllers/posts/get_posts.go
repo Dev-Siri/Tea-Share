@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"sync"
 	"tea-share/db"
 	"tea-share/models"
 
@@ -53,32 +52,21 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 
 	defer cursor.Close(r.Context())
 
-	var wg sync.WaitGroup
-	var mu sync.Mutex
 	var posts []models.Post
 
 	for cursor.Next(r.Context()) {
-		wg.Add(1)
+		var post models.Post
 
-		go func() {
-			defer wg.Done()
+		postDecodeError := cursor.Decode(&post)
 
-			var post models.Post
+		if postDecodeError != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			log.Printf("%v", postDecodeError)
+			return
+		}
 
-			postDecodeError := cursor.Decode(&post)
-
-			if postDecodeError != nil {
-				log.Printf("%v", postDecodeError)
-				return
-			}
-
-			mu.Lock()
-			posts = append(posts, post)
-			mu.Unlock()
-		}()
+		posts = append(posts, post)
 	}
-
-	wg.Wait()
 
 	postJSONBytes, jsonError := json.Marshal(posts)
 
