@@ -14,9 +14,6 @@
     "start": "next start",
     "build": "next build"
   },
-  "engines": {
-    "node": ">=18"
-  },
   "keywords": [
     "initials",
     "node",
