@@ -4,7 +4,6 @@
   "description": "A backend server ran on Vercel Edge Functions to generate initial PFPs",
   "private": true,
   "type": "module",
-  "main": "dist/index.js",
   "eslintConfig": {
     "extends": "@tea-share/packages/config/.eslintrc"
   },
@@ -16,20 +15,19 @@
   },
   "keywords": [
     "initials",
-    "node",
+    "edge",
     "pfp-generation-server"
   ],
   "author": "Dev-Siri",
   "license": "ISC",
   "dependencies": {
-    "@vercel/og": "^0.5.4",
-    "next": "13.4.2"
+    "@vercel/og": "^0.5.6",
+    "next": "13.4.4"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "13.4.2",
     "@tea-share/packages": "workspace:*",
-    "eslint-config-next": "13.4.2",
+    "eslint-config-next": "13.4.4",
     "typescript": "^5.0.4",
-    "vercel": "^29.3.0"
+    "vercel": "^30.0.0"
   }
 }
