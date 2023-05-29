@@ -2,7 +2,7 @@ import { ImageResponse } from "@vercel/og";
 
 import type { ServerRuntime } from "next";
 
-import { getInitials, getRandomColor } from "../utils";
+import { getRandomColor } from "../utils";
 
 export const runtime: ServerRuntime = "edge";
 
@@ -12,7 +12,7 @@ export const GET = async (request: Request) => {
 
   if (!name) return new Response("`name` search param is undefined.", { status: 400 });
 
-  const initials = getInitials(name);
+  const initials = name.slice(0, 2);
 
   return new ImageResponse(
     (
