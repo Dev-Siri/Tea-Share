@@ -7,7 +7,7 @@ interface Props {
 
 const LoadingSpinner: FC<Props> = ({ height, width }) => (
   <svg height={height} width={width} className="animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <circle className="opacity-25" cx={12} cy={12} r={10} stroke="white" stroke-width={2} />
+    <circle className="opacity-25" cx={12} cy={12} r={10} stroke="white" strokeWidth={2} />
     <path
       className="opacity-75"
       fill="white"

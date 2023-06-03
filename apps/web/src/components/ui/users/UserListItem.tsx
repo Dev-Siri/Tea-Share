@@ -11,7 +11,10 @@ interface Props extends Pick<MongoDBUser, "username" | "image"> {
 }
 
 const UserListItem: FC<Props> = ({ username, image }) => (
-  <Link href={`/people/${username}`} className="dark:hover:bg-semi-gray flex w-full cursor-pointer items-center p-3 duration-200 hover:bg-gray-200">
+  <Link
+    href={`/people/${encodeURIComponent(username)}`}
+    className="dark:hover:bg-semi-gray flex w-full cursor-pointer items-center p-3 duration-200 hover:bg-gray-200"
+  >
     <Image src={image} alt={username} height={44} width={44} className="h-11 rounded-full" />
     <div className="ml-5">
       <p>{username}</p>

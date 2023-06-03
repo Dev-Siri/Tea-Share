@@ -24,10 +24,3 @@ export interface FirebaseUser {
     sign_in_provider: string;
   };
 }
-
-export interface UserSubmitFormData {
-  username: string;
-  email: string;
-  password: string;
-  photoURL: File | string | undefined | null;
-}

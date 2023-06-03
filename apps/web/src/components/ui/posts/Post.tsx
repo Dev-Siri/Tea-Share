@@ -2,7 +2,6 @@ import { lazy, type FC } from "react";
 
 import type { Post } from "@/types";
 
-import { PRIMARY_COLOR } from "@/constants/colors";
 import { getRelativeTime } from "@/utils/globals";
 
 import { IoMdThumbsUp } from "@react-icons/all-files/io/IoMdThumbsUp";
@@ -19,7 +18,7 @@ interface PostProps {
 
 const likeBTNProps = {
   size: 30,
-  color: PRIMARY_COLOR,
+  color: "#594194",
 } as const;
 
 const Post: FC<PostProps> = ({ post: { image, title, people, description, _id, author, authorImage, createdAt }, lazyLoadImage = true }) => (

@@ -1,9 +1,5 @@
 import { TIME_UNITS, TIME_UNIT_SECONDS } from "@/constants/date";
 
-/**
- * @param date - The Date object to calculate the time
- * @returns A relative time string.
- */
 export const getRelativeTime = (dateString: string) => {
   const date = new Date(dateString);
   const timeMs = date.getTime();
@@ -21,8 +17,4 @@ export const getRelativeTime = (dateString: string) => {
   }
 };
 
-/**
- * @param username A user's displayName
- * @returns A string with the username formatted with '@'
- */
 export const getHandle = (username?: string) => `@${username?.toLowerCase()?.split(" ")?.join("-")}`;

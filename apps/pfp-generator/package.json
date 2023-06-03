@@ -27,7 +27,7 @@
   "devDependencies": {
     "@tea-share/packages": "workspace:*",
     "eslint-config-next": "13.4.4",
-    "typescript": "^5.0.4",
-    "vercel": "^30.0.0"
+    "typescript": "^5.1.3",
+    "vercel": "^30.1.2"
   }
 }

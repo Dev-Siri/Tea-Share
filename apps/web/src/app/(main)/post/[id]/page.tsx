@@ -2,8 +2,6 @@ import { notFound } from "next/navigation";
 
 import type { GenerateMetadata, PageComponent, Post } from "@/types";
 
-import { INITIAL_PAGE_LIMIT, POST_LIMIT } from "@/constants/limit";
-import { PAGE_URL } from "@/constants/pageInfo";
 import queryClient from "@/services/queryClient";
 import { getRelativeTime } from "@/utils/globals";
 
@@ -37,7 +35,7 @@ export const generateMetadata: GenerateMetadata<Props> = async ({ params: { id }
     openGraph: {
       title,
       description,
-      url: `${PAGE_URL}/post/${id}`,
+      url: `https://tea-share.vercel.app/post/${id}`,
       images: [
         {
           width: 1080,
@@ -69,8 +67,8 @@ const PostInfo: PageComponent<Props> = async ({ params: { id } }) => {
     queryClient<Post[]>("/posts", {
       cache: "no-store",
       searchParams: {
-        page: INITIAL_PAGE_LIMIT,
-        limit: POST_LIMIT + 4,
+        page: 1,
+        limit: 12,
       },
     }),
   ]);

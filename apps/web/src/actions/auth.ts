@@ -64,7 +64,7 @@ export const updateUserProfile = async (formData: FormData) => {
 
   const authToken = await auth.currentUser!.getIdToken();
 
-  cookies().set("auth_token", authToken);
+  cookies().set("auth_token", authToken, { expires: new Date(9999, 0, 1) });
 
   revalidatePath("/settings");
 };
@@ -78,7 +78,7 @@ export const login = async (formData: FormData) => {
   const { user } = await signInWithEmailAndPassword(auth, email, password);
   const authToken = await user.getIdToken();
 
-  cookies().set("auth_token", authToken);
+  cookies().set("auth_token", authToken, { expires: new Date(9999, 0, 1) });
   redirect("/");
 };
 

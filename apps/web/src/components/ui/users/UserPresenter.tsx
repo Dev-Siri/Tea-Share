@@ -3,17 +3,15 @@ import { useState, type FC, type UIEventHandler } from "react";
 
 import type { MongoDBUser } from "@/types";
 
-import { INITIAL_PAGE_LIMIT } from "@/constants/limit";
-
 import UserListItem from "./UserListItem";
-
-let currentPage = INITIAL_PAGE_LIMIT;
 
 interface Props {
   title: string;
   limit?: number;
   initialUsers: Pick<MongoDBUser, "username" | "image">[];
 }
+
+let currentPage = 1;
 
 const UserList: FC<Props> = ({ title, limit, initialUsers }) => {
   const [users, setUsers] = useState<Pick<MongoDBUser, "username" | "image">[]>(initialUsers);

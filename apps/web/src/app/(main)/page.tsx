@@ -1,7 +1,6 @@
 import type { MongoDBUser, PageComponent, Post } from "@/types";
 import type { Metadata, ServerRuntime } from "next";
 
-import { INITIAL_PAGE_LIMIT, POST_LIMIT, USER_LIMIT } from "@/constants/limit";
 import queryClient from "@/services/queryClient";
 
 import { AiOutlineArrowLeft } from "@react-icons/all-files/ai/AiOutlineArrowLeft";
@@ -35,13 +34,13 @@ const Home: PageComponent<Props> = async ({ searchParams: { page = 1 } }) => {
       cache: "no-store",
       searchParams: {
         page,
-        limit: POST_LIMIT,
+        limit: 8,
       },
     }),
     queryClient<MongoDBUser[]>("/users", {
       searchParams: {
-        page: INITIAL_PAGE_LIMIT,
-        limit: USER_LIMIT - 2,
+        page: 1,
+        limit: 8,
       },
     }),
   ]);

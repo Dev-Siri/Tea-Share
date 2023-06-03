@@ -10,18 +10,16 @@ import { FcGoogle } from "@react-icons/all-files/fc/FcGoogle";
 const GoogleLogin = lazy(() => import("@/components/forms/buttons/GoogleLogin"));
 const LoginForm = lazy(() => import("@/components/forms/LoginForm"));
 
-const description = "Login to Tea Share to connect and share posts with your friends online.";
-
 export const metadata: Metadata = {
   title: "Login | Sign up",
-  description,
+  description: "Login to Tea Share to connect and share posts with your friends online.",
   openGraph: {
     title: "Login | Sign up",
-    description,
+    description: "Login to Tea Share to connect and share posts with your friends online.",
   },
   twitter: {
     title: "Login | Sign up",
-    description,
+    description: "Login to Tea Share to connect and share posts with your friends online.",
   },
 };
 

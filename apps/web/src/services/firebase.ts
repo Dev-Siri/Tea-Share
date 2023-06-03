@@ -2,8 +2,6 @@ import { initializeApp, type FirebaseOptions } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
-import { PAGE_TITLE } from "@/constants/pageInfo";
-
 const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
@@ -14,6 +12,6 @@ const firebaseConfig: FirebaseOptions = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
 };
 
-const app = initializeApp(firebaseConfig, PAGE_TITLE);
+const app = initializeApp(firebaseConfig, "Tea Share");
 export const auth = getAuth(app);
 export const storage = getStorage(app);

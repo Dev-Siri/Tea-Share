@@ -1,14 +1,11 @@
 import { Inter } from "next/font/google";
-import { lazy } from "react";
 import "./globals.css";
 
 import type { LayoutComponent } from "@/types";
 import type { Metadata } from "next";
 
-import { PAGE_CREATOR, PAGE_DESCRIPTION, PAGE_KEYWORDS, PAGE_TITLE, PAGE_URL } from "@/constants/pageInfo";
-
-const AppToaster = lazy(() => import("@/components/ui/AppToaster"));
-const Provider = lazy(() => import("@/components/ui/Provider"));
+import ThemeProvider from "@/components/providers/ThemeProvider";
+import AppToaster from "@/components/ui/AppToaster";
 
 const inter = Inter({
   preload: true,
@@ -18,12 +15,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: PAGE_TITLE,
-  description: PAGE_DESCRIPTION,
-  creator: PAGE_CREATOR,
-  keywords: PAGE_KEYWORDS,
-  applicationName: PAGE_TITLE,
-  metadataBase: new URL(PAGE_URL),
+  title: "Tea Share",
+  description:
+    "Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!",
+  creator: "Dev-Siri",
+  keywords: ["Tea Share", "Tea", "Social Media", "Social Networking", "News", "Connect", "Share"],
+  applicationName: "Tea Share",
+  metadataBase: new URL("https://tea-share.vercel.app"),
   robots: {
     index: true,
     follow: true,
@@ -35,37 +33,40 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: PAGE_TITLE,
-    description: PAGE_DESCRIPTION,
-    url: PAGE_URL,
-    siteName: PAGE_TITLE,
+    title: "Tea Share",
+    description:
+      "Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!",
+    url: "https://tea-share.vercel.app",
+    siteName: "Tea Share",
     locale: "en-US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: PAGE_TITLE,
-    description: PAGE_DESCRIPTION,
+    title: "Tea Share",
+    description:
+      "Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!",
   },
   icons: {
     apple: "/apple/apple-icon.png",
   },
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION_TOKEN,
-    yandex: process.env.NEXT_PUBLIC_YANDEX_SITE_VERIFICATION_TOKEN,
+    google: "9ZQX0PW-jAHsoHd2iQ8HzgApN3A0t0aiClpRHZrnf-M",
+    yandex: "8b3345a29cecf753",
   },
   appleWebApp: {
-    title: PAGE_TITLE,
+    title: "Tea Share",
   },
 };
 
 const RootLayout: LayoutComponent = ({ children }) => (
   <html lang="en" className={inter.className} suppressHydrationWarning>
-    <body className="m-0 overflow-y-hidden p-0">
-      <Provider>
+    <head className="block" />
+    <body className="m-0 overflow-hidden p-0">
+      <ThemeProvider attribute="class">
         <AppToaster />
         {children}
-      </Provider>
+      </ThemeProvider>
     </body>
   </html>
 );

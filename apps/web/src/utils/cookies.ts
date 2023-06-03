@@ -18,11 +18,13 @@ export const getCookie = (key: string) => {
 export const setCookie = (key: string, value: string) => {
   const expireDate = new Date(9999, 0, 1).toUTCString();
 
+  cachedCookies[key] = value;
   document.cookie = `${key}=${value};expires=${expireDate};path=/`;
 };
 
 export const removeCookie = (key: string) => {
+  const expireData = new Date(1970, 0, 1).toUTCString();
   const cookieName = encodeURIComponent(key);
 
-  document.cookie = `${cookieName}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+  document.cookie = `${cookieName}=;expires=${expireData};path=/`;
 };
