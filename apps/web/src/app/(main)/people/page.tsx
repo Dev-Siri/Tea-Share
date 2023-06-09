@@ -1,6 +1,6 @@
 import { lazy } from "react";
 
-import type { MongoDBUser, PageComponent } from "@/types";
+import type { MongoDBUser } from "@/types";
 import type { Metadata } from "next";
 
 import queryClient from "@/services/queryClient";
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
 };
 
-const People: PageComponent = async () => {
+export default async function People() {
   const initialUsers = await queryClient<MongoDBUser[]>("/users", {
     cache: "no-cache",
     searchParams: {
@@ -31,6 +31,4 @@ const People: PageComponent = async () => {
       <UserPresentor title="People" limit={10} initialUsers={initialUsers} />
     </article>
   );
-};
-
-export default People;
+}

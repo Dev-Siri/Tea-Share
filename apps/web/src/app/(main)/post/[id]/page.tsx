@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
-import type { GenerateMetadata, PageComponent, Post } from "@/types";
+import type { Post } from "@/types";
+import type { Metadata } from "next";
 
 import queryClient from "@/services/queryClient";
 import { getRelativeTime } from "@/utils/globals";
@@ -16,7 +17,7 @@ interface Props {
   };
 }
 
-export const generateMetadata: GenerateMetadata<Props> = async ({ params: { id } }) => {
+export async function generateMetadata({ params: { id } }: Props) {
   const posts = await queryClient<Post[] | null>("/posts/search", {
     cache: "no-store",
     searchParams: {
@@ -52,10 +53,10 @@ export const generateMetadata: GenerateMetadata<Props> = async ({ params: { id }
         alt: "Post Image",
       },
     },
-  };
-};
+  } satisfies Metadata;
+}
 
-const PostInfo: PageComponent<Props> = async ({ params: { id } }) => {
+export default async function PostInfo({ params: { id } }: Props) {
   const [posts, otherPosts] = await Promise.all([
     queryClient<Post[] | null>("/posts/search", {
       cache: "no-store",
@@ -141,6 +142,4 @@ const PostInfo: PageComponent<Props> = async ({ params: { id } }) => {
       </section>
     </article>
   );
-};
-
-export default PostInfo;
+}

@@ -1,12 +1,12 @@
 "use client";
 import { useRouter } from "next/navigation";
 
-import type { FC, PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
-const GoogleLogin: FC<PropsWithChildren> = ({ children }) => {
+export default function GoogleLogin({ children }: PropsWithChildren) {
   const router = useRouter();
 
-  const loginWithGoogle = async () => {
+  async function loginWithGoogle() {
     const { toast } = await import("react-hot-toast");
     const { GoogleAuth } = await import("@/utils/auth");
 
@@ -15,7 +15,7 @@ const GoogleLogin: FC<PropsWithChildren> = ({ children }) => {
     toast.remove();
     router.refresh();
     router.replace("/");
-  };
+  }
 
   return (
     <button
@@ -26,6 +26,4 @@ const GoogleLogin: FC<PropsWithChildren> = ({ children }) => {
       {children}
     </button>
   );
-};
-
-export default GoogleLogin;
+}

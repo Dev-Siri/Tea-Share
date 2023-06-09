@@ -1,14 +1,14 @@
 "use client";
 import { experimental_useFormStatus as useFormStatus } from "react-dom";
 
-import type { FC, PropsWithChildren, ReactNode } from "react";
+import type { PropsWithChildren, ReactNode } from "react";
 
 interface Props extends PropsWithChildren {
   className?: string;
   loadingSpinner?: ReactNode;
 }
 
-const SubmitButton: FC<Props> = ({ children, className, loadingSpinner }) => {
+export default function SubmitButton({ children, className, loadingSpinner }: Props) {
   const { pending } = useFormStatus();
 
   return (
@@ -17,6 +17,4 @@ const SubmitButton: FC<Props> = ({ children, className, loadingSpinner }) => {
       {pending && loadingSpinner}
     </button>
   );
-};
-
-export default SubmitButton;
+}

@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
 
-import type { GenerateMetadata, MongoDBUser, PageComponent, Post } from "@/types";
+import type { MongoDBUser, Post } from "@/types";
 
 import queryClient from "@/services/queryClient";
 
 import PostList from "@/components/ui/posts/PostList";
 import UserInfo from "@/components/ui/users/UserInfo";
+import { Metadata } from "next";
 
 interface Props {
   params: {
@@ -13,7 +14,7 @@ interface Props {
   };
 }
 
-export const generateMetadata: GenerateMetadata<Props> = async ({ params: { name } }) => {
+export async function generateMetadata({ params: { name } }: Props) {
   const users = await queryClient<MongoDBUser[] | null>("/users/search", {
     cache: "no-store",
     searchParams: {
@@ -50,10 +51,10 @@ export const generateMetadata: GenerateMetadata<Props> = async ({ params: { name
         alt: name,
       },
     },
-  };
-};
+  } satisfies Metadata;
+}
 
-const Profile: PageComponent<Props> = async ({ params: { name } }) => {
+export default async function Profile({ params: { name } }: Props) {
   const [posts, users] = await Promise.all([
     queryClient<Post[] | null>("/posts/search", {
       cache: "no-store",
@@ -81,6 +82,4 @@ const Profile: PageComponent<Props> = async ({ params: { name } }) => {
       </div>
     </article>
   );
-};
-
-export default Profile;
+}

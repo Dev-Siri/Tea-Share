@@ -1,4 +1,4 @@
-import type { MongoDBUser, PageComponent, Post } from "@/types";
+import type { MongoDBUser, Post } from "@/types";
 import type { Metadata, ServerRuntime } from "next";
 
 import queryClient from "@/services/queryClient";
@@ -28,7 +28,7 @@ interface Props {
   };
 }
 
-const Home: PageComponent<Props> = async ({ searchParams: { page = 1 } }) => {
+export default async function Home({ searchParams: { page = 1 } }: Props) {
   const [posts, users] = await Promise.all([
     queryClient<Post[]>("/posts", {
       cache: "no-store",
@@ -74,6 +74,4 @@ const Home: PageComponent<Props> = async ({ searchParams: { page = 1 } }) => {
       </section>
     </aside>
   );
-};
-
-export default Home;
+}

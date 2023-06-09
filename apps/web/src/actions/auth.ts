@@ -1,7 +1,7 @@
-// This is partially used at the moment. In the future, this will
-// be used as a auth-related server-action export
+// This file is kinda new. Almost migrated to server actions, only updateProfile() is left
+// which cannot be done without rebuilding the entire server to remove Firebase auth & MongoDB -> PostgreSQL
 "use server";
-import { createUserWithEmailAndPassword, getIdToken, signInWithEmailAndPassword, updateEmail, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateEmail, updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -18,14 +18,7 @@ import { redirect } from "next/navigation";
 //   authorImage: string;
 // }
 
-export const logout = async () => {
-  await auth.signOut();
-  cookies().delete("auth_token");
-
-  redirect("/auth");
-};
-
-export const updateUserProfile = async (formData: FormData) => {
+export async function updateUserProfile(formData: FormData) {
   interface UserFormData {
     email: string;
     username: string;
@@ -64,25 +57,15 @@ export const updateUserProfile = async (formData: FormData) => {
 
   const authToken = await auth.currentUser!.getIdToken();
 
-  cookies().set("auth_token", authToken, { expires: new Date(9999, 0, 1) });
+  cookies().set("auth_token", authToken, {
+    expires: new Date(9999, 0, 1),
+    sameSite: "strict",
+  });
 
   revalidatePath("/settings");
-};
+}
 
-export const login = async (formData: FormData) => {
-  const email = formData.get("email");
-  const password = formData.get("password");
-
-  if (!email || !password || email instanceof Blob || password instanceof Blob) return;
-
-  const { user } = await signInWithEmailAndPassword(auth, email, password);
-  const authToken = await user.getIdToken();
-
-  cookies().set("auth_token", authToken, { expires: new Date(9999, 0, 1) });
-  redirect("/");
-};
-
-export const signup = async (formData: FormData) => {
+export async function signup(formData: FormData) {
   const email = formData.get("email");
   const image = formData.get("image");
   const username = formData.get("username");
@@ -122,8 +105,36 @@ export const signup = async (formData: FormData) => {
     },
   });
 
-  const authToken = await getIdToken(user);
+  const authToken = await user.getIdToken();
 
-  cookies().set("auth_token", authToken);
+  cookies().set("auth_token", authToken, {
+    expires: new Date(9999, 0, 1),
+    sameSite: "strict",
+  });
+
   redirect("/");
-};
+}
+
+export async function login(formData: FormData) {
+  const email = formData.get("email");
+  const password = formData.get("password");
+
+  if (!email || !password || email instanceof Blob || password instanceof Blob) return;
+
+  const { user } = await signInWithEmailAndPassword(auth, email, password);
+  const authToken = await user.getIdToken();
+
+  cookies().set("auth_token", authToken, {
+    expires: new Date(9999, 0, 1),
+    sameSite: "strict",
+  });
+
+  redirect("/");
+}
+
+export async function logout() {
+  await auth.signOut();
+  cookies().delete("auth_token");
+
+  redirect("/auth");
+}

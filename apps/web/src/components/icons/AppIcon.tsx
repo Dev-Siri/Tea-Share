@@ -1,12 +1,10 @@
-import type { FC } from "react";
-
 interface Props {
   height?: number;
   width?: number;
   className?: string;
 }
 
-const Icon: FC<Props> = ({ height = 269, width = 274, className }) => {
+export default function Icon({ height = 269, width = 274, className }: Props) {
   return (
     <svg className={className} xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width={width} height={height} fill="none">
       <title>Tea Share</title>
@@ -24,6 +22,4 @@ const Icon: FC<Props> = ({ height = 269, width = 274, className }) => {
       </defs>
     </svg>
   );
-};
-
-export default Icon;
+}

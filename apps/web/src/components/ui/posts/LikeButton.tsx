@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, type FC, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { likePost } from "@/actions/posts";
 import useSession from "@/hooks/useSession";
@@ -11,7 +11,7 @@ interface Props {
   unlikedIcon: ReactNode;
 }
 
-const formatLikes = (people: string[]) => {
+function formatLikes(people: string[]) {
   const user = useSession();
 
   if (!people.length) return "0 Likes";
@@ -25,9 +25,9 @@ const formatLikes = (people: string[]) => {
   if (people.length - 1 === 0) return `${people[0]} liked this post`;
 
   return `${people[0]} and ${people.length - 1} others`;
-};
+}
 
-const LikeButton: FC<Props> = ({ people, postId, likedIcon, unlikedIcon }) => {
+export default function LikeButton({ people, postId, likedIcon, unlikedIcon }: Props) {
   const [likes, setLikes] = useState("Loading...");
   const [isLiked, setIsLiked] = useState(false);
 
@@ -58,6 +58,4 @@ const LikeButton: FC<Props> = ({ people, postId, likedIcon, unlikedIcon }) => {
       <span className="text-primary mr-6 text-base md:w-full">&nbsp;{likes}</span>
     </button>
   );
-};
-
-export default LikeButton;
+}

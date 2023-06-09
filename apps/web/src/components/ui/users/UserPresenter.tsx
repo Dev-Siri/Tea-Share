@@ -1,5 +1,5 @@
 "use client";
-import { useState, type FC, type UIEventHandler } from "react";
+import { useState, type UIEventHandler } from "react";
 
 import type { MongoDBUser } from "@/types";
 
@@ -13,7 +13,7 @@ interface Props {
 
 let currentPage = 1;
 
-const UserList: FC<Props> = ({ title, limit, initialUsers }) => {
+export default function UserList({ title, limit, initialUsers }: Props) {
   const [users, setUsers] = useState<Pick<MongoDBUser, "username" | "image">[]>(initialUsers);
 
   const handleListScroll: UIEventHandler<HTMLElement> = async (event: any) => {
@@ -51,6 +51,4 @@ const UserList: FC<Props> = ({ title, limit, initialUsers }) => {
       </section>
     </aside>
   );
-};
-
-export default UserList;
+}

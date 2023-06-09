@@ -1,6 +1,6 @@
 const cachedCookies: Record<string, string> = {};
 
-export const getCookie = (key: string) => {
+export function getCookie(key: string) {
   if (key in cachedCookies) return cachedCookies[key];
 
   const name = `${key}=`;
@@ -13,18 +13,18 @@ export const getCookie = (key: string) => {
   cachedCookies[key] = value;
 
   return value;
-};
+}
 
-export const setCookie = (key: string, value: string) => {
+export function setCookie(key: string, value: string) {
   const expireDate = new Date(9999, 0, 1).toUTCString();
 
   cachedCookies[key] = value;
   document.cookie = `${key}=${value};expires=${expireDate};path=/`;
-};
+}
 
-export const removeCookie = (key: string) => {
+export function removeCookie(key: string) {
   const expireData = new Date(1970, 0, 1).toUTCString();
   const cookieName = encodeURIComponent(key);
 
   document.cookie = `${cookieName}=;expires=${expireData};path=/`;
-};
+}

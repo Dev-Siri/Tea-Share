@@ -1,4 +1,4 @@
-export const GoogleAuth = async () => {
+export async function GoogleAuth() {
   const { signInWithPopup, GoogleAuthProvider } = await import("firebase/auth");
   const { default: queryClient } = await import("@/services/queryClient");
   const { auth } = await import("@/services/firebase");
@@ -31,25 +31,9 @@ export const GoogleAuth = async () => {
     toast.remove(loading);
     toast.error(`Could not sign in with Google, ${errorMessage}`);
   }
-};
+}
 
-export const Logout = async () => {
-  const { removeCookie } = await import("./cookies");
-  const { toast } = await import("react-hot-toast");
-  const { auth } = await import("@/services/firebase");
-
-  const loading = toast.loading("Logging you out...");
-
-  try {
-    await auth.signOut();
-    removeCookie("auth_token");
-  } catch (error: any) {
-    toast.remove(loading);
-    toast.error(`Failed to log you out, ${error.message}`);
-  }
-};
-
-export const UpdateProfile = async (email: string, username: string, image: File | string | null, id: string) => {
+export async function UpdateProfile(email: string, username: string, image: File | string | null, id: string) {
   const { getDownloadURL, ref, uploadBytes } = await import("firebase/storage");
   const { default: queryClient } = await import("@/services/queryClient");
   const { updateEmail, updateProfile } = await import("firebase/auth");
@@ -95,4 +79,4 @@ export const UpdateProfile = async (email: string, username: string, image: File
     toast.remove();
     toast.error(`Failed to update your profile, ${error.message}`);
   }
-};
+}

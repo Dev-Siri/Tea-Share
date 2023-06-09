@@ -1,6 +1,6 @@
-import { NextResponse, userAgent, type NextMiddleware } from "next/server";
+import { NextResponse, userAgent, type NextRequest } from "next/server";
 
-export const middleware: NextMiddleware = async request => {
+export async function middleware(request: NextRequest) {
   const { isBot } = userAgent(request);
   const token = request.cookies.get("auth_token")?.value;
   const onAuthPage = request.nextUrl.pathname.startsWith("/auth");
@@ -12,7 +12,7 @@ export const middleware: NextMiddleware = async request => {
   if (onAuthPage && token) return NextResponse.redirect(new URL("/", request.url));
 
   return NextResponse.next();
-};
+}
 
 export const config = {
   matcher: ["/", "/((?!api|static|.*\\..*|_next).*)"],

@@ -1,5 +1,5 @@
 "use client";
-import { useState, type FC, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 import { login, signup } from "@/actions/auth";
 
@@ -7,7 +7,7 @@ interface Props {
   loadingSpinner: ReactNode;
 }
 
-const LoginForm: FC<Props> = ({ loadingSpinner }) => {
+export default function LoginForm({ loadingSpinner }: Props) {
   const [isSignup, setIsSignup] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -37,6 +37,4 @@ const LoginForm: FC<Props> = ({ loadingSpinner }) => {
       </form>
     </>
   );
-};
-
-export default LoginForm;
+}

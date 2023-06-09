@@ -15,7 +15,7 @@ export const likePost = async (id: string, username: string, image: string) =>
     },
   });
 
-export const createPost = async (formData: FormData) => {
+export async function createPost(formData: FormData) {
   const title = formData.get("title");
   const description = formData.get("description");
   const image = formData.get("image");
@@ -43,4 +43,4 @@ export const createPost = async (formData: FormData) => {
   });
 
   redirect("/");
-};
+}

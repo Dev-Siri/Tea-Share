@@ -24,7 +24,9 @@ const likeBTNProps = {
 const Post: FC<PostProps> = ({ post: { image, title, people, description, _id, author, authorImage, createdAt }, lazyLoadImage = true }) => (
   <article role="listitem" className="border-light-gray dark:border-semi-gray mb-10 w-full rounded-xl border-2 bg-white px-8 pb-5 pt-6 dark:bg-black">
     <h3 className="text-3xl font-bold">{title}</h3>
-    <p className="my-3 ml-1 overflow-y-auto break-words pb-2 text-gray-400">{getRelativeTime(createdAt)}</p>
+    <p className="my-3 ml-1 overflow-y-auto break-words pb-2 text-gray-400" suppressHydrationWarning>
+      {getRelativeTime(createdAt)}
+    </p>
     <Link href={`/post/${_id}`} className="cursor-pointer">
       <Image
         src={image}

@@ -1,9 +1,9 @@
 "use client";
-import { useState, type FC } from "react";
+import { useState } from "react";
 
 import Image from "next/image";
 
-const PreviewImage: FC = () => {
+export default function PreviewImage() {
   const [previewImage, setPreviewImage] = useState<File | null>(null);
 
   return (
@@ -27,6 +27,4 @@ const PreviewImage: FC = () => {
       )}
     </>
   );
-};
-
-export default PreviewImage;
+}

@@ -1,5 +1,3 @@
-import type { FC } from "react";
-
 import useServerSession from "@/hooks/useServerSession";
 
 import { AiOutlinePlus } from "@react-icons/all-files/ai/AiOutlinePlus";
@@ -10,7 +8,7 @@ import Link from "next/link";
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 
-const Navbar: FC = () => {
+export default function Navbar() {
   const user = useServerSession();
 
   return (
@@ -46,6 +44,4 @@ const Navbar: FC = () => {
       </section>
     </nav>
   );
-};
-
-export default Navbar;
+}

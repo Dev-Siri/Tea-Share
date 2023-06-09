@@ -1,11 +1,11 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-import type { LayoutComponent } from "@/types";
 import type { Metadata } from "next";
+import type { PropsWithChildren } from "react";
 
-import ThemeProvider from "@/components/providers/ThemeProvider";
 import AppToaster from "@/components/ui/AppToaster";
+import { cookies } from "next/headers";
 
 const inter = Inter({
   preload: true,
@@ -59,16 +59,17 @@ export const metadata: Metadata = {
   },
 };
 
-const RootLayout: LayoutComponent = ({ children }) => (
-  <html lang="en" className={inter.className} suppressHydrationWarning>
-    <head className="block" />
-    <body className="m-0 overflow-hidden p-0">
-      <ThemeProvider attribute="class">
+function RootLayout({ children }: PropsWithChildren) {
+  const theme = cookies().get("theme")?.value;
+
+  return (
+    <html lang="en" className={inter.className} suppressHydrationWarning>
+      <body className={`overflow-hidden ${theme || "light"}`}>
         <AppToaster />
         {children}
-      </ThemeProvider>
-    </body>
-  </html>
-);
+      </body>
+    </html>
+  );
+}
 
 export default RootLayout;

@@ -1,4 +1,5 @@
-import type { GenerateMetadata, MongoDBUser, PageComponent, Post } from "@/types";
+import type { MongoDBUser, Post } from "@/types";
+import type { Metadata } from "next";
 
 import queryClient from "@/services/queryClient";
 
@@ -13,20 +14,22 @@ interface Props {
   };
 }
 
-export const generateMetadata: GenerateMetadata<Props> = ({ searchParams: { query } }) => ({
-  title: `Search - ${query}`,
-  description: "Posts & People who have `${query}` in their names and titles.",
-  openGraph: {
+export function generateMetadata({ searchParams: { query } }: Props) {
+  return {
     title: `Search - ${query}`,
     description: "Posts & People who have `${query}` in their names and titles.",
-  },
-  twitter: {
-    title: `Search - ${query}`,
-    description: "Posts & People who have `${query}` in their names and titles.",
-  },
-});
+    openGraph: {
+      title: `Search - ${query}`,
+      description: "Posts & People who have `${query}` in their names and titles.",
+    },
+    twitter: {
+      title: `Search - ${query}`,
+      description: "Posts & People who have `${query}` in their names and titles.",
+    },
+  } satisfies Metadata;
+}
 
-const Search: PageComponent<Props> = async ({ searchParams: { query } }) => {
+export default async function Search({ searchParams: { query } }: Props) {
   const [posts, users] = await Promise.all([
     queryClient<Post[]>("/posts/search", {
       cache: "no-store",
@@ -68,6 +71,4 @@ const Search: PageComponent<Props> = async ({ searchParams: { query } }) => {
       </section>
     </aside>
   );
-};
-
-export default Search;
+}
