@@ -11,7 +11,7 @@ export default function UpdateProfileForm({ children, currentImage, userId }: Pr
     event.preventDefault();
     const { UpdateProfile } = await import("@/utils/auth");
 
-    const form = new FormData(event.currentTarget);
+    const form = new FormData(event.target as HTMLFormElement);
     const { email, username, image } = Object.fromEntries(form.entries());
 
     if (email instanceof Blob || username instanceof Blob || image instanceof Blob) return;

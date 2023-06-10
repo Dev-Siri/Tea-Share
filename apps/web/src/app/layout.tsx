@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   },
 };
 
-function RootLayout({ children }: PropsWithChildren) {
+export default function RootLayout({ children }: PropsWithChildren) {
   const theme = cookies().get("theme")?.value;
 
   return (
@@ -71,5 +71,3 @@ function RootLayout({ children }: PropsWithChildren) {
     </html>
   );
 }
-
-export default RootLayout;

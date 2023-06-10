@@ -7,8 +7,9 @@ import { logout } from "@/actions/auth";
 import useServerSession from "@/hooks/useServerSession";
 import queryClient from "@/services/queryClient";
 
+import ThemeOption from "@/components/ui/ThemeOption";
+
 const UpdateProfileForm = lazy(() => import("@/components/forms/UpdateProfileForm"));
-const ThemeOption = lazy(() => import("@/components/ui/ThemeOption"));
 
 export const metadata: Metadata = {
   title: "Settings",
