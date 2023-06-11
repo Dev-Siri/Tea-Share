@@ -8,6 +8,7 @@ import (
 	error_handlers "tea-share/controllers/errors"
 	"tea-share/db"
 	"tea-share/env"
+	"tea-share/middleware"
 	"tea-share/routes"
 
 	"github.com/joho/godotenv"
@@ -32,12 +33,16 @@ func main() {
 		return
 	}
 
-	go http.HandleFunc("/", error_handlers.NotFound)
+	server := http.NewServeMux()
 
-	go routes.RegisterPostRoutes()
-	go routes.RegisterUserRoutes()
+	go server.HandleFunc("/", error_handlers.NotFound)
 
-	if err := http.ListenAndServe(addr, nil); err != nil {
+	go routes.RegisterPostRoutes(server)
+	go routes.RegisterUserRoutes(server)
+
+	handler := middleware.CorsMiddleware(server)
+
+	if err := http.ListenAndServe(addr, handler); err != nil {
 		log.Printf("%v", err)
 	}
 }

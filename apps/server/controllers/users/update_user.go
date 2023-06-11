@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"tea-share/db"
-	"tea-share/env"
 	"tea-share/models"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -56,5 +55,4 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	)
 
 	w.WriteHeader(http.StatusNoContent)
-	w.Header().Set("Access-Control-Allow-Origin", env.CorsOrigin)
 }

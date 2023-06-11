@@ -4,11 +4,10 @@ import (
 	"net/http"
 	error_handlers "tea-share/controllers/errors"
 	user_controllers "tea-share/controllers/users"
-	"tea-share/env"
 )
 
-func RegisterUserRoutes() {
-	go http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+func RegisterUserRoutes(server *http.ServeMux) {
+	go server.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			user_controllers.GetUsers(w, r)
@@ -21,9 +20,7 @@ func RegisterUserRoutes() {
 		}
 	})
 
-	go http.HandleFunc("/users/search", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", env.CorsOrigin)
-
+	go server.HandleFunc("/users/search", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			user_controllers.GetUsersByName(w, r)
 		} else {

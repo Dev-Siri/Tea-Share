@@ -4,11 +4,10 @@ import (
 	"net/http"
 	error_handlers "tea-share/controllers/errors"
 	post_controllers "tea-share/controllers/posts"
-	"tea-share/env"
 )
 
-func RegisterPostRoutes() {
-	go http.HandleFunc("/posts", func(w http.ResponseWriter, r *http.Request) {
+func RegisterPostRoutes(server *http.ServeMux) {
+	go server.HandleFunc("/posts", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			post_controllers.GetPosts(w, r)
@@ -19,9 +18,7 @@ func RegisterPostRoutes() {
 		}
 	})
 
-	go http.HandleFunc("/posts/search", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", env.CorsOrigin)
-
+	go server.HandleFunc("/posts/search", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			post_controllers.GetPostsBySearchTerm(w, r)
 		} else {
@@ -29,7 +26,7 @@ func RegisterPostRoutes() {
 		}
 	})
 
-	go http.HandleFunc("/posts/like", func(w http.ResponseWriter, r *http.Request) {
+	go server.HandleFunc("/posts/like", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPatch {
 			post_controllers.LikePost(w, r)
 		} else {
