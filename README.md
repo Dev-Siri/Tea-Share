@@ -7,7 +7,7 @@
 ## Description
 
 Tea Share is an online social media app for iOS, Android and the Web. It provides UI to interact and scroll through posts and allows you to
-create posts easily with the click of a button. It is built with Flutter for mobile (iOS/Android) and **[Next.js](https://nextjs.org)** for the web version. It uses **[MongoDB](https://www.mongodb.com)** as the
+create posts easily with the click of a button. It is built with Flutter for mobile (iOS/Android) and **[SvelteKit](https://kit.svelte.dev)** for the web version. It uses **[MongoDB](https://www.mongodb.com)** as the
 database, **[Go](https://go.dev)** as the server side language and **[Firebase](https://firebase.google.com)** for authentication + storaging all the user generated data. The mobile app is made with **[Flutter](https://flutter.dev)**, a cross platform framework.
 
 Currently, even though the Flutter project has a **iOS** folder, the iOS version is not configured for it and will not be available for a long time. (I don't have a MacBook)

@@ -1,28 +1,26 @@
+import { env } from "$env/dynamic/public";
+
 type Method = "GET" | "POST" | "PUT" | "DELETE" | "OPTIONS" | "HEAD" | "TRACE" | "CONNECT" | "PATCH";
 
 interface Options {
   method: Method;
   body: Record<string, any>;
-  cache: RequestCache;
-  revalidate: number;
   searchParams: Record<string, any>;
 }
 
-const queryClient = async <T>(endpoint: string, { method = "GET", body, cache, revalidate, searchParams }: Partial<Options>) => {
-  const url = new URL(endpoint, process.env.NEXT_PUBLIC_BACKEND_URL!);
+const queryClient = async <T>(endpoint: string, { method = "GET", body, searchParams }: Partial<Options>) => {
+  const url = new URL(endpoint, env.PUBLIC_BACKEND_URL);
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
 
-  if (searchParams) Object.keys(searchParams).forEach(searchParamKey => url.searchParams.set(searchParamKey, searchParams[searchParamKey]));
+  if (searchParams) Object.keys(searchParams).forEach((searchParamKey) => url.searchParams.set(searchParamKey, searchParams[searchParamKey]));
 
   try {
     const response = await fetch(url, {
       method,
       body: JSON.stringify(body),
       headers,
-      cache,
-      next: { revalidate },
     });
 
     if (!response.ok) throw new Error(`Failed to fetch, The server returned a status code of ${response.status}.`);
@@ -33,7 +31,7 @@ const queryClient = async <T>(endpoint: string, { method = "GET", body, cache, r
       return (await response.text()) as T;
     }
   } catch (error) {
-    // Print the error message on the server, only trigger the error.tsx on the client.
+    // Print the error message on the server, only trigger the +error.svelte on the client.
     // Extra validation to make sure actual error objects are never printed in the browser.
     if (typeof window !== "undefined") throw error;
 
@@ -47,13 +45,15 @@ const queryClient = async <T>(endpoint: string, { method = "GET", body, cache, r
       switch (error.status) {
         case 400:
           console.error("The client sent a bad response.");
+          break;
         case 404:
           console.error("Resource not found.");
+          break;
         case 500:
           console.error("Internal Server Error");
       }
 
-    throw error; // triggers error.tsx
+    throw error; // triggers +error.svelte
   }
 };
 

@@ -1,0 +1,49 @@
+<script lang="ts">
+  import type { Post } from "src/app";
+  import PostCard from "../components/PostCard.svelte";
+  import UserList from "../components/UserList.svelte";
+
+  export let data;
+
+  const { posts, users } = data;
+
+  let currentPage = 1;
+  let paginatedPosts = posts;
+
+  const loadMorePosts = async (event: any) => {
+    const { scrollHeight, scrollTop, clientHeight } = event.target;
+
+    const didScrollToBottom: boolean = scrollHeight - scrollTop === clientHeight;
+
+    if (didScrollToBottom) {
+      currentPage++;
+      const { default: queryClient } = await import("../services/queryClient");
+
+      const posts = await queryClient<Post[]>("/posts", {
+        searchParams: {
+          page: currentPage,
+          limit: 8,
+        },
+      });
+
+      if (posts) paginatedPosts = [...paginatedPosts, ...posts];
+    }
+  };
+</script>
+
+<svelte:head>
+  <title>Home</title>
+  <meta name="og:title" content="Home" />
+  <meta name="twitter:title" content="Home" />
+</svelte:head>
+
+<aside class="flex w-full h-screen min-[1002px]:pr-4">
+  <section role="list" on:scroll={loadMorePosts} class="h-screen w-full overflow-y-auto overflow-hidden px-4 pb-10 pt-4 min-[1002px]:w-[70%]">
+    {#each paginatedPosts as post, index}
+      <PostCard {post} lazyLoadImage={!!index} />
+    {/each}
+  </section>
+  <section class="hidden h-[91vh] py-4 min-[1002px]:block min-[1002px]:w-[30%]">
+    <UserList title="Suggested Accounts" {users} />
+  </section>
+</aside>
