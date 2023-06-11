@@ -9,8 +9,6 @@ import (
 
 func RegisterPostRoutes() {
 	go http.HandleFunc("/posts", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", env.CorsOrigin)
-
 		switch r.Method {
 		case http.MethodGet:
 			post_controllers.GetPosts(w, r)
@@ -32,8 +30,6 @@ func RegisterPostRoutes() {
 	})
 
 	go http.HandleFunc("/posts/like", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", env.CorsOrigin)
-
 		if r.Method == http.MethodPatch {
 			post_controllers.LikePost(w, r)
 		} else {

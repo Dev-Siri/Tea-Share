@@ -9,8 +9,6 @@ import (
 
 func RegisterUserRoutes() {
 	go http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", env.CorsOrigin)
-
 		switch r.Method {
 		case http.MethodGet:
 			user_controllers.GetUsers(w, r)

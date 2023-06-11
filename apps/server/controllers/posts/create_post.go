@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"tea-share/db"
+	"tea-share/env"
 	"tea-share/models"
 	"time"
 )
@@ -41,6 +42,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+	w.Header().Set("Access-Control-Allow-Origin", env.CorsOrigin)
 
 	fmt.Fprintf(w, "Inserted post with ID: %v", result.InsertedID)
 }

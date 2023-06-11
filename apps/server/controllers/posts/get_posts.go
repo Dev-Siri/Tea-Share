@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"tea-share/db"
+	"tea-share/env"
 	"tea-share/models"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -77,6 +78,7 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", env.CorsOrigin)
 
 	fmt.Fprintf(w, "%s", postJSONBytes)
 }
