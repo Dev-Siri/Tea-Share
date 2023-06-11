@@ -1,9 +1,12 @@
 package error_handlers
 
-import "net/http"
+import (
+	"net/http"
+	"tea-share/env"
+)
 
 func NotFound(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "https://tea-share.vercel.app")
+	w.Header().Set("Access-Control-Allow-Origin", env.CorsOrigin)
 
 	http.Error(w, "Page not found", http.StatusNotFound)
 }

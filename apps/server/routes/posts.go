@@ -4,11 +4,12 @@ import (
 	"net/http"
 	error_handlers "tea-share/controllers/errors"
 	post_controllers "tea-share/controllers/posts"
+	"tea-share/env"
 )
 
 func RegisterPostRoutes() {
 	go http.HandleFunc("/posts", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "https://tea-share.vercel.app")
+		w.Header().Set("Access-Control-Allow-Origin", env.CorsOrigin)
 
 		switch r.Method {
 		case http.MethodGet:
@@ -21,7 +22,7 @@ func RegisterPostRoutes() {
 	})
 
 	go http.HandleFunc("/posts/search", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "https://tea-share.vercel.app")
+		w.Header().Set("Access-Control-Allow-Origin", env.CorsOrigin)
 
 		if r.Method == http.MethodGet {
 			post_controllers.GetPostsBySearchTerm(w, r)
@@ -31,7 +32,7 @@ func RegisterPostRoutes() {
 	})
 
 	go http.HandleFunc("/posts/like", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "https://tea-share.vercel.app")
+		w.Header().Set("Access-Control-Allow-Origin", env.CorsOrigin)
 
 		if r.Method == http.MethodPatch {
 			post_controllers.LikePost(w, r)

@@ -7,6 +7,7 @@ import (
 	"os"
 	error_handlers "tea-share/controllers/errors"
 	"tea-share/db"
+	"tea-share/env"
 	"tea-share/routes"
 
 	"github.com/joho/godotenv"
@@ -18,11 +19,7 @@ func main() {
 		return
 	}
 
-	port := os.Getenv("PORT")
-
-	if port == "" {
-		port = "5000"
-	}
+	port := env.GetPort()
 
 	addr := fmt.Sprintf(":%s", port)
 
