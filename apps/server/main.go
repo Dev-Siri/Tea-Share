@@ -9,7 +9,6 @@ import (
 	"tea-share/db"
 	"tea-share/env"
 	"tea-share/middleware"
-	"tea-share/routes"
 
 	"github.com/joho/godotenv"
 )
@@ -37,8 +36,19 @@ func main() {
 
 	go server.HandleFunc("/", error_handlers.NotFound)
 
-	go routes.RegisterPostRoutes(server)
-	go routes.RegisterUserRoutes(server)
+	go server.HandleFunc("/progress-tracker", func(w http.ResponseWriter, r *http.Request) {
+		bytes, err := os.ReadFile("progress-tracker.txt")
+
+		if err != nil {
+			http.Error(w, "Failed to read progress tracker", http.StatusInternalServerError)
+			return
+		}
+
+		fmt.Fprint(w, string(bytes))
+	})
+
+	// go routes.RegisterPostRoutes(server)
+	// go routes.RegisterUserRoutes(server)
 
 	handler := middleware.CorsMiddleware(server)
 

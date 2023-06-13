@@ -51,7 +51,7 @@
   <meta name="twitter:description" content="Login to Tea Share to connect and share posts with your friends online." />
 </svelte:head>
 
-<article class="p-6">
+<article class="p-6 overflow-y-auto">
   <Logo bigger />
   <h1 class="ml-2 mt-3 text-3xl font-bold">{isSignup ? "Signup to join the community!" : "Welcome back! Login to continue."}</h1>
   <form
@@ -75,7 +75,7 @@
     {#if errorOccured}
       <p class="error">An error occured</p>
     {/if}
-    <div class="mt-[30px] flex h-fit items-center">
+    <div class="mt-[30px] mb-4 flex h-fit items-center">
       <button disabled={loading} type="submit" class="btn ml-2 h-10 gap-2">
         {isSignup ? "Signup" : "Login"}
         {#if loading}
@@ -89,6 +89,10 @@
         </span>
       </p>
     </div>
+    <p class="ml-10px w-[390px] my-5 text-sm">
+      Forget Password?
+      <a href="/reset-password" class="text-primary hover:text-primary-dark">Reset</a>
+    </p>
   </form>
   <button
     type="button"

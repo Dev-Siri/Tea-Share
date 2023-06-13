@@ -1,17 +1,16 @@
 import { redirect } from "@sveltejs/kit";
-import jwtDecode from "jwt-decode";
-
-import type { FirebaseUser, Theme } from "../app";
 
 export const load = ({ cookies, url }) => {
-  const theme: Theme = (cookies.get("theme") as Theme) || "light";
+  if (url.pathname !== "/info") throw redirect(307, "/info");
 
-  const authToken = cookies.get("auth_token");
+  // const theme: Theme = (cookies.get("theme") as Theme) || "light";
 
-  if (!authToken && url.pathname !== "/auth") throw redirect(303, "/auth");
+  // const authToken = cookies.get("auth_token");
 
-  return {
-    theme,
-    user: url.pathname !== "/auth" ? jwtDecode<FirebaseUser>(authToken!) : null,
-  };
+  // if (!authToken && url.pathname !== "/auth" && url.pathname !== "/reset-password") throw redirect(303, "/auth");
+
+  // return {
+  //   theme,
+  //   user: url.pathname !== "/auth" && url.pathname !== "/reset-password" ? jwtDecode<FirebaseUser>(authToken!) : null,
+  // };
 };

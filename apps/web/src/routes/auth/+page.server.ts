@@ -1,13 +1,9 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import jwtDecode from "jwt-decode";
-
-import type { FirebaseUser } from "../../app";
 
 import { auth, storage } from "../../services/firebase";
 import queryClient from "../../services/queryClient";
-import userStore from "../../stores/user";
 
 export const actions = {
   async login({ request, cookies }) {
@@ -26,8 +22,6 @@ export const actions = {
       sameSite: true,
       httpOnly: false,
     });
-
-    userStore.set(jwtDecode<FirebaseUser>(authToken));
 
     throw redirect(301, "/");
   },
@@ -54,36 +48,40 @@ export const actions = {
     const imageName = crypto.randomUUID();
     const imageRef = ref(storage, `users/${imageName}`);
 
-    await uploadBytes(imageRef, image);
+    try {
+      await uploadBytes(imageRef, await image.arrayBuffer());
 
-    const imageLink = await getDownloadURL(imageRef);
-    const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      const imageLink = await getDownloadURL(imageRef);
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
 
-    await updateProfile(user, {
-      displayName: username,
-      photoURL: imageLink,
-    });
+      await updateProfile(user, {
+        displayName: username,
+        photoURL: imageLink,
+      });
 
-    await queryClient("/users", {
-      method: "POST",
-      body: {
-        username,
-        image: imageLink,
-        email,
-      },
-    });
+      await queryClient("/users", {
+        method: "POST",
+        body: {
+          username,
+          image: imageLink,
+          email,
+        },
+      });
 
-    const authToken = await user.getIdToken();
+      const authToken = await user.getIdToken();
 
-    cookies.set("auth_token", authToken, {
-      expires: new Date(9999, 0, 1),
-      sameSite: true,
-      httpOnly: false,
-    });
+      cookies.set("auth_token", authToken, {
+        expires: new Date(9999, 0, 1),
+        sameSite: true,
+        httpOnly: false,
+      });
 
-    userStore.set(jwtDecode<FirebaseUser>(authToken));
-
-    throw redirect(301, "/");
+      throw redirect(301, "/");
+    } catch (error) {
+      return {
+        incorrect: true,
+      };
+    }
   },
 };
 

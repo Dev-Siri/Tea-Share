@@ -1,6 +1,6 @@
 import sharp from "sharp";
 
-export const GET = async ({ url: { searchParams } }) => {
+export const GET = async ({ url: { searchParams }, fetch }) => {
   const imageUrl = searchParams.get("url");
   const height = searchParams.get("h");
 
