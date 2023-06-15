@@ -1,6 +1,6 @@
 import queryClient from "../../services/queryClient";
 
-import type { MongoDBUser, Post } from "../../app";
+import type { Post, User } from "../../app";
 
 export const load = async ({ url }) => {
   const query = url.searchParams.get("query");
@@ -12,7 +12,7 @@ export const load = async ({ url }) => {
         fromUser: false,
       },
     }),
-    queryClient<MongoDBUser[]>("/users/search", {
+    queryClient<User[]>("/users/search", {
       searchParams: {
         name: query,
         exact: false,

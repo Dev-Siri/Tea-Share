@@ -13,12 +13,12 @@
   export let post: Post;
   export let lazyLoadImage: boolean = true;
 
-  const { title, description, image, author, authorImage, createdAt, people, _id } = post;
+  const { postId, title, description, postImage, username, userImage, createdAt, likes } = post;
 
-  const formatLikes = (people: string[]) => {
+  const formatLikes = (people: typeof likes) => {
     if (!people.length) return "0 Likes";
 
-    if (people.includes($user.name)) {
+    if (people.some(({ username }) => username === $user.name)) {
       if (people.length === 1) return "You liked this post";
 
       return `You and ${people.length - 1} ${people.length - 1 === 1 ? "other" : "others"}`;
@@ -29,18 +29,25 @@
     return `${people[0]} and ${people.length - 1} others`;
   };
 
-  let likes = formatLikes(post.people);
-  let isLiked = people.includes($user.name);
+  let formattedLikes = formatLikes(likes);
+  let isLiked = likes.some(({ username }) => username === $user.name);
 
   const likePost = async () => {
     if (!$user) return;
 
     const { name, picture } = $user;
 
-    likes = formatLikes([...people, name]);
+    formattedLikes = formatLikes([
+      ...likes,
+      {
+        username: name,
+        userImage: picture,
+      },
+    ]);
+
     isLiked = true;
 
-    await queryClient(`/posts/like?id=${_id}`, {
+    await queryClient(`/posts/like?id=${postId}`, {
       method: "PATCH",
       body: {
         username: name,
@@ -52,7 +59,7 @@
 
 <svelte:head>
   {#if !lazyLoadImage}
-    <link rel="preload" href="/api/image?url={encodeURIComponent(image)}&h=800" as="image" />
+    <link rel="preload" href="/api/image?url={encodeURIComponent(postImage)}&h=800" as="image" />
   {/if}
 </svelte:head>
 
@@ -61,9 +68,9 @@
   <p class="my-3 ml-1 overflow-y-auto break-words pb-2 text-gray-400">
     {getRelativeTime(createdAt)}
   </p>
-  <a href="/post/{_id}" class="cursor-pointer">
+  <a href="/post/{postId}" class="cursor-pointer">
     <Image
-      src={image}
+      src={postImage}
       alt={title}
       height={800}
       width={500}
@@ -82,17 +89,17 @@
         {/if}
       </span>
       <span class="text-primary mr-6 text-base md:w-full">
-        &nbsp;{likes}
+        &nbsp;{formattedLikes}
       </span>
     </button>
     <div class="ml-auto flex items-center">
-      <p>Posted by {author}</p>
-      <a href="/people/{author}" class="hidden md:block">
+      <p>Posted by {username}</p>
+      <a href="/people/{username}" class="hidden md:block">
         <Image
           height={30}
           width={30}
-          src={authorImage}
-          alt={author}
+          src={userImage}
+          alt={username}
           loading={lazyLoadImage ? "lazy" : "eager"}
           class="ml-10px hidden h-[30px] rounded-full md:inline"
         />

@@ -9,22 +9,19 @@ declare global {
 
 export type Theme = "light" | "dark";
 
-export interface Post {
-  _id: string;
+export interface Post extends Omit<User, "email"> {
+  postId: string;
   title: string;
   description: string;
-  author: string;
-  authorImage: string;
-  image: string;
+  postImage: string;
   createdAt: string;
-  people: string[];
-  peopleImage: string[];
+  likes: Pick<User, "username" | "userImage">[];
 }
 
-export interface MongoDBUser {
+export interface User {
+  userId: string;
   username: string;
-  image: string;
-  _id: string;
+  userImage: string;
   email: string;
 }
 

@@ -1,39 +1,31 @@
 package user_controllers
 
-import (
-	"encoding/json"
-	"fmt"
-	"io"
-	"log"
-	"net/http"
-	"tea-share/db"
-	"tea-share/models"
-)
+import "github.com/valyala/fasthttp"
 
-func CreateUser(w http.ResponseWriter, r *http.Request) {
-	body, bodyReadError := io.ReadAll(r.Body)
+func CreateUser(ctx *fasthttp.RequestCtx) {
+	// body, bodyReadError := io.ReadAll(r.Body)
 
-	if bodyReadError != nil {
-		w.WriteHeader(http.StatusOK)
-		log.Printf("Failed to read request body")
-		return
-	}
+	// if bodyReadError != nil {
+	// 	w.WriteHeader(http.StatusOK)
+	// 	log.Printf("Failed to read request body")
+	// 	return
+	// }
 
-	var user models.User
+	// var user models.User
 
-	if bodyParseError := json.Unmarshal(body, &user); bodyParseError != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("Failed to parse request body")
-	}
+	// if bodyParseError := json.Unmarshal(body, &user); bodyParseError != nil {
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	log.Printf("Failed to parse request body")
+	// }
 
-	result, dbInsertError := db.UsersCollection().InsertOne(r.Context(), user)
+	// result, dbInsertError := db.UsersCollection().InsertOne(r.Context(), user)
 
-	if dbInsertError != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("Failed to create user")
-	}
+	// if dbInsertError != nil {
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	log.Printf("Failed to create user")
+	// }
 
-	w.WriteHeader(http.StatusCreated)
+	// w.WriteHeader(http.StatusCreated)
 
-	fmt.Fprintf(w, "Inserted user with ID: %v", result.InsertedID)
+	// fmt.Fprintf(w, "Inserted user with ID: %v", result.InsertedID)
 }

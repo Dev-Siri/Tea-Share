@@ -1,25 +1,23 @@
 package middleware
 
 import (
-	"net/http"
 	"tea-share/env"
+
+	"github.com/valyala/fasthttp"
 )
 
-func CorsMiddleware(handler http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", env.GetCorsOrigin())
+func CORS(next fasthttp.RequestHandler) fasthttp.RequestHandler {
+	return (func(ctx *fasthttp.RequestCtx) {
+		ctx.Response.Header.Set("Access-Control-Allow-Origin", env.GetCorsOrigin())
+		ctx.Response.Header.Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, OPTIONS")
+		ctx.Response.Header.Set("Access-Control-Allow-Headers", "Content-Type")
 
-		if r.Method == http.MethodOptions {
-			w.Header().Set("Access-Control-Allow-Methods", "*")
-			w.Header().Set("Access-Control-Allow-Credentials", "true")
-			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-			w.WriteHeader(http.StatusOK)
+		if string(ctx.Method()) == fasthttp.MethodOptions {
+			ctx.Response.Header.Set("Access-Control-Allow-Credentials", "true")
+			ctx.SetStatusCode(fasthttp.StatusOK)
 			return
 		}
 
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-		handler.ServeHTTP(w, r)
+		next(ctx)
 	})
 }

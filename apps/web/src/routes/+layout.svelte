@@ -1,13 +1,16 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import "../app.css";
+  import user from "../stores/user";
 
+  import Navbar from "../components/Navbar.svelte";
   import theme from "../stores/theme";
 
-  // export let data;
+  export let data;
 
-  theme.set("dark");
-  // theme.set(data.theme);
-  // $: if (data.user) user.set(data.user);
+  theme.set(data.theme);
+  $: if (data.user) user.set(data.user);
+  $: if (browser) document.body.classList.replace($theme === "dark" ? "light" : "dark", $theme);
 </script>
 
 <svelte:head>
@@ -43,9 +46,9 @@
 
 <svelte:body class="m-0 p-0 box-border overflow-hidden {$theme}" />
 
-<!-- {#if $user}
+{#if $user}
   <Navbar />
-{/if} -->
+{/if}
 <main class="dark:bg-dark-gray h-screen w-screen overflow-hidden duration-200 dark:text-white">
   <slot />
 </main>
