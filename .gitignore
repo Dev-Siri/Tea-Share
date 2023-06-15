@@ -117,3 +117,5 @@ apps/web/public/worker/worker-*.js.map
 apps/future-pfp-generation-server/.vscode
 
 bin
+keys
+.data.old
