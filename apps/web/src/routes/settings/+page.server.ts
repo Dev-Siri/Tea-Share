@@ -1,7 +1,7 @@
 import { error, redirect } from "@sveltejs/kit";
 import jwtDecode from "jwt-decode";
 
-import type { FirebaseUser, MongoDBUser } from "../../app";
+import type { FirebaseUser, User } from "../../app";
 import queryClient from "../../services/queryClient";
 
 export const load = async ({ cookies }) => {
@@ -11,7 +11,7 @@ export const load = async ({ cookies }) => {
 
   const { name } = jwtDecode<FirebaseUser>(authToken);
 
-  const fetchedUsers = await queryClient<MongoDBUser[] | null>("/users/search", {
+  const fetchedUsers = await queryClient<User[] | null>("/users/search", {
     searchParams: {
       name,
       exact: true,
@@ -21,6 +21,6 @@ export const load = async ({ cookies }) => {
   if (!fetchedUsers) throw error(500, "Failed to fetch your information. Please try again later.");
 
   return {
-    userId: fetchedUsers[0]._id,
+    userId: fetchedUsers[0].userId,
   };
 };

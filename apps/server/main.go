@@ -37,6 +37,10 @@ func main() {
 		log.Printf("%v", err)
 	}
 
+	if err := db.FileUploadInit(); err != nil {
+		log.Printf("%v", err)
+	}
+
 	router := fasthttprouter.New()
 
 	go routes.RegisterPostRoutes(router)

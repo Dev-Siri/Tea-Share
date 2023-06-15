@@ -53,6 +53,6 @@ func GetUsers(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	ctx.Response.Header.Set("Content-Type", "application/json")
+	ctx.SetContentType("application/json")
 	ctx.Write(userJSONBytes)
 }

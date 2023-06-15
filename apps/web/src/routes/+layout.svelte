@@ -44,8 +44,6 @@
   <title>Home</title>
 </svelte:head>
 
-<svelte:body class="m-0 p-0 box-border overflow-hidden {$theme}" />
-
 {#if $user}
   <Navbar />
 {/if}

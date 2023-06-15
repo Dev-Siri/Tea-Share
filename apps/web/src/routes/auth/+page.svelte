@@ -2,10 +2,12 @@
   import { enhance } from "$app/forms";
   import Circle from "svelte-loading-spinners/Circle.svelte";
 
+  import type { ActionData } from "./$types";
+
   import Logo from "../../components/Logo.svelte";
   import Google from "../../components/icons/Google.svelte";
 
-  export let form;
+  export let form: ActionData;
 
   let isSignup = false;
   let loading = false;

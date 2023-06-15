@@ -1,13 +1,11 @@
-import { redirect } from "@sveltejs/kit";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { fail, redirect, type Actions } from "@sveltejs/kit";
 import jwtDecode from "jwt-decode";
 
+import queryClient from "src/services/queryClient";
 import type { FirebaseUser } from "../../app";
+import { encodeToBase64 } from "../../utils/globals";
 
-import { storage } from "../../services/firebase";
-import queryClient from "../../services/queryClient";
-
-export const actions = {
+export const actions: Actions = {
   async default({ request, cookies }) {
     const authToken = cookies.get("auth_token");
 
@@ -20,22 +18,16 @@ export const actions = {
     const image = formData.get("image");
 
     if (!title || !description || !image || title instanceof Blob || description instanceof Blob || typeof image === "string" || title.length < 4)
-      return;
+      return fail(400, { incorrect: true });
 
     const { name, picture } = jwtDecode<FirebaseUser>(authToken);
-
-    const imageRef = ref(storage, `posts/${crypto.randomUUID()}`);
-
-    await uploadBytes(imageRef, await image.arrayBuffer(), { contentType: image.type });
-
-    const imageLink = await getDownloadURL(imageRef);
+    const encodedImage = await encodeToBase64(image);
 
     await queryClient("/posts", {
       method: "POST",
       body: {
         title,
         description,
-        image: imageLink,
         author: name,
         authorImage: picture,
       },

@@ -1,9 +1,11 @@
+import { error } from "@sveltejs/kit";
+
+import type { Post, User } from "../../../app";
+import type { PageServerLoad } from "./$types";
+
 import queryClient from "../../../services/queryClient";
 
-import { error } from "@sveltejs/kit";
-import type { MongoDBUser, Post } from "../../../app";
-
-export const load = async ({ params: { name } }) => {
+export const load: PageServerLoad = async ({ params: { name } }) => {
   const [posts, users] = await Promise.all([
     queryClient<Post[] | null>("/posts/search", {
       searchParams: {
@@ -11,7 +13,7 @@ export const load = async ({ params: { name } }) => {
         fromUser: true,
       },
     }),
-    queryClient<MongoDBUser[] | null>("/users/search", {
+    queryClient<User[] | null>("/users/search", {
       searchParams: {
         name,
         exact: true,
@@ -19,7 +21,7 @@ export const load = async ({ params: { name } }) => {
     }),
   ]);
 
-  if (!users?.[0]) throw error(404, "Not Found");
+  if (!users) throw error(404, { message: "Not Found" });
 
   const usersPosts = posts || [];
 

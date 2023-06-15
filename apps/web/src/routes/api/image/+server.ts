@@ -1,6 +1,8 @@
 import sharp from "sharp";
 
-export const GET = async ({ url: { searchParams }, fetch }) => {
+import type { RequestHandler } from "@sveltejs/kit";
+
+export const GET: RequestHandler = async ({ url: { searchParams }, fetch }) => {
   const imageUrl = searchParams.get("url");
   const height = searchParams.get("h");
 

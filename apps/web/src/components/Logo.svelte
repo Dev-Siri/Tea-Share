@@ -4,7 +4,7 @@
   export let bigger: boolean = false;
 </script>
 
-<section class="flex items-center {bigger && 'mt-3'}">
+<section class="flex items-center" class:mt-3={bigger}>
   <a href="/" class="bg-primary mx-2 rounded-full">
     <AppIcon height={bigger ? 60 : 50} width={bigger ? 60 : 50} />
   </a>

@@ -14,13 +14,13 @@ import (
 
 var storageBucket *storage.BucketHandle
 
-func FirebaseInit() error {
+func FileUploadInit() error {
 	// The file is present at ${project_root}/keys/tea-commerce-7e43c-firebase-adminsdk-zyi33-7eae621846.json
 	// Replace it with your own project's private keys.
-	opts := option.WithCredentialsFile("keys/tea-commerce-7e43c-firebase-adminsdk-zyi33-7eae621846.json")
+	opts := option.WithCredentialsFile("keys/tea-share-e6fd0-firebase-adminsdk-wfvyp-746795b2e1.json")
 	app, firebaseInitError := firebase.NewApp(context.Background(), &firebase.Config{
-		ProjectID:     "tea-commerce-7e43c",
-		StorageBucket: "tea-commerce-7e43c.appspot.com",
+		ProjectID:     "tea-share-e6fd0",
+		StorageBucket: "tea-share-e6fd0.appspot.com",
 	}, opts)
 
 	if firebaseInitError != nil {

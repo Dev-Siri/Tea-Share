@@ -1,9 +1,10 @@
 import { redirect } from "@sveltejs/kit";
 import jwtDecode from "jwt-decode";
 
-import type { FirebaseUser, Theme } from "src/app.js";
+import type { FirebaseUser, Theme } from "../app";
+import type { LayoutServerLoad } from "./$types";
 
-export const load = ({ cookies, url }) => {
+export const load: LayoutServerLoad = ({ cookies, url }) => {
   const theme: Theme = (cookies.get("theme") as Theme) || "light";
 
   const authToken = cookies.get("auth_token");

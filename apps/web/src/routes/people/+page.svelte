@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { MongoDBUser } from "../../app";
+  import type { User } from "../../app";
 
   import UserListItem from "../../components/UserListItem.svelte";
 
@@ -17,7 +17,7 @@
       currentPage++;
       const { default: queryClient } = await import("../../services/queryClient");
 
-      const fetchedUsers = await queryClient<MongoDBUser[]>("/users", {
+      const fetchedUsers = await queryClient<User[]>("/users", {
         searchParams: {
           page: currentPage,
           limit: 8,
@@ -43,8 +43,8 @@
     <h1 class="ml-4 text-xl font-medium min-[500px]:block">People</h1>
   </section>
   <section role="list" class="mt-14">
-    {#each users as { username, image }}
-      <UserListItem {username} {image} />
+    {#each users as { username, userImage }}
+      <UserListItem {username} {userImage} />
     {/each}
   </section>
 </aside>

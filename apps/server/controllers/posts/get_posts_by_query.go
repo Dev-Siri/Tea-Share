@@ -115,7 +115,7 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 		var post models.Post
 		var likesJSON []uint8
 
-		if err := rows.Scan(
+		if postsDecodeError := rows.Scan(
 			&post.PostID,
 			&post.Title,
 			&post.Description,
@@ -125,7 +125,7 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 			&post.Username,
 			&post.UserImage,
 			&likesJSON,
-		); err != nil {
+		); postsDecodeError != nil {
 			ctx.Error("Failed to decode posts", fasthttp.StatusInternalServerError)
 			return
 		}
@@ -149,6 +149,6 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	ctx.Response.Header.Set("Content-Type", "application/json")
+	ctx.SetContentType("application/json")
 	ctx.Write(postJSONBytes)
 }

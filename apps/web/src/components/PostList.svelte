@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Post } from "../app";
+
   import PostCard from "./PostCard.svelte";
 
   export let posts: Post[];

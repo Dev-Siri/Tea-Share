@@ -1,11 +1,13 @@
-import { fail, redirect } from "@sveltejs/kit";
+import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
+import type { PageServerLoad } from "../$types";
 
 import { auth, storage } from "../../services/firebase";
 import queryClient from "../../services/queryClient";
 
-export const actions = {
+export const actions: Actions = {
   async login({ request, cookies }) {
     const formData = await request.formData();
 
@@ -85,7 +87,7 @@ export const actions = {
   },
 };
 
-export const load = ({ cookies }) => {
+export const load: PageServerLoad = ({ cookies }) => {
   const authToken = cookies.get("auth_token");
 
   if (authToken) throw redirect(301, "/");

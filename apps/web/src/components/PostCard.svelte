@@ -33,7 +33,7 @@
   let isLiked = likes.some(({ username }) => username === $user.name);
 
   const likePost = async () => {
-    if (!$user) return;
+    if (isLiked) return;
 
     const { name, picture } = $user;
 
@@ -47,13 +47,7 @@
 
     isLiked = true;
 
-    await queryClient(`/posts/like?id=${postId}`, {
-      method: "PATCH",
-      body: {
-        username: name,
-        image: picture,
-      },
-    });
+    await queryClient(`/posts/${postId}/like?userId=${postId}`, { method: "PATCH" });
   };
 </script>
 

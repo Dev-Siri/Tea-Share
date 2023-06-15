@@ -46,7 +46,7 @@
       await queryClient(`/users?id=${data.userId}`, {
         method: "PUT",
         body: {
-          _id: data.userId,
+          userId: data.userId,
           image: uploadedImage,
           username,
           email,
