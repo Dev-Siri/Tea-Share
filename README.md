@@ -6,9 +6,8 @@
 
 ## Description
 
-Tea Share is an online social media app for iOS, Android and the Web. It provides UI to interact and scroll through posts and allows you to
-create posts easily with the click of a button. It is built with Flutter for mobile (iOS/Android) and **[SvelteKit](https://kit.svelte.dev)** for the web version. It uses **[MongoDB](https://www.mongodb.com)** as the
-database, **[Go](https://go.dev)** as the server side language and **[Firebase](https://firebase.google.com)** for authentication + storaging all the user generated data. The mobile app is made with **[Flutter](https://flutter.dev)**, a cross platform framework.
+Tea Share is a social media app for Android and the Web. It is built with **[Flutter](https://flutter.dev)** for mobile (~~iOS~~/Android) and **[SvelteKit](https://kit.svelte.dev)** for the web version. It uses **[MongoDB](https://www.mongodb.com)** as the
+database, **[Go](https://go.dev)** as the server side language and **[Firebase](https://firebase.google.com)** for authentication + storaging all the user generated data.
 
 Currently, even though the Flutter project has a **iOS** folder, the iOS version is not configured for it and will not be available for a long time. (I don't have a MacBook)
 
@@ -16,11 +15,10 @@ Currently, even though the Flutter project has a **iOS** folder, the iOS version
 
 - TailwindCSS
 - TypeScript
+- SvelteKit
 - Firebase
-- Next.js
 - Flutter
 - MongoDB
-- React
 - Dart
 - Go
 
@@ -52,7 +50,7 @@ $ pnpm i
 
 - For the mobile version, you need to have the [Flutter SDK](https://docs.flutter.dev/get-started/instal) installed on your system.
 
-- And for the Server, you need to have [Air](https://github.com/cosmtrek) & [Go](https://go.dev/dl) installed. To install it, run:
+- And for the Server, you need to have [Air](https://github.com/cosmtrek) (Optional, air is used for live reloading) & [Go](https://go.dev/dl) installed. To install it, run:
 
 ```sh
 # with install.sh (preferred way according to air)
