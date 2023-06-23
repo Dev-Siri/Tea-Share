@@ -1,9 +1,10 @@
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import jwtDecode from "jwt-decode";
 
-import queryClient from "src/services/queryClient";
-import type { FirebaseUser } from "../../app";
-import { encodeToBase64 } from "../../utils/globals";
+import type { User } from "@/app";
+
+import { encodeToBase64 } from "@/utils/globals";
+import queryClient from "@/utils/queryClient";
 
 export const actions: Actions = {
   async default({ request, cookies }) {
@@ -20,7 +21,7 @@ export const actions: Actions = {
     if (!title || !description || !image || title instanceof Blob || description instanceof Blob || typeof image === "string" || title.length < 4)
       return fail(400, { incorrect: true });
 
-    const { name, picture } = jwtDecode<FirebaseUser>(authToken);
+    const { userId } = jwtDecode<User>(authToken);
     const encodedImage = await encodeToBase64(image);
 
     await queryClient("/posts", {
@@ -28,8 +29,8 @@ export const actions: Actions = {
       body: {
         title,
         description,
-        author: name,
-        authorImage: picture,
+        postImage: encodedImage,
+        userId
       },
     });
 

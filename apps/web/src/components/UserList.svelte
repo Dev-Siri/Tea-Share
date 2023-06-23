@@ -1,7 +1,7 @@
 <script lang="ts">
   import UserListItem from "./UserListItem.svelte";
 
-  import type { User } from "../app";
+  import type { User } from "@/app";
 
   export let title: string;
   export let users: (Pick<User, "username" | "userImage"> & Partial<Pick<User, "userImage" | "userId">>)[];

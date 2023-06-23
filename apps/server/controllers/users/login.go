@@ -28,7 +28,7 @@ func Login(ctx *fasthttp.RequestCtx) {
 
 	var numberOfExistingAccounts int
 
-	countRow := db.SQL().QueryRow(`
+	countRow := db.Database.QueryRow(`
 		SELECT COUNT(email) FROM Users
 		WHERE email = ?
 	;`, user.Email)
@@ -43,7 +43,7 @@ func Login(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	row := db.SQL().QueryRow(`
+	row := db.Database.QueryRow(`
 		SELECT user_id, username, user_image, email, password, salt FROM Users
 		WHERE email = ?
 	;`, user.Email)

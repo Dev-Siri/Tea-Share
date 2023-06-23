@@ -1,17 +1,19 @@
 package hash
 
 import (
-	"os"
+	"tea-share/env"
 
 	scrypt "github.com/Aoang/firebase-scrypt"
 )
 
-var scrpytInstance *scrypt.App;
+var scrpytInstance *scrypt.App
 
 func InitHash() error {
+	base64SignerKey, base64SaltSeparator := env.GetBase65Keys()
+
 	app, err := scrypt.New(
-		os.Getenv("BASE64_SIGNER_KEY"),
-		os.Getenv("BASE64_SALT_SEPARATOR"),
+		base64SignerKey,
+		base64SaltSeparator,
 		8,
 		14,
 	)

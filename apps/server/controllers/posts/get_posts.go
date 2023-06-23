@@ -16,21 +16,27 @@ func GetPosts(ctx *fasthttp.RequestCtx) {
 
 	offset := (page - 1) * limit
 
-	rows, postsFetchError := db.SQL().Query(`
+	rows, postsFetchError := db.Database.Query(`
 		SELECT
 			p.*,
 			u.username,
 			u.user_image,
-			JSON_ARRAYAGG(
-				JSON_OBJECT(
-					'username', lu.username,
-					'userImage', lu.user_image
-				)
+			COALESCE(
+				(
+					SELECT JSON_ARRAYAGG(
+						JSON_OBJECT(
+							'username', lu.username,
+							'userImage', lu.user_image
+						)
+					)
+					FROM Likes l
+					LEFT JOIN Users lu ON lu.user_id = l.user_id
+					WHERE l.post_id = p.post_id
+				),
+				JSON_ARRAY()
 			) AS likes
 		FROM Posts p
-		LEFT JOIN Likes l ON l.post_id = p.post_id
 		LEFT JOIN Users u ON u.user_id = p.user_id
-		LEFT JOIN Users lu ON lu.user_id = l.user_id
 		GROUP BY p.post_id
 		ORDER BY p.created_at DESC
 		LIMIT ? OFFSET ?

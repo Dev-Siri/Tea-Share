@@ -1,7 +1,7 @@
 import { redirect } from "@sveltejs/kit";
 import jwtDecode from "jwt-decode";
 
-import type { FirebaseUser, Theme } from "../app";
+import type { Theme, User } from "@/app";
 import type { LayoutServerLoad } from "./$types";
 
 export const load: LayoutServerLoad = ({ cookies, url }) => {
@@ -13,6 +13,6 @@ export const load: LayoutServerLoad = ({ cookies, url }) => {
 
   return {
     theme,
-    user: url.pathname !== "/auth" && url.pathname !== "/reset-password" ? jwtDecode<FirebaseUser>(authToken!) : null,
+    user: url.pathname !== "/auth" && url.pathname !== "/reset-password" ? jwtDecode<User>(authToken!) : null,
   };
 };

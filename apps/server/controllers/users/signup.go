@@ -4,7 +4,6 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"tea-share/db"
 	"tea-share/env"
@@ -31,15 +30,30 @@ func Signup(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
+	if len(user.Username) < 3 {
+		ctx.Error("Username must be atleast 3 characters long", fasthttp.StatusBadRequest)
+		return
+	}
+
+	if len(user.Username) > 100 {
+		ctx.Error("Username too long", fasthttp.StatusBadRequest)
+		return
+	}
+
+	if len(user.Email) > 255 {
+		ctx.Error("Email too long", fasthttp.StatusBadRequest)
+		return
+	}
+
 	var numberOfExistingAccounts int
-	
+
 	authProvider := "mail"
 
 	if user.AuthProvider == "google" {
 		authProvider = "google"
 	}
 
-	countRow := db.SQL().QueryRow(`
+	countRow := db.Database.QueryRow(`
 		SELECT COUNT(email) FROM Users
 		WHERE email = ?
 	;`, user.Email)
@@ -76,17 +90,19 @@ func Signup(ctx *fasthttp.RequestCtx) {
 
 	encodedSalt := base64.StdEncoding.EncodeToString(salt)
 
-	filename := uuid.New()
-	uploadedImageUrl, imageUploadError := db.UploadDataURL(user.UserImage, fmt.Sprintf("users/%s", filename.String()))
+	uploadedImageUrl, imageUploadError := db.UploadDataURL(
+		user.UserImage,
+		"users/"+uuid.NewString(),
+	)
 
 	if imageUploadError != nil {
 		ctx.Error("Failed to upload your profile image", http.StatusInternalServerError)
 		return
 	}
 
-	userId := uuid.New()
+	userId := uuid.NewString()
 
-	_, dbInsertError := db.SQL().Query(`
+	_, dbInsertError := db.Database.Query(`
 		INSERT INTO Users(user_id, username, user_image, email, password, salt, auth_provider)
 		VALUES ( ?, ?, ?, ?, ?, ?, ? )
 	;`, userId, user.Username, uploadedImageUrl, user.Email, hashedPassword, encodedSalt, authProvider)

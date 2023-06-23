@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { Post } from "src/app";
+  import type { Post } from "@/app";
 
-  import PostCard from "../components/PostCard.svelte";
-  import UserList from "../components/UserList.svelte";
+  import PostCard from "@/components/PostCard.svelte";
+  import UserList from "@/components/UserList.svelte";
 
   export let data;
 
@@ -18,7 +18,7 @@
 
     if (didScrollToBottom) {
       currentPage++;
-      const { default: queryClient } = await import("../services/queryClient");
+      const { default: queryClient } = await import("@/utils/queryClient");
 
       const posts = await queryClient<Post[]>("/posts", {
         searchParams: {

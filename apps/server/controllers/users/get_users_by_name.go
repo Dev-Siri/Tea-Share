@@ -1,68 +1,80 @@
 package user_controllers
 
 import (
-	"net/http"
+	"database/sql"
+	"encoding/json"
+	"tea-share/db"
+	"tea-share/models"
+
+	"github.com/valyala/fasthttp"
 )
 
-func GetUsersByName(w http.ResponseWriter, r *http.Request) {
-	// searchParams := r.URL.Query()
+func GetUsersByName(ctx *fasthttp.RequestCtx) {
+	searchParams := ctx.QueryArgs()
 
-	// name := searchParams.Get("name")
-	// exact := searchParams.Get("exact")
+	name := string(searchParams.Peek("name"))
+	exact := searchParams.GetBool("exact")
 
-	// if name == "" {
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	log.Printf("Search param `name` not provided")
-	// 	return
-	// }
+	var usersFetchError error
+	var fetchedRows *sql.Rows
 
-	// filter := bson.M{
-	// 	"username": bson.M{"$regex": name},
-	// }
+	if exact {
+		rows, err := db.Database.Query(`
+			SELECT user_id, username, user_image, email FROM Users
+			WHERE username = ?
+		;`, name)
 
-	// if exact == "true" {
-	// 	filter = bson.M{
-	// 		"username": name,
-	// 	}
-	// }
+		usersFetchError = err
+		fetchedRows = rows
+	} else {
+		page := searchParams.GetUintOrZero("page")
+		limit := searchParams.GetUintOrZero("limit")
 
-	// cursor, usersFetchError := db.UsersCollection().Find(
-	// 	r.Context(), filter,
-	// )
+		offset := (page - 1) * limit
+		wildcardQuery := "%" + name + "%"
 
-	// if usersFetchError != nil {
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	log.Printf("%v", usersFetchError)
-	// 	return
-	// }
+		rows, err := db.Database.Query(`
+			SELECT user_id, username, user_image, email FROM Users
+			WHERE username LIKE ?
+			LIMIT ? OFFSET ?
+		;`, wildcardQuery, limit, offset)
 
-	// defer cursor.Close(r.Context())
+		usersFetchError = err
+		fetchedRows = rows
+	}
 
-	// var users []models.User
+	if usersFetchError != nil {
+		ctx.Error("Failed to search for users", fasthttp.StatusInternalServerError)
+		return
+	}
 
-	// for cursor.Next(r.Context()) {
-	// 	var user models.User
+	defer fetchedRows.Close()
 
-	// 	postDecodeError := cursor.Decode(&user)
+	var users []models.User
 
-	// 	if postDecodeError != nil {
-	// 		w.WriteHeader(http.StatusInternalServerError)
-	// 		log.Printf("%v", postDecodeError)
-	// 		return
-	// 	}
+	for fetchedRows.Next() {
+		var user models.User
 
-	// 	users = append(users, user)
-	// }
+		if postDecodeError := fetchedRows.Scan(
+			&user.UserID,
+			&user.Username,
+			&user.UserImage,
+			&user.Email,
+		); postDecodeError != nil {
+			ctx.Error("Failed to decode users", fasthttp.StatusInternalServerError)
+			return
+		}
 
-	// userJSONBytes, jsonError := json.Marshal(users)
+		users = append(users, user)
+	}
 
-	// if jsonError != nil {
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	log.Printf("%v", jsonError)
-	// 	return
-	// }
+	userJSONBytes, jsonError := json.Marshal(users)
 
-	// w.Header().Set("Content-Type", "application/json")
+	if jsonError != nil {
+		ctx.Error("Failed to encode users as JSON", fasthttp.StatusInternalServerError)
+		return
+	}
 
-	// fmt.Fprintf(w, "%s", userJSONBytes)
+	ctx.SetContentType("application/json")
+	ctx.Write(userJSONBytes)
 }

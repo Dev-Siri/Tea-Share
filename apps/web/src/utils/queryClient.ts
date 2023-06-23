@@ -6,24 +6,27 @@ interface Options {
   method: Method;
   body: Record<string, any>;
   searchParams: Record<string, any>;
+  customFetch(input: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response>;
 }
 
-const queryClient = async <T>(endpoint: string, { method = "GET", body, searchParams }: Partial<Options>) => {
+const queryClient = async <T>(endpoint: string, { method = "GET", body, searchParams, customFetch }: Partial<Options>) => {
   const url = new URL(endpoint, env.PUBLIC_BACKEND_URL);
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
 
-  if (searchParams) Object.keys(searchParams).forEach((searchParamKey) => url.searchParams.set(searchParamKey, searchParams[searchParamKey]));
+  if (searchParams) Object.keys(searchParams).forEach(searchParamKey => url.searchParams.set(searchParamKey, searchParams[searchParamKey]));
 
   try {
-    const response = await fetch(url, {
+    const opts = {
       method,
       body: JSON.stringify(body),
       headers,
-    });
+    };
 
-    if (!response.ok) throw new Error(`Failed to fetch, The server returned a status code of ${response.status}.`);
+    const response = customFetch ? await customFetch(url, opts) : await fetch(url, opts);
+
+    if (!response.ok) throw new Error(await response.text());
 
     if (response.headers.get("Content-Type")?.includes("application/json")) {
       return (await response.json()) as T;

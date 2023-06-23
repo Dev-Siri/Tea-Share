@@ -7,14 +7,12 @@ import (
 )
 
 func LikePost(ctx *fasthttp.RequestCtx) {
-	db := db.SQL()
-
 	postId := ctx.UserValue("id")
 	userId := string(ctx.QueryArgs().Peek("userId"))
 
 	var countOfExistingPostIds int
 
-	row := db.QueryRow(`
+	row := db.Database.QueryRow(`
 		SELECT COUNT(post_id) FROM Likes
 		WHERE post_id = ?
 	;`, postId)
@@ -29,7 +27,7 @@ func LikePost(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	db.Query(`
+	db.Database.Query(`
 		INSERT INTO Likes(user_id, post_id)
 		VALUES ( ?, ? )
 	;`, userId, postId)

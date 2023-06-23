@@ -1,12 +1,13 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+
+  import user from "@/stores/user";
+
   import MdArrowBack from "svelte-icons/md/MdArrowBack.svelte";
   import MdCheck from "svelte-icons/md/MdCheck.svelte";
   import Circle from "svelte-loading-spinners/Circle.svelte";
 
-  import Logo from "../../components/Logo.svelte";
-
-  import user from "../../stores/user";
+  import Logo from "@/components/Logo.svelte";
 
   export let form;
 

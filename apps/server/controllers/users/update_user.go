@@ -1,48 +1,45 @@
 package user_controllers
 
-import "github.com/valyala/fasthttp"
+import (
+	"encoding/json"
+	"tea-share/db"
+	"tea-share/models"
+
+	"github.com/google/uuid"
+	"github.com/valyala/fasthttp"
+)
 
 func UpdateUser(ctx *fasthttp.RequestCtx) {
-	// body, bodyReadError := io.ReadAll(r.Body)
-	// searchParams := r.URL.Query()
+	userId := ctx.UserValue("id")
 
-	// id := searchParams.Get("id")
+	var updatedUser models.User
 
-	// if id == "" {
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	log.Printf("Search param `id` not provided")
-	// 	return
-	// }
+	if bodyReadError := json.Unmarshal(ctx.PostBody(), &updatedUser); bodyReadError != nil {
+		ctx.Error("Failed to read updated user", fasthttp.StatusBadRequest)
+		return
+	}
 
-	// userID, idParseError := primitive.ObjectIDFromHex(id)
+	newUploadedImage, imageUploadError := db.UploadDataURL(
+		updatedUser.UserImage,
+		"users/"+uuid.NewString(),
+	)
 
-	// if idParseError != nil {
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	log.Printf("Search param `id` is not a valid ObjectID")
-	// 	return
-	// }
+	if imageUploadError != nil {
+		ctx.Error("Failed to upload new profile picture", fasthttp.StatusInternalServerError)
+		return
+	}
 
-	// if bodyReadError != nil {
-	// 	w.WriteHeader(http.StatusOK)
-	// 	log.Printf("Failed to read request body")
-	// 	return
-	// }
+	_, dbUpdateError := db.Database.Query(`
+		UPDATE Users
+		SET username = ?,
+			email = ?
+		WHERE user_id = ?
+	 ;`, updatedUser.Username, updatedUser.Email, newUploadedImage, userId)
 
-	// var user models.User
+	if dbUpdateError != nil {
+		ctx.Error("Failed to update your profile", fasthttp.StatusInternalServerError)
+		return
+	}
 
-	// if bodyParseError := json.Unmarshal(body, &user); bodyParseError != nil {
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	log.Printf("Failed to parse request body")
-	// 	return
-	// }
-
-	// db.UsersCollection().FindOneAndUpdate(
-	// 	r.Context(),
-	// 	bson.M{"_id": userID},
-	// 	bson.M{
-	// 		"$set": user,
-	// 	},
-	// )
-
-	// w.WriteHeader(http.StatusNoContent)
+	ctx.SetStatusCode(fasthttp.StatusNoContent)
 }

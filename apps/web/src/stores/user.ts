@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 
-import type { FirebaseUser } from "../app";
+import type { User } from "@/app";
 
-const user = writable<FirebaseUser>();
+const user = writable<User>();
 
 export default user;

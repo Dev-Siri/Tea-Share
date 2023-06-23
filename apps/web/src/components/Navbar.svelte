@@ -3,7 +3,7 @@
   import FaPlus from "svelte-icons/fa/FaPlus.svelte";
   import IoMdPeople from "svelte-icons/io/IoMdPeople.svelte";
 
-  import user from "../stores/user";
+  import user from "@/stores/user";
 
   import Image from "./Image.svelte";
   import Logo from "./Logo.svelte";
@@ -34,8 +34,8 @@
         <FaCog />
       </div>
     </a>
-    <a href="/people/{$user.name}">
-      <Image src={$user.picture} alt={$user.name} height={75} width={75} class="h-[50px] w-[50px] rounded-full" />
-    </a>
+    <label for="user-dropdown" class="cursor-pointer">
+      <Image src={$user.userImage} alt={$user.username} height={75} width={75} class="h-[50px] w-[50px] rounded-full" />
+    </label>
   </section>
 </nav>

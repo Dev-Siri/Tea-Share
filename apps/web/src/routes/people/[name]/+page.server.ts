@@ -1,16 +1,28 @@
-import { error } from "@sveltejs/kit";
+import { error, redirect, type Actions } from "@sveltejs/kit";
 
-import type { Post, User } from "../../../app";
+import type { Post, User } from "@/app";
 import type { PageServerLoad } from "./$types";
 
-import queryClient from "../../../services/queryClient";
+import queryClient from "@/utils/queryClient";
+
+export const actions: Actions = {
+  async logout({ cookies }) {
+    cookies.delete("auth_token", {
+      httpOnly: true,
+    });
+
+    throw redirect(303, "/auth");
+  },
+};
 
 export const load: PageServerLoad = async ({ params: { name } }) => {
   const [posts, users] = await Promise.all([
     queryClient<Post[] | null>("/posts/search", {
       searchParams: {
         q: name,
-        fromUser: true,
+        type: "user",
+        page: 1,
+        limit: 8,
       },
     }),
     queryClient<User[] | null>("/users/search", {

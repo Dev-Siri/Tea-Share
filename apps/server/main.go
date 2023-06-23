@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"tea-share/db"
+	"tea-share/email"
 	"tea-share/env"
 	"tea-share/hash"
 	"tea-share/middleware"
@@ -21,8 +22,7 @@ func main() {
 		return
 	}
 
-	port := env.GetPort()
-	addr := fmt.Sprintf(":%s", port)
+	addr := ":" + env.GetPort()
 
 	fmt.Printf("Server running on %s\n", addr)
 
@@ -35,11 +35,20 @@ func main() {
 
 	if err := hash.InitHash(); err != nil {
 		log.Printf("%v", err)
+		return
 	}
 
 	if err := db.FileUploadInit(); err != nil {
 		log.Printf("%v", err)
+		return
 	}
+
+	if err := db.FileUploadInit(); err != nil {
+		log.Printf("%v", err)
+		return
+	}
+
+	go email.InitEmail()
 
 	router := fasthttprouter.New()
 

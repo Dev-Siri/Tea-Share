@@ -1,15 +1,18 @@
 <script lang="ts">
   import { browser } from "$app/environment";
-  import "../app.css";
-  import user from "../stores/user";
+  import "@/app.css";
 
-  import Navbar from "../components/Navbar.svelte";
-  import theme from "../stores/theme";
+  import theme from "@/stores/theme";
+  import user from "@/stores/user";
+
+  import Navbar from "@/components/Navbar.svelte";
+  import UserDropdown from "@/components/UserDropdown.svelte";
 
   export let data;
 
   theme.set(data.theme);
-  $: if (data.user) user.set(data.user);
+
+  $: user.set(data.user!);
   $: if (browser) document.body.classList.replace($theme === "dark" ? "light" : "dark", $theme);
 </script>
 
@@ -46,6 +49,7 @@
 
 {#if $user}
   <Navbar />
+  <UserDropdown />
 {/if}
 <main class="dark:bg-dark-gray h-screen w-screen overflow-hidden duration-200 dark:text-white">
   <slot />

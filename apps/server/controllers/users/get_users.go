@@ -16,7 +16,7 @@ func GetUsers(ctx *fasthttp.RequestCtx) {
 
 	offset := (page - 1) * limit
 
-	rows, usersFetchError := db.SQL().Query(`
+	rows, usersFetchError := db.Database.Query(`
 		SELECT user_id,username, user_image, email FROM Users
 		LIMIT ? OFFSET ?
 	;`, limit, offset)

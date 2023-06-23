@@ -1,6 +1,6 @@
-import queryClient from "../../services/queryClient";
+import queryClient from "@/utils/queryClient";
 
-import type { User } from "../../app";
+import type { User } from "@/app";
 
 export const load = async () => {
   const initialUsers = await queryClient<User[]>("/users", {

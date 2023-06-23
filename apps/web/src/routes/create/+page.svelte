@@ -22,15 +22,17 @@
     }}
   >
     <input
-      class="dark:bg-semi-gray bg-light-gray w-[90%] rounded-tl-lg rounded-tr-lg p-4 text-4xl font-light outline-none duration-200 dark:text-white"
+      class="dark:bg-semi-gray bg-light-gray w-[90%] rounded-lg p-4 text-4xl font-light outline-none duration-200 dark:text-white"
       placeholder="Title"
       name="title"
       required
     />
-    <input
-      class="dark:bg-semi-gray bg-light-gray mb-4 w-[90%] rounded-bl-lg rounded-br-lg p-4 pl-5 font-normal outline-none duration-200 dark:text-white"
+    <textarea
+      class="dark:bg-semi-gray mt-3 bg-light-gray mb-4 w-[90%] rounded-lg p-4 pl-5 font-normal outline-none duration-200 dark:text-white"
       placeholder="What's on your mind?"
       name="description"
+      cols="30"
+      rows="2"
       required
     />
     <input class="hidden" type="file" name="image" id="image-upload" aria-label="Post File Upload" on:change={selectImage} required />

@@ -1,12 +1,11 @@
 <script lang="ts">
-  import type { Post } from "../app";
+  import type { Post } from "@/app";
 
-  import user from "../stores/user";
-  import { getRelativeTime } from "../utils/globals";
+  import user from "@/stores/user";
+  import { getRelativeTime } from "@/utils/globals";
 
   import FaRegThumbsUp from "svelte-icons/fa/FaRegThumbsUp.svelte";
   import FaThumbsUp from "svelte-icons/fa/FaThumbsUp.svelte";
-  import queryClient from "../services/queryClient";
 
   import Image from "./Image.svelte";
 
@@ -18,7 +17,7 @@
   const formatLikes = (people: typeof likes) => {
     if (!people.length) return "0 Likes";
 
-    if (people.some(({ username }) => username === $user.name)) {
+    if (people.some(({ username }) => username === $user.username)) {
       if (people.length === 1) return "You liked this post";
 
       return `You and ${people.length - 1} ${people.length - 1 === 1 ? "other" : "others"}`;
@@ -30,24 +29,26 @@
   };
 
   let formattedLikes = formatLikes(likes);
-  let isLiked = likes.some(({ username }) => username === $user.name);
+  let isLiked = likes.some(({ username }) => username === $user.username);
 
   const likePost = async () => {
     if (isLiked) return;
 
-    const { name, picture } = $user;
+    const { username, userImage } = $user;
 
     formattedLikes = formatLikes([
       ...likes,
       {
-        username: name,
-        userImage: picture,
+        username,
+        userImage,
       },
     ]);
 
     isLiked = true;
 
-    await queryClient(`/posts/${postId}/like?userId=${postId}`, { method: "PATCH" });
+    const { default: queryClient } = await import("@/utils/queryClient");
+
+    await queryClient(`/posts/${postId}/like?userId=${$user.userId}`, { method: "PATCH" });
   };
 </script>
 

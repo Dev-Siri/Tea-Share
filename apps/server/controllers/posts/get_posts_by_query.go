@@ -3,7 +3,6 @@ package post_controllers
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"tea-share/db"
 	"tea-share/models"
 
@@ -28,46 +27,59 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 
 	switch typeofSearch {
 	case "id":
-		queriedRows, err := db.SQL().Query(`
+		queriedRows, err := db.Database.Query(`
 			SELECT
 				p.*,
 				u.username,
 				u.user_image,
-				JSON_ARRAYAGG(
-					JSON_OBJECT(
-						'username', lu.username,
-						'userImage', lu.user_image
-					)
+				COALESCE(
+					(
+						SELECT JSON_ARRAYAGG(
+							JSON_OBJECT(
+								'username', lu.username,
+								'userImage', lu.user_image
+							)
+						)
+						FROM Likes l
+						LEFT JOIN Users lu ON lu.user_id = l.user_id
+						WHERE l.post_id = p.post_id
+					),
+					JSON_ARRAY()
 				) AS likes
 			FROM Posts p
-			LEFT JOIN Likes l ON l.post_id = p.post_id
 			LEFT JOIN Users u ON u.user_id = p.user_id
-			LEFT JOIN Users lu ON lu.user_id = l.user_id
 			WHERE p.post_id = ?
 			GROUP BY p.post_id
 			ORDER BY p.created_at DESC
-			LIMIT ? OFFSET ?
-		`, q, limit, offset)
+		`, q)
 
 		postsFetchError = err
 		rows = queriedRows
 	case "user":
-		queriedRows, err := db.SQL().Query(`
+		queriedRows, err := db.Database.Query(`
 			SELECT
 				p.*,
 				u.username,
 				u.user_image,
-				JSON_ARRAYAGG(
-					JSON_OBJECT(
-						'username', lu.username,
-						'userImage', lu.user_image
-					)
+				COALESCE(
+					(
+						SELECT JSON_ARRAYAGG(
+							JSON_OBJECT(
+								'username', lu.username,
+								'userImage', lu.user_image
+							)
+						)
+						FROM Likes l
+						LEFT JOIN Users lu ON lu.user_id = l.user_id
+						WHERE l.post_id = p.post_id
+					),
+					JSON_ARRAY()
 				) AS likes
 			FROM Posts p
 			LEFT JOIN Likes l ON l.post_id = p.post_id
 			LEFT JOIN Users u ON u.user_id = p.user_id
 			LEFT JOIN Users lu ON lu.user_id = l.user_id
-			WHERE p.user_id = ?
+			WHERE u.username = ?
 			GROUP BY p.post_id
 			ORDER BY p.created_at DESC
 			LIMIT ? OFFSET ?
@@ -76,17 +88,25 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 		postsFetchError = err
 		rows = queriedRows
 	default:
-		likeQuery := fmt.Sprintf("%%%s%%", q)
-		queriedRows, err := db.SQL().Query(`
+		likeQuery := "%" + q + "%"
+		queriedRows, err := db.Database.Query(`
 			SELECT
 				p.*,
 				u.username,
 				u.user_image,
-				JSON_ARRAYAGG(
-					JSON_OBJECT(
-						'username', lu.username,
-						'userImage', lu.user_image
-					)
+				COALESCE(
+					(
+						SELECT JSON_ARRAYAGG(
+							JSON_OBJECT(
+								'username', lu.username,
+								'userImage', lu.user_image
+							)
+						)
+						FROM Likes l
+						LEFT JOIN Users lu ON lu.user_id = l.user_id
+						WHERE l.post_id = p.post_id
+					),
+					JSON_ARRAY()
 				) AS likes
 			FROM Posts p
 			LEFT JOIN Likes l ON l.post_id = p.post_id
