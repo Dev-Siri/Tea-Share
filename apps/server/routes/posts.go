@@ -3,10 +3,10 @@ package routes
 import (
 	post_controllers "tea-share/controllers/posts"
 
-	"github.com/buaazp/fasthttprouter"
+	"github.com/fasthttp/router"
 )
 
-func RegisterPostRoutes(router *fasthttprouter.Router) {
+func RegisterPostRoutes(router *router.Router) {
 	go router.GET("/posts", post_controllers.GetPosts)
 	go router.GET("/posts/search", post_controllers.GetPostsBySearchTerm)
 	go router.POST("/posts", post_controllers.CreatePost)

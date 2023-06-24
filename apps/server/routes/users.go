@@ -3,10 +3,10 @@ package routes
 import (
 	user_controllers "tea-share/controllers/users"
 
-	"github.com/buaazp/fasthttprouter"
+	"github.com/fasthttp/router"
 )
 
-func RegisterUserRoutes(router *fasthttprouter.Router) {
+func RegisterUserRoutes(router *router.Router) {
 	go router.GET("/users", user_controllers.GetUsers)
 	go router.GET("/users/search", user_controllers.GetUsersByName)
 	go router.POST("/users/signup", user_controllers.Signup)

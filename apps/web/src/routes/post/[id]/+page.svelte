@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { getRelativeTime } from "@/utils/globals";
+  import { getRelativeTime } from "$lib/utils/globals";
 
-  import Image from "@/components/Image.svelte";
-  import UserList from "@/components/UserList.svelte";
+  import Image from "$lib/components/Image.svelte";
+  import UserList from "$lib/components/UserList.svelte";
 
   export let data;
 

@@ -1,7 +1,7 @@
-import type { Post, User } from "@/app";
+import type { Post, User } from "../../app";
 import type { PageLoad } from "./$types";
 
-import queryClient from "@/utils/queryClient";
+import queryClient from "$lib/utils/queryClient";
 
 export const load: PageLoad = async ({ url, fetch }) => {
   const query = url.searchParams.get("query");

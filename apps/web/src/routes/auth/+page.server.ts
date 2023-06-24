@@ -2,8 +2,8 @@ import { fail, redirect, type Actions } from "@sveltejs/kit";
 
 import type { PageServerLoad } from "./$types";
 
-import { encodeToBase64 } from "@/utils/globals";
-import queryClient from "@/utils/queryClient";
+import { encodeToBase64 } from "$lib/utils/globals";
+import queryClient from "$lib/utils/queryClient";
 
 interface AuthResponse {
   token: string;

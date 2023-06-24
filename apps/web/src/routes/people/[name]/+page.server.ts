@@ -1,14 +1,16 @@
 import { error, redirect, type Actions } from "@sveltejs/kit";
 
-import type { Post, User } from "@/app";
+import type { Post, User } from "../../../app";
 import type { PageServerLoad } from "./$types";
 
-import queryClient from "@/utils/queryClient";
+import queryClient from "$lib/utils/queryClient";
 
 export const actions: Actions = {
   async logout({ cookies }) {
     cookies.delete("auth_token", {
       httpOnly: true,
+      sameSite: true,
+      path: "/",
     });
 
     throw redirect(303, "/auth");

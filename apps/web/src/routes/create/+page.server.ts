@@ -1,10 +1,10 @@
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import jwtDecode from "jwt-decode";
 
-import type { User } from "@/app";
+import type { User } from "../../app";
 
-import { encodeToBase64 } from "@/utils/globals";
-import queryClient from "@/utils/queryClient";
+import { encodeToBase64 } from "$lib/utils/globals";
+import queryClient from "$lib/utils/queryClient";
 
 export const actions: Actions = {
   async default({ request, cookies }) {
@@ -30,7 +30,7 @@ export const actions: Actions = {
         title,
         description,
         postImage: encodedImage,
-        userId
+        userId,
       },
     });
 

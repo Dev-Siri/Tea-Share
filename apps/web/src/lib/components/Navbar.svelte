@@ -1,9 +1,8 @@
 <script>
-  import FaCog from "svelte-icons/fa/FaCog.svelte";
   import FaPlus from "svelte-icons/fa/FaPlus.svelte";
   import IoMdPeople from "svelte-icons/io/IoMdPeople.svelte";
 
-  import user from "@/stores/user";
+  import user from "$lib/stores/user";
 
   import Image from "./Image.svelte";
   import Logo from "./Logo.svelte";
@@ -23,15 +22,6 @@
     <a title="People" href="/people" class="place-center dark:bg-semi-gray mr-2 grid rounded-full bg-white p-3.5 duration-200 hover:bg-gray-100">
       <div class="h-6">
         <IoMdPeople />
-      </div>
-    </a>
-    <a
-      title="Settings"
-      href="/settings"
-      class="place-center place-items-center dark:bg-semi-gray mr-2 grid rounded-full bg-white p-3.5 duration-200 hover:bg-gray-100"
-    >
-      <div class="h-5 px-0.5">
-        <FaCog />
       </div>
     </a>
     <label for="user-dropdown" class="cursor-pointer">

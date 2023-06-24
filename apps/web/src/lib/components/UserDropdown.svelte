@@ -1,11 +1,12 @@
 <script lang="ts">
   import FaUser from "svelte-icons/fa/FaUser.svelte";
+  import IoMdSettings from "svelte-icons/io/IoMdSettings.svelte";
   import Toggle from "svelte-toggle/src/Toggle.svelte";
 
-  import user from "@/stores/user";
-  import { getHandle } from "@/utils/globals";
+  import user from "$lib/stores/user";
+  import { getHandle } from "$lib/utils/globals";
 
-  import theme from "@/stores/theme";
+  import theme from "$lib/stores/theme";
   import Image from "./Image.svelte";
 
   const toggleTheme = async () => {
@@ -13,7 +14,7 @@
 
     theme.set(newTheme);
 
-    const { setCookie } = await import("@/utils/cookies");
+    const { setCookie } = await import("$lib/utils/cookies");
 
     setCookie("theme", newTheme);
   };
@@ -40,6 +41,12 @@
       <FaUser />
     </div>
     <p class="font-bold">Your Profile</p>
+  </a>
+  <a class="flex items-center p-5 gap-2 hover:bg-semi-gray duration-200" href="/update-profile">
+    <div class="h-4">
+      <IoMdSettings />
+    </div>
+    <p class="font-bold">Update Profile</p>
   </a>
   <button class="flex items-center pl-4 p-5 gap-2 w-full hover:bg-semi-gray duration-200" on:click={toggleTheme}>
     <Toggle hideLabel toggled={$theme === "dark"} label="{$theme} Theme" />

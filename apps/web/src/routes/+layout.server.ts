@@ -1,7 +1,7 @@
 import { redirect } from "@sveltejs/kit";
 import jwtDecode from "jwt-decode";
 
-import type { Theme, User } from "@/app";
+import type { Theme, User } from "../app";
 import type { LayoutServerLoad } from "./$types";
 
 export const load: LayoutServerLoad = ({ cookies, url }) => {

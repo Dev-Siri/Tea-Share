@@ -1,15 +1,15 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import { page } from "$app/stores";
-  import type { Post } from "@/app.js";
   import IoMdLogOut from "svelte-icons/io/IoMdLogOut.svelte";
-  import IoMdSettings from "svelte-icons/io/IoMdSettings.svelte";
 
-  import Image from "@/components/Image.svelte";
-  import PostCard from "@/components/PostCard.svelte";
-  import user from "@/stores/user";
+  import type { Post } from "../../../app";
 
-  import { getHandle } from "@/utils/globals";
+  import user from "$lib/stores/user";
+  import { getHandle } from "$lib/utils/globals";
+
+  import Image from "$lib/components/Image.svelte";
+  import PostCard from "$lib/components/PostCard.svelte";
 
   export let data;
 
@@ -25,7 +25,7 @@
 
     if (didScrollToBottom) {
       currentPage++;
-      const { default: queryClient } = await import("@/utils/queryClient");
+      const { default: queryClient } = await import("$lib/utils/queryClient");
 
       const posts = await queryClient<Post[] | null>("/posts/search", {
         searchParams: {
@@ -65,11 +65,6 @@
       <h2 class="text-xl text-gray-400">{getHandle(username)}</h2>
     </div>
     {#if userId === $user.userId}
-      <a class="bg-semi-gray md:ml-auto mt-auto p-3 rounded-full" href="/update-profile">
-        <div class="h-7">
-          <IoMdSettings />
-        </div>
-      </a>
       <form method="POST" action="?/logout" class="mt-auto ml-2" use:enhance>
         <button type="submit" class="bg-semi-gray p-3 rounded-full">
           <div class="h-7">

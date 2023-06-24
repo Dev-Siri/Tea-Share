@@ -1,12 +1,12 @@
 <script lang="ts">
   import { browser } from "$app/environment";
-  import "@/app.css";
+  import "../app.css";
 
-  import theme from "@/stores/theme";
-  import user from "@/stores/user";
+  import theme from "$lib/stores/theme";
+  import user from "$lib/stores/user";
 
-  import Navbar from "@/components/Navbar.svelte";
-  import UserDropdown from "@/components/UserDropdown.svelte";
+  import Navbar from "$lib/components/Navbar.svelte";
+  import UserDropdown from "$lib/components/UserDropdown.svelte";
 
   export let data;
 

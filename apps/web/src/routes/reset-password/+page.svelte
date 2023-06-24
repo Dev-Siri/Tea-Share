@@ -1,13 +1,13 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
 
-  import user from "@/stores/user";
+  import user from "$lib/stores/user";
 
   import MdArrowBack from "svelte-icons/md/MdArrowBack.svelte";
-  import MdCheck from "svelte-icons/md/MdCheck.svelte";
   import Circle from "svelte-loading-spinners/Circle.svelte";
 
-  import Logo from "@/components/Logo.svelte";
+  import Logo from "$lib/components/Logo.svelte";
+  import SuccessMessage from "$lib/components/SuccessMessage.svelte";
 
   export let form;
 
@@ -37,12 +37,7 @@
       <p class="ml-1 mt-4 w-96 rounded-md border-2 border-red-600 bg-red-200 p-3 text-center font-bold text-red-800">The given email is invalid</p>
     {/if}
     {#if form?.success}
-      <div class="flex border-l-8 border-l-green-600 items-center text-green-600 p-1 ml-1 mt-5 rounded-md bg-green-300">
-        <span class="h-10 text-green-500 bg-green-300 rounded-full p-2">
-          <MdCheck />
-        </span>
-        <p>A reset link has been sent to your email.</p>
-      </div>
+      <SuccessMessage message="A reset link has been sent to your email." />
     {/if}
     <div class="mt-[30px] ml-1 gap-2 flex h-fit items-center">
       {#if !$user}

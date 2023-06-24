@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { Post } from "@/app";
+  import type { Post } from "../../app";
 
-  import user from "@/stores/user";
-  import { getRelativeTime } from "@/utils/globals";
+  import user from "$lib/stores/user";
+  import { getRelativeTime } from "$lib/utils/globals";
 
   import FaRegThumbsUp from "svelte-icons/fa/FaRegThumbsUp.svelte";
   import FaThumbsUp from "svelte-icons/fa/FaThumbsUp.svelte";
@@ -46,7 +46,7 @@
 
     isLiked = true;
 
-    const { default: queryClient } = await import("@/utils/queryClient");
+    const { default: queryClient } = await import("$lib/utils/queryClient");
 
     await queryClient(`/posts/${postId}/like?userId=${$user.userId}`, { method: "PATCH" });
   };

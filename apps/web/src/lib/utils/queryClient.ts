@@ -40,7 +40,8 @@ const queryClient = async <T>(endpoint: string, { method = "GET", body, searchPa
 
     if (error instanceof TypeError) console.error("A network error was thrown with message:", error.message);
     else if (error instanceof SyntaxError) console.error("Failed to parse JSON body:", error.message);
-    else if (error instanceof DOMException && error.name === "AbortError") console.error("Request was aborted with message:", error.message);
+    else if (typeof DOMException !== "undefined" && error instanceof DOMException && error.name === "AbortError")
+      console.error("Request was aborted with message:", error.message);
     else if (error instanceof Error) console.error("A new instance of `Error` was thrown with message:", error.message);
     else console.error("An unknown error was thrown:", error);
 

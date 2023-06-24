@@ -3,7 +3,7 @@
   import FaVideoSlash from "svelte-icons/fa/FaVideoSlash.svelte";
   import PostCard from "./PostCard.svelte";
 
-  import type { Post, User } from "@/app";
+  import type { Post, User } from "../../app";
 
   import UserListItem from "./UserListItem.svelte";
 

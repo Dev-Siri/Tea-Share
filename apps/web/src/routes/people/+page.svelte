@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { User } from "@/app";
+  import type { User } from "../../app";
 
-  import UserListItem from "@/components/UserListItem.svelte";
+  import UserListItem from "$lib/components/UserListItem.svelte";
 
   export let data;
 
@@ -15,7 +15,7 @@
 
     if (didScrollToBottom) {
       currentPage++;
-      const { default: queryClient } = await import("@/utils/queryClient");
+      const { default: queryClient } = await import("$lib/utils/queryClient");
 
       const fetchedUsers = await queryClient<User[]>("/users", {
         searchParams: {

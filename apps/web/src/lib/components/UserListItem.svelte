@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getHandle } from "@/utils/globals";
+  import { getHandle } from "$lib/utils/globals";
 
   import Image from "./Image.svelte";
 

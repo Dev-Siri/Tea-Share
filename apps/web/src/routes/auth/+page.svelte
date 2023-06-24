@@ -5,9 +5,9 @@
 
   import type { ActionData } from "./$types";
 
-  import Logo from "@/components/Logo.svelte";
-  import Google from "@/components/icons/Google.svelte";
-  import { getHandle } from "@/utils/globals";
+  import Logo from "$lib/components/Logo.svelte";
+  import Google from "$lib/components/icons/Google.svelte";
+  import { getHandle } from "$lib/utils/globals";
 
   export let form: ActionData;
 
@@ -99,7 +99,13 @@
       </button>
       <p class="ml-10px w-[390px] text-sm">
         {isSignup ? "Already an user? " : "Don't have an account? "}
-        <span class="text-primary hover:text-primary-dark cursor-pointer duration-200" on:click={toggleMode} on:keydown={toggleMode}>
+        <span
+          role="button"
+          tabindex="0"
+          class="text-primary hover:text-primary-dark cursor-pointer duration-200"
+          on:click={toggleMode}
+          on:keydown={toggleMode}
+        >
           {isSignup ? "Login" : "Signup"}
         </span>
       </p>

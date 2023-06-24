@@ -1,9 +1,9 @@
 <script lang="ts">
   import { page } from "$app/stores";
 
-  import type { Post, User } from "@/app.js";
+  import type { Post, User } from "../../app";
 
-  import SearchResults from "@/components/SearchResults.svelte";
+  import SearchResults from "$lib/components/SearchResults.svelte";
 
   export let data;
 
@@ -22,7 +22,7 @@
 
     if (didScrollToBottom) {
       currentPage++;
-      const { default: queryClient } = await import("@/utils/queryClient");
+      const { default: queryClient } = await import("$lib/utils/queryClient");
 
       const items = await queryClient<Post[] | User[]>(`/${type === "people" ? "users" : "posts"}`, {
         searchParams: {

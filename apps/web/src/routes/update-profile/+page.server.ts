@@ -1,13 +1,13 @@
 import { fail, redirect } from "@sveltejs/kit";
 import jwtDecode from "jwt-decode";
 
-import type { User } from "@/app";
+import type { User } from "../../app";
 
-import { encodeToBase64 } from "@/utils/globals.js";
-import queryClient from "@/utils/queryClient";
+import { encodeToBase64 } from "$lib/utils/globals";
+import queryClient from "$lib/utils/queryClient";
 
 export const actions = {
-  async updateProfile({ request, cookies }) {
+  async default({ request, cookies }) {
     const authToken = cookies.get("auth_token");
 
     if (!authToken) throw redirect(307, "/auth");
@@ -18,7 +18,10 @@ export const actions = {
     const email = formData.get("email");
     const image = formData.get("image");
 
-    if (email instanceof Blob || username instanceof Blob || !image || typeof image === "string") return;
+    if (email instanceof Blob || username instanceof Blob || !image || typeof image === "string")
+      return fail(400, {
+        errorMessage: "The updated information you provided are invalid.",
+      });
 
     const { username: currentUsername } = jwtDecode<User>(authToken);
 
@@ -41,5 +44,7 @@ export const actions = {
         email,
       },
     });
+
+    return { success: true };
   },
 };

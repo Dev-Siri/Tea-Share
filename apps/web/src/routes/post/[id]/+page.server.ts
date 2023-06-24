@@ -1,9 +1,9 @@
 import { error } from "@sveltejs/kit";
 
-import type { Post } from "@/app";
+import type { Post } from "../../../app";
 import type { PageServerLoad } from "./$types";
 
-import queryClient from "@/utils/queryClient";
+import queryClient from "$lib/utils/queryClient";
 
 export const load: PageServerLoad = async ({ params }) => {
   const [posts, otherPosts] = await Promise.all([

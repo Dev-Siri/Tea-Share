@@ -11,7 +11,7 @@ import (
 	"tea-share/middleware"
 	"tea-share/routes"
 
-	"github.com/buaazp/fasthttprouter"
+	"github.com/fasthttp/router"
 	"github.com/joho/godotenv"
 	"github.com/valyala/fasthttp"
 )
@@ -43,17 +43,12 @@ func main() {
 		return
 	}
 
-	if err := db.FileUploadInit(); err != nil {
-		log.Printf("%v", err)
-		return
-	}
-
 	go email.InitEmail()
 
-	router := fasthttprouter.New()
+	router := router.New()
 
-	go routes.RegisterPostRoutes(router)
-	go routes.RegisterUserRoutes(router)
+	routes.RegisterPostRoutes(router)
+	routes.RegisterUserRoutes(router)
 
 	if err := fasthttp.ListenAndServe(addr, middleware.CORS(router.Handler)); err != nil {
 		log.Printf("%v", err)
