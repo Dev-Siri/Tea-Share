@@ -135,5 +135,6 @@ func Signup(ctx *fasthttp.RequestCtx) {
 	}
 
 	ctx.SetContentType("application/json")
+	ctx.SetStatusCode(fasthttp.StatusCreated)
 	ctx.Write(jsonResponse)
 }

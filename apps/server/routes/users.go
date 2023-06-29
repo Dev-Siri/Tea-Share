@@ -12,4 +12,5 @@ func RegisterUserRoutes(router *router.Router) {
 	go router.POST("/users/signup", user_controllers.Signup)
 	go router.POST("/users/login", user_controllers.Login)
 	go router.PUT("/users/:id/update", user_controllers.UpdateUser)
+	go router.PUT("/users/reset-password", user_controllers.ResetPassword)
 }
