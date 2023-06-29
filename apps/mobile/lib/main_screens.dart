@@ -1,13 +1,13 @@
-import 'package:bottom_bar_page_transition/bottom_bar_page_transition.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tea_share/screens/home.dart';
-import 'package:tea_share/screens/people.dart';
-import 'package:tea_share/screens/profile.dart';
-import 'package:tea_share/screens/settings.dart';
-import 'package:tea_share/services/users_service.dart';
+import "package:bottom_bar_page_transition/bottom_bar_page_transition.dart";
+import "package:cached_network_image/cached_network_image.dart";
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:tea_share/models/user_model.dart";
+import "package:tea_share/screens/home.dart";
+import "package:tea_share/screens/people.dart";
+import "package:tea_share/screens/profile.dart";
+import "package:tea_share/screens/settings.dart";
+import "package:tea_share/services/users_service.dart";
 
 class MainScreens extends StatefulWidget {
   const MainScreens({ super.key });
@@ -28,18 +28,35 @@ class _MainScreensState extends State<MainScreens> {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = context.read<UserService>().user;
-
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.search),
-            tooltip: 'Search',
-            onPressed: () => Navigator.pushNamed(context, '/search'),
+            tooltip: "Search",
+            onPressed: () => Navigator.pushNamed(context, "/search"),
           ),
         ],
-        title: const Text('Tea Share'),
+        title: Row(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(6),
+              margin: const EdgeInsets.only(bottom: 5),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(100)
+              ),
+              child: Image.asset("assets/Logo.gif",
+                height: 40,
+                width: 40,
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Text("Tea Share"),
+            )
+          ],
+        )
       ),
       body: BottomBarPageTransition(
         builder: (_, index) => _screens[index],
@@ -49,9 +66,10 @@ class _MainScreensState extends State<MainScreens> {
         transitionCurve: Curves.easeOut,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/create-post'),
-        tooltip: 'Create A Post',
-        heroTag: 'Go To Create Post Screen',
+        onPressed: () => Navigator.pushNamed(context, "/create-post"),
+        tooltip: "Create A Post",
+        heroTag: "Go To Create Post Screen",
+        backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: NavigationBar(
@@ -60,26 +78,31 @@ class _MainScreensState extends State<MainScreens> {
         destinations: <NavigationDestination>[
           const NavigationDestination(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: "Home",
           ),
           const NavigationDestination(
             icon: Icon(Icons.people),
-            label: 'People',
+            label: "People",
           ),
           NavigationDestination(
-            icon: Visibility(
-              visible: user != null,
-              replacement: const CircularProgressIndicator(),
-              child: CircleAvatar(
-                radius: 15,
-                backgroundImage: CachedNetworkImageProvider(user?.photoURL ?? ""),
-              )
+            icon: FutureBuilder(
+              future: context.read<UserService>().user,
+              builder: (BuildContext context, AsyncSnapshot<UserModel?> user) {
+                if (user.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+
+                return CircleAvatar(
+                  radius: 15,
+                  backgroundImage: CachedNetworkImageProvider(user.data?.userImage ?? ""),
+                );
+              }
             ),
-            label: 'Profile',
+            label: "Profile",
           ),
           const NavigationDestination(
             icon: Icon(Icons.settings),
-            label: 'Settings',
+            label: "Settings",
           ),
         ],
       ),

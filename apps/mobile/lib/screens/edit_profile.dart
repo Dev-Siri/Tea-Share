@@ -1,13 +1,12 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:tea_share/models/user_model.dart';
-import 'package:tea_share/services/users_service.dart';
-import 'package:tea_share/utils/error_dialog.dart';
+import "package:flutter/material.dart";
+import "package:flutter_expandable_fab/flutter_expandable_fab.dart";
+import "package:image_picker/image_picker.dart";
+import "package:provider/provider.dart";
+import "package:tea_share/models/user_model.dart";
+import "package:tea_share/services/users_service.dart";
+import "package:tea_share/utils/error_dialog.dart";
 
 class EditProfile extends StatefulWidget {
   const EditProfile({ super.key });
@@ -22,25 +21,11 @@ class _EditProfileState extends State<EditProfile> with ErrorDialog {
 
   final GlobalKey<ExpandableFabState> _expandableFabKey = GlobalKey<ExpandableFabState>();
 
-  late UserModel _mongoUser;
-
   XFile? _newPicture;
 
   @override
   void initState() {
-    final User user = context.read<UserService>().user!;
-
-    _usernameInputController.text = user.displayName!;
-    _emailInputController.text = user.email!;
-
-    context.read<UserService>().fetchUserByName(
-      name: user.displayName!,
-      exact: true
-    ).then((UsersServiceResponse userResponse) {
-      if (mounted) {
-        setState(() => _mongoUser = userResponse.users![0]);
-      }
-    });
+    _populateFields();
 
     super.initState();
   }
@@ -55,17 +40,15 @@ class _EditProfileState extends State<EditProfile> with ErrorDialog {
 
   Future<void> _updateUser() async {
     if (_newPicture == null) {
-      return showErrorDialog(context, 'Failed to update your profile.');
+      return showErrorDialog(context, "Failed to update your profile.");
     }
 
     await context.read<UserService>().updateProfile(
-      user: UserModel(
-        username: _usernameInputController.text,
-        email: _emailInputController.text,
-        image: _newPicture!.path,
-        id: _mongoUser.id
-      )
+      username: _usernameInputController.text,
+      userImage: await _newPicture!.readAsBytes(),
+      email: _emailInputController.text,
     );
+
     Navigator.pop(context);
   }
 
@@ -78,6 +61,15 @@ class _EditProfileState extends State<EditProfile> with ErrorDialog {
 
     _expandableFabKey.currentState!.toggle();
   }
+
+  Future<void> _populateFields() async {
+    final UserModel? user = await context.read<UserService>().user;
+
+    if (user == null) return;
+
+    _usernameInputController.text = user.username;
+    _emailInputController.text = user.email;
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -86,7 +78,7 @@ class _EditProfileState extends State<EditProfile> with ErrorDialog {
         leading: BackButton(
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Edit Profile'),
+        title: const Text("Edit Profile"),
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
@@ -98,14 +90,14 @@ class _EditProfileState extends State<EditProfile> with ErrorDialog {
         child: const Icon(Icons.cloud_upload),
         children: <Widget>[
           FloatingActionButton(
-            heroTag: 'Edit Profile Image Picker: Gallery',
-            tooltip: 'Open Gallery',
+            heroTag: "Edit Profile Image Picker: Gallery",
+            tooltip: "Open Gallery",
             child: const Icon(Icons.photo_library_rounded),
             onPressed: () => _pickImage("Gallery"),
           ),
           FloatingActionButton(
-            heroTag: 'Edit Profile Image Picker: Camera',
-            tooltip: 'Capture Photo',
+            heroTag: "Edit Profile Image Picker: Camera",
+            tooltip: "Capture Photo",
             child: const Icon(Icons.camera_alt),
             onPressed: () => _pickImage("Camera"),
           ),
@@ -120,7 +112,7 @@ class _EditProfileState extends State<EditProfile> with ErrorDialog {
                 controller: _usernameInputController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Username',
+                  labelText: "Username",
                 ),
               ),
               Padding(
@@ -129,7 +121,7 @@ class _EditProfileState extends State<EditProfile> with ErrorDialog {
                   controller: _emailInputController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Email',
+                    labelText: "Email",
                   ),
                 ),
               ),
@@ -139,7 +131,7 @@ class _EditProfileState extends State<EditProfile> with ErrorDialog {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: _updateUser,
-                  child: const Text('Update Profile'),
+                  child: const Text("Update Profile"),
                 ),
               ),
               Visibility(

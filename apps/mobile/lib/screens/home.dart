@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tea_share/models/post_model.dart';
-import 'package:tea_share/services/posts_service.dart';
-import 'package:tea_share/widgets/error_message.dart';
-import 'package:tea_share/widgets/post_card.dart';
-import 'package:tea_share/widgets/skeletons/posts_skeleton.dart';
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:tea_share/models/post_model.dart";
+import "package:tea_share/services/posts_service.dart";
+import "package:tea_share/widgets/error_message.dart";
+import "package:tea_share/widgets/post_card.dart";
+import "package:tea_share/widgets/skeletons/posts_skeleton.dart";
 
 class Home extends StatefulWidget {
   const Home({ super.key });
@@ -55,15 +55,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           Future.delayed(const Duration(milliseconds: 50), () {
             _posts.add(
               PostModel(
-                id: post.id,
+                postId: post.postId,
                 title: post.title,
                 description: post.description,
-                image: post.image,
-                author: post.author,
-                authorImage: post.authorImage,
+                postImage: post.postImage,
+                username: post.username,
+                userImage: post.userImage,
                 createdAt: post.createdAt,
-                people: post.people,
-                peopleImage: post.peopleImage
+                userId: post.userId,
+                likes: post.likes,
               )
             );
             
@@ -89,8 +89,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     
     return AnimatedList(
       padding: const EdgeInsets.only(
-        left: 25,
-        right: 25,
+        left: 10,
+        right: 10,
         bottom: 25,
       ),
       initialItemCount: _posts.length,
@@ -114,15 +114,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               )
             ),
             child: PostCard(
-              id: _posts[index].id,
+              postId: _posts[index].postId,
               title: _posts[index].title,
               description: _posts[index].description,
-              image: _posts[index].image,
-              author: _posts[index].author,
-              authorImage: _posts[index].authorImage,
+              postImage: _posts[index].postImage,
+              userId: _posts[index].userId,
+              username: _posts[index].username,
+              userImage: _posts[index].userImage,
               createdAt: _posts[index].createdAt,
-              people: _posts[index].people,
-              peopleImage: _posts[index].peopleImage
+              likes: _posts[index].likes,
             ),
           );
         }

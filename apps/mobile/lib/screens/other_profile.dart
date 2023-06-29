@@ -1,12 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tea_share/models/post_model.dart';
-import 'package:tea_share/models/user_model.dart';
-import 'package:tea_share/services/posts_service.dart';
-import 'package:tea_share/services/theme_service.dart';
-import 'package:tea_share/widgets/error_message.dart';
-import 'package:tea_share/widgets/post_grid.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:tea_share/models/post_model.dart";
+import "package:tea_share/models/user_model.dart";
+import "package:tea_share/services/posts_service.dart";
+import "package:tea_share/services/theme_service.dart";
+import "package:tea_share/widgets/error_message.dart";
+import "package:tea_share/widgets/post_grid.dart";
+import "package:tea_share/widgets/skeletons/posts_grid_skeleton.dart";
 
 class OtherProfile extends StatefulWidget {
   const OtherProfile({ super.key });
@@ -29,7 +30,11 @@ class _OtherProfileState extends State<OtherProfile> {
 
       setState(() => _isLoading = true);
 
-      context.read<PostService>().fetchPostsByQuery(query: user.username).then((PostsServiceResponse postsResponse) {
+      context.read<PostService>().fetchPostsByQuery(
+        query: user.username,
+        page: 1,
+        limit: 8
+      ).then((PostsServiceResponse postsResponse) {
         setState(() {
           if (postsResponse.successful) {
             _posts = postsResponse.posts!;
@@ -53,13 +58,13 @@ class _OtherProfileState extends State<OtherProfile> {
         leading: BackButton(
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('${user.username}\'s Profile'),
+        title: Text("${user.username}\"s Profile"),
       ),
       body: Visibility(
         visible: _errorMessage == null,
         replacement: ErrorMessage(
           icon: Icons.error,
-          message: _errorMessage ?? 'An Error occured when trying to load ${user.username}\'s profile.',
+          message: _errorMessage ?? "An Error occured when trying to load ${user.username}\"s profile.",
         ),
         child: ListView(
           addAutomaticKeepAlives: false,
@@ -70,10 +75,10 @@ class _OtherProfileState extends State<OtherProfile> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Hero(
-                    tag: user.email,
+                    tag: user.userImage,
                     child: CircleAvatar(
                       radius: 50,
-                      backgroundImage: CachedNetworkImageProvider(user.image),
+                      backgroundImage: CachedNetworkImageProvider(user.userImage),
                     ),
                   ),
                   Padding(
@@ -94,7 +99,7 @@ class _OtherProfileState extends State<OtherProfile> {
                         Padding(
                           padding: const EdgeInsets.only(top: 5, bottom: 7),
                           child: Text(
-                            '@${user.username.toLowerCase().replaceAll(RegExp(r' '), '-')}',
+                            "@${user.username.toLowerCase().replaceAll(RegExp(r" "), "-")}",
                             style: const TextStyle(
                               fontSize: 18,
                               color: Colors.grey
@@ -102,7 +107,7 @@ class _OtherProfileState extends State<OtherProfile> {
                           ),
                         ),
                         Text(
-                          '${_isLoading ? 'Loading' : _posts.isEmpty ? 'No' : _posts.length} Posts${_isLoading ? '...' : ''}',
+                          "${_isLoading ? "Loading" : _posts.isEmpty ? "No" : _posts.length} Posts${_isLoading ? "..." : ""}",
                           style: TextStyle(
                             fontSize: 18,
                             color: context.read<DarkThemeService>().darkTheme ?
@@ -115,29 +120,27 @@ class _OtherProfileState extends State<OtherProfile> {
                 ],
               ),
             ),
-          Visibility(
-            visible: _isLoading,
-            replacement: Visibility(
-              visible: _posts.isNotEmpty,
-              replacement: const Padding(
-                padding: EdgeInsets.only(top: 120),
-                child: Column(
-                  children: <Widget>[
-                    Icon(Icons.add_a_photo,
-                      size: 80,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: Text('You have not posted anything yet.'),
-                    ),
-                  ],
+            Visibility(
+              visible: _isLoading,
+              replacement: Visibility(
+                visible: _posts.isNotEmpty,
+                replacement: const Padding(
+                  padding: EdgeInsets.only(top: 120),
+                  child: Column(
+                    children: <Widget>[
+                      Icon(Icons.add_a_photo,
+                        size: 80,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 8),
+                        child: Text("You have not posted anything yet."),
+                      ),
+                    ],
+                  ),
                 ),
+                child: PostGrid(posts: _posts)
               ),
-              child: PostGrid(posts: _posts)
-            ),
-            child: const Center(
-                child: CircularProgressIndicator()
-              ),
+              child: const PostsGridSkeleton(),
             ),
           ],
         ),

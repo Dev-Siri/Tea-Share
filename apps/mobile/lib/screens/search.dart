@@ -1,14 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tea_share/models/post_model.dart';
-import 'package:tea_share/models/user_model.dart';
-import 'package:tea_share/services/posts_service.dart';
-import 'package:tea_share/services/theme_service.dart';
-import 'package:tea_share/services/users_service.dart';
-import 'package:tea_share/widgets/error_message.dart';
-import 'package:tea_share/widgets/post_card.dart';
-import 'package:tea_share/widgets/user_tile.dart';
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:tea_share/models/post_model.dart";
+import "package:tea_share/models/user_model.dart";
+import "package:tea_share/services/posts_service.dart";
+import "package:tea_share/services/theme_service.dart";
+import "package:tea_share/services/users_service.dart";
+import "package:tea_share/widgets/error_message.dart";
+import "package:tea_share/widgets/post_card.dart";
+import "package:tea_share/widgets/user_tile.dart";
 
 class Search extends StatefulWidget {
   const Search({ super.key });
@@ -28,16 +27,27 @@ class _SearchState extends State<Search> {
 
   @override
   void initState() {
-    final User? user = context.read<UserService>().user;
+    _fetchInitialData();
 
-    context.read<UserService>().fetchUserByName(name: user?.displayName ?? "").then((UsersServiceResponse usersResponse) {
+    super.initState();
+  }
+
+  Future<void> _fetchInitialData() async {
+    final UserModel? user = await context.read<UserService>().user;
+
+    context.read<UserService>().fetchUserByName(name: user?.username ?? "").then((UsersServiceResponse usersResponse) {
       if (usersResponse.successful) {
         _users = usersResponse.users!;
       } else {
         _errorMessage = usersResponse.errorMessage;
       }
     });
-    context.read<PostService>().fetchPostsByQuery(query: user?.displayName ?? "").then((PostsServiceResponse postsResponse) {
+
+    context.read<PostService>().fetchPostsByQuery(
+      query: user?.username ?? "",
+      page: 8,
+      limit: 1,
+    ).then((PostsServiceResponse postsResponse) {
       setState(() {
         if (postsResponse.successful) {
           _posts = postsResponse.posts!;
@@ -46,8 +56,6 @@ class _SearchState extends State<Search> {
         }
       });
     });
-
-    super.initState();
   }
 
   Future<void> _search() async {
@@ -55,7 +63,12 @@ class _SearchState extends State<Search> {
       setState(() => _isLoading = true);
       
       final UsersServiceResponse usersResponse = await context.read<UserService>().fetchUserByName(name: _searchController.text);
-      final PostsServiceResponse postsResponse = await context.read<PostService>().fetchPostsByQuery(query: _searchController.text, fromUser: false);
+      final PostsServiceResponse postsResponse = await context.read<PostService>().fetchPostsByQuery(
+        query: _searchController.text,
+        type: "normal",
+        page: 1,
+        limit: 8,
+      );
 
       setState(() {
         if (postsResponse.successful) {
@@ -116,12 +129,12 @@ class _SearchState extends State<Search> {
                     onPressed: _isLoading ? null : _search,
                     child: _isLoading ? const CircularProgressIndicator(strokeWidth: 4) : const Icon(Icons.search)
                   ),
-                  hintText: 'Search'
+                  hintText: "Search"
                 ),
               ),
               const Padding(
                 padding: EdgeInsets.all(20),
-                child: Text('People',
+                child: Text("People",
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -141,14 +154,17 @@ class _SearchState extends State<Search> {
                   itemCount: _users.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Card(
-                      child: UserTile(user: _users[index]),
+                      child: UserTile(
+                        username: _users[index].username,
+                        userImage: _users[index].userImage,
+                      ),
                     );
                   }
                 ),
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 20, left: 20),
-                child: Text('Posts',
+                child: Text("Posts",
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -162,15 +178,15 @@ class _SearchState extends State<Search> {
                     itemCount: _posts.length,
                     itemBuilder: (BuildContext context, int index) {
                       return PostCard(
-                        id: _posts[index].id,
+                        postId: _posts[index].postId,
                         title: _posts[index].title,
                         description: _posts[index].description,
-                        author: _posts[index].author,
-                        authorImage: _posts[index].authorImage,
-                        image: _posts[index].image,
+                        postImage: _posts[index].postImage,
+                        userId: _posts[index].userId,
+                        username: _posts[index].username,
+                        userImage: _posts[index].userImage,
                         createdAt: _posts[index].createdAt,
-                        people: _posts[index].people,
-                        peopleImage: _posts[index].peopleImage
+                        likes: _posts[index].likes,
                       );
                     },
                   ),

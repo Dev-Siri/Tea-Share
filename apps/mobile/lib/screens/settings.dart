@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'package:tea_share/services/users_service.dart';
-import 'package:tea_share/services/theme_service.dart';
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:tea_share/services/theme_service.dart";
+import "package:tea_share/services/users_service.dart";
 
 class Settings extends StatefulWidget {
   const Settings({ super.key });
@@ -15,7 +14,7 @@ class _SettingsState extends State<Settings> {
   Future<void> _logout() async {
     await context.read<UserService>().signOut();
 
-    Navigator.pushReplacementNamed(context, '/auth');
+    Navigator.pushReplacementNamed(context, "/auth");
   }
 
   @override
@@ -25,14 +24,14 @@ class _SettingsState extends State<Settings> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Text('Theme Options',
+          const Text("Theme Options",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 22
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(top: 15),
+            margin: const EdgeInsets.symmetric(vertical: 15),
             width: 400,
             height: 40,
             child: ElevatedButton.icon(
@@ -40,11 +39,19 @@ class _SettingsState extends State<Settings> {
               icon: const Icon(Icons.wb_sunny_rounded,
                 size: 22
               ),
-              label: const Text('Switch to Light Theme'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Theme.of(context).primaryColor),
+                foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              label: const Text("Switch to Light Theme"),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 15),
+          SizedBox(
             width: 400,
             height: 40,
             child: ElevatedButton.icon(
@@ -52,12 +59,21 @@ class _SettingsState extends State<Settings> {
               icon: const Icon(Icons.nightlight_round_outlined,
                 size: 22
               ),
-              label: const Text('Switch to Dark Theme'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Theme.of(context).primaryColor),
+                foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              label: const Text("Switch to Dark Theme"),
             ),
           ),
           const Padding(
             padding: EdgeInsets.only(top: 20),
-            child: Text('User Settings',
+            child: Text("User Settings",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 22
@@ -69,11 +85,20 @@ class _SettingsState extends State<Settings> {
             width: 400,
             height: 40,
             child: ElevatedButton.icon(
-              onPressed: () => Navigator.pushNamed(context, '/edit-profile'),
+              onPressed: () => Navigator.pushNamed(context, "/edit-profile"),
               icon: const Icon(Icons.person,
                 size: 22
               ),
-              label: const Text('Edit Profile'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Theme.of(context).primaryColor),
+                foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              label: const Text("Edit Profile"),
             ),
           ),
           Container(
@@ -85,7 +110,16 @@ class _SettingsState extends State<Settings> {
               icon: const Icon(Icons.logout,
                 size: 22
               ),
-              label: const Text('Logout'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Theme.of(context).primaryColor),
+                foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              label: const Text("Logout"),
             ),
           ),
         ],

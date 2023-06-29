@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:skeletons/skeletons.dart';
+import "package:flutter/material.dart";
+import "package:skeletons/skeletons.dart";
 
 class UsersSkeleton extends StatelessWidget {
   const UsersSkeleton({ super.key });

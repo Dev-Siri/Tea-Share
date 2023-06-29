@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-
-import 'package:tea_share/models/post_model.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:flutter/material.dart";
+import "package:skeletons/skeletons.dart";
+import "package:tea_share/models/post_model.dart";
 
 class PostGrid extends StatelessWidget {
   final List<PostModel> posts;
@@ -17,24 +17,19 @@ class PostGrid extends StatelessWidget {
       child: IconButton(
         onPressed: () => Navigator.pushNamed(
           context,
-          '/post-info',
-          arguments: PostModel(
-            image: post.image,
-            title: post.title,
-            description: post.description,
-            author: post.author,
-            authorImage: post.authorImage,
-            people: post.people,
-            peopleImage: post.peopleImage,
-            createdAt: post.createdAt,
-            id: post.id
-          )
+          "/post-info",
+          arguments: post
         ),
         padding: EdgeInsets.zero,
         icon: CachedNetworkImage(
-          imageUrl: post.image,
+          imageUrl: post.postImage,
           height: 205.5,
-          progressIndicatorBuilder: (BuildContext context, String url, DownloadProgress progress) => const CircularProgressIndicator(),
+          progressIndicatorBuilder: (BuildContext context, String url, DownloadProgress progress) => SkeletonLine(
+            style: SkeletonLineStyle(
+              height: 300,
+              borderRadius: BorderRadius.circular(10)
+            ),
+          ),
           // Fills half of the screen so 2 items can be displayed in one row
           width: MediaQuery.of(context).size.width / 2,
           fit: BoxFit.fitHeight,

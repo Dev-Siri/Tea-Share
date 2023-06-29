@@ -1,14 +1,13 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:tea_share/models/post_model.dart';
-import 'package:tea_share/services/posts_service.dart';
-import 'package:tea_share/services/users_service.dart';
-import 'package:tea_share/utils/error_dialog.dart';
+import "package:flutter/material.dart";
+import "package:flutter_expandable_fab/flutter_expandable_fab.dart";
+import "package:image_picker/image_picker.dart";
+import "package:provider/provider.dart";
+import "package:tea_share/models/user_model.dart";
+import "package:tea_share/services/posts_service.dart";
+import "package:tea_share/services/users_service.dart";
+import "package:tea_share/utils/error_dialog.dart";
 
 class Create extends StatefulWidget {
   const Create({ super.key });
@@ -34,22 +33,17 @@ class _CreateState extends State<Create> with ErrorDialog {
   }
   
   Future<void> _createPost() async {
-    if (_image == null) showErrorDialog(context, 'No image selected.');
+    if (_image == null) return showErrorDialog(context, "No image selected.");
 
-    final User? user = context.read<UserService>().user;
-    
+    final UserModel? user = await context.read<UserService>().user;
+
+    if (user == null) return;
+
     final PostsServiceResponse response = await context.read<PostService>().createPost(
-      post: PostModel(
-        title: _titleInputController.text,
-        description: _aboutInputController.text,
-        author: user!.displayName!,
-        authorImage: user.photoURL!,
-        image: _image!.path,
-        people: [],
-        peopleImage: [],
-        id: "",
-        createdAt: "",
-      )
+      title: _titleInputController.text,
+      description: _aboutInputController.text,
+      userId: user.userId!,
+      postImage: await _image!.readAsBytes(),
     );
 
     if (response.successful) {
@@ -79,7 +73,7 @@ class _CreateState extends State<Create> with ErrorDialog {
         leading: BackButton(
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Create A Post'),
+        title: const Text("Create A Post"),
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
@@ -91,14 +85,14 @@ class _CreateState extends State<Create> with ErrorDialog {
         child: const Icon(Icons.cloud_upload),
         children: <Widget>[
           FloatingActionButton(
-            heroTag: 'Create Post Image Picker: Gallery',
-            tooltip: 'Open Gallery',
+            heroTag: "Create Post Image Picker: Gallery",
+            tooltip: "Open Gallery",
             child: const Icon(Icons.photo_library_rounded),
             onPressed: () => _pickImage("Gallery"),
           ),
           FloatingActionButton(
-            heroTag: 'Create Post Image Picker: Camera',
-            tooltip: 'Capture Photo',
+            heroTag: "Create Post Image Picker: Camera",
+            tooltip: "Capture Photo",
             child: const Icon(Icons.camera_alt),
             onPressed: () => _pickImage("Camera"),
           ),
@@ -113,7 +107,7 @@ class _CreateState extends State<Create> with ErrorDialog {
                 controller: _titleInputController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Title',
+                  labelText: "Title",
                 ),
               ),
               Padding(
@@ -122,7 +116,7 @@ class _CreateState extends State<Create> with ErrorDialog {
                   controller: _aboutInputController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'About your post',
+                    labelText: "About your post",
                   ),
                 ),
               ),
@@ -135,7 +129,7 @@ class _CreateState extends State<Create> with ErrorDialog {
                   child: ElevatedButton.icon(
                     onPressed: () => setState(() => _image = null),
                     icon: const Icon(Icons.image_not_supported),
-                    label: const Text('Clear Selected Image'),
+                    label: const Text("Clear Selected Image"),
                   ),
                 ),
               ),
@@ -145,7 +139,7 @@ class _CreateState extends State<Create> with ErrorDialog {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: _createPost,
-                  child: const Text('Post!'),
+                  child: const Text("Post!"),
                 ),
               ),
               Visibility(
