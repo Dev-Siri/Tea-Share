@@ -12,6 +12,6 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "jsx": "preserve",
-    "baseUrl": "../../apps/pfp-generation-server"
+    "baseUrl": "../../apps/pfp-generator"
   }
 }
