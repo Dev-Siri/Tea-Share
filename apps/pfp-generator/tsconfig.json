@@ -1,5 +1,5 @@
 {
-  "extends": "@tea-share/packages/tsconfig/pfp-generation-server.json",
+  "extends": "@tea-share/packages/tsconfig/pfp-generator.json",
   "compilerOptions": {
     "plugins": [{ "name": "next" }]
   },
