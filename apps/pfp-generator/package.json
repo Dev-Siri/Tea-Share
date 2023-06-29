@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@tea-share/packages": "workspace:*",
+    "@types/react": "18.2.14",
     "eslint-config-next": "13.4.5-canary.4",
     "typescript": "^5.1.3",
     "vercel": "^30.1.2"

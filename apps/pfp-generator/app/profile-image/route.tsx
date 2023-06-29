@@ -6,7 +6,7 @@ import { getRandomColor } from "../utils";
 
 export const runtime: ServerRuntime = "edge";
 
-export const GET = async (request: Request) => {
+export async function GET(request: Request) {
   const url = new URL(request.url);
   const name = url.searchParams.get("name");
 
@@ -41,4 +41,4 @@ export const GET = async (request: Request) => {
       width: 400,
     }
   );
-};
+}

@@ -1,5 +1,8 @@
 {
   "extends": "@tea-share/packages/tsconfig/pfp-generation-server.json",
+  "compilerOptions": {
+    "plugins": [{ "name": "next" }]
+  },
   "exclude": ["node_modules"],
   "include": ["app/**/*", ".next/types/**/*.ts"]
 }
