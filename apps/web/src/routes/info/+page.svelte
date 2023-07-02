@@ -7,7 +7,7 @@
 <article class="overflow-y-auto h-screen">
   <section class="grid place-items-center text-center p-20">
     <h1 class="font-bold text-5xl leading-relaxed">The Future of Tea Share</h1>
-    <p class="text-lg">The migration from MongoDB & Firebase -> PostgreSQL</p>
+    <p class="text-lg">The migration from MongoDB & Firebase -> MySQL</p>
   </section>
   <section class="px-10">
     <label for="progress-tracker" class="mb-1 text-lg font-medium dark:text-white">Progress Tracker</label>
@@ -26,7 +26,7 @@
   <section class="grid place-items-center text-center p-20">
     <h1 class="font-bold leading-relaxed text-5xl">Why am I seeing this page & not the Tea Share app?</h1>
     <p class="text-lg">
-      The Tea Share app is currently under going a migration from the MongoDB database to PostgreSQL <br />
+      The Tea Share app is currently under going a migration from the MongoDB database to MySQL <br />
       which is a relational database that fits this app better than what MongoDB offers. Firebase is also a service from Google <br />
       & Tea Share uses it to handle authentication & storage. But these services are two seperate pieces that Tea Share tries to tie together to build
       <br />
