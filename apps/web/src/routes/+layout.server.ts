@@ -8,11 +8,12 @@ export const load: LayoutServerLoad = ({ cookies, url }) => {
   const theme: Theme = (cookies.get("theme") as Theme) || "light";
 
   const authToken = cookies.get("auth_token");
+  const notOnUnprotectedRoutes = url.pathname !== "/auth" && url.pathname !== "/reset-password" && url.pathname !== "/terms-of-service";
 
-  if (!authToken && url.pathname !== "/auth" && url.pathname !== "/reset-password") throw redirect(303, "/auth");
+  if (!authToken && notOnUnprotectedRoutes) throw redirect(303, "/auth");
 
   return {
     theme,
-    user: url.pathname !== "/auth" && url.pathname !== "/reset-password" ? jwtDecode<User>(authToken!) : null,
+    user: notOnUnprotectedRoutes ? jwtDecode<User>(authToken!) : null,
   };
 };

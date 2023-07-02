@@ -1,4 +1,4 @@
-import { env } from "$env/dynamic/public";
+import { PUBLIC_BACKEND_URL } from "$env/static/public";
 
 type Method = "GET" | "POST" | "PUT" | "DELETE" | "OPTIONS" | "HEAD" | "TRACE" | "CONNECT" | "PATCH";
 
@@ -10,7 +10,7 @@ interface Options {
 }
 
 const queryClient = async <T>(endpoint: string, { method = "GET", body, searchParams, customFetch }: Partial<Options>) => {
-  const url = new URL(endpoint, env.PUBLIC_BACKEND_URL);
+  const url = new URL(endpoint, PUBLIC_BACKEND_URL);
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };

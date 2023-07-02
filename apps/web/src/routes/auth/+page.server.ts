@@ -1,4 +1,7 @@
+import { dev } from "$app/environment";
+import { PRIVATE_GOOGLE_CLIENT_ID, PRIVATE_GOOGLE_CLIENT_SECRET } from "$env/static/private";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
+import { OAuth2Client } from "google-auth-library";
 
 import type { PageServerLoad } from "./$types";
 
@@ -104,6 +107,19 @@ export const actions: Actions = {
         errorMessage: "An unknown error occured",
       };
     }
+  },
+  async googleLogin() {
+    const redirectUrl = dev ? "http://localhost:5173/api/google-login" : "https://tea-share.vercel.app/api/google-login";
+
+    const oAuth2Client = new OAuth2Client(PRIVATE_GOOGLE_CLIENT_ID, PRIVATE_GOOGLE_CLIENT_SECRET, redirectUrl);
+
+    const authorizedUrl = oAuth2Client.generateAuthUrl({
+      access_type: "offline",
+      scope: "profile email openid",
+      prompt: "consent",
+    });
+
+    throw redirect(302, authorizedUrl);
   },
 };
 

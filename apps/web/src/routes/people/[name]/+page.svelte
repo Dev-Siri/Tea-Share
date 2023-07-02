@@ -65,8 +65,8 @@
       <h2 class="text-xl text-gray-400">{getHandle(username)}</h2>
     </div>
     {#if userId === $user.userId}
-      <form method="POST" action="?/logout" class="mt-auto ml-2" use:enhance>
-        <button type="submit" class="bg-semi-gray p-3 rounded-full">
+      <form method="POST" action="?/logout" class="mt-auto ml-auto" use:enhance>
+        <button type="submit" class="bg-light-gray dark:bg-semi-gray p-3 rounded-full">
           <div class="h-7">
             <IoMdLogOut />
           </div>

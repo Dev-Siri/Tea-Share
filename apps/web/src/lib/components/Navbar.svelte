@@ -24,7 +24,9 @@
         <IoMdPeople />
       </div>
     </a>
-    <label for="user-dropdown" class="cursor-pointer">
+    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <label on:click={e => e.stopPropagation()} for="user-dropdown" class="cursor-pointer">
       <Image src={$user.userImage} alt={$user.username} height={75} width={75} class="h-[50px] w-[50px] rounded-full" />
     </label>
   </section>
