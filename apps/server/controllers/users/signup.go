@@ -4,7 +4,6 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
-	"net/http"
 	"tea-share/db"
 	"tea-share/env"
 	"tea-share/hash"
@@ -25,7 +24,13 @@ func Signup(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	if user.Username == "" || user.UserImage == "" || !utils.IsValidEmail(user.Email) || user.Password == "" {
+	authProvider := "mail"
+
+	if user.AuthProvider == "google" {
+		authProvider = "google"
+	}
+
+	if user.Username == "" || user.UserImage == "" || !utils.IsValidEmail(user.Email) || (authProvider != "google" && user.Password == "") {
 		ctx.Error("Username, Email, Image or Password are either empty or Email is invalid", fasthttp.StatusBadRequest)
 		return
 	}
@@ -47,12 +52,6 @@ func Signup(ctx *fasthttp.RequestCtx) {
 
 	var numberOfExistingAccounts int
 
-	authProvider := "mail"
-
-	if user.AuthProvider == "google" {
-		authProvider = "google"
-	}
-
 	countRow := db.Database.QueryRow(`
 		SELECT COUNT(email) FROM Users
 		WHERE email = ?
@@ -65,7 +64,7 @@ func Signup(ctx *fasthttp.RequestCtx) {
 
 	if numberOfExistingAccounts != 0 {
 		if authProvider == "google" {
-			ctx.SetStatusCode(fasthttp.StatusNoContent)
+			signInWithGoogle(ctx, user.Email)
 			return
 		}
 
@@ -73,41 +72,56 @@ func Signup(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	salt := make([]byte, 16)
-	_, saltGenerateError := rand.Read(salt)
-
-	if saltGenerateError != nil {
-		ctx.Error("Failed to generate a secure salt for your account", fasthttp.StatusInternalServerError)
-		return
-	}
-
-	hashedPassword, passwordHashError := hash.Scrpyt().EncodeToString([]byte(user.Password), salt)
-
-	if passwordHashError != nil {
-		ctx.Error("Failed to hash your password", fasthttp.StatusInternalServerError)
-		return
-	}
-
-	encodedSalt := base64.StdEncoding.EncodeToString(salt)
-
-	uploadedImageUrl, imageUploadError := db.UploadDataURL(
-		user.UserImage,
-		"users/"+uuid.NewString(),
-	)
-
-	if imageUploadError != nil {
-		ctx.Error("Failed to upload your profile image", http.StatusInternalServerError)
-		return
-	}
-
+	var dbError error
+	imageUrl := user.UserImage
 	userId := uuid.NewString()
 
-	_, dbInsertError := db.Database.Query(`
-		INSERT INTO Users(user_id, username, user_image, email, password, salt, auth_provider)
-		VALUES ( ?, ?, ?, ?, ?, ?, ? )
-	;`, userId, user.Username, uploadedImageUrl, user.Email, hashedPassword, encodedSalt, authProvider)
+	if authProvider == "mail" {
+		salt := make([]byte, 16)
+		_, saltGenerateError := rand.Read(salt)
 
-	if dbInsertError != nil {
+		if saltGenerateError != nil {
+			ctx.Error("Failed to generate a secure salt for your account", fasthttp.StatusInternalServerError)
+			return
+		}
+
+		hashedPassword, passwordHashError := hash.Scrpyt().EncodeToString([]byte(user.Password), salt)
+
+		if passwordHashError != nil {
+			ctx.Error("Failed to hash your password", fasthttp.StatusInternalServerError)
+			return
+		}
+
+		encodedSalt := base64.StdEncoding.EncodeToString(salt)
+
+		uploadedImageUrl, imageUploadError := db.UploadDataURL(
+			user.UserImage,
+			"users/"+uuid.NewString(),
+		)
+
+		if imageUploadError != nil {
+			ctx.Error("Failed to upload your profile image", fasthttp.StatusInternalServerError)
+			return
+		}
+
+		imageUrl = uploadedImageUrl
+
+		_, dbInsertError := db.Database.Query(`
+			INSERT INTO Users(user_id, username, user_image, email, password, salt, auth_provider)
+			VALUES ( ?, ?, ?, ?, ?, ?, ? )
+		;`, userId, user.Username, uploadedImageUrl, user.Email, hashedPassword, encodedSalt, authProvider)
+
+		dbError = dbInsertError
+	} else {
+		_, dbInsertError := db.Database.Query(`
+			INSERT INTO Users(user_id, username, user_image, email, auth_provider)
+			VALUES ( ?, ?, ?, ?, ?, ?, ? )
+		;`, userId, user.Username, user.UserImage, user.Email, authProvider)
+
+		dbError = dbInsertError
+	}
+
+	if dbError != nil {
 		ctx.Error("Failed to create your account", fasthttp.StatusInternalServerError)
 		return
 	}
@@ -115,7 +129,7 @@ func Signup(ctx *fasthttp.RequestCtx) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId":    userId,
 		"username":  user.Username,
-		"userImage": uploadedImageUrl,
+		"userImage": imageUrl,
 		"email":     user.Email,
 	})
 
@@ -137,4 +151,33 @@ func Signup(ctx *fasthttp.RequestCtx) {
 	ctx.SetContentType("application/json")
 	ctx.SetStatusCode(fasthttp.StatusCreated)
 	ctx.Write(jsonResponse)
+}
+
+func signInWithGoogle(ctx *fasthttp.RequestCtx, email string) {
+	row := db.Database.QueryRow(`
+		SELECT user_id, username, user_image, email FROM Users
+		WHERE email = ?
+	;`, email)
+
+	var dbUser models.User
+
+	if dbUserScanError := row.Scan(
+		&dbUser.UserID,
+		&dbUser.Username,
+		&dbUser.UserImage,
+		&dbUser.Email,
+	); dbUserScanError != nil {
+		ctx.Error("Failed to scan your info", fasthttp.StatusInternalServerError)
+		return
+	}
+
+	authResponse, authResponseError := utils.CreateUserJWTResponse(dbUser.UserID, dbUser.Username, dbUser.UserImage, dbUser.Email)
+
+	if authResponseError != nil {
+		ctx.Error("Failed to create your authentication token", fasthttp.StatusInternalServerError)
+		return
+	}
+
+	ctx.SetContentType("application/json")
+	ctx.Write(authResponse)
 }

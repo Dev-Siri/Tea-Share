@@ -3,13 +3,10 @@ package user_controllers
 import (
 	"encoding/json"
 	"tea-share/db"
-	"tea-share/env"
 	"tea-share/hash"
 	"tea-share/models"
-	response_models "tea-share/models/responses"
 	"tea-share/utils"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/valyala/fasthttp"
 )
 
@@ -69,28 +66,13 @@ func Login(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"userId":    dbUser.UserID,
-		"username":  dbUser.Username,
-		"userImage": dbUser.UserImage,
-		"email":     dbUser.Email,
-	})
+	authResponse, authResponseError := utils.CreateUserJWTResponse(dbUser.UserID, dbUser.Username, dbUser.UserImage, dbUser.Email)
 
-	authToken, tokenSignError := token.SignedString(env.GetJWTSecretKey())
-
-	if tokenSignError != nil {
-		ctx.Error("Failed to sign your auth token", fasthttp.StatusInternalServerError)
-		return
-	}
-
-	response := response_models.AuthResponse{Token: authToken}
-	jsonResponse, jsonMarshalError := json.Marshal(response)
-
-	if jsonMarshalError != nil {
-		ctx.Error("Failed to encode response as JSON", fasthttp.StatusInternalServerError)
+	if authResponseError != nil {
+		ctx.Error("Failed to create your authentication token", fasthttp.StatusInternalServerError)
 		return
 	}
 
 	ctx.SetContentType("application/json")
-	ctx.Write(jsonResponse)
+	ctx.Write(authResponse)
 }
