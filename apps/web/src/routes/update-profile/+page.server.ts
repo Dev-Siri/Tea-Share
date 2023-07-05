@@ -1,12 +1,12 @@
-import { fail, redirect } from "@sveltejs/kit";
+import { fail, redirect, type Actions } from "@sveltejs/kit";
 import jwtDecode from "jwt-decode";
 
 import type { User } from "../../app";
 
-import { encodeToBase64 } from "$lib/utils/globals";
+import { encodeToBase64 } from "$lib/server/encoding";
 import queryClient from "$lib/utils/queryClient";
 
-export const actions = {
+export const actions: Actions = {
   async default({ request, cookies }) {
     const authToken = cookies.get("auth_token");
 

@@ -5,7 +5,7 @@ import { OAuth2Client } from "google-auth-library";
 
 import type { PageServerLoad } from "./$types";
 
-import { encodeToBase64 } from "$lib/utils/globals";
+import { encodeToBase64 } from "$lib/server/encoding";
 import queryClient from "$lib/utils/queryClient";
 
 interface AuthResponse {
