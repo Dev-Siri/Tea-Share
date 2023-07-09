@@ -3,10 +3,6 @@
   "extends": "./base.json",
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "removeComments": true,
-    "skipLibCheck": true,
-    "noEmit": true,
-    "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
     "module": "ESNext",
