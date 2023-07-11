@@ -32,8 +32,6 @@ apps/mobile/android/app/debug
 apps/mobile/android/app/profile
 apps/mobile/android/app/release
 
-secret_keys.dart
-
 dist
 node_modules
 .env
@@ -107,14 +105,9 @@ GeneratedPluginRegistrant.*
 !default.perspectivev3
 
 apps/web/.vscode
-apps/web/public/worker/sw.js
-apps/web/public/worker/workbox-*.js
-apps/web/public/worker/worker-*.js
-apps/web/public/worker/sw.js.map
-apps/web/public/worker/workbox-*.js.map
-apps/web/public/worker/worker-*.js.map
 
-apps/future-pfp-generation-server/.vscode
+apps/pfp-generator/.vscode
 
 bin
 keys
+env.dart

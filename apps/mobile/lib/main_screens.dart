@@ -6,7 +6,9 @@ import "package:tea_share/models/user_model.dart";
 import "package:tea_share/screens/home.dart";
 import "package:tea_share/screens/people.dart";
 import "package:tea_share/screens/profile.dart";
+import "package:tea_share/screens/search.dart";
 import "package:tea_share/screens/settings.dart";
+import "package:tea_share/services/theme_service.dart";
 import "package:tea_share/services/users_service.dart";
 
 class MainScreens extends StatefulWidget {
@@ -21,6 +23,7 @@ class _MainScreensState extends State<MainScreens> {
 
   final List<Widget> _screens = [
     const Home(),
+    const Search(),
     const People(),
     const Profile(),
     const Settings(),
@@ -30,13 +33,6 @@ class _MainScreensState extends State<MainScreens> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.search),
-            tooltip: "Search",
-            onPressed: () => Navigator.pushNamed(context, "/search"),
-          ),
-        ],
         title: Row(
           children: <Widget>[
             Container(
@@ -69,16 +65,26 @@ class _MainScreensState extends State<MainScreens> {
         onPressed: () => Navigator.pushNamed(context, "/create-post"),
         tooltip: "Create A Post",
         heroTag: "Go To Create Post Screen",
-        backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentTab,
         onDestinationSelected: (int index) => setState(() => _currentTab = index),
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+        indicatorShape: StadiumBorder(
+          side: BorderSide(
+            color: context.watch<DarkThemeService>().darkTheme ? Theme.of(context).primaryColor : Colors.purple.shade100,
+            width: 20,
+          ),
+        ),
         destinations: <NavigationDestination>[
           const NavigationDestination(
             icon: Icon(Icons.home),
             label: "Home",
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.search),
+            label: "Search",
           ),
           const NavigationDestination(
             icon: Icon(Icons.people),

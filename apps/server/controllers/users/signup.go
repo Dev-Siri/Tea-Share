@@ -179,5 +179,6 @@ func signInWithGoogle(ctx *fasthttp.RequestCtx, email string) {
 	}
 
 	ctx.SetContentType("application/json")
+	ctx.SetStatusCode(fasthttp.StatusCreated)
 	ctx.Write(authResponse)
 }

@@ -1,6 +1,7 @@
 import "dart:convert";
 
 import "package:flutter/foundation.dart";
+import "package:google_sign_in/google_sign_in.dart";
 import "package:http/http.dart" as http;
 import "package:jwt_decoder/jwt_decoder.dart";
 import "package:shared_preferences/shared_preferences.dart";
@@ -21,6 +22,7 @@ class UsersServiceResponse {
 }
 
 class UserService {
+  static const _usersUrl = "$backendUrl/users";
   static const Map<String, String> _headers = {
     "Content-Type": "application/json; charset=UTF-8",
   };
@@ -53,7 +55,7 @@ class UserService {
     if (currentUser == null) return;
 
     await http.put(
-      Uri.parse("$backendUrl/users/${currentUser.userId}/update"),
+      Uri.parse("$_usersUrl/${currentUser.userId}/update"),
       headers: _headers,
       body: jsonEncode({
         "username": username,
@@ -65,7 +67,8 @@ class UserService {
 
   Future<UsersServiceResponse> login({ required String email, required String password }) async {
     final http.Response response = await http.post(
-      Uri.parse("$backendUrl/users/login"),
+      Uri.parse("$_usersUrl/login"),
+      headers: _headers,
       body: jsonEncode({
         "email": email,
         "password": password
@@ -87,6 +90,55 @@ class UserService {
     );
   }
 
+  Future<UsersServiceResponse> signInWithGoogle() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: [
+          "email",
+          "profile",
+        ],
+      );
+      final GoogleSignInAccount? account = await googleSignIn.signIn();
+
+      if (account == null) {
+        return UsersServiceResponse(
+          successful: false,
+          errorMessage: "Something went wrong. We weren't able to get your account information."
+        );
+      }
+
+      final http.Response signupResponse = await http.post(
+        Uri.parse("$_usersUrl/signup"),
+        headers: _headers,
+        body: jsonEncode({
+          "authProvider": "google",
+          "username": account.displayName,
+          "userImage": account.photoUrl,
+          "email": account.email,
+        })
+      );
+
+      if (signupResponse.statusCode == 201) {
+        Map<String, dynamic> authResponse = jsonDecode(signupResponse.body);
+
+        final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        sharedPreferences.setString("auth_token", authResponse["token"]!);
+
+        return UsersServiceResponse(successful: true);
+      }
+
+      return UsersServiceResponse(
+        successful: false,
+        errorMessage: signupResponse.body
+      );
+    } catch (error) {
+      return UsersServiceResponse(
+        successful: false,
+        errorMessage: "An error occured while trying to log you in with Google."
+      );
+    }
+  }
+
   Future<void> signOut() async {
     final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
@@ -97,10 +149,11 @@ class UserService {
     final http.Response defaultPfpResponse = await http.get(Uri.parse("$randomPfpUrl/profile-image?name=$username"));
     final Uint8List imageBytes = defaultPfpResponse.bodyBytes;
     final String base64Image = base64Encode(imageBytes);
-    final String? mimeType = defaultPfpResponse.headers['content-type'];
+    final String? mimeType = defaultPfpResponse.headers["content-type"];
 
     final http.Response signupResponse = await http.post(
-      Uri.parse("$backendUrl/users/signup"),
+      Uri.parse("$_usersUrl/signup"),
+      headers: _headers,
       body: jsonEncode({
         "username": username,
         "userImage": "data:$mimeType;base64,$base64Image",
@@ -125,7 +178,7 @@ class UserService {
   }
 
   Future<UsersServiceResponse> fetchUsers({ int? limit, int? page }) async {
-    final http.Response response = await http.get(Uri.parse("$backendUrl/users?page=$page&limit=$limit"));
+    final http.Response response = await http.get(Uri.parse("$_usersUrl?page=$page&limit=$limit"));
 
     if (response.statusCode == 200) {
       final List<UserModel> users = await compute(_decodeUsers, response);
@@ -142,8 +195,8 @@ class UserService {
     );
   }
 
-  Future<UsersServiceResponse> fetchUserByName({ required String name, bool? exact = false }) async {
-    final http.Response response = await http.get(Uri.parse("$backendUrl/users/search?name=$name&exact=$exact"));
+  Future<UsersServiceResponse> fetchUserByName({ required String name, required int page, required int limit, bool? exact = false }) async {
+    final http.Response response = await http.get(Uri.parse("$_usersUrl/search?name=$name&exact=$exact&page=$page&limit=$limit"));
 
     if (response.statusCode == 200) {
       final List<UserModel> users = await compute(_decodeUsers, response);

@@ -29,15 +29,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     if (mounted) {
       page = 1;
 
-      WidgetsBinding.instance.addPostFrameCallback((_) => showPosts(page));
+      WidgetsBinding.instance.addPostFrameCallback((_) => _showPosts());
     }
 
     super.initState();
   }
 
-  Future<void> showPosts(int page) async {
+  Future<void> _showPosts() async {
     final PostsServiceResponse response = await context.read<PostService>().fetchPosts(limit: 4, page: page);
-    
+
     if (!response.successful && mounted) {
       setState(() {
         _errorMessage = response.errorMessage;
@@ -98,34 +98,29 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       itemBuilder: (BuildContext context, int index, Animation animation) {        
         if (index == _posts.length - 1) {
           page++;
-          showPosts(page);
+          _showPosts();
 
-          return const Padding(
-            padding: EdgeInsets.only(top: 10),
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else {
-          return ScaleTransition(
-            scale: animation.drive(
-              CurveTween(
-                curve: Curves.easeIn
-              )
-            ),
-            child: PostCard(
-              postId: _posts[index].postId,
-              title: _posts[index].title,
-              description: _posts[index].description,
-              postImage: _posts[index].postImage,
-              userId: _posts[index].userId,
-              username: _posts[index].username,
-              userImage: _posts[index].userImage,
-              createdAt: _posts[index].createdAt,
-              likes: _posts[index].likes,
-            ),
-          );
+          return const PostsSkeleton();
         }
+
+        return ScaleTransition(
+          scale: animation.drive(
+            CurveTween(
+              curve: Curves.easeIn
+            )
+          ),
+          child: PostCard(
+            postId: _posts[index].postId,
+            title: _posts[index].title,
+            description: _posts[index].description,
+            postImage: _posts[index].postImage,
+            userId: _posts[index].userId,
+            username: _posts[index].username,
+            userImage: _posts[index].userImage,
+            createdAt: _posts[index].createdAt,
+            likes: _posts[index].likes,
+          ),
+        );
       },
     );
   }

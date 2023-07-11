@@ -20,6 +20,7 @@ class PostsServiceResponse {
 }
 
 class PostService {
+  static const _postsUrl = "$backendUrl/posts";
   static const Map<String, String> _headers = {
     "Content-Type": "application/json; charset=UTF-8",
   };
@@ -35,7 +36,7 @@ class PostService {
   }
 
   Future<PostsServiceResponse> fetchPosts({ required int limit, required int page }) async {
-    final http.Response response = await http.get(Uri.parse("$backendUrl/posts?page=$page&limit=$limit"));
+    final http.Response response = await http.get(Uri.parse("$_postsUrl?page=$page&limit=$limit"));
 
     if (response.statusCode == 200) {
       final List<PostModel> posts = await compute(_decodePosts, response);
@@ -59,7 +60,7 @@ class PostService {
     String? type = "user",
   }) async {
     final http.Response response = await http.get(
-      Uri.parse("$backendUrl/posts/search?q=$query&type=$type&page=$page&limit=$limit")
+      Uri.parse("$_postsUrl/search?q=$query&type=$type&page=$page&limit=$limit")
     );
 
     if (response.statusCode == 200) {
@@ -79,7 +80,7 @@ class PostService {
 
   Future<PostsServiceResponse> likePost({ required String id, required String username, required String image }) async {
     final http.Response response = await http.patch(
-      Uri.parse("$backendUrl/posts/$id/like"),
+      Uri.parse("$_postsUrl/$id/like"),
       headers: _headers,
       body: jsonEncode({
         "username": username,
@@ -94,9 +95,7 @@ class PostService {
       );
     }
 
-    return PostsServiceResponse(
-      successful: true
-    );
+    return PostsServiceResponse(successful: true);
   }
 
   Future<PostsServiceResponse> createPost({
@@ -108,7 +107,7 @@ class PostService {
     final String encodedImage = await compute(base64Encode, postImage);
 
     final http.Response response = await http.post(
-      Uri.parse("$backendUrl/posts"),
+      Uri.parse(_postsUrl),
       headers: _headers,
       body: jsonEncode({
         "title": title,
@@ -118,12 +117,7 @@ class PostService {
       })
     );
 
-    if (response.statusCode == 201) {
-      return PostsServiceResponse(
-        successful: true
-      );
-    }
-
+    if (response.statusCode == 201) return PostsServiceResponse(successful: true);
 
     return PostsServiceResponse(
       successful: false,

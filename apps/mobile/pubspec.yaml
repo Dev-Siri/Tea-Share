@@ -19,6 +19,7 @@ dependencies:
   date_time_format: ^2.0.1
   cupertino_icons: ^1.0.5
   image_picker: ^0.8.6+1
+  google_sign_in: ^6.1.4
   jwt_decoder: ^2.0.1
   skeletons: ^0.0.3
   provider: ^6.0.5

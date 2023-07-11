@@ -66,15 +66,14 @@ class _AuthState extends State<Auth> with Validation {
   }
 
   Future<void> _signInWithGoogle() async {
-    // TODO: Implement Google Login
-    // final UsersServiceResponse response = await context.read<UserService>().signIn();
+    final UsersServiceResponse response = await context.read<UserService>().signInWithGoogle();
 
-    // if (response.successful) {
-    //   Navigator.pushReplacementNamed(context, "/");
-    //   return;
-    // }
+    if (response.successful) {
+      Navigator.pushReplacementNamed(context, "/");
+      return;
+    }
 
-    // showErrorDialog(context, response.errorMessage ?? "Error, could not log you in.");
+    setState(() => _errorMessage = response.errorMessage ?? "Error, could not log you in.");
   }
 
   @override
@@ -126,9 +125,7 @@ class _AuthState extends State<Auth> with Validation {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(
-                              top: _isSignup ? 10 : 0
-                            ),
+                            padding: EdgeInsets.only(top: _isSignup ? 10 : 0),
                             child: TextFormField(
                               autocorrect: false,
                               controller: _emailController,

@@ -1,7 +1,6 @@
 import "dart:io";
 
 import "package:flutter/material.dart";
-import "package:flutter_expandable_fab/flutter_expandable_fab.dart";
 import "package:image_picker/image_picker.dart";
 import "package:provider/provider.dart";
 import "package:tea_share/models/user_model.dart";
@@ -19,8 +18,6 @@ class Create extends StatefulWidget {
 class _CreateState extends State<Create> with ErrorDialog {
   final TextEditingController _titleInputController = TextEditingController();
   final TextEditingController _aboutInputController = TextEditingController();
-
-  final GlobalKey<ExpandableFabState> _expandableFabKey = GlobalKey<ExpandableFabState>();
 
   XFile? _image;
 
@@ -54,16 +51,12 @@ class _CreateState extends State<Create> with ErrorDialog {
     showErrorDialog(context, response.errorMessage!);
   }
 
-  Future<void> _pickImage(String imageInputOption) async {
+  Future<void> _pickImage(ImageSource imageSource) async {
     final ImagePicker imagePicker = ImagePicker();
 
-    final XFile? image = await imagePicker.pickImage(
-      source: imageInputOption == "Gallery" ? ImageSource.gallery : ImageSource.camera
-    );
+    final XFile? image = await imagePicker.pickImage(source: imageSource);
     
     if (image != null) setState(() => _image = image);
-
-    _expandableFabKey.currentState!.toggle();
   }
 
   @override
@@ -75,88 +68,93 @@ class _CreateState extends State<Create> with ErrorDialog {
         ),
         title: const Text("Create A Post"),
       ),
-      floatingActionButtonLocation: ExpandableFab.location,
-      floatingActionButton: ExpandableFab(
-        key: _expandableFabKey,
-        openButtonHeroTag: "Create Post Image Picker: Open",
-        closeButtonHeroTag: "Create Post Image Picker: Close",
-        type: ExpandableFabType.up,
-        distance: 80,
-        child: const Icon(Icons.cloud_upload),
-        children: <Widget>[
-          FloatingActionButton(
-            heroTag: "Create Post Image Picker: Gallery",
-            tooltip: "Open Gallery",
-            child: const Icon(Icons.photo_library_rounded),
-            onPressed: () => _pickImage("Gallery"),
-          ),
-          FloatingActionButton(
-            heroTag: "Create Post Image Picker: Camera",
-            tooltip: "Capture Photo",
-            child: const Icon(Icons.camera_alt),
-            onPressed: () => _pickImage("Camera"),
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             children: <Widget>[
-              TextField(
-                controller: _titleInputController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Title",
+              ElevatedButton(
+                onPressed: () => _pickImage(ImageSource.gallery),
+                style: ButtonStyle(
+                  padding: const MaterialStatePropertyAll(EdgeInsets.zero),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                child: Visibility(
+                  visible: _image != null,
+                  replacement: Container(
+                    height: 400,
+                    width: 400,
+                    padding: const EdgeInsets.all(40),
+                    alignment: Alignment.center,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.image,
+                          size: 100,
+                        ),
+                        Text("Choose Image",
+                          style: TextStyle(fontSize: 21),
+                        ),
+                        Text("Preferably, choose images that are 400x400 in size.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      child: Image.file(
+                        File(_image?.path ?? ""),
+                        height: 400,
+                        width: 400,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: TextField(
-                  controller: _aboutInputController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "About your post",
+                  controller: _titleInputController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    labelText: "Title",
                   ),
                 ),
               ),
-              Visibility(
-                visible: _image != null,
-                child: Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  width: 400,
-                  height: 50,
-                  child: ElevatedButton.icon(
-                    onPressed: () => setState(() => _image = null),
-                    icon: const Icon(Icons.image_not_supported),
-                    label: const Text("Clear Selected Image"),
-                  ),
+              TextField(
+                controller: _aboutInputController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  labelText: "About your post",
                 ),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 10),
                 width: 400,
-                height: 50,
+                height: 45,
                 child: ElevatedButton(
-                  onPressed: _createPost,
-                  child: const Text("Post!"),
-                ),
-              ),
-              Visibility(
-                visible: _image != null,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.file(
-                      File(_image?.path ?? ""),
-                      height: 400,
-                      width: 400,
-                      fit: BoxFit.fill,
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(Theme.of(context).primaryColor),
+                    foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                   ),
+                  onPressed: _createPost,
+                  child: const Text("Create Post!"),
                 ),
-              )
+              ),
             ],
           ),
         ),

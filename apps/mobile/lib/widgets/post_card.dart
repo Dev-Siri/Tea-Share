@@ -3,6 +3,7 @@ import "package:date_time_format/date_time_format.dart";
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 import "package:skeletons/skeletons.dart";
+import "package:tea_share/models/like_model.dart";
 import "package:tea_share/models/post_model.dart";
 import "package:tea_share/models/user_model.dart";
 import "package:tea_share/services/posts_service.dart";

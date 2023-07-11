@@ -9,6 +9,8 @@ class PostsSkeleton extends StatelessWidget {
     return ListView.builder(
       itemCount: 10,
       addAutomaticKeepAlives: true,
+      shrinkWrap: true,
+      physics: const ClampingScrollPhysics(),
       padding: const EdgeInsets.only(
         left: 10,
         right: 10,

@@ -22,7 +22,7 @@ class ErrorMessage extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8.0),
+          padding: const EdgeInsets.only(top: 8),
           child: Text(message,
           textAlign: TextAlign.center,
             style: const TextStyle(

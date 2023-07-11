@@ -16,7 +16,11 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
+int page = 1;
+
 class _ProfileState extends State<Profile> {
+  final ScrollController _postsGridController = ScrollController();
+
   String _profileImage = "";
   String _username = "";
 
@@ -29,33 +33,45 @@ class _ProfileState extends State<Profile> {
   void initState() {
     if (mounted) {
       WidgetsFlutterBinding.ensureInitialized();
+      page = 1;
+
       _fetchData();
     }
-    
+
+    _postsGridController.addListener(() {
+      bool isTop = _postsGridController.position.pixels == 0;
+      if (_postsGridController.position.atEdge && !isTop) {
+        page++;
+        _fetchData();
+      }
+    });
+
     super.initState();
   }
 
-  Future<void> _fetchData() async {
+  Future<void> _setupUser() async {
     final UserModel? user = await context.read<UserService>().user;
   
-    setState(() => _isLoading = true);
-
     if (user != null) {
       setState(() {
         _profileImage = user.userImage;
         _username = user.username;
       });
     }
+  }
+
+  Future<void> _fetchData() async {
+    if (_username == "") await _setupUser();
 
     final PostsServiceResponse postsResponse = await context.read<PostService>().fetchPostsByQuery(
       query: _username,
-      page: 1,
+      page: page,
       limit: 8,
     );
   
     setState(() {
-      if (postsResponse.successful) {
-        _posts = postsResponse.posts!;
+      if (mounted && postsResponse.successful && postsResponse.posts != null) {
+        _posts = [..._posts, ...postsResponse.posts!];
       } else {
         _errorMessage = postsResponse.errorMessage;
       }
@@ -75,6 +91,7 @@ class _ProfileState extends State<Profile> {
 
     return ListView(
       addAutomaticKeepAlives: false,
+      controller: _postsGridController,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(20),
