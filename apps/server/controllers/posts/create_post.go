@@ -39,5 +39,5 @@ func CreatePost(ctx *fasthttp.RequestCtx) {
 	}
 
 	ctx.SetStatusCode(fasthttp.StatusCreated)
-	ctx.Write([]byte("Post created successfully"))
+	ctx.WriteString("Post created successfully")
 }

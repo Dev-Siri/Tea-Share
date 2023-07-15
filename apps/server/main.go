@@ -49,6 +49,7 @@ func main() {
 
 	router.HandleOPTIONS = true
 
+	go routes.RegisterHealthRoutes(router)
 	go routes.RegisterPostRoutes(router)
 	go routes.RegisterUserRoutes(router)
 
