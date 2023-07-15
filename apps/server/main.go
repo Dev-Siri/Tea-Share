@@ -53,7 +53,5 @@ func main() {
 	go routes.RegisterPostRoutes(router)
 	go routes.RegisterUserRoutes(router)
 
-	if err := fasthttp.ListenAndServe(addr, middleware.CORS(router.Handler)); err != nil {
-		log.Printf("%v", err)
-	}
+	log.Fatal(fasthttp.ListenAndServe(addr, middleware.CORS(router.Handler)))
 }
