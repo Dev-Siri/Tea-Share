@@ -1,7 +1,7 @@
 <script lang="ts">
   import FaUser from "svelte-icons/fa/FaUser.svelte";
   import IoMdSettings from "svelte-icons/io/IoMdSettings.svelte";
-  import Toggle from "svelte-toggle/src/Toggle.svelte";
+  import Toggle from "svelte-toggle";
 
   import user from "$lib/stores/user";
   import { getHandle } from "$lib/utils/globals";

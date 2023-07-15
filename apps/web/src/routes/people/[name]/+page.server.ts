@@ -35,7 +35,7 @@ export const load: PageServerLoad = async ({ params: { name } }) => {
     }),
   ]);
 
-  if (!users) throw error(404, { message: "Not Found" });
+  if (!users?.[0]) throw error(404, { message: "Not Found" });
 
   const usersPosts = posts || [];
 

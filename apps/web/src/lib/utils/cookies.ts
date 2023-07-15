@@ -9,7 +9,7 @@ export const getCookie = (key: string) => {
   const regex = new RegExp(`(?:^|;\\s*)${name}([^;]*)`);
   const match = decodedCookie.match(regex);
 
-  const value = match ? match[1] : "";
+  const value = match?.[1] ? match[1] : "";
   cachedCookies[key] = value;
 
   return value;

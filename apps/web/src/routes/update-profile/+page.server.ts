@@ -32,7 +32,7 @@ export const actions: Actions = {
       },
     });
 
-    if (!fetchedUsers) return fail(500, { errorMessage: "Failed to fetch your information. Please try again later." });
+    if (!fetchedUsers?.[0]) return fail(500, { errorMessage: "Failed to fetch your information. Please try again later." });
 
     const encodedImage = encodeToBase64(image);
 

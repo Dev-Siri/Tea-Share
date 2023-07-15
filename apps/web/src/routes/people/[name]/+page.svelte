@@ -29,7 +29,7 @@
 
       const posts = await queryClient<Post[] | null>("/posts/search", {
         searchParams: {
-          q: $page.params.name,
+          q: $page.params["name"],
           type: "user",
           page: currentPage,
           limit: 8,
