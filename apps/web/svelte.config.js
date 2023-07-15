@@ -5,7 +5,7 @@ import { vitePreprocess } from "@sveltejs/kit/vite";
 const config = {
   preprocess: [vitePreprocess()],
   kit: {
-    adapter: adapter({ maxDuration: 20 }),
+    adapter: adapter({ maxDuration: 10 }),
   },
 };
 
