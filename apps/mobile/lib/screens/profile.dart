@@ -1,13 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tea_share/models/post_model.dart';
-import 'package:tea_share/services/posts_service.dart';
-import 'package:tea_share/services/theme_service.dart';
-import 'package:tea_share/services/users_service.dart';
-import 'package:tea_share/widgets/error_message.dart';
-import 'package:tea_share/widgets/post_grid.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:tea_share/models/post_model.dart";
+import "package:tea_share/models/user_model.dart";
+import "package:tea_share/services/posts_service.dart";
+import "package:tea_share/services/users_service.dart";
+import "package:tea_share/widgets/error_message.dart";
+import "package:tea_share/widgets/post_grid.dart";
+import "package:tea_share/widgets/skeletons/posts_grid_skeleton.dart";
 
 class Profile extends StatefulWidget {
   const Profile({ super.key });
@@ -16,7 +16,11 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
+int page = 1;
+
 class _ProfileState extends State<Profile> {
+  final ScrollController _postsGridController = ScrollController();
+
   String _profileImage = "";
   String _username = "";
 
@@ -29,32 +33,51 @@ class _ProfileState extends State<Profile> {
   void initState() {
     if (mounted) {
       WidgetsFlutterBinding.ensureInitialized();
-      final User? user = context.read<UserService>().user;
-      
-      setState(() => _isLoading = true);
-      
-      if (user != null) {
-        setState(() {
-          _profileImage = user.photoURL!;
-          _username = user.displayName ?? "";
-        });
-      }
+      page = 1;
 
-      context.read<PostService>().fetchPostsByQuery(query: _username).then((PostsServiceResponse postsResponse) {
-        if (mounted) {
-          setState(() {
-            if (postsResponse.successful) {
-              _posts = postsResponse.posts!;
-            } else {
-              _errorMessage = postsResponse.errorMessage;
-            }
-            _isLoading = false;
-          });
-        }
-      });  
+      _fetchData();
     }
-    
+
+    _postsGridController.addListener(() {
+      bool isTop = _postsGridController.position.pixels == 0;
+      if (_postsGridController.position.atEdge && !isTop) {
+        page++;
+        _fetchData();
+      }
+    });
+
     super.initState();
+  }
+
+  Future<void> _setupUser() async {
+    final UserModel? user = await context.read<UserService>().user;
+  
+    if (user != null) {
+      setState(() {
+        _profileImage = user.userImage;
+        _username = user.username;
+      });
+    }
+  }
+
+  Future<void> _fetchData() async {
+    if (_username == "") await _setupUser();
+
+    final PostsServiceResponse postsResponse = await context.read<PostService>().fetchPostsByQuery(
+      query: _username,
+      page: page,
+      limit: 8,
+    );
+  
+    setState(() {
+      if (mounted && postsResponse.successful && postsResponse.posts != null) {
+        _posts = [..._posts, ...postsResponse.posts!];
+      } else {
+        _errorMessage = postsResponse.errorMessage;
+      }
+      
+      _isLoading = false;
+    });
   }
 
   @override
@@ -64,80 +87,71 @@ class _ProfileState extends State<Profile> {
         icon: Icons.error,
         message: _errorMessage!
       );
-    } else {
-      return ListView(
-        addAutomaticKeepAlives: false,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: CachedNetworkImageProvider(_profileImage),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(_username,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 28
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 0, bottom: 7),
-                        child: Text(
-                          '@${_username.toLowerCase().replaceAll(RegExp(r' '), '-')}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey
-                          ),
-                        ),
-                      ),
-                      Text(
-                        '${_isLoading ? 'Loading' : _posts.isEmpty ? 'No' : _posts.length} Posts${_isLoading ? '...' : ''}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: context.read<DarkThemeService>().darkTheme ?
-                            Colors.grey.shade400 : Colors.grey.shade600 ,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-          Visibility(
-            visible: _isLoading,
-            replacement: Visibility(
-              visible: _posts.isNotEmpty,
-              replacement: const Padding(
-                padding: EdgeInsets.only(top: 120),
+    }
+
+    return ListView(
+      addAutomaticKeepAlives: false,
+      controller: _postsGridController,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: CachedNetworkImageProvider(_profileImage),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Icon(Icons.add_a_photo,
-                      size: 80,
+                    Text(_username,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28
+                      ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: Text('You have not posted anything yet.'),
+                      padding: const EdgeInsets.only(top: 0, bottom: 7),
+                      child: Text(
+                        "@${_username.toLowerCase().replaceAll(RegExp(r" "), "-")}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey
+                        ),
+                      ),
                     ),
                   ],
                 ),
+              )
+            ],
+          ),
+        ),
+        Visibility(
+          visible: _isLoading,
+          replacement: Visibility(
+            visible: _posts.isNotEmpty,
+            replacement: const Padding(
+              padding: EdgeInsets.only(top: 120),
+              child: Column(
+                children: <Widget>[
+                  Icon(Icons.add_a_photo,
+                    size: 80,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text("You have not posted anything yet."),
+                  ),
+                ],
               ),
-              child: PostGrid(posts: _posts)
             ),
-            child: const Center(
-              child: CircularProgressIndicator()
-            ),
-          )
-        ],
-      );
-    }
+            child: PostGrid(posts: _posts)
+          ),
+          child: const PostsGridSkeleton()
+        )
+      ],
+    );
   }
 }

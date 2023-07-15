@@ -6,8 +6,9 @@
 
 ## Description
 
-Tea Share is a social media app for Android and the Web. It is built with **[Flutter](https://flutter.dev)** for mobile (~~iOS~~/Android) and **[SvelteKit](https://kit.svelte.dev)** for the web version. It uses **[MongoDB](https://www.mongodb.com)** as the
-database, **[Go](https://go.dev)** as the server side language and **[Firebase](https://firebase.google.com)** for authentication + storaging all the user generated data.
+Tea Share is an online social media app for Android and the Web.
+It is built with **[Flutter](https://flutter.dev)** for mobile (~~iOS~~/Android) and **[SvelteKit](https://kit.svelte.dev)** for the web version. It uses **[MySQL](https://www.mysql.com)** hosted on [PlanetScale](https://planetscale.com) as the
+database, **[Go](https://go.dev)** as the server side language and **[GCP Storage](https://cloud.google.com)** throught Firebase Admin for authentication + storing all the user generated data.
 
 Currently, even though the Flutter project has a **iOS** folder, the iOS version is not configured for it and will not be available for a long time. (I don't have a MacBook)
 
@@ -16,9 +17,8 @@ Currently, even though the Flutter project has a **iOS** folder, the iOS version
 - TailwindCSS
 - TypeScript
 - SvelteKit
-- Firebase
 - Flutter
-- MongoDB
+- MySQL
 - Dart
 - Go
 
@@ -50,7 +50,7 @@ $ pnpm i
 
 - For the mobile version, you need to have the [Flutter SDK](https://docs.flutter.dev/get-started/instal) installed on your system.
 
-- And for the Server, you need to have [Air](https://github.com/cosmtrek) (Optional, air is used for live reloading) & [Go](https://go.dev/dl) installed. To install it, run:
+- And for the Server, you need to have [Air](https://github.com/cosmtrek) if looking for live reload, & [Go](https://go.dev/dl) installed. To install it, run:
 
 ```sh
 # with install.sh (preferred way according to air)
@@ -97,12 +97,18 @@ $ pnpm build
 Then to start the production version, run:
 
 ```sh
-$ pnpm start
+$ pnpm preview
 ```
 
 #### Server
 
-To compile the server version, run:
+To compile the optimal server version, run:
+
+```sh
+$ go build -tags netgo -ldflags "-extldflags '-static' -s -w" -gcflags "all=-N -l -B -C -S -D -M" -o bin/tea-share
+```
+
+This creates a more optimized binary but takes a lot longer && results in a larger output. But you can also compile without -gcflags which will create a smaller binary much faster but it will run slightly slower than the optimized one.
 
 ```sh
 $ go build -tags netgo -ldflags '-s -w' -o tea-share

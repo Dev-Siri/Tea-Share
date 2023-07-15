@@ -32,8 +32,6 @@ apps/mobile/android/app/debug
 apps/mobile/android/app/profile
 apps/mobile/android/app/release
 
-secret_keys.dart
-
 dist
 node_modules
 .env
@@ -56,21 +54,23 @@ key.properties
 
 coverage
 
+.svelte-kit
 .next
-out
 build
+out
 
 *.pem
+
+/apps/web/package
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+vite.config.ts.timestamp-*
+vite.config.js.timestamp-*
 
 .vercel
-google-services.json
-firebase_app_id_file.json
-GoogleService-Info.plist
 
 **/dgph
 *.mode1v3
@@ -106,16 +106,9 @@ GeneratedPluginRegistrant.*
 !default.pbxuser
 !default.perspectivev3
 
-apps/web/.vscode
-apps/web/public/worker/sw.js
-apps/web/public/worker/workbox-*.js
-apps/web/public/worker/worker-*.js
-apps/web/public/worker/sw.js.map
-apps/web/public/worker/workbox-*.js.map
-apps/web/public/worker/worker-*.js.map
-
-apps/future-pfp-generation-server/.vscode
+apps/pfp-generator/.vscode
 
 bin
 keys
 .data.old
+keys

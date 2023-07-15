@@ -1,60 +1,67 @@
 package user_controllers
 
 import (
+	"database/sql"
 	"encoding/json"
-	"fmt"
-	"log"
-	"net/http"
 	"tea-share/db"
 	"tea-share/models"
 
-	"go.mongodb.org/mongo-driver/bson"
+	"github.com/valyala/fasthttp"
 )
 
-func GetUsersByName(w http.ResponseWriter, r *http.Request) {
-	searchParams := r.URL.Query()
+func GetUsersByName(ctx *fasthttp.RequestCtx) {
+	searchParams := ctx.QueryArgs()
 
-	name := searchParams.Get("name")
-	exact := searchParams.Get("exact")
+	name := string(searchParams.Peek("name"))
+	exact := searchParams.GetBool("exact")
 
-	if name == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		log.Printf("Search param `name` not provided")
-		return
+	var usersFetchError error
+	var fetchedRows *sql.Rows
+
+	if exact {
+		rows, err := db.Database.Query(`
+			SELECT user_id, username, user_image, email FROM Users
+			WHERE username = ?
+		;`, name)
+
+		usersFetchError = err
+		fetchedRows = rows
+	} else {
+		page := searchParams.GetUintOrZero("page")
+		limit := searchParams.GetUintOrZero("limit")
+
+		offset := (page - 1) * limit
+		wildcardQuery := "%" + name + "%"
+
+		rows, err := db.Database.Query(`
+			SELECT user_id, username, user_image, email FROM Users
+			WHERE username LIKE ?
+			LIMIT ? OFFSET ?
+		;`, wildcardQuery, limit, offset)
+
+		usersFetchError = err
+		fetchedRows = rows
 	}
-
-	filter := bson.M{
-		"username": bson.M{"$regex": name},
-	}
-
-	if exact == "true" {
-		filter = bson.M{
-			"username": name,
-		}
-	}
-
-	cursor, usersFetchError := db.UsersCollection().Find(
-		r.Context(), filter,
-	)
 
 	if usersFetchError != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("%v", usersFetchError)
+		ctx.Error("Failed to search for users", fasthttp.StatusInternalServerError)
 		return
 	}
 
-	defer cursor.Close(r.Context())
+	defer fetchedRows.Close()
 
 	var users []models.User
 
-	for cursor.Next(r.Context()) {
+	for fetchedRows.Next() {
 		var user models.User
 
-		postDecodeError := cursor.Decode(&user)
-
-		if postDecodeError != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			log.Printf("%v", postDecodeError)
+		if postDecodeError := fetchedRows.Scan(
+			&user.UserID,
+			&user.Username,
+			&user.UserImage,
+			&user.Email,
+		); postDecodeError != nil {
+			ctx.Error("Failed to decode users", fasthttp.StatusInternalServerError)
 			return
 		}
 
@@ -64,12 +71,10 @@ func GetUsersByName(w http.ResponseWriter, r *http.Request) {
 	userJSONBytes, jsonError := json.Marshal(users)
 
 	if jsonError != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("%v", jsonError)
+		ctx.Error("Failed to encode users as JSON", fasthttp.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-
-	fmt.Fprintf(w, "%s", userJSONBytes)
+	ctx.SetContentType("application/json")
+	ctx.Write(userJSONBytes)
 }

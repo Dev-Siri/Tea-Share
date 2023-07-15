@@ -5,10 +5,6 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
-      boxShadow: {
-        dark: "0px 2px 122px 18px rgba(0, 0, 0, 0.23)",
-        light: "-22px 10px 300px -97px hsl(0, 0%, 100%)",
-      },
       colors: {
         primary: "hsl(257, 77%, 64%)",
         "primary-dark": "#6348a8",

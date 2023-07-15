@@ -1,16 +1,45 @@
 <script lang="ts">
-  import FaUserAltSlash from "svelte-icons/fa/FaUserAltSlash.svelte";
-  import FaVideoSlash from "svelte-icons/fa/FaVideoSlash.svelte";
-
   import { page } from "$app/stores";
-  import PostList from "../../components/PostList.svelte";
-  import UserList from "../../components/UserList.svelte";
+
+  import type { Post, User } from "../../app";
+
+  import SearchResults from "$lib/components/SearchResults.svelte";
 
   export let data;
 
-  const query = $page.url.searchParams.get("query");
+  let currentPage = 1;
 
-  const { posts, users } = data;
+  $: paginatedPosts = data.posts;
+  $: paginatedUsers = data.users;
+
+  $: query = $page.url.searchParams.get("query") ?? "";
+  $: type = ($page.url.searchParams.get("type") ?? "posts") as "posts" | "people";
+
+  const loadMoreItems = async (event: any) => {
+    const { scrollHeight, scrollTop, clientHeight } = event.target;
+
+    const didScrollToBottom: boolean = scrollHeight - scrollTop === clientHeight;
+
+    if (didScrollToBottom) {
+      currentPage++;
+      const { default: queryClient } = await import("$lib/utils/queryClient");
+
+      const items = await queryClient<Post[] | User[]>(`/${type === "people" ? "users" : "posts"}`, {
+        searchParams: {
+          page: currentPage,
+          limit: 8,
+        },
+      });
+
+      if (!items) return;
+
+      if (type === "posts") {
+        paginatedPosts = [...paginatedPosts, ...(items as Post[])];
+      } else {
+        paginatedUsers = [...paginatedUsers, ...(items as User[])];
+      }
+    }
+  };
 </script>
 
 <svelte:head>
@@ -22,31 +51,18 @@
   <meta name="twitter:description" content="Posts & People who have \`{query}\` in their names and titles." />
 </svelte:head>
 
-<aside class="flex h-screen w-full flex-col-reverse min-[1002px]:flex-row min-[1002px]:pr-4">
-  <section class="h-screen flex-[2] overflow-y-auto px-4 min-[1002px]:mt-3">
-    {#if posts?.length}
-      <PostList {posts} />
-    {:else}
-      <aside
-        class="border-light-gray dark:border-semi-gray flex h-full w-full flex-col items-center justify-center rounded-xl border-2 bg-white py-4 dark:bg-black"
-      >
-        <div class="h-11">
-          <FaVideoSlash />
-        </div>
-        <p class="mt-4 text-center">No posts found with query &apos;{query}&apos;</p>
-      </aside>
-    {/if}
+<article class="h-screen pb-10 overflow-y-auto" on:scroll={loadMoreItems}>
+  <header class="p-5 gap-10 text-2xl flex">
+    <a class:active-link={type === "posts"} href="/search?query={query}&type=posts">Posts</a>
+    <a class:active-link={type === "people"} href="/search?query={query}&type=people">People</a>
+  </header>
+  <section class="w-full border-radius min-[1002px]:pr-4" class:p-4={type === "posts"}>
+    <SearchResults users={paginatedUsers} posts={paginatedPosts} {type} />
   </section>
-  <section class="h-2/5 w-full p-4 min-[1002px]:h-3/5 min-[1002px]:w-[30%] min-[1002px]:px-0">
-    {#if users}
-      <UserList title="People" {users} />
-    {:else}
-      <aside class="border-light-gray dark:border-semi-gray grid w-full place-items-center rounded-xl border-2 bg-white py-4 dark:bg-black">
-        <div class="h-11">
-          <FaUserAltSlash />
-        </div>
-        <p class="mt-4 px-4 text-center">No people found with name &apos;{query}&apos;</p>
-      </aside>
-    {/if}
-  </section>
-</aside>
+</article>
+
+<style lang="postcss">
+  .active-link {
+    @apply border-b-primary border-b-4 pb-2 font-bold duration-200;
+  }
+</style>

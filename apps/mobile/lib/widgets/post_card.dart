@@ -1,37 +1,38 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:date_time_format/date_time_format.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:skeletons/skeletons.dart';
-import 'package:tea_share/models/post_model.dart';
-import 'package:tea_share/services/posts_service.dart';
-import 'package:tea_share/services/theme_service.dart';
-import 'package:tea_share/services/users_service.dart';
-import 'package:tea_share/utils/error_dialog.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:date_time_format/date_time_format.dart";
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:skeletons/skeletons.dart";
+import "package:tea_share/models/like_model.dart";
+import "package:tea_share/models/post_model.dart";
+import "package:tea_share/models/user_model.dart";
+import "package:tea_share/services/posts_service.dart";
+import "package:tea_share/services/theme_service.dart";
+import "package:tea_share/services/users_service.dart";
+import "package:tea_share/utils/error_dialog.dart";
 
 class PostCard extends StatefulWidget {
-  final String id;
+  final String postId;
   final String title;
   final String description;
-  final String author;
-  final String authorImage;
-  final String image;
+  final String userId;
+  final String username;
+  final String userImage;
+  final String postImage;
   final String createdAt;
-  final List people;
-  final List peopleImage;
+  final List<LikeModel> likes;
 
   const PostCard({
     super.key,
-    required this.id,
+    required this.postId,
     required this.title,
     required this.description,
-    required this.author,
-    required this.authorImage,
-    required this.image,
+    required this.userId,
+    required this.username,
+    required this.userImage,
+    required this.postImage,
     required this.createdAt,
-    required this.people,
-    required this.peopleImage,
+    required this.likes,
   });
 
   @override
@@ -39,54 +40,64 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> with ErrorDialog {
-  late String _likeText;
-  late IconData _thumbsUpIcon;
-  late bool _isLikeButtonDisabled;
+  String _likeText = "";
+  IconData _thumbsUpIcon = Icons.thumb_up_sharp;
+  bool _isLikeButtonDisabled = false;
 
-  String _postLikes(User? user) {
-    if (widget.people.isEmpty) return '0 Likes';
+  String _postLikes(UserModel? user) {
+    if (widget.likes.isEmpty) return "0 Likes";
 
-    if (widget.people.contains(user?.displayName)) {
-      if (widget.people.length == 1 && widget.people.contains(user?.displayName)) return 'You liked this post';
+    if (_isLikeButtonDisabled) {
+      if (widget.likes.length == 1) return "You liked this post";
 
-      return 'You and ${widget.people.length - 1} ${widget.people.length - 1 == 1 ? 'other' : 'others'}';
+      return "You and ${widget.likes.length - 1} ${widget.likes.length - 1 == 1 ? "other" : "others"}";
     }
 
-    if (widget.people.length - 1 == 0) return '${widget.people[0]} liked this post';
+    if (widget.likes.length - 1 == 0) return "${widget.likes[0].username} liked this post";
 
-    return '${widget.people[0]} and ${widget.people.length - 1} others';
+    return "${widget.likes[0].username} and ${widget.likes.length - 1} others";
   }
 
   @override
   void initState() {
-    final User? user = context.read<UserService>().user;
-    
-    setState(() {
-      _likeText = _postLikes(user);
-      _isLikeButtonDisabled = widget.people.contains(user?.displayName);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _prepareLikes());
+    super.initState();
+  }
 
-      if (widget.people.contains(user?.displayName)) {
+  Future<void> _prepareLikes() async {
+    final UserModel? user = await context.read<UserService>().user;
+
+    setState(() {
+      _isLikeButtonDisabled = widget.likes.any((LikeModel like) => like.username == user?.username);
+      _likeText = _postLikes(user);
+
+      if (_isLikeButtonDisabled) {
         _thumbsUpIcon = Icons.thumb_up_sharp;
       } else {
         _thumbsUpIcon = Icons.thumb_up_outlined;
       }
     });
-    super.initState();
   }
 
   Future<void> _likePost() async {
-    final User user = context.read<UserService>().user!;
+    final UserModel? user = await context.read<UserService>().user;
     
+    if (user == null) return;
+
     final PostsServiceResponse response = await context.read<PostService>().likePost(
-      id: widget.id,
-      username: user.displayName!,
-      image: user.photoURL!,
+      id: widget.postId,
+      username: user.username,
+      image: user.userImage,
     );
 
     if (!response.successful) return showErrorDialog(context, response.errorMessage!);
 
-    widget.people.add(user.displayName);
-    widget.peopleImage.add(user.photoURL);
+    widget.likes.add(
+      LikeModel(
+        username: user.username,
+        userImage: user.userImage
+      ),
+    );
 
     setState(() {
       _isLikeButtonDisabled = true;
@@ -101,7 +112,7 @@ class _PostCardState extends State<PostCard> with ErrorDialog {
       elevation: 5,
       margin: const EdgeInsets.only(top: 15),
       child: Container(
-        width: 500,
+        width: 600,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(2)),
         ),
@@ -136,17 +147,17 @@ class _PostCardState extends State<PostCard> with ErrorDialog {
               padding: EdgeInsets.zero,
               onPressed: () => Navigator.pushNamed(
                 context,
-                '/post-info',
+                "/post-info",
                 arguments: PostModel(
+                  postId: widget.postId,
                   title: widget.title,
-                  image: widget.image,
+                  postImage: widget.postImage,
                   description: widget.description,
-                  author: widget.author,
-                  authorImage: widget.authorImage,
-                  people: widget.people,
-                  peopleImage: widget.peopleImage,
+                  userId: widget.userId,
+                  username: widget.username,
+                  userImage: widget.userImage,
+                  likes: widget.likes,
                   createdAt: widget.createdAt,
-                  id: widget.id,
                 )
               ),
               child: SizedBox(
@@ -156,14 +167,14 @@ class _PostCardState extends State<PostCard> with ErrorDialog {
                   child: Hero(
                     tag: widget.title,
                     child: CachedNetworkImage(
-                      imageUrl: widget.image,
+                      imageUrl: widget.postImage,
+                      fit: BoxFit.fill,
                       progressIndicatorBuilder: (BuildContext context, String url, DownloadProgress progress) => SkeletonLine(
                         style: SkeletonLineStyle(
                           height: 300,
                           borderRadius: BorderRadius.circular(10)
                         ),
                       ),
-                      fit: BoxFit.fill
                     ),
                   ),
                 )
@@ -219,7 +230,7 @@ class _PostCardState extends State<PostCard> with ErrorDialog {
                     child: SizedBox(
                       width: 50,
                       child: Text(
-                        widget.author,
+                        widget.username,
                         overflow: TextOverflow.ellipsis
                       ),
                     ),
@@ -227,7 +238,7 @@ class _PostCardState extends State<PostCard> with ErrorDialog {
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: CircleAvatar(
-                      backgroundImage: CachedNetworkImageProvider(widget.authorImage),
+                      backgroundImage: CachedNetworkImageProvider(widget.userImage),
                       radius: 15,
                     ),
                   )

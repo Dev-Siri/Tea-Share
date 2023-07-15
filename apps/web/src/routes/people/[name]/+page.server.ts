@@ -1,17 +1,33 @@
-import queryClient from "../../../services/queryClient";
+import { error, redirect, type Actions } from "@sveltejs/kit";
 
-import { error } from "@sveltejs/kit";
-import type { MongoDBUser, Post } from "../../../app";
+import type { Post, User } from "../../../app";
+import type { PageServerLoad } from "./$types";
 
-export const load = async ({ params: { name } }) => {
+import queryClient from "$lib/utils/queryClient";
+
+export const actions: Actions = {
+  async logout({ cookies }) {
+    cookies.delete("auth_token", {
+      httpOnly: true,
+      sameSite: true,
+      path: "/",
+    });
+
+    throw redirect(303, "/auth");
+  },
+};
+
+export const load: PageServerLoad = async ({ params: { name } }) => {
   const [posts, users] = await Promise.all([
     queryClient<Post[] | null>("/posts/search", {
       searchParams: {
         q: name,
-        fromUser: true,
+        type: "user",
+        page: 1,
+        limit: 8,
       },
     }),
-    queryClient<MongoDBUser[] | null>("/users/search", {
+    queryClient<User[] | null>("/users/search", {
       searchParams: {
         name,
         exact: true,
@@ -19,7 +35,7 @@ export const load = async ({ params: { name } }) => {
     }),
   ]);
 
-  if (!users?.[0]) throw error(404, "Not Found");
+  if (!users) throw error(404, { message: "Not Found" });
 
   const usersPosts = posts || [];
 

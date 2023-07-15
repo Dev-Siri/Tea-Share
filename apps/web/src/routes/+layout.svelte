@@ -2,13 +2,17 @@
   import { browser } from "$app/environment";
   import "../app.css";
 
-  import theme from "../stores/theme";
+  import theme from "$lib/stores/theme";
+  import user from "$lib/stores/user";
 
-  // export let data;
+  import Navbar from "$lib/components/Navbar.svelte";
+  import UserDropdown from "$lib/components/UserDropdown.svelte";
 
-  theme.set("dark");
-  // theme.set(data.theme);
-  // $: if (data.user) user.set(data.user);
+  export let data;
+
+  theme.set(data.theme);
+
+  $: user.set(data.user!);
   $: if (browser) document.body.classList.replace($theme === "dark" ? "light" : "dark", $theme);
 </script>
 
@@ -43,9 +47,10 @@
   <title>Home</title>
 </svelte:head>
 
-<!-- {#if $user}
+{#if $user}
   <Navbar />
-{/if} -->
+  <UserDropdown />
+{/if}
 <main class="dark:bg-dark-gray h-screen w-screen overflow-hidden duration-200 dark:text-white">
   <slot />
 </main>

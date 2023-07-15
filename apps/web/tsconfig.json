@@ -1,3 +1,9 @@
 {
-  "extends": ["./.svelte-kit/tsconfig.json", "@tea-share/packages/tsconfig/web.json"]
+  "extends": ["./.svelte-kit/tsconfig.json", "@tea-share/packages/tsconfig/web.json"],
+  "compilerOptions": {
+    "paths": {
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"]
+    }
+  }
 }

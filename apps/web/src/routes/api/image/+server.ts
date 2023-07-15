@@ -1,6 +1,8 @@
 import sharp from "sharp";
 
-export const GET = async ({ url: { searchParams }, fetch }) => {
+import type { RequestHandler } from "@sveltejs/kit";
+
+export const GET: RequestHandler = async ({ url: { searchParams }, fetch }) => {
   const imageUrl = searchParams.get("url");
   const height = searchParams.get("h");
 
@@ -10,7 +12,13 @@ export const GET = async ({ url: { searchParams }, fetch }) => {
   const imageBuffer = await imageResponse.arrayBuffer();
 
   try {
-    const optimizedImage = await sharp(imageBuffer).resize(Number(height)).avif().toBuffer();
+    let optimizedImage: Buffer;
+
+    if (imageResponse.headers.get("Content-Type")?.includes("image/gif")) {
+      optimizedImage = await sharp(imageBuffer).resize(Number(height)).gif().toBuffer();
+    } else {
+      optimizedImage = await sharp(imageBuffer).resize(Number(height)).avif().toBuffer();
+    }
 
     return new Response(optimizedImage);
   } catch (error) {

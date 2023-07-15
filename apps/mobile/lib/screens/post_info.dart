@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:tea_share/models/post_model.dart';
-import 'package:tea_share/models/user_model.dart';
-import 'package:tea_share/widgets/user_tile.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:flutter/material.dart";
+import "package:tea_share/models/post_model.dart";
+import "package:tea_share/models/user_model.dart";
+import "package:tea_share/widgets/user_tile.dart";
 
 class PostInfo extends StatelessWidget {
   const PostInfo({ super.key });
@@ -23,10 +23,9 @@ class PostInfo extends StatelessWidget {
                     tag: post.title,
                     child: CachedNetworkImage(
                       width: double.infinity,
-                      imageUrl: post.image,
+                      imageUrl: post.postImage,
                       progressIndicatorBuilder: (BuildContext context, String url, DownloadProgress progress) => const CircularProgressIndicator(),
                       fit: BoxFit.fill,
-                      height: 300,
                     ),
                   ),
                   Padding(
@@ -75,22 +74,22 @@ class PostInfo extends StatelessWidget {
                             minWidth: 18,
                             onPressed: () => Navigator.pushNamed(
                               context,
-                              '/other-profile',
+                              "/other-profile",
                               arguments: UserModel(
-                                email: post.id,
-                                username: post.author,
-                                image: post.authorImage,
+                                email: post.postId,
+                                username: post.username,
+                                userImage: post.userImage,
                               ),
                             ),
                             child: Hero(
-                              tag: post.id,
+                              tag: post.userId,
                               child: CircleAvatar(
                                 radius: 18,
-                                backgroundImage: CachedNetworkImageProvider(post.authorImage)
+                                backgroundImage: CachedNetworkImageProvider(post.userImage)
                               ),
                             ),
                           ),
-                          Text(post.author,
+                          Text(post.username,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold
                             ),
@@ -100,7 +99,7 @@ class PostInfo extends StatelessWidget {
                     ),
                     const Padding(
                       padding: EdgeInsets.only(top: 15),
-                      child: Text('People who liked this post',
+                      child: Text("People who liked this post",
                         style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold
@@ -113,14 +112,11 @@ class PostInfo extends StatelessWidget {
                         child: SizedBox(
                           height: MediaQuery.of(context).size.height - 520,
                           child: ListView.builder(
-                            itemCount: post.people.length,
+                            itemCount: post.likes.length,
                             itemBuilder: (BuildContext context, int index) {
                               return UserTile(
-                                user: UserModel(
-                                  username: post.people[index],
-                                  image: post.peopleImage[index],
-                                  email: post.people[index],
-                                )
+                                username: post.likes[index].username,
+                                userImage: post.likes[index].userImage,
                               );
                             }
                           ),

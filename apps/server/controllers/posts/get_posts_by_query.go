@@ -1,74 +1,163 @@
 package post_controllers
 
 import (
+	"database/sql"
 	"encoding/json"
-	"fmt"
-	"log"
-	"net/http"
 	"tea-share/db"
 	"tea-share/models"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/valyala/fasthttp"
 )
 
-func GetPostsBySearchTerm(w http.ResponseWriter, r *http.Request) {
-	searchParams := r.URL.Query()
+func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
+	searchParams := ctx.QueryArgs()
 
-	q := searchParams.Get("q")
-	fromUser := searchParams.Get("fromUser")
+	q := string(searchParams.Peek("q"))
 
-	if q == "" {
-		w.WriteHeader(http.StatusOK)
-		log.Printf("Search param `q` not provided")
-		return
+	// Type: "normal" | "id" | "user"
+	typeofSearch := string(searchParams.Peek("type"))
+
+	page := searchParams.GetUintOrZero("page")
+	limit := searchParams.GetUintOrZero("limit")
+
+	offset := (page - 1) * limit
+
+	var rows *sql.Rows
+	var postsFetchError error
+
+	switch typeofSearch {
+	case "id":
+		queriedRows, err := db.Database.Query(`
+			SELECT
+				p.*,
+				u.username,
+				u.user_image,
+				COALESCE(
+					(
+						SELECT JSON_ARRAYAGG(
+							JSON_OBJECT(
+								'username', lu.username,
+								'userImage', lu.user_image
+							)
+						)
+						FROM Likes l
+						LEFT JOIN Users lu ON lu.user_id = l.user_id
+						WHERE l.post_id = p.post_id
+					),
+					JSON_ARRAY()
+				) AS likes
+			FROM Posts p
+			LEFT JOIN Users u ON u.user_id = p.user_id
+			WHERE p.post_id = ?
+			GROUP BY p.post_id
+			ORDER BY p.created_at DESC
+		`, q)
+
+		postsFetchError = err
+		rows = queriedRows
+	case "user":
+		queriedRows, err := db.Database.Query(`
+			SELECT
+				p.*,
+				u.username,
+				u.user_image,
+				COALESCE(
+					(
+						SELECT JSON_ARRAYAGG(
+							JSON_OBJECT(
+								'username', lu.username,
+								'userImage', lu.user_image
+							)
+						)
+						FROM Likes l
+						LEFT JOIN Users lu ON lu.user_id = l.user_id
+						WHERE l.post_id = p.post_id
+					),
+					JSON_ARRAY()
+				) AS likes
+			FROM Posts p
+			LEFT JOIN Likes l ON l.post_id = p.post_id
+			LEFT JOIN Users u ON u.user_id = p.user_id
+			LEFT JOIN Users lu ON lu.user_id = l.user_id
+			WHERE u.username = ?
+			GROUP BY p.post_id
+			ORDER BY p.created_at DESC
+			LIMIT ? OFFSET ?
+		`, q, limit, offset)
+
+		postsFetchError = err
+		rows = queriedRows
+	default:
+		likeQuery := "%" + q + "%"
+		queriedRows, err := db.Database.Query(`
+			SELECT
+				p.*,
+				u.username,
+				u.user_image,
+				COALESCE(
+					(
+						SELECT JSON_ARRAYAGG(
+							JSON_OBJECT(
+								'username', lu.username,
+								'userImage', lu.user_image
+							)
+						)
+						FROM Likes l
+						LEFT JOIN Users lu ON lu.user_id = l.user_id
+						WHERE l.post_id = p.post_id
+					),
+					JSON_ARRAY()
+				) AS likes
+			FROM Posts p
+			LEFT JOIN Likes l ON l.post_id = p.post_id
+			LEFT JOIN Users u ON u.user_id = p.user_id
+			LEFT JOIN Users lu ON lu.user_id = l.user_id
+			WHERE title LIKE ? OR description LIKE ?
+			GROUP BY p.post_id
+			ORDER BY p.created_at DESC
+			LIMIT ? OFFSET ?
+		`, likeQuery, likeQuery, limit, offset)
+
+		postsFetchError = err
+		rows = queriedRows
 	}
 
-	filter := bson.M{
-		"$or": bson.A{
-			bson.M{
-				"title": bson.M{"$regex": q},
-			},
-			bson.M{
-				"description": bson.M{"$regex": q},
-			},
-		},
-	}
-
-	if fromUser == "true" {
-		filter = bson.M{"author": q}
-	}
-
-	id, idParseError := primitive.ObjectIDFromHex(q)
-
-	if idParseError == nil {
-		filter = bson.M{"_id": id}
-	}
-
-	cursor, postsFetchError := db.PostsCollection().Find(
-		r.Context(), filter,
-		options.Find().SetSort(bson.M{"createdAt": -1}),
-	)
+	defer rows.Close()
 
 	if postsFetchError != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("%v", postsFetchError)
+		ctx.Error("Failed to get posts", fasthttp.StatusInternalServerError)
 		return
 	}
 
 	var posts []models.Post
 
-	for cursor.Next(r.Context()) {
+	for rows.Next() {
 		var post models.Post
+		var likesJSON []uint8
 
-		postDecodeError := cursor.Decode(&post)
-
-		if postDecodeError != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			log.Printf("%v", postDecodeError)
+		if postsDecodeError := rows.Scan(
+			&post.PostID,
+			&post.Title,
+			&post.Description,
+			&post.PostImage,
+			&post.CreatedAt,
+			&post.UserID,
+			&post.Username,
+			&post.UserImage,
+			&likesJSON,
+		); postsDecodeError != nil {
+			ctx.Error("Failed to decode posts", fasthttp.StatusInternalServerError)
 			return
 		}
+
+		var likes []models.LikedPerson
+
+		if unmarshalErr := json.Unmarshal([]byte(likesJSON), &likes); unmarshalErr != nil {
+			ctx.Error("Failed to decode likes", fasthttp.StatusInternalServerError)
+			return
+		}
+
+		post.Likes = likes
 
 		posts = append(posts, post)
 	}
@@ -76,14 +165,10 @@ func GetPostsBySearchTerm(w http.ResponseWriter, r *http.Request) {
 	postJSONBytes, jsonError := json.Marshal(posts)
 
 	if jsonError != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("%v", jsonError)
+		ctx.Error("Failed to encode posts as JSON", fasthttp.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-
-	w.WriteHeader(http.StatusOK)
-
-	fmt.Fprintf(w, "%s", postJSONBytes)
+	ctx.SetContentType("application/json")
+	ctx.Write(postJSONBytes)
 }

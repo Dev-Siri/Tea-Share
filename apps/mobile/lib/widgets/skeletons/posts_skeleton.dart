@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:skeletons/skeletons.dart';
+import "package:flutter/material.dart";
+import "package:skeletons/skeletons.dart";
 
 class PostsSkeleton extends StatelessWidget {
   const PostsSkeleton({ super.key });
@@ -9,9 +9,11 @@ class PostsSkeleton extends StatelessWidget {
     return ListView.builder(
       itemCount: 10,
       addAutomaticKeepAlives: true,
+      shrinkWrap: true,
+      physics: const ClampingScrollPhysics(),
       padding: const EdgeInsets.only(
-        left: 25,
-        right: 25,
+        left: 10,
+        right: 10,
         bottom: 25,
       ),
       itemBuilder: (BuildContext context, int index) => Card(
@@ -68,6 +70,7 @@ class PostsSkeleton extends StatelessWidget {
                     padding: const EdgeInsets.only(
                       top: 10,
                       left: 17,
+                      right: 17
                     ),
                   ),
                 ),

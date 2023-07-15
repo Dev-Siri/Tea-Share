@@ -1,30 +1,16 @@
 package routes
 
 import (
-	"net/http"
-	error_handlers "tea-share/controllers/errors"
 	user_controllers "tea-share/controllers/users"
+
+	"github.com/fasthttp/router"
 )
 
-func RegisterUserRoutes(server *http.ServeMux) {
-	go server.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case http.MethodGet:
-			user_controllers.GetUsers(w, r)
-		case http.MethodPost:
-			user_controllers.CreateUser(w, r)
-		case http.MethodPut:
-			user_controllers.UpdateUser(w, r)
-		default:
-			error_handlers.MethodNotAllowed(w, r)
-		}
-	})
-
-	go server.HandleFunc("/users/search", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodGet {
-			user_controllers.GetUsersByName(w, r)
-		} else {
-			error_handlers.MethodNotAllowed(w, r)
-		}
-	})
+func RegisterUserRoutes(router *router.Router) {
+	go router.GET("/users", user_controllers.GetUsers)
+	go router.GET("/users/search", user_controllers.GetUsersByName)
+	go router.POST("/users/signup", user_controllers.Signup)
+	go router.POST("/users/login", user_controllers.Login)
+	go router.PUT("/users/:id/update", user_controllers.UpdateUser)
+	go router.PUT("/users/reset-password", user_controllers.ResetPassword)
 }

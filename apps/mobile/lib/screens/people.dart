@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tea_share/models/user_model.dart';
-import 'package:tea_share/services/users_service.dart';
-import 'package:tea_share/widgets/skeletons/users_skeleton.dart';
-import 'package:tea_share/widgets/user_tile.dart';
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:tea_share/models/user_model.dart";
+import "package:tea_share/services/users_service.dart";
+import "package:tea_share/widgets/skeletons/users_skeleton.dart";
+import "package:tea_share/widgets/user_tile.dart";
 
 class People extends StatefulWidget {
   const People({ super.key });
@@ -61,7 +61,12 @@ class _PeopleState extends State<People> {
           
           for (UserModel user in usersResponse.users!) {
             delay = delay.then((_) => Future.delayed(const Duration(milliseconds: 50), () {
-                _users.add(UserTile(user: user));
+                _users.add(
+                  UserTile(
+                    username: user.username,
+                    userImage: user.userImage,
+                  )
+                );
                 _userListState.currentState?.insertItem(_users.length - 1);
               })
             );

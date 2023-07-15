@@ -2,45 +2,42 @@ package post_controllers
 
 import (
 	"encoding/json"
-	"fmt"
-	"io"
-	"log"
-	"net/http"
 	"tea-share/db"
 	"tea-share/models"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/valyala/fasthttp"
 )
 
-func CreatePost(w http.ResponseWriter, r *http.Request) {
-	body, bodyReadError := io.ReadAll(r.Body)
+func CreatePost(ctx *fasthttp.RequestCtx) {
+	var post models.Post
 
-	if bodyReadError != nil {
-		w.WriteHeader(http.StatusOK)
-		log.Printf("Failed to read request body")
+	if bodyDecodeError := json.Unmarshal(ctx.PostBody(), &post); bodyDecodeError != nil {
+		ctx.Error("Failed to read post contents", fasthttp.StatusBadRequest)
 		return
 	}
 
-	var post models.Post = models.Post{
-		CreatedAt:   time.Now().UTC(),
-		People:      []string{},
-		PeopleImage: []string{},
-	}
+	uploadedImageUrl, imageUploadError := db.UploadDataURL(
+		post.PostImage,
+		"posts/"+uuid.NewString(),
+	)
 
-	if bodyParseError := json.Unmarshal(body, &post); bodyParseError != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("Failed to parse request body")
+	if imageUploadError != nil {
+		ctx.Error("Failed to upload post image", fasthttp.StatusInternalServerError)
 		return
 	}
 
-	result, dbInsertError := db.PostsCollection().InsertOne(r.Context(), post)
+	_, dbInsertError := db.Database.Query(`
+		INSERT INTO Posts(post_id, title, description, post_image, created_at, user_id)
+		VALUES ( ?, ?, ?, ?, ?, ? )
+	;`, uuid.NewString(), post.Title, post.Description, uploadedImageUrl, time.Now().UTC(), post.UserID)
 
 	if dbInsertError != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("Failed to create post")
+		ctx.Error("Failed to create post", fasthttp.StatusInternalServerError)
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-
-	fmt.Fprintf(w, "Inserted post with ID: %v", result.InsertedID)
+	ctx.SetStatusCode(fasthttp.StatusCreated)
+	ctx.Write([]byte("Post created successfully"))
 }

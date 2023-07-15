@@ -1,12 +1,12 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
-import 'package:tea_share/constants.dart';
-import 'package:tea_share/env/secret_keys.dart' show BACKEND_URL;
-import 'package:tea_share/models/user_model.dart';
-import 'package:tea_share/utils/storage.dart';
+import "package:flutter/foundation.dart";
+import "package:google_sign_in/google_sign_in.dart";
+import "package:http/http.dart" as http;
+import "package:jwt_decoder/jwt_decoder.dart";
+import "package:shared_preferences/shared_preferences.dart";
+import "package:tea_share/constants.dart";
+import "package:tea_share/models/user_model.dart";
 
 class UsersServiceResponse {
   final bool successful;
@@ -21,139 +21,164 @@ class UsersServiceResponse {
   });
 }
 
-class UserService with Storage {
-  final FirebaseAuth _firebaseAuth;
-
-  UserService(this._firebaseAuth);
-  
+class UserService {
+  static const _usersUrl = "$backendUrl/users";
   static const Map<String, String> _headers = {
-    'Content-Type': 'application/json; charset=UTF-8',
+    "Content-Type": "application/json; charset=UTF-8",
   };
 
-  User? get user => _firebaseAuth.currentUser;
+  Future<UserModel?> get user async {
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final String? authToken = sharedPreferences.getString("auth_token");
+
+    if (authToken != null) {
+      final Map<String, dynamic> userMap = JwtDecoder.decode(authToken);
+      return UserModel.fromJson(userMap);
+    }
+
+    return null;
+  }
 
   List<UserModel> _decodeUsers(http.Response response) {
-    final List body = jsonDecode(response.body);
+    final List? body = jsonDecode(response.body);
+
+    if (body == null) return [];
+
     final List<UserModel> users = body.map((final user) => UserModel.fromJson(user)).toList();
 
     return users;
   }
-  
-  Future<void> updateProfile({ required UserModel user }) async {
-    final StorageResponse imageResponse = await uploadImage(
-      imagePath: user.image,
-      type: "users"
-    );
 
-    await _firebaseAuth.currentUser!.updateDisplayName(user.username);
-    await _firebaseAuth.currentUser!.updateEmail(user.email);
-    await _firebaseAuth.currentUser!.updatePhotoURL(imageResponse.imageUrl);
+  Future<void> updateProfile({ required String username, required Uint8List userImage, required String email }) async {
+    final currentUser = await user;
+
+    if (currentUser == null) return;
 
     await http.put(
-      Uri.parse("$BACKEND_URL/user?id=${user.id}"),
+      Uri.parse("$_usersUrl/${currentUser.userId}/update"),
       headers: _headers,
       body: jsonEncode({
-        'username': user.username,
-        'image': user.image,
-        'email': user.email,
+        "username": username,
+        "userImage": userImage,
+        "email": email,
       })
     );
   }
 
-  Future<void> _createUser(UserModel user) async => await http.post(
-    Uri.parse("$BACKEND_URL/users"),
-    headers: _headers,
-    body: jsonEncode({
-      'username': user.username,
-      'email': user.email,
-      'image': user.image,
-    })
-  );
-
-  Future<void> signOut() async => _firebaseAuth.signOut();
-
   Future<UsersServiceResponse> login({ required String email, required String password }) async {
-    try {
-      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+    final http.Response response = await http.post(
+      Uri.parse("$_usersUrl/login"),
+      headers: _headers,
+      body: jsonEncode({
+        "email": email,
+        "password": password
+      })
+    );
 
-      return UsersServiceResponse(
-        successful: true
-      );
-    } on FirebaseAuthException catch (error) {
-      return UsersServiceResponse(
-        successful: false,
-        errorMessage: error.message
-      );
+    if (response.statusCode == 200) {
+      Map<String, dynamic> authResponse = jsonDecode(response.body);
+
+      final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      sharedPreferences.setString("auth_token", authResponse["token"]!);
+
+      return UsersServiceResponse(successful: true);
     }
-  }
 
-  Future<UsersServiceResponse> signUp({ required String email, required String password, required String username }) async {
-    try {
-      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-      await _firebaseAuth.currentUser?.updatePhotoURL(DEFAULT_IMAGE_URL);
-      await _firebaseAuth.currentUser?.updateDisplayName(username);
-
-      await _createUser(
-        UserModel(
-          email: email,
-          image: DEFAULT_IMAGE_URL,
-          username: username,
-        )
-      );
-      
-      return UsersServiceResponse(
-        successful: true
-      );
-    } on FirebaseAuthException catch (error) {
-      return UsersServiceResponse(
-        successful: false,
-        errorMessage: error.message
-      );
-    }
+    return UsersServiceResponse(
+      successful: false,
+      errorMessage: response.body
+    );
   }
 
   Future<UsersServiceResponse> signInWithGoogle() async {
     try {
-      await _firebaseAuth.signInWithProvider(GoogleAuthProvider());
-      await _createUser(
-        UserModel(
-          username: _firebaseAuth.currentUser!.displayName!,
-          email: _firebaseAuth.currentUser!.email!,
-          image: _firebaseAuth.currentUser!.photoURL!,
-        )
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: [
+          "email",
+          "profile",
+        ],
       );
-      
-      return UsersServiceResponse(
-        successful: true
+      final GoogleSignInAccount? account = await googleSignIn.signIn();
+
+      if (account == null) {
+        return UsersServiceResponse(
+          successful: false,
+          errorMessage: "Something went wrong. We weren't able to get your account information."
+        );
+      }
+
+      final http.Response signupResponse = await http.post(
+        Uri.parse("$_usersUrl/signup"),
+        headers: _headers,
+        body: jsonEncode({
+          "authProvider": "google",
+          "username": account.displayName,
+          "userImage": account.photoUrl,
+          "email": account.email,
+        })
       );
-    } on FirebaseAuthException catch (error) {
+
+      if (signupResponse.statusCode == 201) {
+        Map<String, dynamic> authResponse = jsonDecode(signupResponse.body);
+
+        final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        sharedPreferences.setString("auth_token", authResponse["token"]!);
+
+        return UsersServiceResponse(successful: true);
+      }
+
       return UsersServiceResponse(
         successful: false,
-        errorMessage: error.message
+        errorMessage: signupResponse.body
+      );
+    } catch (error) {
+      return UsersServiceResponse(
+        successful: false,
+        errorMessage: "An error occured while trying to log you in with Google."
       );
     }
   }
 
-  Future<UsersServiceResponse> fetchUsers({ int? limit, int? page }) async {
-    final http.Response response = await http.get(Uri.parse('$BACKEND_URL/users?page=$page&limit=$limit'));
+  Future<void> signOut() async {
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    if (response.statusCode == 200) {
-      final List<UserModel> users = await compute(_decodeUsers, response);
+    sharedPreferences.remove("auth_token");
+  }
 
-      return UsersServiceResponse(
-        successful: true,
-        users: users
-      );
+  Future<UsersServiceResponse> signup({ required String username, required String email, required String password }) async {
+    final http.Response defaultPfpResponse = await http.get(Uri.parse("$randomPfpUrl/profile-image?name=$username"));
+    final Uint8List imageBytes = defaultPfpResponse.bodyBytes;
+    final String base64Image = base64Encode(imageBytes);
+    final String? mimeType = defaultPfpResponse.headers["content-type"];
+
+    final http.Response signupResponse = await http.post(
+      Uri.parse("$_usersUrl/signup"),
+      headers: _headers,
+      body: jsonEncode({
+        "username": username,
+        "userImage": "data:$mimeType;base64,$base64Image",
+        "email": email,
+        "password": password,
+      })
+    );
+
+    if (signupResponse.statusCode == 201) {
+      Map<String, dynamic> authResponse = jsonDecode(signupResponse.body);
+
+      final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      sharedPreferences.setString("auth_token", authResponse["token"]!);
+
+      return UsersServiceResponse(successful: true);
     }
 
     return UsersServiceResponse(
       successful: false,
-      errorMessage: 'Failed to get people.\nThe server responded with a status code of ${response.statusCode}'
+      errorMessage: signupResponse.body
     );
   }
 
-  Future<UsersServiceResponse> fetchUserByName({ required String name, bool? exact = false }) async {
-    final http.Response response = await http.get(Uri.parse('$BACKEND_URL/users/search?name=$name&exact=$exact'));
+  Future<UsersServiceResponse> fetchUsers({ int? limit, int? page }) async {
+    final http.Response response = await http.get(Uri.parse("$_usersUrl?page=$page&limit=$limit"));
 
     if (response.statusCode == 200) {
       final List<UserModel> users = await compute(_decodeUsers, response);
@@ -166,7 +191,25 @@ class UserService with Storage {
 
     return UsersServiceResponse(
       successful: false,
-      errorMessage: 'Failed to get user with name.\nThe server responded with a status code of ${response.statusCode}'
+      errorMessage: "Failed to get people.\nThe server responded with a status code of ${response.statusCode}"
+    );
+  }
+
+  Future<UsersServiceResponse> fetchUserByName({ required String name, required int page, required int limit, bool? exact = false }) async {
+    final http.Response response = await http.get(Uri.parse("$_usersUrl/search?name=$name&exact=$exact&page=$page&limit=$limit"));
+
+    if (response.statusCode == 200) {
+      final List<UserModel> users = await compute(_decodeUsers, response);
+
+      return UsersServiceResponse(
+        successful: true,
+        users: users
+      );
+    }
+
+    return UsersServiceResponse(
+      successful: false,
+      errorMessage: "Failed to get user with name.\nThe server responded with a status code of ${response.statusCode}"
     );
   }
 }

@@ -3,14 +3,17 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
-	error_handlers "tea-share/controllers/errors"
 	"tea-share/db"
+	"tea-share/email"
 	"tea-share/env"
+	"tea-share/hash"
 	"tea-share/middleware"
+	"tea-share/routes"
 
+	"github.com/fasthttp/router"
 	"github.com/joho/godotenv"
+	"github.com/valyala/fasthttp"
 )
 
 func main() {
@@ -19,40 +22,35 @@ func main() {
 		return
 	}
 
-	port := env.GetPort()
-
-	addr := fmt.Sprintf(":%s", port)
+	addr := ":" + env.GetPort()
 
 	fmt.Printf("Server running on %s\n", addr)
 
-	dbURL := os.Getenv("MONGO_CONNECTION_URL")
+	dbURL := os.Getenv("DSN")
 
-	if err := db.Connect(dbURL, "Tea-Share"); err != nil {
+	if err := db.Connect(dbURL); err != nil {
 		log.Printf("%v", err)
 		return
 	}
 
-	server := http.NewServeMux()
+	if err := hash.InitHash(); err != nil {
+		log.Printf("%v", err)
+		return
+	}
 
-	go server.HandleFunc("/", error_handlers.NotFound)
+	if err := db.FileUploadInit(); err != nil {
+		log.Printf("%v", err)
+		return
+	}
 
-	go server.HandleFunc("/progress-tracker", func(w http.ResponseWriter, r *http.Request) {
-		bytes, err := os.ReadFile("progress-tracker.txt")
+	go email.InitEmail()
 
-		if err != nil {
-			http.Error(w, "Failed to read progress tracker", http.StatusInternalServerError)
-			return
-		}
+	router := router.New()
 
-		fmt.Fprint(w, string(bytes))
-	})
+	routes.RegisterPostRoutes(router)
+	routes.RegisterUserRoutes(router)
 
-	// go routes.RegisterPostRoutes(server)
-	// go routes.RegisterUserRoutes(server)
-
-	handler := middleware.CorsMiddleware(server)
-
-	if err := http.ListenAndServe(addr, handler); err != nil {
+	if err := fasthttp.ListenAndServe(addr, middleware.CORS(router.Handler)); err != nil {
 		log.Printf("%v", err)
 	}
 }

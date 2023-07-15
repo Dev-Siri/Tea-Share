@@ -65,7 +65,15 @@ body {
   }
 
   .btn {
-    @apply bg-primary p-10px hover:bg-primary-dark border-px border-primary flex w-36
+    @apply bg-primary p-10px hover:bg-primary-dark border-px border-primary flex
     cursor-pointer items-center justify-center rounded-md text-center text-white duration-200;
   }
+}
+
+#user-dropdown + #user-dropdown-menu {
+  @apply hidden;
+}
+
+#user-dropdown:checked + #user-dropdown-menu {
+  @apply block;
 }

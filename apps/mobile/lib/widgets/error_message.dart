@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class ErrorMessage extends StatelessWidget {
   final IconData icon;
@@ -22,7 +22,7 @@ class ErrorMessage extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8.0),
+          padding: const EdgeInsets.only(top: 8),
           child: Text(message,
           textAlign: TextAlign.center,
             style: const TextStyle(

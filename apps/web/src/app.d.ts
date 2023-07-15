@@ -9,41 +9,18 @@ declare global {
 
 export type Theme = "light" | "dark";
 
-export interface Post {
-  _id: string;
+export interface Post extends Omit<User, "email"> {
+  postId: string;
   title: string;
   description: string;
-  author: string;
-  authorImage: string;
-  image: string;
+  postImage: string;
   createdAt: string;
-  people: string[];
-  peopleImage: string[];
+  likes: Pick<User, "username" | "userImage">[];
 }
 
-export interface MongoDBUser {
+export interface User {
+  userId: string;
   username: string;
-  image: string;
-  _id: string;
+  userImage: string;
   email: string;
-}
-
-export interface FirebaseUser {
-  name: string;
-  picture: string;
-  iss: string;
-  aud: string;
-  auth_time: number;
-  user_id: string;
-  sub: string;
-  iat: number;
-  exp: number;
-  email: string;
-  email_verified: boolean;
-  firebase: {
-    identities: {
-      email: string[];
-    };
-    sign_in_provider: string;
-  };
 }

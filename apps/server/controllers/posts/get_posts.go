@@ -2,68 +2,82 @@ package post_controllers
 
 import (
 	"encoding/json"
-	"fmt"
-	"log"
-	"net/http"
-	"strconv"
 	"tea-share/db"
 	"tea-share/models"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/valyala/fasthttp"
 )
 
-func GetPosts(w http.ResponseWriter, r *http.Request) {
-	searchParams := r.URL.Query()
+func GetPosts(ctx *fasthttp.RequestCtx) {
+	searchParams := ctx.QueryArgs()
 
-	limitParam := searchParams.Get("limit")
-	pageParam := searchParams.Get("page")
+	page := searchParams.GetUintOrZero("page")
+	limit := searchParams.GetUintOrZero("limit")
 
-	limit, limitParseError := strconv.Atoi(limitParam)
+	offset := (page - 1) * limit
 
-	if limitParseError != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		log.Printf("Failed to parse `limit` as integer")
-		return
-	}
-
-	page, pageParseError := strconv.Atoi(pageParam)
-
-	if pageParseError != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		log.Printf("Failed to parse `page` as integer")
-		return
-	}
-
-	startIndex := (page - 1) * limit
-
-	cursor, postsFetchError := db.PostsCollection().Find(
-		r.Context(), bson.D{},
-		options.Find().SetSkip(int64(startIndex)),
-		options.Find().SetLimit(int64(limit)),
-		options.Find().SetSort(bson.M{"createdAt": -1}),
-	)
+	rows, postsFetchError := db.Database.Query(`
+		SELECT
+			p.*,
+			u.username,
+			u.user_image,
+			COALESCE(
+				(
+					SELECT JSON_ARRAYAGG(
+						JSON_OBJECT(
+							'username', lu.username,
+							'userImage', lu.user_image
+						)
+					)
+					FROM Likes l
+					LEFT JOIN Users lu ON lu.user_id = l.user_id
+					WHERE l.post_id = p.post_id
+				),
+				JSON_ARRAY()
+			) AS likes
+		FROM Posts p
+		LEFT JOIN Users u ON u.user_id = p.user_id
+		GROUP BY p.post_id
+		ORDER BY p.created_at DESC
+		LIMIT ? OFFSET ?
+	;`, limit, offset)
 
 	if postsFetchError != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("%v", postsFetchError)
+		ctx.Error("Failed to get posts", fasthttp.StatusInternalServerError)
 		return
 	}
 
-	defer cursor.Close(r.Context())
+	defer rows.Close()
 
 	var posts []models.Post
 
-	for cursor.Next(r.Context()) {
+	for rows.Next() {
 		var post models.Post
+		var likesJSON []uint8
 
-		postDecodeError := cursor.Decode(&post)
-
-		if postDecodeError != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			log.Printf("%v", postDecodeError)
+		if postDecodeError := rows.Scan(
+			&post.PostID,
+			&post.Title,
+			&post.Description,
+			&post.PostImage,
+			&post.CreatedAt,
+			&post.UserID,
+			&post.Username,
+			&post.UserImage,
+			&likesJSON,
+		); postDecodeError != nil {
+			ctx.Error("Failed to decode posts", fasthttp.StatusInternalServerError)
 			return
 		}
+
+		var likes []models.LikedPerson
+
+		if unmarshalErr := json.Unmarshal([]byte(likesJSON), &likes); unmarshalErr != nil {
+			ctx.Error("Failed to decode likes", fasthttp.StatusInternalServerError)
+			return
+		}
+
+		post.Likes = likes
 
 		posts = append(posts, post)
 	}
@@ -71,12 +85,10 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 	postJSONBytes, jsonError := json.Marshal(posts)
 
 	if jsonError != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("%v", jsonError)
+		ctx.Error("Failed to encode posts as JSON", fasthttp.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-
-	fmt.Fprintf(w, "%s", postJSONBytes)
+	ctx.SetContentType("application/json")
+	ctx.Write(postJSONBytes)
 }

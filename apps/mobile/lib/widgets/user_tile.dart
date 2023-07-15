@@ -1,14 +1,15 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-
-import 'package:tea_share/models/user_model.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:flutter/material.dart";
+import "package:tea_share/models/user_model.dart";
 
 class UserTile extends StatefulWidget {
-  final UserModel? user;
+  final String username;
+  final String userImage;
 
   const UserTile({
     super.key,
-    required this.user
+    required this.username,
+    required this.userImage
   });
 
   @override
@@ -23,33 +24,27 @@ class _UserTileState extends State<UserTile> {
     return MaterialButton(
       onPressed: () => Navigator.pushNamed(
         context,
-        '/other-profile',
+        "/other-profile",
         arguments: UserModel(
-          username: widget.user!.username,
-          image: widget.user!.image,
-          email: widget.user!.email,
-        )
+          username: widget.username,
+          userImage: widget.userImage,
+          email: ""
+        ),
       ),
       padding: EdgeInsets.zero,
       child: ListTile(
-        title: Text(widget.user?.username ?? ""),
+        title: Text(widget.username),
         leading: Visibility(
-          visible: widget.user?.image != null,
-          replacement: const Center(
-            child: CircularProgressIndicator(),
+          visible: !_errorOccurred,
+          replacement: const Icon(Icons.error,
+            color: Colors.red,
           ),
-          child: Visibility(
-            visible: !_errorOccurred,
-            replacement: const Icon(Icons.error,
-              color: Colors.red,
-            ),
-            child: Hero(
-              tag: widget.user!.email,
-              child: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(
-                  widget.user!.image,
-                  errorListener: () => setState(() => _errorOccurred = true)
-                ),
+          child: Hero(
+            tag: widget.userImage,
+            child: CircleAvatar(
+              backgroundImage: CachedNetworkImageProvider(
+                widget.userImage,
+                errorListener: () => setState(() => _errorOccurred = true)
               ),
             ),
           ),

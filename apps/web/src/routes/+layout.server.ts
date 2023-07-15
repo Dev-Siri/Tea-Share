@@ -1,16 +1,19 @@
 import { redirect } from "@sveltejs/kit";
+import jwtDecode from "jwt-decode";
 
-export const load = ({ cookies, url }) => {
-  if (url.pathname !== "/info") throw redirect(307, "/info");
+import type { Theme, User } from "../app";
+import type { LayoutServerLoad } from "./$types";
 
-  // const theme: Theme = (cookies.get("theme") as Theme) || "light";
+export const load: LayoutServerLoad = ({ cookies, url }) => {
+  const theme: Theme = (cookies.get("theme") as Theme) || "light";
 
-  // const authToken = cookies.get("auth_token");
+  const authToken = cookies.get("auth_token");
+  const notOnUnprotectedRoutes = url.pathname !== "/auth" && url.pathname !== "/reset-password" && url.pathname !== "/terms-of-service";
 
-  // if (!authToken && url.pathname !== "/auth" && url.pathname !== "/reset-password") throw redirect(303, "/auth");
+  if (!authToken && notOnUnprotectedRoutes) throw redirect(303, "/auth");
 
-  // return {
-  //   theme,
-  //   user: url.pathname !== "/auth" && url.pathname !== "/reset-password" ? jwtDecode<FirebaseUser>(authToken!) : null,
-  // };
+  return {
+    theme,
+    user: notOnUnprotectedRoutes ? jwtDecode<User>(authToken!) : null,
+  };
 };

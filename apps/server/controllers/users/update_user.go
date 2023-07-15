@@ -2,57 +2,44 @@ package user_controllers
 
 import (
 	"encoding/json"
-	"io"
-	"log"
-	"net/http"
 	"tea-share/db"
 	"tea-share/models"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"github.com/google/uuid"
+	"github.com/valyala/fasthttp"
 )
 
-func UpdateUser(w http.ResponseWriter, r *http.Request) {
-	body, bodyReadError := io.ReadAll(r.Body)
-	searchParams := r.URL.Query()
+func UpdateUser(ctx *fasthttp.RequestCtx) {
+	userId := ctx.UserValue("id")
 
-	id := searchParams.Get("id")
+	var updatedUser models.User
 
-	if id == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		log.Printf("Search param `id` not provided")
+	if bodyReadError := json.Unmarshal(ctx.PostBody(), &updatedUser); bodyReadError != nil {
+		ctx.Error("Failed to read updated user", fasthttp.StatusBadRequest)
 		return
 	}
 
-	userID, idParseError := primitive.ObjectIDFromHex(id)
-
-	if idParseError != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		log.Printf("Search param `id` is not a valid ObjectID")
-		return
-	}
-
-	if bodyReadError != nil {
-		w.WriteHeader(http.StatusOK)
-		log.Printf("Failed to read request body")
-		return
-	}
-
-	var user models.User
-
-	if bodyParseError := json.Unmarshal(body, &user); bodyParseError != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Printf("Failed to parse request body")
-		return
-	}
-
-	db.UsersCollection().FindOneAndUpdate(
-		r.Context(),
-		bson.M{"_id": userID},
-		bson.M{
-			"$set": user,
-		},
+	newUploadedImage, imageUploadError := db.UploadDataURL(
+		updatedUser.UserImage,
+		"users/"+uuid.NewString(),
 	)
 
-	w.WriteHeader(http.StatusNoContent)
+	if imageUploadError != nil {
+		ctx.Error("Failed to upload new profile picture", fasthttp.StatusInternalServerError)
+		return
+	}
+
+	_, dbUpdateError := db.Database.Query(`
+		UPDATE Users
+		SET username = ?,
+			email = ?
+		WHERE user_id = ?
+	 ;`, updatedUser.Username, updatedUser.Email, newUploadedImage, userId)
+
+	if dbUpdateError != nil {
+		ctx.Error("Failed to update your profile", fasthttp.StatusInternalServerError)
+		return
+	}
+
+	ctx.SetStatusCode(fasthttp.StatusNoContent)
 }
