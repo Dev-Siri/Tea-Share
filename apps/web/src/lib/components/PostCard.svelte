@@ -23,9 +23,9 @@
       return `You and ${people.length - 1} ${people.length - 1 === 1 ? "other" : "others"}`;
     }
 
-    if (people.length - 1 === 0) return `${people[0]} liked this post`;
+    if (people.length - 1 === 0) return `${people[0]?.username ?? "Someone"} liked this post`;
 
-    return `${people[0]} and ${people.length - 1} others`;
+    return `${people[0]?.username ?? "Someone"} and ${people.length - 1} others`;
   };
 
   let formattedLikes = formatLikes(likes);
