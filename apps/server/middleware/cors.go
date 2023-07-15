@@ -12,12 +12,6 @@ func CORS(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 		ctx.Response.Header.Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, OPTIONS")
 		ctx.Response.Header.Set("Access-Control-Allow-Headers", "Content-Type")
 
-		if string(ctx.Method()) == fasthttp.MethodOptions {
-			ctx.Response.Header.Set("Access-Control-Allow-Credentials", "true")
-			ctx.SetStatusCode(fasthttp.StatusOK)
-			return
-		}
-
 		next(ctx)
 	})
 }

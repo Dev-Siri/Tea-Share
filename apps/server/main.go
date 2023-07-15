@@ -47,8 +47,10 @@ func main() {
 
 	router := router.New()
 
-	routes.RegisterPostRoutes(router)
-	routes.RegisterUserRoutes(router)
+	router.HandleOPTIONS = true
+
+	go routes.RegisterPostRoutes(router)
+	go routes.RegisterUserRoutes(router)
 
 	if err := fasthttp.ListenAndServe(addr, middleware.CORS(router.Handler)); err != nil {
 		log.Printf("%v", err)
