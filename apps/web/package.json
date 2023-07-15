@@ -13,31 +13,31 @@
     "format": "prettier --plugin-search-dir . --write ."
   },
   "devDependencies": {
-    "@sveltejs/kit": "^1.22.1",
+    "@sveltejs/kit": "^1.22.3",
     "@tea-share/packages": "workspace:*",
-    "@typescript-eslint/eslint-plugin": "^5.61.0",
-    "@typescript-eslint/parser": "^5.61.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "^10.4.14",
-    "eslint": "^8.44.0",
+    "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-svelte": "^2.32.2",
-    "postcss": "^8.4.25",
+    "postcss": "^8.4.26",
     "prettier": "^3.0.0",
     "prettier-plugin-svelte": "^2.10.1",
     "svelte": "^4.0.5",
-    "svelte-check": "^3.4.5",
+    "svelte-check": "^3.4.6",
     "svelte-toggle": "^4.0.0",
-    "tailwindcss": "^3.3.2",
+    "tailwindcss": "^3.3.3",
     "tslib": "^2.6.0",
     "typescript": "^5.1.6",
-    "vite": "^4.4.2"
+    "vite": "^4.4.4"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.0.5",
-    "@sveltejs/adapter-vercel": "^3.0.1",
+    "@sveltejs/adapter-vercel": "^3.0.2",
     "google-auth-library": "^8.9.0",
     "jwt-decode": "^3.1.2",
-    "sharp": "^0.32.1",
+    "sharp": "^0.32.3",
     "svelte-icons": "^2.1.0",
     "svelte-loading-spinners": "^0.3.4"
   }

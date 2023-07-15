@@ -54,21 +54,23 @@ key.properties
 
 coverage
 
+.svelte-kit
 .next
-out
 build
+out
 
 *.pem
+
+/apps/web/package
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+vite.config.ts.timestamp-*
+vite.config.js.timestamp-*
 
 .vercel
-google-services.json
-firebase_app_id_file.json
-GoogleService-Info.plist
 
 **/dgph
 *.mode1v3
@@ -104,10 +106,7 @@ GeneratedPluginRegistrant.*
 !default.pbxuser
 !default.perspectivev3
 
-apps/web/.vscode
-
 apps/pfp-generator/.vscode
 
 bin
 keys
-env.dart

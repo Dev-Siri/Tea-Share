@@ -10,7 +10,7 @@
 
 <article class="p-10 pb-32 overflow-y-auto h-screen">
   {#if !$user}
-    <a href="/auth" class="btn gap-2 w-52 flex items-center">
+    <a href="/auth" class="btn gap-2 mb-3 w-52 flex items-center">
       <div class="h-4">
         <FaArrowLeft />
       </div>
