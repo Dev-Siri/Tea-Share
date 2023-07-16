@@ -6,6 +6,7 @@ import queryClient from "$lib/utils/queryClient";
 
 export const config: Config = {
   runtime: "edge",
+  split: true
 };
 
 export const load: PageServerLoad = async () => {
