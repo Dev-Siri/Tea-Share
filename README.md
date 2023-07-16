@@ -102,16 +102,10 @@ $ pnpm preview
 
 #### Server
 
-To compile the optimal server version, run:
+To compile the server version, run:
 
 ```sh
-$ go build -tags netgo -ldflags "-extldflags '-static' -s -w" -gcflags "all=-N -l -B -C -S -D -M" -o bin/tea-share
-```
-
-This creates a more optimized binary but takes a lot longer && results in a larger output. But you can also compile without -gcflags which will create a smaller binary much faster but it will run slightly slower than the optimized one.
-
-```sh
-$ go build -tags netgo -ldflags '-s -w' -o tea-share
+$ go build -ldflags "-extldflags '-static' -s -w" -o bin/tea-share
 ```
 
 Then run the binary:

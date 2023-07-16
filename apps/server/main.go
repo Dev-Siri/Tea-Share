@@ -48,6 +48,7 @@ func main() {
 	router := router.New()
 
 	router.HandleOPTIONS = true
+	router.HandleMethodNotAllowed = true
 
 	go routes.RegisterHealthRoutes(router)
 	go routes.RegisterPostRoutes(router)
