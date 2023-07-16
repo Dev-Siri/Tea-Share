@@ -1,10 +1,8 @@
 import { ImageResponse } from "@vercel/og";
 
-import type { ServerRuntime } from "next";
-
 import { getRandomColor } from "../utils";
 
-export const runtime: ServerRuntime = "edge";
+export const runtime = "edge";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
