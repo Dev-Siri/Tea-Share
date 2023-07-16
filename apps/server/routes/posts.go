@@ -7,8 +7,8 @@ import (
 )
 
 func RegisterPostRoutes(router *router.Router) {
-	go router.GET("/posts", post_controllers.GetPosts)
-	go router.GET("/posts/search", post_controllers.GetPostsBySearchTerm)
-	go router.POST("/posts", post_controllers.CreatePost)
-	go router.PATCH("/posts/{id}/like", post_controllers.LikePost)
+	router.GET("/posts", post_controllers.GetPosts)
+	router.GET("/posts/search", post_controllers.GetPostsBySearchTerm)
+	router.POST("/posts", post_controllers.CreatePost)
+	router.PATCH("/posts/{id}/like", post_controllers.LikePost)
 }

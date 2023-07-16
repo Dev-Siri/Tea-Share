@@ -50,9 +50,9 @@ func main() {
 	router.HandleOPTIONS = true
 	router.HandleMethodNotAllowed = true
 
-	go routes.RegisterHealthRoutes(router)
-	go routes.RegisterPostRoutes(router)
-	go routes.RegisterUserRoutes(router)
+	routes.RegisterHealthRoutes(router)
+	routes.RegisterPostRoutes(router)
+	routes.RegisterUserRoutes(router)
 
 	log.Fatal(fasthttp.ListenAndServe(addr, middleware.CORS(router.Handler)))
 }

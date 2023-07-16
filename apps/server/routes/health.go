@@ -7,5 +7,5 @@ import (
 )
 
 func RegisterHealthRoutes(router *router.Router) {
-	go router.GET("/health", health_controllers.GetHealthStatus)
+	router.GET("/health", health_controllers.GetHealthStatus)
 }
