@@ -3,6 +3,7 @@ package post_controllers
 import (
 	"tea-share/db"
 
+	"github.com/google/uuid"
 	"github.com/valyala/fasthttp"
 )
 
@@ -28,9 +29,9 @@ func LikePost(ctx *fasthttp.RequestCtx) {
 	}
 
 	db.Database.Query(`
-		INSERT INTO Likes(user_id, post_id)
-		VALUES ( ?, ? )
-	;`, userId, postId)
+		INSERT INTO Likes(like_id, user_id, post_id)
+		VALUES ( ?, ?, ? )
+	;`, uuid.NewString(), userId, postId)
 
 	ctx.SetStatusCode(fasthttp.StatusNoContent)
 }
