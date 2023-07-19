@@ -9,7 +9,11 @@
   import theme from "$lib/stores/theme";
   import Image from "./Image.svelte";
 
-  const toggleTheme = async (e: any) => {
+  const toggleTheme = async (
+    e: MouseEvent & {
+      currentTarget: EventTarget & HTMLButtonElement;
+    }
+  ) => {
     e.stopPropagation();
 
     const newTheme = $theme === "dark" ? "light" : "dark";

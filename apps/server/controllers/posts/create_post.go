@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"tea-share/db"
 	"tea-share/models"
+	"tea-share/utils"
 	"time"
 
 	"github.com/google/uuid"
@@ -15,6 +16,23 @@ func CreatePost(ctx *fasthttp.RequestCtx) {
 
 	if bodyDecodeError := json.Unmarshal(ctx.PostBody(), &post); bodyDecodeError != nil {
 		ctx.Error("Failed to read post contents", fasthttp.StatusBadRequest)
+		return
+	}
+
+	if len(post.Title) < 4 {
+		ctx.Error("Title too short", fasthttp.StatusBadRequest)
+		return
+	}
+
+	if len(post.Title) > 255 {
+		ctx.Error("Title too long", fasthttp.StatusBadRequest)
+		return
+	}
+
+	isValid, message := utils.IsValidUserID(post.UserID)
+
+	if !isValid {
+		ctx.Error(message, fasthttp.StatusBadRequest)
 		return
 	}
 

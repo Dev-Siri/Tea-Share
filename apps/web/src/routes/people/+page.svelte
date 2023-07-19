@@ -8,8 +8,8 @@
   let users = data.initialUsers;
   let currentPage = 1;
 
-  const loadMoreUsers = async (event: any) => {
-    const { scrollHeight, scrollTop, clientHeight } = event.target;
+  const loadMoreUsers = async (event: UIEvent & { currentTarget: EventTarget & HTMLElement }) => {
+    const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
 
     const didScrollToBottom: boolean = scrollHeight - scrollTop === clientHeight;
 

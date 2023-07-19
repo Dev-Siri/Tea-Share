@@ -2,6 +2,7 @@ package post_controllers
 
 import (
 	"tea-share/db"
+	"tea-share/utils"
 
 	"github.com/google/uuid"
 	"github.com/valyala/fasthttp"
@@ -25,6 +26,13 @@ func LikePost(ctx *fasthttp.RequestCtx) {
 
 	if countOfExistingPostIds != 0 {
 		ctx.Error("Already liked", fasthttp.StatusForbidden)
+		return
+	}
+
+	isValid, message := utils.IsValidUserID(userId)
+
+	if !isValid {
+		ctx.Error(message, fasthttp.StatusBadRequest)
 		return
 	}
 

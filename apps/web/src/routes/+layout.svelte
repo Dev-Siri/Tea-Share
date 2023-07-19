@@ -10,9 +10,9 @@
 
   export let data;
 
-  theme.set(data.theme);
+  theme.set(data.global.theme);
 
-  $: user.set(data.user!);
+  $: user.set(data.global.user!);
   $: if (browser) document.body.classList.replace($theme === "dark" ? "light" : "dark", $theme);
 </script>
 

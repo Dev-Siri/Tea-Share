@@ -14,14 +14,14 @@
   let isSignup = false;
   let loading = false;
   let errorOccured = false;
-  let previewImage: File | null = null;
+  let previewImage: File | undefined;
   let username: string = form?.username ?? "";
 
   $: handle = getHandle(username.trim() || "Username");
 
   const toggleMode = () => (isSignup = !isSignup);
-  const selectImage = (event: any) => (previewImage = event?.target?.files?.[0]);
-  const updateUsername = (event: any) => (username = event.target.value);
+  const selectImage = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => (previewImage = e?.currentTarget?.files?.[0]);
+  const updateUsername = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => (username = e?.currentTarget?.value);
 </script>
 
 <svelte:head>

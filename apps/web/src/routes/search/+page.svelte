@@ -15,8 +15,8 @@
   $: query = $page.url.searchParams.get("query") ?? "";
   $: type = ($page.url.searchParams.get("type") ?? "posts") as "posts" | "people";
 
-  const loadMoreItems = async (event: any) => {
-    const { scrollHeight, scrollTop, clientHeight } = event.target;
+  const loadMoreItems = async (event: UIEvent & { currentTarget: EventTarget & HTMLElement }) => {
+    const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
 
     const didScrollToBottom: boolean = scrollHeight - scrollTop === clientHeight;
 

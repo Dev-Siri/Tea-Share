@@ -1,4 +1,4 @@
-export const encodeToBase64 = async (image: File) => {
+export const encodeToBase64 = async (image: Blob) => {
   const imageBuffer = Buffer.from(await image.arrayBuffer());
   const base64Data = imageBuffer.toString("base64");
 

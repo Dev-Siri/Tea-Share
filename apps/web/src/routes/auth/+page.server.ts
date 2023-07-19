@@ -3,8 +3,6 @@ import { PRIVATE_GOOGLE_CLIENT_ID, PRIVATE_GOOGLE_CLIENT_SECRET } from "$env/sta
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { OAuth2Client } from "google-auth-library";
 
-import type { PageServerLoad } from "./$types";
-
 import { encodeToBase64 } from "$lib/server/encoding";
 import queryClient from "$lib/utils/queryClient";
 
@@ -94,6 +92,7 @@ export const actions: Actions = {
 
       throw redirect(301, "/");
     } catch (error) {
+      console.log(error);
       if (error instanceof Error)
         return {
           username,
@@ -121,10 +120,4 @@ export const actions: Actions = {
 
     throw redirect(302, authorizedUrl);
   },
-};
-
-export const load: PageServerLoad = ({ cookies }) => {
-  const authToken = cookies.get("auth_token");
-
-  if (authToken) throw redirect(301, "/");
 };

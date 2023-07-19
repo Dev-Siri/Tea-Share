@@ -8,7 +8,7 @@
 
 Tea Share is an online social media app for Android and the Web.
 It is built with **[Flutter](https://flutter.dev)** for mobile (~~iOS~~/Android) and **[SvelteKit](https://kit.svelte.dev)** for the web version. It uses **[MySQL](https://www.mysql.com)** hosted on [PlanetScale](https://planetscale.com) as the
-database, **[Go](https://go.dev)** as the server side language and **[GCP Storage](https://cloud.google.com)** throught Firebase Admin for authentication + storing all the user generated data.
+database, **[Go](https://go.dev)** as the server side language and **[GCP Storage](https://cloud.google.com)** through Firebase Admin.
 
 Currently, even though the Flutter project has a **iOS** folder, the iOS version is not configured for it and will not be available for a long time. (I don't have a MacBook)
 

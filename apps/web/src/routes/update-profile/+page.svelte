@@ -8,10 +8,10 @@
 
   export let form;
 
-  const selectImage = (event: any) => (previewImage = event?.target?.files?.[0]);
-
   let loading = false;
-  let previewImage: File | null = null;
+  let previewImage: File | undefined;
+
+  const selectImage = (event: Event & { currentTarget: EventTarget & HTMLInputElement }) => (previewImage = event?.currentTarget?.files?.[0]);
 </script>
 
 <form

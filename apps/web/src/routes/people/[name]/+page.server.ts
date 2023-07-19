@@ -41,6 +41,6 @@ export const load: PageServerLoad = async ({ params: { name } }) => {
 
   return {
     posts: usersPosts,
-    profileUser: users[0],
+    user: users[0],
   };
 };

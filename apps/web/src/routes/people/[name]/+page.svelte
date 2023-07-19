@@ -16,10 +16,10 @@
   let currentPage = 1;
   let paginatedPosts = data.posts;
 
-  const { username, userImage, userId } = data.profileUser;
+  const { username, userImage, userId } = data.user;
 
-  const loadMorePosts = async (event: any) => {
-    const { scrollHeight, scrollTop, clientHeight } = event.target;
+  const loadMorePosts = async (event: UIEvent & { currentTarget: EventTarget & HTMLElement }) => {
+    const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
 
     const didScrollToBottom: boolean = scrollHeight - scrollTop === clientHeight;
 

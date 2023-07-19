@@ -1,27 +1,27 @@
 import { fail, redirect, type Actions } from "@sveltejs/kit";
-import jwtDecode from "jwt-decode";
-
-import type { User } from "../../app";
 
 import { encodeToBase64 } from "$lib/server/encoding";
+import validatePostForm from "$lib/server/validation/post/validatePostFormSchema";
 import queryClient from "$lib/utils/queryClient";
 
 export const actions: Actions = {
-  async default({ request, cookies }) {
-    const authToken = cookies.get("auth_token");
-
-    if (!authToken) throw redirect(307, "/auth");
-
+  async default({ request, locals }) {
     const formData = await request.formData();
+    const data = Object.fromEntries(formData.entries());
 
-    const title = formData.get("title");
-    const description = formData.get("description");
-    const image = formData.get("image");
+    const postValidationResult = validatePostForm(data);
 
-    if (!title || !description || !image || title instanceof Blob || description instanceof Blob || typeof image === "string" || title.length < 4)
-      return fail(400, { incorrect: true });
+    if (!postValidationResult.success)
+      return fail(400, {
+        ...postValidationResult,
+        suppliedValues: {
+          title: data["title"],
+          description: data["description"],
+        },
+      });
 
-    const { userId } = jwtDecode<User>(authToken);
+    const { title, description, image } = postValidationResult.data;
+
     const encodedImage = await encodeToBase64(image);
 
     await queryClient("/posts", {
@@ -30,7 +30,7 @@ export const actions: Actions = {
         title,
         description,
         postImage: encodedImage,
-        userId,
+        userId: locals.user.userId,
       },
     });
 

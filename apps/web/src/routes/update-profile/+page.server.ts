@@ -1,5 +1,4 @@
-import { fail, redirect, type Actions } from "@sveltejs/kit";
-import jwtDecode from "jwt-decode";
+import { fail, type Actions } from "@sveltejs/kit";
 
 import type { User } from "../../app";
 
@@ -7,11 +6,7 @@ import { encodeToBase64 } from "$lib/server/encoding";
 import queryClient from "$lib/utils/queryClient";
 
 export const actions: Actions = {
-  async default({ request, cookies }) {
-    const authToken = cookies.get("auth_token");
-
-    if (!authToken) throw redirect(307, "/auth");
-
+  async default({ request, locals }) {
     const formData = await request.formData();
 
     const username = formData.get("username");
@@ -23,11 +18,9 @@ export const actions: Actions = {
         errorMessage: "The updated information you provided are invalid.",
       });
 
-    const { username: currentUsername } = jwtDecode<User>(authToken);
-
     const fetchedUsers = await queryClient<User[] | null>("/users/search", {
       searchParams: {
-        name: currentUsername,
+        name: locals.user.username,
         exact: true,
       },
     });
@@ -36,7 +29,7 @@ export const actions: Actions = {
 
     const encodedImage = encodeToBase64(image);
 
-    queryClient(`/users/${fetchedUsers[0].userId}/update`, {
+    await queryClient(`/users/${fetchedUsers[0].userId}/update`, {
       method: "PUT",
       body: {
         username,

@@ -19,6 +19,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "^10.4.14",
+    "encoding": "^0.1.13",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-svelte": "^2.32.2",
@@ -38,6 +39,7 @@
     "jwt-decode": "^3.1.2",
     "sharp": "^0.32.3",
     "svelte-icons": "^2.1.0",
-    "svelte-loading-spinners": "^0.3.4"
+    "svelte-loading-spinners": "^0.3.4",
+    "zod": "^3.21.4"
   }
 }

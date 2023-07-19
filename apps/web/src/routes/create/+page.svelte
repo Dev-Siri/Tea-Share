@@ -8,15 +8,16 @@
   export let form: ActionData;
 
   let loading = false;
-  let previewImage: File | null = null;
+  let previewImage: File | undefined;
 
-  const selectImage = (event: any) => (previewImage = event?.target?.files?.[0]);
+  const selectImage = (event: Event & { currentTarget: EventTarget & HTMLInputElement }) => (previewImage = event?.currentTarget?.files?.[0]);
 </script>
 
 <section class="h-screen w-full overflow-y-scroll">
   <form
     method="POST"
     class="flex w-full flex-col items-center py-2"
+    enctype="multipart/form-data"
     use:enhance={() => {
       loading = true;
     }}
@@ -25,20 +26,38 @@
       class="dark:bg-semi-gray bg-light-gray w-[90%] rounded-lg p-4 text-4xl font-light outline-none duration-200 dark:text-white"
       placeholder="Title"
       name="title"
+      value={form?.suppliedValues.title ?? ""}
+      minlength="4"
+      maxlength="255"
       required
     />
+    {#if !form?.success && form?.errors["title"]}
+      <p class="error">{form.errors["title"]}</p>
+    {/if}
     <textarea
-      class="dark:bg-semi-gray mt-3 bg-light-gray mb-4 w-[90%] rounded-lg p-4 pl-5 font-normal outline-none duration-200 dark:text-white"
+      class="dark:bg-semi-gray bg-light-gray my-1 w-[90%] rounded-lg p-4 font-normal outline-none duration-200 dark:text-white"
       placeholder="What's on your mind?"
       name="description"
       cols="30"
       rows="2"
+      value={form?.suppliedValues.description ?? ""}
+    />
+    {#if !form?.success && form?.errors["description"]}
+      <p class="error">{form.errors["description"]}</p>
+    {/if}
+    <input
+      class="h-0 w-0"
+      type="file"
+      name="image"
+      accept="image/*"
+      id="image-upload"
+      aria-label="Post File Upload"
+      on:change={selectImage}
       required
     />
-    <input class="hidden" type="file" name="image" id="image-upload" aria-label="Post File Upload" on:change={selectImage} required />
     <label
       for="image-upload"
-      class="flex border-2 border-gray-400 dark:border-gray-600 items-center justify-center flex-col rounded-xl cursor-pointer w-[90%]"
+      class="flex mt-4 border-2 border-gray-400 dark:border-gray-600 items-center justify-center flex-col rounded-xl cursor-pointer w-[90%]"
     >
       {#if previewImage}
         <img
@@ -57,10 +76,8 @@
         <p class="text-gray-500 mt-20 mb-16 px-8 text-center">It is recommended to upload images of type PNG, JPG, WEBP, AVIF or GIF.</p>
       {/if}
     </label>
-    {#if form?.incorrect}
-      <p class="mt-5 bg-red-300 text-red-900 border-red-900 font-bold w-[90%] text-center p-4 rounded-md border-2">
-        The provided information is invalid.
-      </p>
+    {#if !form?.success && form?.errors["image"]}
+      <p class="error">{form.errors["image"]}</p>
     {/if}
     <button
       type="submit"
@@ -73,3 +90,9 @@
     </button>
   </form>
 </section>
+
+<style lang="postcss">
+  .error {
+    @apply w-[90%] rounded-md p-2 text-red-300;
+  }
+</style>
