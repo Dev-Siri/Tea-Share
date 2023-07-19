@@ -9,15 +9,9 @@ export const handle: Handle = async ({ event, resolve }) => {
   const authToken = event.cookies.get("auth_token");
   const unProtectedRoutes = ["/auth", "/reset-password", "/terms-of-service"];
 
-  if (authToken && event.url.pathname.includes("/auth")) {
-    console.info("ay ay whatcha doin");
-    throw redirect(303, "/");
-  }
+  if (authToken && event.url.pathname.includes("/auth")) throw redirect(303, "/");
 
-  if (!authToken && !unProtectedRoutes.includes(event.url.pathname)) {
-    console.info("kicked you out, who are you anyways?");
-    throw redirect(303, "/auth");
-  }
+  if (!authToken && !unProtectedRoutes.includes(event.url.pathname)) throw redirect(303, "/auth");
 
   try {
     if (authToken) {
