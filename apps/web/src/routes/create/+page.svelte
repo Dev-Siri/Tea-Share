@@ -93,6 +93,6 @@
 
 <style lang="postcss">
   .error {
-    @apply w-[90%] rounded-md p-2 text-red-300;
+    @apply w-[90%] p-2 text-red-300;
   }
 </style>

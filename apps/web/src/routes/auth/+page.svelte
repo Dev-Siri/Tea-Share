@@ -130,6 +130,6 @@
 
 <style lang="postcss">
   .error {
-    @apply ml-1 mt-4 w-96 rounded-md border-2 border-red-600 bg-red-200 p-3 text-center font-bold text-red-800;
+    @apply w-96 p-2 text-red-300;
   }
 </style>

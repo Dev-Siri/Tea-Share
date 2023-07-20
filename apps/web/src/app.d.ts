@@ -3,6 +3,7 @@ declare global {
     // interface Error {}
     interface Locals {
       user: User;
+      redirected: boolean;
     }
     // interface PageData {}
     // interface Platform {}

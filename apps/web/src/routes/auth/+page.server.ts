@@ -2,8 +2,12 @@ import { dev } from "$app/environment";
 import { PRIVATE_GOOGLE_CLIENT_ID, PRIVATE_GOOGLE_CLIENT_SECRET } from "$env/static/private";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { OAuth2Client } from "google-auth-library";
+import * as jwtDecode from "jwt-decode";
+
+import type { User } from "src/app";
 
 import { encodeToBase64 } from "$lib/server/encoding";
+import validateUser from "$lib/server/validation/user/validateUser";
 import queryClient from "$lib/utils/queryClient";
 
 interface AuthResponse {
@@ -121,3 +125,20 @@ export const actions: Actions = {
     throw redirect(302, authorizedUrl);
   },
 };
+
+export function load({ cookies }) {
+  const authToken = cookies.get("auth_token");
+
+  if (authToken) {
+    let user: User | null;
+    try {
+      user = jwtDecode.default<User>(authToken);
+    } catch {
+      user = null;
+    }
+
+    const isUserValid = validateUser(user);
+
+    if (isUserValid) throw redirect(303, "/");
+  }
+}

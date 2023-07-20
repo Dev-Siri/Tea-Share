@@ -1,15 +1,14 @@
 import type { Config } from "@sveltejs/adapter-vercel";
 import type { Post, User } from "../app";
-import type { PageServerLoad } from "./$types";
 
 import queryClient from "$lib/utils/queryClient";
 
 export const config: Config = {
   runtime: "edge",
-  split: true
+  split: true,
 };
 
-export const load: PageServerLoad = async () => {
+export async function load() {
   const [posts, users] = await Promise.all([
     queryClient<Post[]>("/posts", {
       searchParams: {
@@ -26,4 +25,4 @@ export const load: PageServerLoad = async () => {
   ]);
 
   return { posts, users };
-};
+}

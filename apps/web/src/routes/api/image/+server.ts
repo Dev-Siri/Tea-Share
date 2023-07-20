@@ -1,8 +1,6 @@
 import sharp from "sharp";
 
-import type { RequestHandler } from "@sveltejs/kit";
-
-export const GET: RequestHandler = async ({ url: { searchParams }, fetch }) => {
+export async function GET({ url: { searchParams }, fetch }) {
   const imageUrl = searchParams.get("url");
   const height = searchParams.get("h");
 
@@ -27,4 +25,4 @@ export const GET: RequestHandler = async ({ url: { searchParams }, fetch }) => {
     // So the user gets an actual (Although unoptimized) image
     return new Response(imageBuffer);
   }
-};
+}

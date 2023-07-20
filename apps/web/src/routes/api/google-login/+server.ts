@@ -1,7 +1,7 @@
 import { dev } from "$app/environment";
 import { PRIVATE_GOOGLE_CLIENT_ID, PRIVATE_GOOGLE_CLIENT_SECRET } from "$env/static/private";
 import queryClient from "$lib/utils/queryClient";
-import { redirect, type RequestHandler } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import { OAuth2Client } from "google-auth-library";
 import jwtDecode from "jwt-decode";
 
@@ -25,7 +25,7 @@ interface AuthResponse {
   token: string;
 }
 
-export const GET: RequestHandler = async ({ cookies, url }) => {
+export async function GET({ cookies, url }) {
   const redirectUrl = dev ? "http://localhost:5173/api/google-login" : "https://tea-share.vercel.app/api/google-login";
   const code = url.searchParams.get("code");
 
@@ -59,4 +59,4 @@ export const GET: RequestHandler = async ({ cookies, url }) => {
   });
 
   throw redirect(303, "/");
-};
+}

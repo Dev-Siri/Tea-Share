@@ -12,7 +12,7 @@ type PostFormValidationResponse =
       errors: Record<string, string>;
     };
 
-const validatePostForm = <T>(postFormData: T): PostFormValidationResponse => {
+export default function validatePostForm<T>(postFormData: T): PostFormValidationResponse {
   const postValidationResult = postFormSchema.safeParse(postFormData);
 
   if (postValidationResult.success) return postValidationResult;
@@ -28,6 +28,4 @@ const validatePostForm = <T>(postFormData: T): PostFormValidationResponse => {
   }, {} as Record<string, string>);
 
   return { success: false, errors: errorResponse };
-};
-
-export default validatePostForm;
+}

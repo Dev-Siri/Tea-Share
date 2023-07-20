@@ -1,11 +1,10 @@
 import { error } from "@sveltejs/kit";
 
 import type { Post } from "../../../app";
-import type { PageServerLoad } from "./$types";
 
 import queryClient from "$lib/utils/queryClient";
 
-export const load: PageServerLoad = async ({ params }) => {
+export async function load({ params }) {
   const [posts, otherPosts] = await Promise.all([
     queryClient<Post[] | null>("/posts/search", {
       searchParams: {
@@ -24,4 +23,4 @@ export const load: PageServerLoad = async ({ params }) => {
   if (!posts?.[0]) throw error(404, { message: "Not Found" });
 
   return { post: posts[0], otherPosts };
-};
+}

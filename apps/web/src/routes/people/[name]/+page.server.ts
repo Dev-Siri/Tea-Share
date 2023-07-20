@@ -1,7 +1,6 @@
 import { error, redirect, type Actions } from "@sveltejs/kit";
 
 import type { Post, User } from "../../../app";
-import type { PageServerLoad } from "./$types";
 
 import queryClient from "$lib/utils/queryClient";
 
@@ -17,7 +16,7 @@ export const actions: Actions = {
   },
 };
 
-export const load: PageServerLoad = async ({ params: { name } }) => {
+export async function load({ params: { name } }) {
   const [posts, users] = await Promise.all([
     queryClient<Post[] | null>("/posts/search", {
       searchParams: {
@@ -43,4 +42,4 @@ export const load: PageServerLoad = async ({ params: { name } }) => {
     posts: usersPosts,
     user: users[0],
   };
-};
+}

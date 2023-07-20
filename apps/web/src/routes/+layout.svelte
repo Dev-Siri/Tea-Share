@@ -4,6 +4,7 @@
 
   import theme from "$lib/stores/theme";
   import user from "$lib/stores/user";
+  import { BASE_URL } from "../env";
 
   import Navbar from "$lib/components/Navbar.svelte";
   import UserDropdown from "$lib/components/UserDropdown.svelte";
@@ -32,10 +33,10 @@
     name="og:description"
     content="Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!"
   />
-  <meta name="og:image" content="/images/og.png" />
+  <meta name="og:image" content="{BASE_URL}/images/og.png" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Home" />
-  <meta name="twitter:image" content="/images/twitter.png" />
+  <meta name="twitter:image" content="{BASE_URL}/images/twitter.png" />
   <meta
     name="twitter:description"
     content="Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!"
@@ -47,7 +48,8 @@
   <title>Home</title>
 </svelte:head>
 
-{#if $user}
+<!-- a small client-side validation to prevent zod from running down the network -->
+{#if $user?.userId?.length === 36}
   <Navbar />
   <UserDropdown />
 {/if}

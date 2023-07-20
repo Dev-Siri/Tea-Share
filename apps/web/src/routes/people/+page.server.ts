@@ -2,7 +2,7 @@ import queryClient from "$lib/utils/queryClient";
 
 import type { User } from "../../app";
 
-export const load = async () => {
+export async function load() {
   const initialUsers = await queryClient<User[]>("/users", {
     searchParams: {
       page: 1,
@@ -11,4 +11,4 @@ export const load = async () => {
   });
 
   return { initialUsers };
-};
+}

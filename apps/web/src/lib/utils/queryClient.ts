@@ -2,20 +2,26 @@ import { PUBLIC_BACKEND_URL } from "$env/static/public";
 
 type Method = "GET" | "POST" | "PUT" | "DELETE" | "OPTIONS" | "HEAD" | "TRACE" | "CONNECT" | "PATCH";
 
-interface Options {
+interface Options<S, B> {
   method: Method;
-  body: Record<string, any>;
-  searchParams: Record<string, any>;
+  body: B;
+  searchParams: S;
   customFetch(input: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response>;
 }
 
-const queryClient = async <T>(endpoint: string, { method = "GET", body, searchParams, customFetch }: Partial<Options>) => {
+export default async function queryClient<T, S = Record<string, any>, B = Record<string, any>>(
+  endpoint: string,
+  { method = "GET", body, searchParams, customFetch }: Partial<Options<S, B>>
+) {
   const url = new URL(endpoint, PUBLIC_BACKEND_URL);
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
 
-  if (searchParams) Object.keys(searchParams).forEach(searchParamKey => url.searchParams.set(searchParamKey, searchParams[searchParamKey]));
+  if (searchParams)
+    Object.keys(searchParams).forEach(searchParamKey =>
+      url.searchParams.set(searchParamKey, searchParams[searchParamKey as keyof typeof searchParams])
+    );
 
   try {
     const opts = {
@@ -59,6 +65,4 @@ const queryClient = async <T>(endpoint: string, { method = "GET", body, searchPa
 
     throw error; // triggers +error.svelte
   }
-};
-
-export default queryClient;
+}

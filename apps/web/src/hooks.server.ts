@@ -1,15 +1,13 @@
-import { Redirect, error, redirect, type Handle } from "@sveltejs/kit";
+import { Redirect, error, redirect } from "@sveltejs/kit";
 import * as jwtDecode from "jwt-decode";
 
 import type { User } from "./app";
 
 import validateUser from "$lib/server/validation/user/validateUser";
 
-export const handle: Handle = async ({ event, resolve }) => {
+export async function handle({ event, resolve }) {
   const authToken = event.cookies.get("auth_token");
   const unProtectedRoutes = ["/auth", "/reset-password", "/terms-of-service"];
-
-  if (authToken && event.url.pathname.includes("/auth")) throw redirect(303, "/");
 
   if (!authToken && !unProtectedRoutes.includes(event.url.pathname)) throw redirect(303, "/auth");
 
@@ -24,7 +22,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     }
   } catch (thrownError) {
     // A hack to let the `throw redirect` inside of the try, execute. Cmon sveltekit :/
-    if (thrownError instanceof Redirect) throw thrownError;
+    if ((thrownError as Redirect)?.status) throw thrownError;
     if (thrownError instanceof jwtDecode.InvalidTokenError && !unProtectedRoutes.includes(event.url.pathname)) throw redirect(303, "/auth");
 
     // just show the 500 page because we don't know what went wrong
@@ -37,4 +35,4 @@ export const handle: Handle = async ({ event, resolve }) => {
   });
 
   return response;
-};
+}

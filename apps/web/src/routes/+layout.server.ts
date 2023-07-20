@@ -1,7 +1,6 @@
 import type { Theme } from "../app";
-import type { LayoutServerLoad } from "./$types";
 
-export const load: LayoutServerLoad = ({ cookies, locals }) => {
+export function load({ cookies, locals }) {
   const theme: Theme = (cookies.get("theme") as Theme) || "light";
 
   return {
@@ -10,4 +9,4 @@ export const load: LayoutServerLoad = ({ cookies, locals }) => {
       user: locals.user,
     },
   };
-};
+}

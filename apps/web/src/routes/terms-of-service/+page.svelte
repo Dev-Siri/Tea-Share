@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import FaArrowLeft from "svelte-icons/fa/FaArrowLeft.svelte";
 
   import user from "$lib/stores/user";

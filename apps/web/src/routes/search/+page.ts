@@ -1,9 +1,8 @@
 import type { Post, User } from "../../app";
-import type { PageLoad } from "./$types";
 
 import queryClient from "$lib/utils/queryClient";
 
-export const load: PageLoad = async ({ url, fetch }) => {
+export async function load({ url, fetch }) {
   const query = url.searchParams.get("query");
 
   const [posts, users] = await Promise.all([
@@ -26,4 +25,4 @@ export const load: PageLoad = async ({ url, fetch }) => {
   ]);
 
   return { posts, users };
-};
+}
