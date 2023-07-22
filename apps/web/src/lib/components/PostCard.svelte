@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Post } from "../../app";
+  import type { Post } from "$lib/types";
 
   import user from "$lib/stores/user";
   import { getRelativeTime } from "$lib/utils/globals";

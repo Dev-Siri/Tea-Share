@@ -3,7 +3,7 @@
   import { page } from "$app/stores";
   import IoMdLogOut from "svelte-icons/io/IoMdLogOut.svelte";
 
-  import type { Post } from "../../../app";
+  import type { Post } from "$lib/types";
 
   import user from "$lib/stores/user";
   import { getHandle } from "$lib/utils/globals";

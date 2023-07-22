@@ -1,6 +1,6 @@
 import { error, redirect, type Actions } from "@sveltejs/kit";
 
-import type { Post, User } from "../../../app";
+import type { Post, User } from "$lib/types";
 
 import queryClient from "$lib/utils/queryClient";
 

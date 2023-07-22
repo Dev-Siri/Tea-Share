@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
 
-  import type { Post, User } from "../../app";
+  import type { Post, User } from "$lib/types";
 
   import SearchResults from "$lib/components/SearchResults.svelte";
 

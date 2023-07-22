@@ -3,19 +3,20 @@
   import FaCamera from "svelte-icons/fa/FaCamera.svelte";
   import Circle from "svelte-loading-spinners/Circle.svelte";
 
-  import type { ActionData } from "./$types";
-
   import Logo from "$lib/components/Logo.svelte";
   import Google from "$lib/components/icons/Google.svelte";
   import { getHandle } from "$lib/utils/globals";
 
-  export let form: ActionData;
+  export let form;
 
   let isSignup = false;
   let loading = false;
   let errorOccured = false;
   let previewImage: File | undefined;
-  let username: string = form?.username ?? "";
+  let username: string = (form?.suppliedValues as {
+    username?: string;
+    email?: string;
+  })?.["username"] ?? "";
 
   $: handle = getHandle(username.trim() || "Username");
 
@@ -73,23 +74,34 @@
         name="username"
         minlength="3"
         maxlength="100"
-        value={form?.username ?? ""}
         on:input={updateUsername}
         required
       />
     {/if}
-    <input class="input" placeholder="Email" type="email" name="email" value={form?.email ?? ""} required />
+    <input class="input" placeholder="Email" type="email" name="email" value={form?.suppliedValues?.["email"] ?? ""} required />
+    {#if
+      !form?.success && form?.errors?.["email"]
+    }
+      <p class="error">
+        {form.errors["email"]}
+      </p>
+    {/if}
     <input class="input" placeholder="Password" type="password" name="password" required />
-    {#if form?.errorMessage}
-      <p class="error">{form?.errorMessage}</p>
+    {#if !form?.success && form?.errors?.["password"]}
+      <p class="error">
+        {form.errors["password"]}
+      </p>
+    {/if}
+    {#if form?.apiError}
+      <p class="error">{form?.apiError}</p>
     {/if}
     {#if errorOccured}
       <p class="error">An error occured</p>
     {/if}
     <div class="mt-[30px] mb-4 flex h-fit items-center">
-      <button disabled={!form?.errorMessage && loading} type="submit" class="btn w-36 ml-2 h-10 gap-2">
+      <button disabled={!form?.apiError && form?.success && loading} type="submit" class="btn w-36 ml-2 h-10 gap-2">
         {isSignup ? "Signup" : "Login"}
-        {#if !form?.errorMessage && loading}
+        {#if !form?.apiError && form?.success && loading}
           <Circle size={20} color="white" />
         {/if}
       </button>

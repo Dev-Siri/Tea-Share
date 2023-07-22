@@ -9,7 +9,7 @@ body {
 }
 
 *::-webkit-scrollbar {
-  display: none;
+  @apply hidden;
 }
 
 ::selection {

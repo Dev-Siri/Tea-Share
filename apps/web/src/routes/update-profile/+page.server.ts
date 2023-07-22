@@ -1,6 +1,6 @@
 import { fail, type Actions } from "@sveltejs/kit";
 
-import type { User } from "../../app";
+import type { User } from "$lib/types";
 
 import { encodeToBase64 } from "$lib/server/encoding";
 import queryClient from "$lib/utils/queryClient";

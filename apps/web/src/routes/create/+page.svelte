@@ -3,9 +3,7 @@
   import FaCloudUploadAlt from "svelte-icons/fa/FaCloudUploadAlt.svelte";
   import Circle from "svelte-loading-spinners/Circle.svelte";
 
-  import type { ActionData } from "./$types";
-
-  export let form: ActionData;
+  export let form;
 
   let loading = false;
   let previewImage: File | undefined;
@@ -82,9 +80,10 @@
     <button
       type="submit"
       class="bg-primary flex justify-center items-center gap-2 hover:bg-primary-dark mb-[30%] mt-4 w-[90%] cursor-pointer rounded-md border-none p-3 text-white duration-200 sm:mb-[10%]"
+      disabled={loading || form?.success}
     >
       Create Post!
-      {#if loading}
+      {#if form?.success && loading}
         <Circle size={20} color="white" />
       {/if}
     </button>

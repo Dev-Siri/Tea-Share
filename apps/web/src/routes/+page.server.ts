@@ -1,5 +1,5 @@
+import type { Post, User } from "$lib/types";
 import type { Config } from "@sveltejs/adapter-vercel";
-import type { Post, User } from "../app";
 
 import queryClient from "$lib/utils/queryClient";
 

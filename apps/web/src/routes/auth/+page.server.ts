@@ -1,12 +1,14 @@
 import { dev } from "$app/environment";
 import { PRIVATE_GOOGLE_CLIENT_ID, PRIVATE_GOOGLE_CLIENT_SECRET } from "$env/static/private";
-import { fail, redirect, type Actions } from "@sveltejs/kit";
+import { Redirect, fail, redirect, type Actions } from "@sveltejs/kit";
 import { OAuth2Client } from "google-auth-library";
 import * as jwtDecode from "jwt-decode";
 
-import type { User } from "src/app";
+import type { User } from "$lib/types";
 
+import { BASE_URL } from "$lib/env";
 import { encodeToBase64 } from "$lib/server/encoding";
+import { validateLoginSchema, validateSignupSchema } from "$lib/server/validation/auth/validateAuth";
 import validateUser from "$lib/server/validation/user/validateUser";
 import queryClient from "$lib/utils/queryClient";
 
@@ -17,15 +19,17 @@ interface AuthResponse {
 export const actions: Actions = {
   async login({ request, cookies }) {
     const formData = await request.formData();
+    const data = Object.fromEntries(formData.entries());
 
-    const email = formData.get("email");
-    const password = formData.get("password");
+    const loginFormValidationResult = validateLoginSchema(data);
 
-    if (!email || !password || email instanceof Blob || password instanceof Blob)
+    if (!loginFormValidationResult.success)
       return fail(400, {
-        errorMessage: "The credentials provided are invalid",
-        email,
+        ...loginFormValidationResult,
+        suppliedValues: { email: data["email"] },
       });
+
+    const { email, password } = loginFormValidationResult.data;
 
     try {
       const { token } = await queryClient<AuthResponse>("/users/login", {
@@ -35,45 +39,43 @@ export const actions: Actions = {
           password,
         },
       });
-
       cookies.set("auth_token", token, {
         expires: new Date(9999, 0, 1),
         sameSite: true,
       });
 
-      throw redirect(301, "/");
+      throw redirect(303, "/");
     } catch (error) {
+      if ((error as Redirect)?.status) throw error;
       if (error instanceof Error)
-        return {
-          email,
-          errorMessage: error.message,
-        };
+        return fail(500, {
+          apiError: error.message,
+          suppliedValues: { email: data["email"] },
+        });
 
-      return {
-        email,
-        errorMessage: "An unknown error occured",
-      };
+      return fail(500, {
+        suppliedValues: { email: data["email"] },
+        apiError: "An unknown error occured",
+      });
     }
   },
   async signup({ request, cookies }) {
     const formData = await request.formData();
+    const data = Object.fromEntries(formData.entries());
 
-    const email = formData.get("email");
-    const image = formData.get("image");
-    const username = formData.get("username");
-    const password = formData.get("password");
+    const signupFormValidationResult = validateSignupSchema(data);
 
-    if (
-      !email ||
-      !password ||
-      !username ||
-      !image ||
-      email instanceof Blob ||
-      password instanceof Blob ||
-      username instanceof Blob ||
-      typeof image === "string"
-    )
-      return fail(400, { username, email, errorMessage: "The credentials provided are invalid" });
+    if (!signupFormValidationResult.success)
+      return fail(400, {
+        ...signupFormValidationResult,
+        suppliedValues: {
+          email: data["email"],
+          username: data["username"],
+          image: data["image"],
+        },
+      });
+
+    const { username, email, image, password } = signupFormValidationResult.data;
 
     try {
       const imageBase64 = await encodeToBase64(image);
@@ -97,22 +99,27 @@ export const actions: Actions = {
       throw redirect(301, "/");
     } catch (error) {
       console.log(error);
+      if ((error as Redirect)?.status) throw error;
       if (error instanceof Error)
-        return {
+        return fail(500, {
+          suppliedValues: {
+            username,
+            email,
+          },
+          apiError: error.message,
+        });
+
+      return fail(500, {
+        suppliedValues: {
           username,
           email,
-          errorMessage: error.message,
-        };
-
-      return {
-        username,
-        email,
-        errorMessage: "An unknown error occured",
-      };
+        },
+        apiError: "An unknown error occured",
+      });
     }
   },
   async googleLogin() {
-    const redirectUrl = dev ? "http://localhost:5173/api/google-login" : "https://tea-share.vercel.app/api/google-login";
+    const redirectUrl = dev ? `${BASE_URL}/api/google-login` : `${BASE_URL}/api/google-login`;
 
     const oAuth2Client = new OAuth2Client(PRIVATE_GOOGLE_CLIENT_ID, PRIVATE_GOOGLE_CLIENT_SECRET, redirectUrl);
 

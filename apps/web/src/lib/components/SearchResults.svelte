@@ -1,10 +1,10 @@
 <script lang="ts">
   import FaUserAltSlash from "svelte-icons/fa/FaUserAltSlash.svelte";
   import FaVideoSlash from "svelte-icons/fa/FaVideoSlash.svelte";
+  
+  import type { Post, User } from "$lib/types";
+  
   import PostCard from "./PostCard.svelte";
-
-  import type { Post, User } from "../../app";
-
   import UserListItem from "./UserListItem.svelte";
 
   export let posts: Post[];

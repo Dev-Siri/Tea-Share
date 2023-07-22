@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { User } from "../../app";
+  import type { User } from "$lib/types";
 
   import UserListItem from "$lib/components/UserListItem.svelte";
 

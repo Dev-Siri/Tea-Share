@@ -1,6 +1,6 @@
 import { error } from "@sveltejs/kit";
 
-import type { Post } from "../../../app";
+import type { Post } from "$lib/types";
 
 import queryClient from "$lib/utils/queryClient";
 

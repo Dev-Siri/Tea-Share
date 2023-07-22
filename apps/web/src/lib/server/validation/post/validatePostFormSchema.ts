@@ -1,5 +1,6 @@
 import type { z } from "zod";
 
+import formatSchemaErrors from "../errors";
 import postFormSchema from "./postFormSchema";
 
 type PostFormValidationResponse =
@@ -17,15 +18,7 @@ export default function validatePostForm<T>(postFormData: T): PostFormValidation
 
   if (postValidationResult.success) return postValidationResult;
 
-  const errorResponse = postValidationResult.error.issues.reduce((res, error) => {
-    const {
-      path: [path],
-      message,
-    } = error;
-
-    if (path && typeof path === "string") res[path] = message;
-    return res;
-  }, {} as Record<string, string>);
+  const errorResponse = formatSchemaErrors(postValidationResult.error);
 
   return { success: false, errors: errorResponse };
 }

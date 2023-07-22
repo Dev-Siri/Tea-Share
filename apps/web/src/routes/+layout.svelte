@@ -1,10 +1,11 @@
 <script lang="ts">
   import { browser } from "$app/environment";
+  import { fly } from "svelte/transition";
   import "../app.css";
 
+  import { BASE_URL } from "$lib/env";
   import theme from "$lib/stores/theme";
   import user from "$lib/stores/user";
-  import { BASE_URL } from "../env";
 
   import Navbar from "$lib/components/Navbar.svelte";
   import UserDropdown from "$lib/components/UserDropdown.svelte";
@@ -15,36 +16,18 @@
 
   $: user.set(data.global.user!);
   $: if (browser) document.body.classList.replace($theme === "dark" ? "light" : "dark", $theme);
+
+  const description = "Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!";
 </script>
 
 <svelte:head>
-  <meta name="application-name" content="Tea Share" />
-  <meta name="keywords" content="Tea Share, Tea, Social Media, Social Networking, News, Connect, Share" />
-  <meta name="creator" content="Dev-Siri" />
-  <meta name="robots" content="index, follow" />
-  <meta name="googlebot" content="noimageindex, max-video-preview:-1, max-image-preview:large, max-snippet:-1" />
-  <meta name="google-site-verification" content="9ZQX0PW-jAHsoHd2iQ8HzgApN3A0t0aiClpRHZrnf-M" />
-  <meta name="yandex-verification" content="8b3345a29cecf753" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="Tea Share" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="description" content={description} />
   <meta name="og:title" content="Home" />
-  <meta
-    name="og:description"
-    content="Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!"
-  />
+  <meta name="og:description" content={description} />
   <meta name="og:image" content="{BASE_URL}/images/og.png" />
-  <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Home" />
+  <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content="{BASE_URL}/images/twitter.png" />
-  <meta
-    name="twitter:description"
-    content="Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!"
-  />
-  <meta
-    name="description"
-    content="Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!"
-  />
   <title>Home</title>
 </svelte:head>
 
@@ -53,6 +36,12 @@
   <Navbar />
   <UserDropdown />
 {/if}
-<main class="dark:bg-dark-gray h-screen w-screen overflow-hidden duration-200 dark:text-white">
-  <slot />
-</main>
+{#key data.global.transitionKey}
+  <main
+    in:fly={{ x: -200, duration: 300, delay: 300  }}
+    out:fly={{ x: 200, duration: 300 }}
+    class="overflow-hidden duration-200"
+  >
+    <slot />
+  </main>
+{/key}

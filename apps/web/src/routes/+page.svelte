@@ -32,12 +32,6 @@
   };
 </script>
 
-<svelte:head>
-  <title>Home</title>
-  <meta name="og:title" content="Home" />
-  <meta name="twitter:title" content="Home" />
-</svelte:head>
-
 <aside class="flex w-full h-screen min-[1002px]:pr-4">
   <section role="list" on:scroll={loadMorePosts} class="h-screen w-full overflow-y-auto overflow-hidden px-4 pb-10 pt-4 min-[1002px]:w-[70%]">
     {#each paginatedPosts as post, index}

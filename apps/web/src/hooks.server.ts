@@ -1,7 +1,7 @@
 import { Redirect, error, redirect } from "@sveltejs/kit";
 import * as jwtDecode from "jwt-decode";
 
-import type { User } from "./app";
+import type { User } from "$lib/types";
 
 import validateUser from "$lib/server/validation/user/validateUser";
 
