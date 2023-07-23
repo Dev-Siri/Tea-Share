@@ -18,6 +18,11 @@
     enctype="multipart/form-data"
     use:enhance={() => {
       loading = true;
+
+      return ({ update }) => {
+        loading = false;
+        update();
+      }
     }}
   >
     <input
@@ -80,10 +85,10 @@
     <button
       type="submit"
       class="bg-primary flex justify-center items-center gap-2 hover:bg-primary-dark mb-[30%] mt-4 w-[90%] cursor-pointer rounded-md border-none p-3 text-white duration-200 sm:mb-[10%]"
-      disabled={loading || form?.success}
+      disabled={loading}
     >
       Create Post!
-      {#if form?.success && loading}
+      {#if loading}
         <Circle size={20} color="white" />
       {/if}
     </button>

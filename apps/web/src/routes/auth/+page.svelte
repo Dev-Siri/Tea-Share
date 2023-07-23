@@ -43,6 +43,11 @@
     enctype="multipart/form-data"
     use:enhance={() => {
       loading = true;
+
+      return ({ update }) => {
+        loading = false;
+        update();
+      }
     }}
   >
     {#if isSignup}
@@ -99,9 +104,9 @@
       <p class="error">An error occured</p>
     {/if}
     <div class="mt-[30px] mb-4 flex h-fit items-center">
-      <button disabled={!form?.apiError && form?.success && loading} type="submit" class="btn w-36 ml-2 h-10 gap-2">
+      <button disabled={loading} type="submit" class="btn w-36 ml-2 h-10 gap-2">
         {isSignup ? "Signup" : "Login"}
-        {#if !form?.apiError && form?.success && loading}
+        {#if loading}
           <Circle size={20} color="white" />
         {/if}
       </button>
