@@ -43,11 +43,6 @@
     enctype="multipart/form-data"
     use:enhance={() => {
       loading = true;
-
-      return ({ update }) => {
-        loading = false;
-        update();
-      }
     }}
   >
     {#if isSignup}

@@ -32,7 +32,7 @@
 </svelte:head>
 
 <!-- a small client-side validation to prevent zod from running down the network -->
-{#if $user?.userId?.length === 36}
+{#if $user?.userId}
   <Navbar />
   <UserDropdown />
 {/if}
