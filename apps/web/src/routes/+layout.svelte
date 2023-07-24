@@ -14,10 +14,8 @@
 
   theme.set(data.global.theme);
 
-  const htmlTag = document.documentElement;
-
   $: user.set(data.global.user!);
-  $: if (browser) htmlTag.classList.replace($theme === "dark" ? "light" : "dark", $theme);
+  $: if (browser) document.documentElement.classList.replace($theme === "dark" ? "light" : "dark", $theme);
 
   const description = "Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!";
 </script>
