@@ -17,7 +17,7 @@ interface AuthResponse {
 }
 
 export const actions: Actions = {
-  async login({ request, cookies }) {
+  async login({ request, cookies, locals }) {
     const formData = await request.formData();
     const data = Object.fromEntries(formData.entries());
 
@@ -39,10 +39,13 @@ export const actions: Actions = {
           password,
         },
       });
+
       cookies.set("auth_token", token, {
         expires: new Date(9999, 0, 1),
         sameSite: true,
       });
+
+      locals.user = jwtDecode.default<User>(token);
 
       throw redirect(303, "/");
     } catch (error) {
@@ -59,7 +62,7 @@ export const actions: Actions = {
       });
     }
   },
-  async signup({ request, cookies }) {
+  async signup({ request, cookies, locals }) {
     const formData = await request.formData();
     const data = Object.fromEntries(formData.entries());
 
@@ -95,6 +98,8 @@ export const actions: Actions = {
         expires: new Date(9999, 0, 1),
         sameSite: true,
       });
+
+      locals.user = jwtDecode.default<User>(token);
 
       throw redirect(301, "/");
     } catch (error) {
