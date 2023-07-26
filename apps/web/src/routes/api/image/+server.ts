@@ -18,7 +18,9 @@ export async function GET({ url: { searchParams }, fetch }) {
       optimizedImage = await sharp(imageBuffer).resize(Number(height)).avif().toBuffer();
     }
 
-    return new Response(optimizedImage);
+    return new Response(optimizedImage, {
+      headers: new Headers({ "Cache-Control": "public, max-age=86400" }),
+    });
   } catch (error) {
     console.log(error);
     // Return the original image as-is instead of silently erroring in the server console
