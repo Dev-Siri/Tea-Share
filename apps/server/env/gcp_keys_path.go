@@ -10,6 +10,7 @@ func GetGCPKeysPath() string {
 
 	if gcpKeysPath == "" {
 		log.Printf("GCP Keys path not specified in environment variables")
+		gcpKeysPath = "keys/gcp-keys.json"
 	}
 
 	return gcpKeysPath
