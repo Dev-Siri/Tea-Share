@@ -36,17 +36,24 @@ class _ProfileState extends State<Profile> {
       page = 1;
 
       _fetchData();
+
+      _postsGridController.addListener(() {
+        bool isTop = _postsGridController.position.pixels == 0;
+        if (_postsGridController.position.atEdge && !isTop) {
+          page++;
+          _fetchData();
+        }
+      });
     }
 
-    _postsGridController.addListener(() {
-      bool isTop = _postsGridController.position.pixels == 0;
-      if (_postsGridController.position.atEdge && !isTop) {
-        page++;
-        _fetchData();
-      }
-    });
-
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _postsGridController.dispose();
+
+    super.dispose();
   }
 
   Future<void> _setupUser() async {
@@ -90,7 +97,6 @@ class _ProfileState extends State<Profile> {
     }
 
     return ListView(
-      addAutomaticKeepAlives: false,
       controller: _postsGridController,
       children: <Widget>[
         Padding(
@@ -107,19 +113,20 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(_username,
+                    Text(
+                      _username,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 28
+                        fontSize: 28,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 0, bottom: 7),
                       child: Text(
-                        "@${_username.toLowerCase().replaceAll(RegExp(r" "), "-")}",
+                        "@${_username.toLowerCase().replaceAll(RegExp(r' '), '-')}",
                         style: const TextStyle(
                           fontSize: 18,
-                          color: Colors.grey
+                          color: Colors.grey,
                         ),
                       ),
                     ),
@@ -129,28 +136,26 @@ class _ProfileState extends State<Profile> {
             ],
           ),
         ),
-        Visibility(
-          visible: _isLoading,
-          replacement: Visibility(
-            visible: _posts.isNotEmpty,
-            replacement: const Padding(
-              padding: EdgeInsets.only(top: 120),
-              child: Column(
-                children: <Widget>[
-                  Icon(Icons.add_a_photo,
-                    size: 80,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 8),
-                    child: Text("You have not posted anything yet."),
-                  ),
-                ],
-              ),
+        if (_isLoading)
+          const PostsGridSkeleton()
+        else if (_posts.isEmpty)
+          const Padding(
+            padding: EdgeInsets.only(top: 120),
+            child: Column(
+              children: <Widget>[
+                Icon(
+                  Icons.add_a_photo,
+                  size: 80,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Text('You have not posted anything yet.'),
+                ),
+              ],
             ),
-            child: PostGrid(posts: _posts)
-          ),
-          child: const PostsGridSkeleton()
-        )
+          )
+        else
+          PostGrid(posts: _posts),
       ],
     );
   }

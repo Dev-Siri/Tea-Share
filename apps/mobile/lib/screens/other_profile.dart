@@ -77,84 +77,78 @@ class _OtherProfileState extends State<OtherProfile> {
         ),
         title: Text("${user.username}'s Profile"),
       ),
-      body: Visibility(
-        visible: _errorMessage == null,
-        replacement: ErrorMessage(
-          icon: Icons.error,
-          message: _errorMessage ?? "An Error occured when trying to load ${user.username}\"s profile.",
-        ),
-        child: ListView(
-          addAutomaticKeepAlives: false,
-          controller: _postsGridController,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Hero(
-                    tag: user.userImage,
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: CachedNetworkImageProvider(user.userImage),
-                    ),
+      body: _errorMessage == null ? ListView(
+        addAutomaticKeepAlives: false,
+        controller: _postsGridController,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Hero(
+                  tag: user.userImage,
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: CachedNetworkImageProvider(user.userImage),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width - 180,
-                          child: Text(user.username,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 28,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5, bottom: 7),
-                          child: Text(
-                            "@${user.username.toLowerCase().replaceAll(RegExp(r" "), "-")}",
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.grey
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Visibility(
-              visible: _isLoading,
-              replacement: Visibility(
-                visible: _posts.isNotEmpty,
-                replacement: Padding(
-                  padding: const EdgeInsets.only(top: 120),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      const Icon(Icons.add_a_photo,
-                        size: 80,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width - 180,
+                        child: Text(user.username,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28,
+                          ),
+                        ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text("${user.username} has not posted anything yet."),
+                        padding: const EdgeInsets.only(top: 5, bottom: 7),
+                        child: Text(
+                          "@${user.username.toLowerCase().replaceAll(RegExp(r" "), "-")}",
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ),
-                child: PostGrid(posts: _posts)
-              ),
-              child: const PostsGridSkeleton(),
+                )
+              ],
             ),
+          ),
+          if (_isLoading)
+            const PostsGridSkeleton()
+          else if (_posts.isNotEmpty)
+            PostGrid(posts: _posts)
+          else
+            Padding(
+              padding: const EdgeInsets.only(top: 120),
+              child: Column(
+                children: <Widget>[
+                  const Icon(
+                    Icons.add_a_photo,
+                    size: 80,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text("${user.username} has not posted anything yet."),
+                  ),
+                ],
+              ),
+            )
           ],
+        ) : ErrorMessage(
+          icon: Icons.error,
+          message: _errorMessage ?? "An Error occured when trying to load ${user.username}\"s profile.",
         ),
-      ),
     );
   }
 }

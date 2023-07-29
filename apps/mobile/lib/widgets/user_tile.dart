@@ -9,7 +9,7 @@ class UserTile extends StatefulWidget {
   const UserTile({
     super.key,
     required this.username,
-    required this.userImage
+    required this.userImage,
   });
 
   @override
@@ -28,24 +28,21 @@ class _UserTileState extends State<UserTile> {
         arguments: UserModel(
           username: widget.username,
           userImage: widget.userImage,
-          email: ""
+          email: "",
         ),
       ),
       padding: EdgeInsets.zero,
       child: ListTile(
         title: Text(widget.username),
-        leading: Visibility(
-          visible: !_errorOccurred,
-          replacement: const Icon(Icons.error,
-            color: Colors.red,
-          ),
-          child: Hero(
-            tag: widget.userImage,
-            child: CircleAvatar(
-              backgroundImage: CachedNetworkImageProvider(
-                widget.userImage,
-                errorListener: () => setState(() => _errorOccurred = true)
-              ),
+        leading: _errorOccurred ? const Icon(
+          Icons.error,
+          color: Colors.red,
+        ) : Hero(
+          tag: widget.userImage,
+          child: CircleAvatar(
+            backgroundImage: CachedNetworkImageProvider(
+              widget.userImage,
+              errorListener: () => setState(() => _errorOccurred = true),
             ),
           ),
         ),

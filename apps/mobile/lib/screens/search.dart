@@ -4,7 +4,6 @@ import "package:tea_share/models/post_model.dart";
 import "package:tea_share/models/user_model.dart";
 import "package:tea_share/services/posts_service.dart";
 import "package:tea_share/services/users_service.dart";
-import "package:tea_share/widgets/error_message.dart";
 import "package:tea_share/widgets/post_card.dart";
 import "package:tea_share/widgets/user_tile.dart";
 
@@ -96,24 +95,16 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: _errorMessage == null,
-      replacement: ErrorMessage(
-        icon: Icons.error,
-        message: _errorMessage ?? "An error occured when searching for posts & people.",
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        if (_errorMessage == null) ...[
           Padding(
             padding: const EdgeInsets.all(10),
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(
-                  top: 10,
-                  left: 20
-                ),
+                contentPadding: const EdgeInsets.only(top: 10, left: 20),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                 suffixIcon: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -123,9 +114,9 @@ class _SearchState extends State<Search> {
                     backgroundColor: Colors.transparent,
                   ),
                   onPressed: _isLoading ? null : _search,
-                  child: _isLoading ? const CircularProgressIndicator(strokeWidth: 4) : const Icon(Icons.search)
+                  child: _isLoading ? const CircularProgressIndicator(strokeWidth: 4) : const Icon(Icons.search),
                 ),
-                hintText: "Search"
+                hintText: "Search",
               ),
             ),
           ),
@@ -135,8 +126,10 @@ class _SearchState extends State<Search> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: _searchType == "posts" ? MaterialStatePropertyAll(Theme.of(context).primaryColor) : const MaterialStatePropertyAll(Colors.transparent),
-                    foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                    backgroundColor: _searchType == "posts"
+                        ? MaterialStateProperty.all(Theme.of(context).primaryColor)
+                        : MaterialStateProperty.all(Colors.transparent),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -144,13 +137,15 @@ class _SearchState extends State<Search> {
                     ),
                   ),
                   onPressed: () => _changeSearchMode("posts"),
-                  child: const Text("Posts")
+                  child: const Text("Posts"),
                 ),
               ),
               ElevatedButton(
                 style: ButtonStyle(
-                  backgroundColor: _searchType == "users" ? MaterialStatePropertyAll(Theme.of(context).primaryColor) : const MaterialStatePropertyAll(Colors.transparent),
-                  foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                  backgroundColor: _searchType == "users"
+                      ? MaterialStateProperty.all(Theme.of(context).primaryColor)
+                      : MaterialStateProperty.all(Colors.transparent),
+                  foregroundColor: MaterialStateProperty.all(Colors.white),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -158,80 +153,72 @@ class _SearchState extends State<Search> {
                   ),
                 ),
                 onPressed: () => _changeSearchMode("users"),
-                child: const Text("People")
+                child: const Text("People"),
               ),
             ],
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Visibility(
-                visible:
-                  (_searchType == "posts" && _posts.isNotEmpty)
-                  || (_searchType == "users" && _users.isNotEmpty)
-                  || _isLoading,
-                replacement: const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.search,
-                        size: 77
-                      ),
-                      Text("Search for something awesome!",
-                        style: TextStyle(
-                          fontSize: 22
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                child: ListView.builder(
-                  itemCount: _searchType == "posts" ? _posts.length : _users.length,
-                  addAutomaticKeepAlives: false,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (
-                      index == (
-                        _searchType == "posts" ? _posts.length : _users.length
-                      ) - 1
-                      || !_isLoading
-                    ) {
-                      page++;
-                      _search();
+        ],
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: (_searchType == "posts" && _posts.isNotEmpty) ||
+                    (_searchType == "users" && _users.isNotEmpty) ||
+                    _isLoading
+                ? ListView.builder(
+                    itemCount: _searchType == "posts" ? _posts.length : _users.length,
+                    addAutomaticKeepAlives: false,
+                    itemBuilder: (BuildContext context, int index) {
+                      if (index == (_searchType == "posts" ? _posts.length : _users.length) - 1 || !_isLoading) {
+                        page++;
+                        _search();
 
-                      /*
-                        Returning a value here for showing a loading indicator would actually
-                        instead place it on top of the content on the initial render, so its not possible
-                        without adding an additional state variable that is updated when the initial load
-                        happens and then show the skeletons based on that.
-                      */
-                    }
+                        /*
+                          Returning a value here for showing a loading indicator would actually
+                          instead place it on top of the content on the initial render, so its not possible
+                          without adding an additional state variable that is updated when the initial load
+                          happens and then show the skeletons based on that.
+                        */
+                      }
 
-                    if (_searchType == "users") {
-                      return UserTile(
-                        username: _users[index].username,
-                        userImage: _users[index].userImage,
+                      if (_searchType == "users") {
+                        return UserTile(
+                          username: _users[index].username,
+                          userImage: _users[index].userImage,
+                        );
+                      }
+
+                      return PostCard(
+                        postId: _posts[index].postId,
+                        title: _posts[index].title,
+                        description: _posts[index].description,
+                        postImage: _posts[index].postImage,
+                        userId: _posts[index].userId,
+                        username: _posts[index].username,
+                        userImage: _posts[index].userImage,
+                        createdAt: _posts[index].createdAt,
+                        likes: _posts[index].likes,
                       );
-                    }
-
-                    return PostCard(
-                      postId: _posts[index].postId,
-                      title: _posts[index].title,
-                      description: _posts[index].description,
-                      postImage: _posts[index].postImage,
-                      userId: _posts[index].userId,
-                      username: _posts[index].username,
-                      userImage: _posts[index].userImage,
-                      createdAt: _posts[index].createdAt,
-                      likes: _posts[index].likes,
-                    );
-                  },
-                ),
-              ),
-            ),
+                    },
+                  )
+                : const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.search,
+                          size: 77,
+                        ),
+                        Text(
+                          "Search for something awesome!",
+                          style: TextStyle(fontSize: 22),
+                        ),
+                      ],
+                    ),
+                  ),
           ),
-        ]
-      ),
+        ),
+      ],
     );
   }
 }

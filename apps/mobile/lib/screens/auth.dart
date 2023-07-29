@@ -110,9 +110,8 @@ class _AuthState extends State<Auth> with Validation {
                       padding: const EdgeInsets.only(top: 10),
                       child: Column(
                         children: <Widget>[
-                          Visibility(
-                            visible: _isSignup,
-                            child: TextFormField(
+                          if (_isSignup)
+                            TextFormField(
                               autocorrect: false,
                               controller: _usernameController,
                               keyboardType: TextInputType.name,
@@ -123,7 +122,6 @@ class _AuthState extends State<Auth> with Validation {
                                 ),
                               ),
                             ),
-                          ),
                           Padding(
                             padding: EdgeInsets.only(top: _isSignup ? 10 : 0),
                             child: TextFormField(
@@ -170,9 +168,8 @@ class _AuthState extends State<Auth> with Validation {
                         ],
                       )
                     ),
-                    Visibility(
-                      visible: _errorMessage != "",
-                      child: Padding(
+                    if (_errorMessage != "")
+                      Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Text(_errorMessage,
                           style: const TextStyle(
@@ -180,7 +177,6 @@ class _AuthState extends State<Auth> with Validation {
                           ),
                         ),
                       ),
-                    ),
                     SizedBox(
                       height: 45,
                       child: ElevatedButton(
@@ -207,9 +203,8 @@ class _AuthState extends State<Auth> with Validation {
                                 )
                               ),
                             ),
-                            Visibility(
-                              visible: _isLoading,
-                              child: Container(
+                            if (_isLoading)
+                              Container(
                                 height: 20,
                                 width: 30,
                                 padding: const EdgeInsets.only(left: 10),
@@ -217,8 +212,7 @@ class _AuthState extends State<Auth> with Validation {
                                   color: Colors.white,
                                   strokeWidth: 3,
                                 ),
-                              ),
-                            )
+                              )
                           ],
                         )
                       ),

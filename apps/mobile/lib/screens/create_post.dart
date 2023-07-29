@@ -83,40 +83,36 @@ class _CreateState extends State<Create> with ErrorDialog {
                     ),
                   ),
                 ),
-                child: Visibility(
-                  visible: _image != null,
-                  replacement: Container(
-                    height: 400,
-                    width: 400,
-                    padding: const EdgeInsets.all(40),
-                    alignment: Alignment.center,
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.image,
-                          size: 100,
-                        ),
-                        Text("Choose Image",
-                          style: TextStyle(fontSize: 21),
-                        ),
-                        Text("Preferably, choose images that are 400x400 in size.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
+                child: _image != null ? Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: Image.file(
+                      File(_image?.path ?? ""),
+                      height: 400,
+                      width: 400,
+                      fit: BoxFit.fill,
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      child: Image.file(
-                        File(_image?.path ?? ""),
-                        height: 400,
-                        width: 400,
-                        fit: BoxFit.fill,
+                ) : Container(
+                  height: 400,
+                  width: 400,
+                  padding: const EdgeInsets.all(40),
+                  alignment: Alignment.center,
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(Icons.image,
+                        size: 100,
                       ),
-                    ),
+                      Text("Choose Image",
+                        style: TextStyle(fontSize: 21),
+                      ),
+                      Text("Preferably, choose images that are 400x400 in size.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
                   ),
                 ),
               ),

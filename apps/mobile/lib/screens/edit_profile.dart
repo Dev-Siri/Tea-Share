@@ -92,20 +92,16 @@ class _EditProfileState extends State<EditProfile> with ErrorDialog {
                     ),
                   ),
                 ),
-                child: Visibility(
-                  visible: _currentPicture != "",
-                  replacement: SkeletonAvatar(
-                    style: SkeletonAvatarStyle(
-                      height: 200,
-                      width: 200,
-                      borderRadius: BorderRadius.circular(100)
-                    ),
-                  ),
-                  child: CircleAvatar(
-                    radius: 100,
-                    backgroundImage: _newPicture != null
-                      ? Image.file(File(_newPicture!.path)).image
-                      : CachedNetworkImageProvider(_currentPicture),
+                child: _currentPicture != "" ? CircleAvatar(
+                  radius: 100,
+                  backgroundImage: _newPicture != null
+                    ? Image.file(File(_newPicture!.path)).image
+                    : CachedNetworkImageProvider(_currentPicture),
+                ) : SkeletonAvatar(
+                  style: SkeletonAvatarStyle(
+                    height: 200,
+                    width: 200,
+                    borderRadius: BorderRadius.circular(100)
                   ),
                 ),
               ),
