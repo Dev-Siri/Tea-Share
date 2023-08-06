@@ -6,7 +6,6 @@ import "package:provider/provider.dart";
 import "package:tea_share/models/user_model.dart";
 import "package:tea_share/services/posts_service.dart";
 import "package:tea_share/services/users_service.dart";
-import "package:tea_share/utils/error_dialog.dart";
 
 class Create extends StatefulWidget {
   const Create({ super.key });
@@ -15,11 +14,14 @@ class Create extends StatefulWidget {
   State<Create> createState() => _CreateState();
 }
 
-class _CreateState extends State<Create> with ErrorDialog {
+class _CreateState extends State<Create> {
   final TextEditingController _titleInputController = TextEditingController();
   final TextEditingController _aboutInputController = TextEditingController();
 
   XFile? _image;
+  bool _isLoading = false;
+  String _errorMessage = "";
+  String _titleInvalidMessage = "";
 
   @override
   void dispose() {
@@ -30,7 +32,9 @@ class _CreateState extends State<Create> with ErrorDialog {
   }
   
   Future<void> _createPost() async {
-    if (_image == null) return showErrorDialog(context, "No image selected.");
+    if (_image == null) return setState(() => _errorMessage = "No image selected.");
+
+    setState(() => _isLoading = true);
 
     final UserModel? user = await context.read<UserService>().user;
 
@@ -40,7 +44,7 @@ class _CreateState extends State<Create> with ErrorDialog {
       title: _titleInputController.text,
       description: _aboutInputController.text,
       userId: user.userId!,
-      postImage: await _image!.readAsBytes(),
+      postImage: _image!,
     );
 
     if (response.successful) {
@@ -48,14 +52,17 @@ class _CreateState extends State<Create> with ErrorDialog {
       return;
     }
 
-    showErrorDialog(context, response.errorMessage!);
+    setState(() {
+      _errorMessage = response.errorMessage ?? "An error occured when trying to create your post.";
+      _isLoading = false;
+    });
   }
 
   Future<void> _pickImage(ImageSource imageSource) async {
     final ImagePicker imagePicker = ImagePicker();
 
     final XFile? image = await imagePicker.pickImage(source: imageSource);
-    
+
     if (image != null) setState(() => _image = image);
   }
 
@@ -118,21 +125,45 @@ class _CreateState extends State<Create> with ErrorDialog {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                child: TextField(
+                child: TextFormField(
                   controller: _titleInputController,
+                  onChanged: (String value) => setState(() {
+                    if (value.isNotEmpty && value.length < 4) {
+                      _titleInvalidMessage = "Title must be 4 characters or longer.";
+                      return;
+                    }
+
+                    if (value.length > 255) {
+                      _titleInvalidMessage = "Title too long.";
+                      return;
+                    }
+
+                    _titleInvalidMessage = "";
+                  }),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                     labelText: "Title",
+                    errorText: _titleInvalidMessage != "" ? _titleInvalidMessage : null,
                   ),
                 ),
               ),
-              TextField(
+              TextFormField(
                 controller: _aboutInputController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                   labelText: "About your post",
                 ),
               ),
+              if (_errorMessage != "")
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(_errorMessage,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.red
+                    ),
+                  ),
+                ),
               Container(
                 margin: const EdgeInsets.only(top: 10),
                 width: 400,
@@ -147,8 +178,32 @@ class _CreateState extends State<Create> with ErrorDialog {
                       ),
                     ),
                   ),
-                  onPressed: _createPost,
-                  child: const Text("Create Post!"),
+                  onPressed: _isLoading ? null : _createPost,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: _isLoading ? 16 : 0
+                        ),
+                        child: const Text("Create Post!",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          )
+                        ),
+                      ),
+                      if (_isLoading)
+                        Container(
+                          height: 20,
+                          width: 30,
+                          padding: const EdgeInsets.only(left: 10),
+                          child: const CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 3,
+                          ),
+                        )
+                    ],
+                  )
                 ),
               ),
             ],

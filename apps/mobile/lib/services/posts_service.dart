@@ -3,6 +3,7 @@ import "dart:convert";
 
 import "package:flutter/foundation.dart";
 import "package:http/http.dart" as http;
+import "package:image_picker/image_picker.dart";
 import "package:tea_share/constants.dart";
 import "package:tea_share/models/post_model.dart";
 
@@ -78,17 +79,13 @@ class PostService {
     );
   }
 
-  Future<PostsServiceResponse> likePost({ required String id, required String username, required String image }) async {
+  Future<PostsServiceResponse> likePost({ required String postId, required String userId }) async {
     final http.Response response = await http.patch(
-      Uri.parse("$_postsUrl/$id/like"),
-      headers: _headers,
-      body: jsonEncode({
-        "username": username,
-        "image": image,
-      })
+      Uri.parse("$_postsUrl/$postId/like?userId=$userId"),
+      headers: _headers
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != 204) {
       return PostsServiceResponse(
         successful: false,
         errorMessage: "${response.body}\nThe server responded with a status code of ${response.statusCode}"
@@ -101,10 +98,11 @@ class PostService {
   Future<PostsServiceResponse> createPost({
     required String title,
     required String description,
-    required Uint8List postImage,
+    required XFile postImage,
     required String userId,
   }) async {
-    final String encodedImage = await compute(base64Encode, postImage);
+    final String encodedImage = await compute(base64Encode, await postImage.readAsBytes());
+    final String imageDataUrl = "data:${postImage.mimeType};base64,$encodedImage";
 
     final http.Response response = await http.post(
       Uri.parse(_postsUrl),
@@ -112,7 +110,7 @@ class PostService {
       body: jsonEncode({
         "title": title,
         "description": description,
-        "image": encodedImage,
+        "postImage": imageDataUrl,
         "userId": userId,
       })
     );

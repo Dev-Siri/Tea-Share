@@ -9,7 +9,6 @@ import "package:tea_share/models/user_model.dart";
 import "package:tea_share/services/posts_service.dart";
 import "package:tea_share/services/theme_service.dart";
 import "package:tea_share/services/users_service.dart";
-import "package:tea_share/utils/error_dialog.dart";
 
 class PostCard extends StatefulWidget {
   final String postId;
@@ -39,7 +38,7 @@ class PostCard extends StatefulWidget {
   State<PostCard> createState() => _PostCardState();
 }
 
-class _PostCardState extends State<PostCard> with ErrorDialog {
+class _PostCardState extends State<PostCard> {
   String _likeText = "";
   IconData _thumbsUpIcon = Icons.thumb_up_sharp;
   bool _isLikeButtonDisabled = false;
@@ -65,6 +64,8 @@ class _PostCardState extends State<PostCard> with ErrorDialog {
   }
 
   Future<void> _prepareLikes() async {
+    if (!mounted) return;
+
     final UserModel? user = await context.read<UserService>().user;
 
     setState(() {
@@ -85,12 +86,11 @@ class _PostCardState extends State<PostCard> with ErrorDialog {
     if (user == null) return;
 
     final PostsServiceResponse response = await context.read<PostService>().likePost(
-      id: widget.postId,
-      username: user.username,
-      image: user.userImage,
+      postId: widget.postId,
+      userId: user.userId!,
     );
 
-    if (!response.successful) return showErrorDialog(context, response.errorMessage!);
+    if (!response.successful) return;
 
     widget.likes.add(
       LikeModel(

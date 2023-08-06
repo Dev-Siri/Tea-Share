@@ -180,7 +180,7 @@ class _AuthState extends State<Auth> with Validation {
                     SizedBox(
                       height: 45,
                       child: ElevatedButton(
-                        onPressed: _signInWithMail,
+                        onPressed: _isLoading ? null : _signInWithMail,
                         style: ButtonStyle(
                           backgroundColor: MaterialStatePropertyAll(Theme.of(context).primaryColor),
                           foregroundColor: const MaterialStatePropertyAll(Colors.white),
@@ -222,7 +222,7 @@ class _AuthState extends State<Auth> with Validation {
                       child: SizedBox(
                         height: 45,
                         child: ElevatedButton(
-                          onPressed: _signInWithGoogle,
+                          onPressed: _isLoading ? null : _signInWithGoogle,
                           style: ButtonStyle(
                             backgroundColor: MaterialStatePropertyAll(Colors.grey.shade900),
                             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
