@@ -15,7 +15,7 @@ func LikePost(ctx *fasthttp.RequestCtx) {
 
 	row := db.Database.QueryRow(`
 		SELECT COUNT(user_id) FROM Likes
-		WHERE post_id = ? AND user_id = userId
+		WHERE post_id = ? AND user_id = ?
 	;`, postId, userId)
 
 	var countOfExistingUserIds int
@@ -25,6 +25,7 @@ func LikePost(ctx *fasthttp.RequestCtx) {
 			ctx.Error("Already liked", fasthttp.StatusForbidden)
 			return
 		}
+
 		ctx.Error("Failed to check if post is already liked", fasthttp.StatusInternalServerError)
 		return
 	}

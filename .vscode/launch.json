@@ -21,31 +21,5 @@
       "type": "dart",
       "flutterMode": "release"
     },
-    {
-      "name": "Web (Server Side)",
-      "type": "node-terminal",
-      "cwd": "${workspaceFolder}/apps/web",
-      "request": "launch",
-      "command": "pnpm dev"
-    },
-    {
-      "name": "Web (Client Side)",
-      "type": "chrome",
-      "cwd": "${workspaceFolder}/apps/web",
-      "request": "launch",
-      "url": "http://localhost:3000"
-    },
-    {
-      "name": "Web (Full Stack)",
-      "type": "node-terminal",
-      "request": "launch",
-      "cwd": "${workspaceFolder}/apps/web",
-      "command": "pnpm dev",
-      "serverReadyAction": {
-        "pattern": "started server on .+, url: (https?://.+)",
-        "uriFormat": "%s",
-        "action": "debugWithChrome"
-      }
-    }
   ]
 }
