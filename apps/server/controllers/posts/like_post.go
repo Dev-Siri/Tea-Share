@@ -1,6 +1,7 @@
 package post_controllers
 
 import (
+	"database/sql"
 	"tea-share/db"
 	"tea-share/utils"
 
@@ -12,20 +13,19 @@ func LikePost(ctx *fasthttp.RequestCtx) {
 	postId := ctx.UserValue("id")
 	userId := string(ctx.QueryArgs().Peek("userId"))
 
-	var countOfExistingUserIds int
-
 	row := db.Database.QueryRow(`
 		SELECT COUNT(user_id) FROM Likes
 		WHERE post_id = ? AND user_id = userId
 	;`, postId, userId)
 
-	if postCountDecodeError := row.Scan(&countOfExistingUserIds); postCountDecodeError != nil {
-		ctx.Error("Failed to check if post is already liked", fasthttp.StatusInternalServerError)
-		return
-	}
+	var countOfExistingUserIds int
 
-	if countOfExistingUserIds != 0 {
-		ctx.Error("Already liked", fasthttp.StatusForbidden)
+	if postCountDecodeError := row.Scan(&countOfExistingUserIds); postCountDecodeError != nil {
+		if postCountDecodeError == sql.ErrNoRows {
+			ctx.Error("Already liked", fasthttp.StatusForbidden)
+			return
+		}
+		ctx.Error("Failed to check if post is already liked", fasthttp.StatusInternalServerError)
 		return
 	}
 
