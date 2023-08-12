@@ -13,7 +13,7 @@ func IsValidUserID(id string) (bool, string) {
 	}
 
 	if len(id) != 36 {
-		return false, "Your ID is in the wrong shape. It has either been tampered with or invalid. Please re-login to create the post."
+		return false, "Your ID is in the wrong shape. It has either been tampered with or invalid. Please re-login"
 	}
 
 	return true, ""

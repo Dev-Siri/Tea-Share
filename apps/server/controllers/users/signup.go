@@ -53,7 +53,7 @@ func Signup(ctx *fasthttp.RequestCtx) {
 	var numberOfExistingAccounts int
 
 	countRow := db.Database.QueryRow(`
-		SELECT COUNT(email) FROM Users
+		SELECT COUNT(*) FROM Users
 		WHERE email = ?
 	;`, user.Email)
 

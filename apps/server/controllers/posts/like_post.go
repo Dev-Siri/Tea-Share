@@ -14,7 +14,7 @@ func LikePost(ctx *fasthttp.RequestCtx) {
 	userId := string(ctx.QueryArgs().Peek("userId"))
 
 	row := db.Database.QueryRow(`
-		SELECT COUNT(user_id) FROM Likes
+		SELECT COUNT(*) FROM Likes
 		WHERE post_id = ? AND user_id = ?
 	;`, postId, userId)
 
