@@ -14,13 +14,3 @@ func ParseLikes(likesJSON []uint8) ([]models.Like, error) {
 
 	return likes, nil
 }
-
-func ParseComments(commentsJSON []uint8) ([]models.Comment, error) {
-	var comments []models.Comment
-
-	if err := json.Unmarshal([]byte(commentsJSON), &comments); err != nil {
-		return nil, err
-	}
-
-	return comments, nil
-}
