@@ -6,12 +6,13 @@ import (
 	"tea-share/db"
 	"tea-share/models"
 	"tea-share/utils"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/valyala/fasthttp"
 )
 
-func Comment(ctx *fasthttp.RequestCtx) {
+func CreateComment(ctx *fasthttp.RequestCtx) {
 	postId := ctx.UserValue("id")
 	userId := string(ctx.QueryArgs().Peek("userId"))
 
@@ -57,9 +58,9 @@ func Comment(ctx *fasthttp.RequestCtx) {
 	}
 
 	_, dbInsertError := db.Database.Query(`
-		INSERT INTO Comments(comment_id, post_id, user_id, comment)
-		VALUES ( ?, ?, ?, ? )
-	;`, uuid.NewString(), postId, userId, comment.Comment)
+		INSERT INTO Comments(comment_id, post_id, user_id, created_at, comment)
+		VALUES ( ?, ?, ?, ?, ? )
+	;`, uuid.NewString(), postId, userId, time.Now().UTC(), comment.Comment)
 
 	if dbInsertError != nil {
 		ctx.Error("Failed to create comment", fasthttp.StatusInternalServerError)

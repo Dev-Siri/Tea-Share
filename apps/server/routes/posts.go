@@ -10,6 +10,7 @@ func RegisterPostRoutes(router *router.Router) {
 	router.GET("/posts", post_controllers.GetPosts)
 	router.GET("/posts/search", post_controllers.GetPostsBySearchTerm)
 	router.POST("/posts", post_controllers.CreatePost)
-	router.POST("/posts/{id}/comment", post_controllers.Comment)
 	router.PATCH("/posts/{id}/like", post_controllers.LikePost)
+	router.GET("/posts/{id}/comments", post_controllers.GetComments)
+	router.POST("/posts/{id}/comments", post_controllers.CreateComment)
 }

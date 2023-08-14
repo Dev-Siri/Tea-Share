@@ -35,23 +35,7 @@ func GetPosts(ctx *fasthttp.RequestCtx) {
 					WHERE l.post_id = p.post_id
 				),
 				JSON_ARRAY()
-			) AS likes,
-			COALESCE(
-				(
-					SELECT JSON_ARRAYAGG(
-						JSON_OBJECT(
-							'username', u.username,
-							'userImage', u.user_image,
-							'comment', c.comment
-						)
-					)
-					FROM Comments c
-					LEFT JOIN Posts p ON p.post_id = c.post_id
-					LEFT JOIN Users u ON u.user_id = c.user_id
-					WHERE p.post_id = c.post_id
-				),
-				JSON_ARRAY()
-			) AS comments
+			) AS likes
 		FROM Posts p
 		LEFT JOIN Users u ON u.user_id = p.user_id
 		GROUP BY p.post_id
@@ -71,7 +55,6 @@ func GetPosts(ctx *fasthttp.RequestCtx) {
 	for rows.Next() {
 		var post models.Post
 		var likesJSON []uint8
-		var commentsJSON []uint8
 
 		if postDecodeError := rows.Scan(
 			&post.PostID,
@@ -83,7 +66,6 @@ func GetPosts(ctx *fasthttp.RequestCtx) {
 			&post.Username,
 			&post.UserImage,
 			&likesJSON,
-			&commentsJSON,
 		); postDecodeError != nil {
 			ctx.Error("Failed to decode posts", fasthttp.StatusInternalServerError)
 			return
@@ -96,15 +78,7 @@ func GetPosts(ctx *fasthttp.RequestCtx) {
 			return
 		}
 
-		comments, commentsParseError := utils.ParseComments(commentsJSON)
-
-		if commentsParseError != nil {
-			ctx.Error("Failed to decode comments", fasthttp.StatusInternalServerError)
-			return
-		}
-
 		post.Likes = likes
-		post.Comments = comments
 		posts = append(posts, post)
 	}
 

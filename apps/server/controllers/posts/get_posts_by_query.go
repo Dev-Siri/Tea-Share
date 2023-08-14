@@ -46,23 +46,7 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 						WHERE l.post_id = p.post_id
 					),
 					JSON_ARRAY()
-				) AS likes,
-				COALESCE(
-					(
-						SELECT JSON_ARRAYAGG(
-							JSON_OBJECT(
-								'username', u.username,
-								'userImage', u.user_image,
-								'comment', c.comment
-							)
-						)
-						FROM Comments c
-						LEFT JOIN Posts p ON p.post_id = c.post_id
-						LEFT JOIN Users u ON u.user_id = c.user_id
-						WHERE p.post_id = c.post_id
-					),
-					JSON_ARRAY()
-				) AS comments
+				) AS likes
 			FROM Posts p
 			LEFT JOIN Users u ON u.user_id = p.user_id
 			WHERE p.post_id = ?
@@ -91,23 +75,7 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 						WHERE l.post_id = p.post_id
 					),
 					JSON_ARRAY()
-				) AS likes,
-				COALESCE(
-					(
-						SELECT JSON_ARRAYAGG(
-							JSON_OBJECT(
-								'username', u.username,
-								'userImage', u.user_image,
-								'comment', c.comment
-							)
-						)
-						FROM Comments c
-						LEFT JOIN Posts p ON p.post_id = c.post_id
-						LEFT JOIN Users u ON u.user_id = c.user_id
-						WHERE p.post_id = c.post_id
-					),
-					JSON_ARRAY()
-				) AS comments
+				) AS likes
 			FROM Posts p
 			LEFT JOIN Likes l ON l.post_id = p.post_id
 			LEFT JOIN Users u ON u.user_id = p.user_id
@@ -140,28 +108,11 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 						WHERE l.post_id = p.post_id
 					),
 					JSON_ARRAY()
-				) AS likes,
-				COALESCE(
-					(
-						SELECT JSON_ARRAYAGG(
-							JSON_OBJECT(
-								'username', u.username,
-								'userImage', u.user_image,
-								'comment', c.comment
-							)
-						)
-						FROM Comments c
-						LEFT JOIN Posts p ON p.post_id = c.post_id
-						LEFT JOIN Users u ON u.user_id = c.user_id
-						WHERE p.post_id = c.post_id
-					),
-					JSON_ARRAY()
-				) AS comments
+				) AS likes
 			FROM Posts p
 			LEFT JOIN Likes l ON l.post_id = p.post_id
 			LEFT JOIN Users u ON u.user_id = p.user_id
 			LEFT JOIN Users lu ON lu.user_id = l.user_id
-			LEFT JOIN Comments c on c.post_id = p.post_id
 			WHERE title LIKE ? OR description LIKE ?
 			GROUP BY p.post_id
 			ORDER BY p.created_at DESC
@@ -184,7 +135,6 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 	for rows.Next() {
 		var post models.Post
 		var likesJSON []uint8
-		var commentsJSON []uint8
 
 		if postsDecodeError := rows.Scan(
 			&post.PostID,
@@ -196,7 +146,6 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 			&post.Username,
 			&post.UserImage,
 			&likesJSON,
-			&commentsJSON,
 		); postsDecodeError != nil {
 			ctx.Error("Failed to decode posts", fasthttp.StatusInternalServerError)
 			return
@@ -209,15 +158,7 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 			return
 		}
 
-		comments, commentsParseError := utils.ParseComments(commentsJSON)
-
-		if commentsParseError != nil {
-			ctx.Error("Failed to decode comments", fasthttp.StatusInternalServerError)
-			return
-		}
-
 		post.Likes = likes
-		post.Comments = comments
 		posts = append(posts, post)
 	}
 
