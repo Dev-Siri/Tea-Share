@@ -38,14 +38,17 @@ func GetComments(ctx *fasthttp.RequestCtx) {
 	go func() {
 		defer close(commentsChan)
 
+		lastVisiblePosition := (page - 1) * limit
+		newPage := (lastVisiblePosition / limit) + 1
+
 		rows, dbQueryError := db.Database.Query(`
 			SELECT u.username, u.user_image, c.created_at, c.comment
 			FROM Comments c
 			LEFT JOIN Users u ON u.user_id = c.user_id
 			WHERE c.post_id = ?
-			ORDER BY c.created_at ASC
+			ORDER BY c.created_at DESC
 			LIMIT ? OFFSET ?
-		;`, postId, limit, page)
+		;`, postId, limit, newPage)
 
 		if dbQueryError != nil {
 			errorsChan <- "Failed to get comments"
@@ -69,7 +72,7 @@ func GetComments(ctx *fasthttp.RequestCtx) {
 				return
 			}
 
-			comments = append(comments, comment)
+			comments = append([]models.Comment{comment}, comments...)
 		}
 
 		if len(comments) == 0 {
