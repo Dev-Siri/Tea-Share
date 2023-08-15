@@ -4,22 +4,18 @@ import (
 	"encoding/json"
 	"tea-share/db"
 	"tea-share/models"
+	"tea-share/utils"
 
 	"github.com/valyala/fasthttp"
 )
 
 func GetUsers(ctx *fasthttp.RequestCtx) {
-	searchParams := ctx.QueryArgs()
-
-	page := searchParams.GetUintOrZero("page")
-	limit := searchParams.GetUintOrZero("limit")
-
-	offset := (page - 1) * limit
+	page, limit := utils.GetPaginationParams(ctx.QueryArgs())
 
 	rows, usersFetchError := db.Database.Query(`
 		SELECT user_id,username, user_image, email FROM Users
 		LIMIT ? OFFSET ?
-	;`, limit, offset)
+	;`, limit, page)
 
 	if usersFetchError != nil {
 		ctx.Error("Failed to get users", fasthttp.StatusInternalServerError)

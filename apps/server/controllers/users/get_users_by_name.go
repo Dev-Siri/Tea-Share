@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"tea-share/db"
 	"tea-share/models"
+	"tea-share/utils"
 
 	"github.com/valyala/fasthttp"
 )
@@ -27,17 +28,14 @@ func GetUsersByName(ctx *fasthttp.RequestCtx) {
 		usersFetchError = err
 		fetchedRows = rows
 	} else {
-		page := searchParams.GetUintOrZero("page")
-		limit := searchParams.GetUintOrZero("limit")
-
-		offset := (page - 1) * limit
+		page, limit := utils.GetPaginationParams(searchParams)
 		wildcardQuery := "%" + name + "%"
 
 		rows, err := db.Database.Query(`
 			SELECT user_id, username, user_image, email FROM Users
 			WHERE username LIKE ?
 			LIMIT ? OFFSET ?
-		;`, wildcardQuery, limit, offset)
+		;`, wildcardQuery, limit, page)
 
 		usersFetchError = err
 		fetchedRows = rows

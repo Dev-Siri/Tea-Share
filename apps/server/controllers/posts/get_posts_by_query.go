@@ -17,11 +17,7 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 
 	// Type: "normal" | "id" | "user"
 	typeofSearch := string(searchParams.Peek("type"))
-
-	page := searchParams.GetUintOrZero("page")
-	limit := searchParams.GetUintOrZero("limit")
-
-	offset := (page - 1) * limit
+	page, limit := utils.GetPaginationParams(searchParams)
 
 	var rows *sql.Rows
 	var postsFetchError error
@@ -84,7 +80,7 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 			GROUP BY p.post_id
 			ORDER BY p.created_at DESC
 			LIMIT ? OFFSET ?
-		`, q, limit, offset)
+		`, q, limit, page)
 
 		postsFetchError = err
 		rows = queriedRows
@@ -117,7 +113,7 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 			GROUP BY p.post_id
 			ORDER BY p.created_at DESC
 			LIMIT ? OFFSET ?
-		`, likeQuery, likeQuery, limit, offset)
+		`, likeQuery, likeQuery, limit, page)
 
 		postsFetchError = err
 		rows = queriedRows

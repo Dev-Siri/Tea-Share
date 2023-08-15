@@ -10,12 +10,7 @@ import (
 )
 
 func GetPosts(ctx *fasthttp.RequestCtx) {
-	searchParams := ctx.QueryArgs()
-
-	page := searchParams.GetUintOrZero("page")
-	limit := searchParams.GetUintOrZero("limit")
-
-	offset := (page - 1) * limit
+	page, limit := utils.GetPaginationParams(ctx.QueryArgs())
 
 	rows, postsFetchError := db.Database.Query(`
 		SELECT
@@ -41,7 +36,7 @@ func GetPosts(ctx *fasthttp.RequestCtx) {
 		GROUP BY p.post_id
 		ORDER BY p.created_at DESC
 		LIMIT ? OFFSET ?
-	;`, limit, offset)
+	;`, limit, page)
 
 	if postsFetchError != nil {
 		ctx.Error("Failed to get posts", fasthttp.StatusInternalServerError)
