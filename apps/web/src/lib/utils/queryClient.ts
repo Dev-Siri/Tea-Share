@@ -9,10 +9,8 @@ interface Options<S, B> {
   customFetch(input: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response>;
 }
 
-export default async function queryClient<T, S = Record<string, any>, B = Record<string, any>>(
-  endpoint: string,
-  { method = "GET", body, searchParams, customFetch }: Partial<Options<S, B>>
-) {
+export default async function queryClient<T, S = Record<string, any>, B = Record<string, any>>(endpoint: string, options?: Partial<Options<S, B>>) {
+  const { method = "GET", body, searchParams, customFetch } = options ?? {};
   const url = new URL(endpoint, PUBLIC_BACKEND_URL);
   const headers: Record<string, string> = {
     "Content-Type": "application/json",

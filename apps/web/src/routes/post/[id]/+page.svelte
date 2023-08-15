@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getRelativeTime } from "$lib/utils/globals";
 
+  import Comments from "$lib/components/Comments.svelte";
   import Image from "$lib/components/Image.svelte";
   import UserList from "$lib/components/UserList.svelte";
 
@@ -52,6 +53,7 @@
         <UserList title="People who liked this post" users={likes} />
       </div>
     </section>
+    <Comments class="border-light-gray dark:border-semi-gray h-fit w-full rounded-md border-2 p-8 mt-4 dark:bg-black" {postId} />
   </aside>
   <section class="mt-[30px] w-full pl-2 pr-4 sm:pl-[60px] md:pr-14">
     <div class="border-light-gray dark:border-semi-gray h-fit w-full rounded-md border-2 p-8 dark:bg-black xl:mb-0">

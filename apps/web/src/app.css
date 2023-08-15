@@ -9,7 +9,15 @@ body {
 }
 
 *::-webkit-scrollbar {
-  @apply hidden;
+  @apply w-2;
+}
+
+*::-webkit-scrollbar-track {
+  @apply rounded-lg;
+}
+
+*::-webkit-scrollbar-thumb {
+  @apply dark:bg-semi-gray h-14 rounded-lg border-4 border-transparent bg-gray-400 bg-clip-content;
 }
 
 ::selection {

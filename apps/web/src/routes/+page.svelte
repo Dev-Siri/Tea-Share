@@ -11,10 +11,10 @@
   let currentPage = 1;
   let paginatedPosts = posts;
 
-  const loadMorePosts = async (event: UIEvent & { currentTarget: EventTarget & HTMLElement }) => {
+  async function loadMorePosts(event: UIEvent & { currentTarget: EventTarget & HTMLElement }) {
     const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
 
-    const didScrollToBottom: boolean = scrollHeight - scrollTop === clientHeight;
+    const didScrollToBottom = scrollHeight - scrollTop === clientHeight;
 
     if (didScrollToBottom) {
       currentPage++;
@@ -29,7 +29,7 @@
 
       if (posts) paginatedPosts = [...paginatedPosts, ...posts];
     }
-  };
+  }
 </script>
 
 <aside class="flex w-full h-screen min-[1002px]:pr-4">
