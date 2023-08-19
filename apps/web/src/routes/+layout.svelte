@@ -1,6 +1,5 @@
 <script lang="ts">
   import { browser } from "$app/environment";
-  import { fly } from "svelte/transition";
   import "../app.css";
 
   import { BASE_URL } from "$lib/env";
@@ -9,6 +8,7 @@
 
   import Navbar from "$lib/components/Navbar.svelte";
   import UserDropdown from "$lib/components/UserDropdown.svelte";
+  import { fly } from "svelte/transition";
 
   export let data;
 
@@ -17,7 +17,8 @@
   $: user.set(data.global.user!);
   $: if (browser) document.documentElement.classList.replace($theme === "dark" ? "light" : "dark", $theme);
 
-  const description = "Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!";
+  const description =
+    "Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!";
 </script>
 
 <svelte:head>
@@ -37,11 +38,7 @@
   <UserDropdown />
 {/if}
 {#key data.global.transitionKey}
-  <main
-    in:fly={{ x: -200, duration: 300, delay: 300  }}
-    out:fly={{ x: 200, duration: 300 }}
-    class="overflow-hidden duration-200"
-  >
+  <main class="overflow-hidden duration-200" in:fly={{ x: 30 }}>
     <slot />
   </main>
 {/key}
