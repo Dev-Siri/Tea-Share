@@ -37,27 +37,35 @@
   let page = 1;
 
   async function getComments() {
-    const commentsResponse = await queryClient<CommentsResponse>(`/posts/${postId}/comments`, {
-      searchParams: {
-        page,
-        limit: 4,
+    const commentsResponse = await queryClient<CommentsResponse>(
+      `/posts/${postId}/comments`,
+      {
+        searchParams: {
+          page,
+          limit: 4,
+        },
       },
-    });
+    );
 
     comments = commentsResponse.comments;
     totalComments = commentsResponse.total;
   }
 
-  async function fetchMoreComments(event: UIEvent & { currentTarget: EventTarget & HTMLElement }) {
+  async function fetchMoreComments(
+    event: UIEvent & { currentTarget: EventTarget & HTMLElement },
+  ) {
     if (event.currentTarget.scrollTop !== 0) return;
     page++;
 
-    const commentsResponse = await queryClient<CommentsResponse>(`/posts/${postId}/comments`, {
-      searchParams: {
-        page,
-        limit: 4,
+    const commentsResponse = await queryClient<CommentsResponse>(
+      `/posts/${postId}/comments`,
+      {
+        searchParams: {
+          page,
+          limit: 4,
+        },
       },
-    });
+    );
 
     comments = [...commentsResponse.comments, ...comments];
   }
@@ -90,10 +98,22 @@
     >
       {#if comments.length}
         {#each comments as { username, userImage, createdAt, comment }}
-          <article role="listitem" class="p-3 flex rounded-md items-center gap-2">
-            <Image src={userImage} alt={username} height={50} width={50} class="rounded-full" />
+          <article
+            role="listitem"
+            class="p-3 flex rounded-md items-center gap-2"
+          >
+            <Image
+              src={userImage}
+              alt={username}
+              height={50}
+              width={50}
+              class="rounded-full"
+            />
             <div>
-              <a href="/people/{encodeURIComponent(username)}" class="font-bold">
+              <a
+                href="/people/{encodeURIComponent(username)}"
+                class="font-bold"
+              >
                 {username}
                 <span class="text-gray-400 font-normal">
                   {getRelativeTime(createdAt)}
@@ -111,7 +131,9 @@
             <FaCommentSlash />
           </div>
           <p class="text-2xl mt-2">No comments yet</p>
-          <p class="text-xl mt-2 text-center [text-wrap:balance]">Be the first one to comment on this post!</p>
+          <p class="text-xl mt-2 text-center [text-wrap:balance]">
+            Be the first one to comment on this post!
+          </p>
         </div>
       {/if}
     </div>
@@ -143,7 +165,13 @@
         };
       }}
     >
-      <input type="text" name="comment" placeholder="Add your comment..." class="input h-full mt-[0!important] w-3/4" required />
+      <input
+        type="text"
+        name="comment"
+        placeholder="Add your comment..."
+        class="input h-full mt-[0!important] w-3/4"
+        required
+      />
       <button type="submit" class="btn gap-2 w-1/4 h-full" aria-label="Comment">
         <div class="h-5">
           <MdSend />
