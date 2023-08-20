@@ -8,9 +8,13 @@
   import FaRegComment from "svelte-icons/fa/FaRegComment.svelte";
   import FaRegThumbsUp from "svelte-icons/fa/FaRegThumbsUp.svelte";
   import FaThumbsUp from "svelte-icons/fa/FaThumbsUp.svelte";
+  import IoIosCode from "svelte-icons/io/IoIosCode.svelte";
 
+  import { BASE_URL } from "$lib/env";
+  import theme from "$lib/stores/theme";
   import Comments from "./Comments.svelte";
   import Image from "./Image.svelte";
+  import ThreeDotsMenu from "./ThreeDotsMenu.svelte";
 
   export let post: Post;
   export let lazyLoadImage: boolean = true;
@@ -58,6 +62,20 @@
 
     await queryClient(`/posts/${postId}/like?userId=${$user.userId}`, { method: "PATCH" });
   }
+  const postActions = [
+    {
+      name: "Embed Post",
+      Icon: IoIosCode,
+      async onClick() {
+        const { toast } = await import("svoast");
+
+        const snippet = `<iframe src="${BASE_URL}/post/${postId}/embed?theme=${$theme}&imageSize=260px" height="600" width="600" frameborder="0" style="border-radius: 6px;"></iframe>`;
+        navigator.clipboard.writeText(snippet);
+
+        toast.success("Embed Snippet copied to clipboard succcessfully!");
+      },
+    },
+  ];
 </script>
 
 <svelte:head>
@@ -67,7 +85,12 @@
 </svelte:head>
 
 <article role="listitem" class="border-light-gray dark:border-semi-gray mb-10 w-full rounded-xl border-2 bg-white px-8 pb-5 pt-6 dark:bg-black">
-  <h3 class="text-3xl font-bold">{title}</h3>
+  <div class="flex justify-between">
+    <h3 class="text-3xl font-bold">{title}</h3>
+    <div class="relative inline-block text-left">
+      <ThreeDotsMenu options={postActions} />
+    </div>
+  </div>
   <p class="my-3 ml-1 overflow-y-auto break-words pb-2 text-gray-400">
     {getRelativeTime(createdAt)}
   </p>

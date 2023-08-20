@@ -6,6 +6,7 @@
 
 body {
   font-family: "Inter Variable";
+  -webkit-tap-highlight-color: transparent;
 }
 
 *::-webkit-scrollbar {

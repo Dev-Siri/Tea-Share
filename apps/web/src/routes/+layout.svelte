@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from "$app/environment";
+  import { Toasts } from "svoast";
   import "../app.css";
 
   import { BASE_URL } from "$lib/env";
@@ -33,7 +34,7 @@
 </svelte:head>
 
 <!-- a small client-side validation to prevent zod from running down the network -->
-{#if $user?.userId}
+{#if $user?.userId && !data.global.transitionKey.endsWith("/embed")}
   <Navbar />
   <UserDropdown />
 {/if}
@@ -42,3 +43,5 @@
     <slot />
   </main>
 {/key}
+
+<Toasts position="bottom-right" />

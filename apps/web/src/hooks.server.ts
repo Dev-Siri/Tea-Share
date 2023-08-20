@@ -1,4 +1,4 @@
-import { Redirect, error, redirect } from "@sveltejs/kit";
+import { error, redirect, type Redirect } from "@sveltejs/kit";
 import * as jwtDecode from "jwt-decode";
 
 import type { User } from "$lib/types";
@@ -7,16 +7,17 @@ import validateUser from "$lib/server/validation/user/validateUser";
 
 export async function handle({ event, resolve }) {
   const authToken = event.cookies.get("auth_token");
-  const unProtectedRoutes = ["/auth", "/reset-password", "/terms-of-service"];
+  const unProtectedRoutes = ["/auth", "/reset-password", "/terms-of-service", "/embed"];
+  const OnUnprotectedRoutes = unProtectedRoutes.some(route => event.url.pathname.endsWith(route));
 
-  if (!authToken && !unProtectedRoutes.includes(event.url.pathname)) throw redirect(303, "/auth");
+  if (!authToken && !OnUnprotectedRoutes) throw redirect(303, "/auth");
 
   try {
     if (authToken) {
       const user = jwtDecode.default<User>(authToken);
       const isUserValid = validateUser(user);
 
-      if (!isUserValid && !unProtectedRoutes.includes(event.url.pathname)) throw redirect(303, "/auth");
+      if (!isUserValid && !OnUnprotectedRoutes) throw redirect(303, "/auth");
 
       event.locals.user = user;
     }
@@ -30,7 +31,7 @@ export async function handle({ event, resolve }) {
   }
 
   const response = await resolve(event, {
-    transformPageChunk: ({ html }) => html.replace("%app.theme%", event.cookies.get("theme") || "light"),
+    transformPageChunk: ({ html }) => html.replace("%app.theme%", event.url.pathname.endsWith("/embed") ? "embed-theme" : event.cookies.get("theme") || "light"),
     filterSerializedResponseHeaders: () => true,
   });
 
