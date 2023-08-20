@@ -52,10 +52,10 @@ class _StateWrapperState extends State<StateWrapper> {
         }
 
         return MaterialApp(
-          initialRoute: !user.hasData ? "/auth" : "/",
+          initialRoute: user.hasData ? "/" : "/auth",
           routes: routes,
           theme: ThemeData.light(useMaterial3: true).copyWith(
-            primaryColor: const Color.fromARGB(255, 59, 41, 94)
+            primaryColor: const Color.fromARGB(255, 59, 41, 94),
           ),
           darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
             primaryColor: const Color.fromARGB(255, 59, 41, 94)

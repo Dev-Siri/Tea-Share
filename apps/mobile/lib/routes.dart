@@ -5,6 +5,7 @@ import "package:tea_share/screens/create_post.dart";
 import "package:tea_share/screens/edit_profile.dart";
 import "package:tea_share/screens/other_profile.dart";
 import "package:tea_share/screens/post_info.dart";
+import "package:tea_share/screens/profile.dart";
 
 final Map<String, WidgetBuilder> routes = {
   "/": (_) => const MainScreens(),
@@ -12,5 +13,6 @@ final Map<String, WidgetBuilder> routes = {
   "/create-post": (_) => const Create(),
   "/edit-profile": (_) => const EditProfile(),
   "/post-info": (_) => const PostInfo(),
+  "/profile": (_) => const Profile(),
   "/other-profile": (_) => const OtherProfile(),
 };

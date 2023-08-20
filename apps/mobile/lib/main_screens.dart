@@ -1,15 +1,13 @@
 import "package:bottom_bar_page_transition/bottom_bar_page_transition.dart";
-import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
+import "package:flutter_vector_icons/flutter_vector_icons.dart";
 import "package:provider/provider.dart";
-import "package:tea_share/models/user_model.dart";
 import "package:tea_share/screens/home.dart";
 import "package:tea_share/screens/people.dart";
-import "package:tea_share/screens/profile.dart";
 import "package:tea_share/screens/search.dart";
-import "package:tea_share/screens/settings.dart";
 import "package:tea_share/services/theme_service.dart";
-import "package:tea_share/services/users_service.dart";
+import "package:tea_share/widgets/profile_drawer.dart";
+import 'package:tea_share/widgets/top_bar.dart';
 
 class MainScreens extends StatefulWidget {
   const MainScreens({ super.key });
@@ -25,35 +23,14 @@ class _MainScreensState extends State<MainScreens> {
     const Home(),
     const Search(),
     const People(),
-    const Profile(),
-    const Settings(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(6),
-              margin: const EdgeInsets.only(bottom: 5),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(100)
-              ),
-              child: Image.asset("assets/Logo.gif",
-                height: 40,
-                width: 40,
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 8),
-              child: Text("Tea Share"),
-            )
-          ],
-        )
-      ),
+      backgroundColor: context.watch<DarkThemeService>().darkTheme ? Colors.black : Colors.white,
+      drawer: const ProfileDrawer(),
+      appBar: const TopBar(),
       body: BottomBarPageTransition(
         builder: (_, index) => _screens[index],
         currentIndex: _currentTab,
@@ -61,54 +38,25 @@ class _MainScreensState extends State<MainScreens> {
         transitionType: TransitionType.slide,
         transitionCurve: Curves.easeOut,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, "/create-post"),
-        tooltip: "Create A Post",
-        heroTag: "Go To Create Post Screen",
-        child: const Icon(Icons.add),
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentTab,
-        onDestinationSelected: (int index) => setState(() => _currentTab = index),
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-        indicatorShape: StadiumBorder(
-          side: BorderSide(
-            color: context.watch<DarkThemeService>().darkTheme ? Theme.of(context).primaryColor : Colors.purple.shade100,
-            width: 20,
-          ),
-        ),
-        destinations: <NavigationDestination>[
-          const NavigationDestination(
-            icon: Icon(Icons.home),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentTab,
+        onTap: (int index) => setState(() => _currentTab = index),
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        unselectedItemColor: context.watch<DarkThemeService>().darkTheme ? Colors.white : Colors.black,
+        selectedItemColor: context.watch<DarkThemeService>().darkTheme ? Colors.white : Colors.black,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(_currentTab == 0 ? MaterialCommunityIcons.tea : MaterialCommunityIcons.tea_outline),
             label: "Home",
           ),
-          const NavigationDestination(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: "Search",
           ),
-          const NavigationDestination(
-            icon: Icon(Icons.people),
+          BottomNavigationBarItem(
             label: "People",
-          ),
-          NavigationDestination(
-            icon: FutureBuilder(
-              future: context.read<UserService>().user,
-              builder: (BuildContext context, AsyncSnapshot<UserModel?> user) {
-                if (user.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                }
-
-                return CircleAvatar(
-                  radius: 15,
-                  backgroundImage: CachedNetworkImageProvider(user.data?.userImage ?? ""),
-                );
-              }
-            ),
-            label: "Profile",
-          ),
-          const NavigationDestination(
-            icon: Icon(Icons.settings),
-            label: "Settings",
+            icon: Icon(_currentTab == 2 ? Icons.people : Icons.people_outline),
           ),
         ],
       ),

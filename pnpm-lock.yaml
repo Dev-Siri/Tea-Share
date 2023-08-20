@@ -111,6 +111,9 @@ importers:
       svelte-toggle:
         specifier: ^4.0.0
         version: 4.0.0
+      svoast:
+        specifier: ^2.3.0
+        version: 2.3.0(svelte@4.2.0)
       tailwindcss:
         specifier: ^3.3.3
         version: 3.3.3
@@ -4623,6 +4626,14 @@ packages:
       locate-character: 3.0.0
       magic-string: 0.30.2
       periscopic: 3.1.0
+    dev: true
+
+  /svoast@2.3.0(svelte@4.2.0):
+    resolution: {integrity: sha512-ZAjtPy1o478xG6l3JOwZ1VELyd2U7sldXAENp5Yvy+LS7/yuJJ+1u0Q43cDv6pubZwbeAAj0YboXrMpZcEI6iA==}
+    peerDependencies:
+      svelte: ^4.0.0
+    dependencies:
+      svelte: 4.2.0
     dev: true
 
   /tailwindcss@3.3.3:

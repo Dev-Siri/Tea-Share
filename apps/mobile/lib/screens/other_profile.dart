@@ -4,6 +4,7 @@ import "package:provider/provider.dart";
 import "package:tea_share/models/post_model.dart";
 import "package:tea_share/models/user_model.dart";
 import "package:tea_share/services/posts_service.dart";
+import "package:tea_share/utils/formatting.dart";
 import "package:tea_share/widgets/error_message.dart";
 import "package:tea_share/widgets/post_grid.dart";
 import "package:tea_share/widgets/skeletons/posts_grid_skeleton.dart";
@@ -17,7 +18,7 @@ class OtherProfile extends StatefulWidget {
 
 int page = 1;
 
-class _OtherProfileState extends State<OtherProfile> {  
+class _OtherProfileState extends State<OtherProfile> with Formatting {
   final ScrollController _postsGridController = ScrollController();
 
   List<PostModel> _posts = [];
@@ -111,7 +112,7 @@ class _OtherProfileState extends State<OtherProfile> {
                       Padding(
                         padding: const EdgeInsets.only(top: 5, bottom: 7),
                         child: Text(
-                          "@${user.username.toLowerCase().replaceAll(RegExp(r" "), "-")}",
+                          formatHandle(user.username),
                           style: const TextStyle(
                             fontSize: 18,
                             color: Colors.grey

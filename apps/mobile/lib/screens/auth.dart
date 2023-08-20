@@ -257,7 +257,7 @@ class _AuthState extends State<Auth> with Validation {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(_isSignup ? "Already have an account? " : "Don\"t have an account? ",
+                          Text(_isSignup ? "Already have an account? " : "Don't have an account? ",
                             style: const TextStyle(
                               fontSize: 18
                             ),

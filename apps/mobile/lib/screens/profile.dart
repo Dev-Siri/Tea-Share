@@ -4,10 +4,13 @@ import "package:provider/provider.dart";
 import "package:tea_share/models/post_model.dart";
 import "package:tea_share/models/user_model.dart";
 import "package:tea_share/services/posts_service.dart";
+import "package:tea_share/services/theme_service.dart";
 import "package:tea_share/services/users_service.dart";
+import "package:tea_share/utils/formatting.dart";
 import "package:tea_share/widgets/error_message.dart";
 import "package:tea_share/widgets/post_grid.dart";
 import "package:tea_share/widgets/skeletons/posts_grid_skeleton.dart";
+import "package:tea_share/widgets/top_bar.dart";
 
 class Profile extends StatefulWidget {
   const Profile({ super.key });
@@ -18,7 +21,7 @@ class Profile extends StatefulWidget {
 
 int page = 1;
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<Profile> with Formatting {
   final ScrollController _postsGridController = ScrollController();
 
   String _profileImage = "";
@@ -96,67 +99,71 @@ class _ProfileState extends State<Profile> {
       );
     }
 
-    return ListView(
-      controller: _postsGridController,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              CircleAvatar(
-                radius: 50,
-                backgroundImage: CachedNetworkImageProvider(_profileImage),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      _username,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 0, bottom: 7),
-                      child: Text(
-                        "@${_username.toLowerCase().replaceAll(RegExp(r' '), '-')}",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-        if (_isLoading)
-          const PostsGridSkeleton()
-        else if (_posts.isEmpty)
-          const Padding(
-            padding: EdgeInsets.only(top: 120),
-            child: Column(
+    return Scaffold(
+      backgroundColor: context.watch<DarkThemeService>().darkTheme ? Colors.black : Colors.white,
+      appBar: const TopBar(showBackButton: true),
+      body: ListView(
+        controller: _postsGridController,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Icon(
-                  Icons.add_a_photo,
-                  size: 80,
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: CachedNetworkImageProvider(_profileImage),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 8),
-                  child: Text('You have not posted anything yet.'),
-                ),
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        _username,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 28,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 0, bottom: 7),
+                        child: Text(
+                          formatHandle(_username),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
-          )
-        else
-          PostGrid(posts: _posts),
-      ],
+          ),
+          if (_isLoading)
+            const PostsGridSkeleton()
+          else if (_posts.isEmpty)
+            const Padding(
+              padding: EdgeInsets.only(top: 120),
+              child: Column(
+                children: <Widget>[
+                  Icon(
+                    Icons.add_a_photo,
+                    size: 80,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text('You have not posted anything yet.'),
+                  ),
+                ],
+              ),
+            )
+          else
+            PostGrid(posts: _posts),
+        ],
+      ),
     );
   }
 }
