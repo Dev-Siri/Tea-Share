@@ -12,8 +12,6 @@
   let menuOpen = false;
 
   const toggleMenu = () => (menuOpen = true);
-
-  $: console.log(menuOpen);
 </script>
 
 <div class="relative inline-block text-left">
