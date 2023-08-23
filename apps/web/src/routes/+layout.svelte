@@ -1,6 +1,8 @@
 <script lang="ts">
   import { browser } from "$app/environment";
+  import { onMount } from "svelte";
   import { Toasts } from "svoast";
+  import { pwaInfo } from "virtual:pwa-info";
   import "../app.css";
 
   import { BASE_URL } from "$lib/env";
@@ -20,6 +22,16 @@
 
   const description =
     "Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!";
+
+  onMount(async () => {
+    if (pwaInfo) {
+      const { useRegisterSW } = await import("virtual:pwa-register/svelte");
+
+      useRegisterSW({ immediate: true });
+    }
+  });
+
+  $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : "";
 </script>
 
 <svelte:head>
@@ -30,6 +42,7 @@
   <meta name="twitter:title" content="Home" />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content="{BASE_URL}/images/twitter.png" />
+  {@html webManifest}
   <title>Home</title>
 </svelte:head>
 

@@ -6,6 +6,12 @@ const config = {
   preprocess: [vitePreprocess()],
   kit: {
     adapter: adapter({ maxDuration: 10 }),
+    files: {
+      serviceWorker: "src/service-worker.ts",
+    },
+    serviceWorker: {
+      register: false
+    }
   },
 };
 
