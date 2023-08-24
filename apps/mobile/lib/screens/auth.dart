@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
+import "package:tea_share/services/theme_service.dart";
 import "package:tea_share/services/users_service.dart";
 import "package:tea_share/utils/validation.dart";
 
@@ -80,6 +81,7 @@ class _AuthState extends State<Auth> with Validation {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: context.watch<DarkThemeService>().darkTheme ? Colors.black : Colors.white,
         body: SingleChildScrollView(
           child: Center(
             child: FractionallySizedBox(

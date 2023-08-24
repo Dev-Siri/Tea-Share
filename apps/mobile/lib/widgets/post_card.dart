@@ -108,146 +108,133 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      margin: const EdgeInsets.only(top: 15),
-      child: Container(
-        width: 600,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(2)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 15,
-                left: 15,
-              ),
-              child: Text(widget.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          margin: const EdgeInsets.only(top: 10),
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 2,
+                  right: 10
+                ),
+                child: CircleAvatar(
+                  backgroundImage: CachedNetworkImageProvider(widget.userImage),
+                  radius: 20,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 10,
-                bottom: 10,
-                left: 19
-              ),
-              child: Text(DateTimeFormat.relative(DateTime.parse(widget.createdAt), appendIfAfter: "ago"),
-                style: TextStyle(
-                  color: context.read<DarkThemeService>().darkTheme ? Colors.grey.shade400 : Colors.grey.shade600
-                ),
-              )
-            ),
-            MaterialButton(
-              padding: EdgeInsets.zero,
-              onPressed: () => Navigator.pushNamed(
-                context,
-                "/post-info",
-                arguments: PostModel(
-                  postId: widget.postId,
-                  title: widget.title,
-                  postImage: widget.postImage,
-                  description: widget.description,
-                  userId: widget.userId,
-                  username: widget.username,
-                  userImage: widget.userImage,
-                  likes: widget.likes,
-                  createdAt: widget.createdAt,
-                )
-              ),
-              child: SizedBox(
-                width: 500,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  child: Hero(
-                    tag: widget.title,
-                    child: CachedNetworkImage(
-                      imageUrl: widget.postImage,
-                      fit: BoxFit.fill,
-                      progressIndicatorBuilder: (BuildContext context, String url, DownloadProgress progress) => SkeletonLine(
-                        style: SkeletonLineStyle(
-                          height: 300,
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                      ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(widget.username,
+                    style: const TextStyle(fontSize: 15),
+                  ),
+                  Text(DateTimeFormat.relative(DateTime.parse(widget.createdAt), appendIfAfter: "ago"),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey
                     ),
                   ),
-                )
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 10,
-                left: 17,
-              ),
-              child: Text(widget.description,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: context.read<DarkThemeService>().darkTheme ? Colors.grey.shade400 : Colors.grey.shade600
-                ),
-              )
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 10),
-              child: Row(
-                children: <Widget>[
-                  MaterialButton(
-                    onPressed: _isLikeButtonDisabled ? null : _likePost,
-                    disabledTextColor: context.read<DarkThemeService>().darkTheme ? Colors.white : Colors.black,
-                    child: SizedBox(
-                      height: 48,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Icon(_thumbsUpIcon,
-                            color: Colors.deepPurple,
-                            size: 22
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: SizedBox(
-                              width: 135,
-                              child: Text(
-                                _likeText,
-                                overflow: TextOverflow.ellipsis
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: SizedBox(
-                      width: 50,
-                      child: Text(
-                        widget.username,
-                        overflow: TextOverflow.ellipsis
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: CircleAvatar(
-                      backgroundImage: CachedNetworkImageProvider(widget.userImage),
-                      radius: 15,
-                    ),
-                  )
                 ],
               ),
-            )
-          ],
+            ],
+          ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 15,
+            bottom: 5,
+            left: 3,
+          ),
+          child: Text(widget.title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+        ),
+        MaterialButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => Navigator.pushNamed(
+            context,
+            "/post-info",
+            arguments: PostModel(
+              postId: widget.postId,
+              title: widget.title,
+              postImage: widget.postImage,
+              description: widget.description,
+              userId: widget.userId,
+              username: widget.username,
+              userImage: widget.userImage,
+              likes: widget.likes,
+              createdAt: widget.createdAt,
+            )
+          ),
+          child: SizedBox(
+            height: 300,
+            width: 500,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              child: Hero(
+                tag: widget.title,
+                child: CachedNetworkImage(
+                  imageUrl: widget.postImage,
+                  fit: BoxFit.cover,
+                  progressIndicatorBuilder: (BuildContext context, String url, DownloadProgress progress) => SkeletonLine(
+                    style: SkeletonLineStyle(
+                      height: 300,
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 10,
+            left: 10,
+          ),
+          child: Text(widget.description,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: context.read<DarkThemeService>().darkTheme ? Colors.grey.shade400 : Colors.grey.shade600
+            ),
+          )
+        ),
+        MaterialButton(
+          onPressed: _isLikeButtonDisabled ? null : _likePost,
+          disabledTextColor: context.read<DarkThemeService>().darkTheme ? Colors.white : Colors.black,
+          padding: const EdgeInsets.only(left: 10),
+          child: SizedBox(
+            height: 48,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Icon(_thumbsUpIcon,
+                  color: Colors.deepPurple,
+                  size: 22
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: SizedBox(
+                    width: 135,
+                    child: Text(
+                      _likeText,
+                      overflow: TextOverflow.ellipsis
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

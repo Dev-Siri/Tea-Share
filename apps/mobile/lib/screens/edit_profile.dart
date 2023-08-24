@@ -6,8 +6,10 @@ import "package:image_picker/image_picker.dart";
 import "package:provider/provider.dart";
 import "package:skeletons/skeletons.dart";
 import "package:tea_share/models/user_model.dart";
+import "package:tea_share/services/theme_service.dart";
 import "package:tea_share/services/users_service.dart";
 import "package:tea_share/utils/error_dialog.dart";
+import "package:tea_share/widgets/top_bar.dart";
 
 class EditProfile extends StatefulWidget {
   const EditProfile({ super.key });
@@ -71,12 +73,8 @@ class _EditProfileState extends State<EditProfile> with ErrorDialog {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text("Edit Profile"),
-      ),
+      backgroundColor: context.watch<DarkThemeService>().darkTheme ? Colors.black : Colors.white,
+      appBar: const TopBar(showBackButton: true),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),

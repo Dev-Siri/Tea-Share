@@ -4,10 +4,12 @@ import "package:provider/provider.dart";
 import "package:tea_share/models/post_model.dart";
 import "package:tea_share/models/user_model.dart";
 import "package:tea_share/services/posts_service.dart";
+import "package:tea_share/services/theme_service.dart";
 import "package:tea_share/utils/formatting.dart";
 import "package:tea_share/widgets/error_message.dart";
 import "package:tea_share/widgets/post_grid.dart";
 import "package:tea_share/widgets/skeletons/posts_grid_skeleton.dart";
+import "package:tea_share/widgets/top_bar.dart";
 
 class OtherProfile extends StatefulWidget {
   const OtherProfile({ super.key });
@@ -72,12 +74,8 @@ class _OtherProfileState extends State<OtherProfile> with Formatting {
     final UserModel user = ModalRoute.of(context)!.settings.arguments as UserModel;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text("${user.username}'s Profile"),
-      ),
+      backgroundColor: context.watch<DarkThemeService>().darkTheme ? Colors.black : Colors.white,
+      appBar: const TopBar(showBackButton: true),
       body: _errorMessage == null ? ListView(
         addAutomaticKeepAlives: false,
         controller: _postsGridController,

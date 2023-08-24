@@ -1,7 +1,9 @@
 import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
+import "package:provider/provider.dart";
 import "package:tea_share/models/post_model.dart";
 import "package:tea_share/models/user_model.dart";
+import "package:tea_share/services/theme_service.dart";
 import "package:tea_share/widgets/user_tile.dart";
 
 class PostInfo extends StatelessWidget {
@@ -12,6 +14,7 @@ class PostInfo extends StatelessWidget {
     final PostModel post = ModalRoute.of(context)!.settings.arguments as PostModel;
     
     return Scaffold(
+      backgroundColor: context.watch<DarkThemeService>().darkTheme ? Colors.black : Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -109,6 +112,7 @@ class PostInfo extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
                       child: Card(
+                        surfaceTintColor: Colors.grey,
                         child: SizedBox(
                           height: MediaQuery.of(context).size.height - 520,
                           child: ListView.builder(

@@ -74,6 +74,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     }
   }
 
+  Future<void> _refreshPosts() async {
+    page = 1;
+    setState(() => _isLoadingPosts = true);
+    await _showPosts();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoadingPosts) {
@@ -87,41 +93,44 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       );
     }
     
-    return AnimatedList(
-      padding: const EdgeInsets.only(
-        left: 10,
-        right: 10,
-        bottom: 25,
+    return RefreshIndicator(
+      onRefresh: _refreshPosts,
+      child: AnimatedList(
+        padding: const EdgeInsets.only(
+          left: 10,
+          right: 10,
+          bottom: 25,
+        ),
+        initialItemCount: _posts.length,
+        key: _postListState,
+        itemBuilder: (BuildContext context, int index, Animation animation) {        
+          if (index == _posts.length - 1) {
+            page++;
+            _showPosts();
+    
+            return const PostsSkeleton();
+          }
+    
+          return ScaleTransition(
+            scale: animation.drive(
+              CurveTween(
+                curve: Curves.easeIn
+              )
+            ),
+            child: PostCard(
+              postId: _posts[index].postId,
+              title: _posts[index].title,
+              description: _posts[index].description,
+              postImage: _posts[index].postImage,
+              userId: _posts[index].userId,
+              username: _posts[index].username,
+              userImage: _posts[index].userImage,
+              createdAt: _posts[index].createdAt,
+              likes: _posts[index].likes,
+            ),
+          );
+        },
       ),
-      initialItemCount: _posts.length,
-      key: _postListState,
-      itemBuilder: (BuildContext context, int index, Animation animation) {        
-        if (index == _posts.length - 1) {
-          page++;
-          _showPosts();
-
-          return const PostsSkeleton();
-        }
-
-        return ScaleTransition(
-          scale: animation.drive(
-            CurveTween(
-              curve: Curves.easeIn
-            )
-          ),
-          child: PostCard(
-            postId: _posts[index].postId,
-            title: _posts[index].title,
-            description: _posts[index].description,
-            postImage: _posts[index].postImage,
-            userId: _posts[index].userId,
-            username: _posts[index].username,
-            userImage: _posts[index].userImage,
-            createdAt: _posts[index].createdAt,
-            likes: _posts[index].likes,
-          ),
-        );
-      },
     );
   }
 }
