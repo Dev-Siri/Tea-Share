@@ -28,22 +28,14 @@ export const actions = {
 };
 
 export async function load({ params }) {
-  const [posts, otherPosts] = await Promise.all([
-    queryClient<Post[] | null>("/posts/search", {
-      searchParams: {
-        q: params.id,
-        type: "id",
-      },
-    }),
-    queryClient<Post[]>("/posts", {
-      searchParams: {
-        page: 1,
-        limit: 12,
-      },
-    }),
-  ]);
+  const posts = await queryClient<Post[] | null>("/posts/search", {
+    searchParams: {
+      q: params.id,
+      type: "id",
+    },
+  });
 
   if (!posts?.[0]) throw error(404, { message: "Not Found" });
 
-  return { post: posts[0], otherPosts };
+  return { post: posts[0] };
 }

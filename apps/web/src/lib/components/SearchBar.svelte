@@ -1,23 +1,39 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { onMount } from "svelte";
 
   import FaSearch from "svelte-icons/fa/FaSearch.svelte";
+
+  let searchInput: HTMLInputElement;
+
+  onMount(() => {
+    function focusInput(e: KeyboardEvent) {
+      const { activeElement } = document;
+      const isInputFocused = activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement;
+
+      if (e.key === "/" && !isInputFocused) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    }
+
+    window.addEventListener("keydown", focusInput);
+
+    return () => window.removeEventListener("keydown", focusInput);
+  });
 </script>
 
-<form
-  action="/search"
-  method="GET"
-  class="bg-white dark:bg-semi-gray absolute mt-24 flex w-screen px-4 min-[700px]:static min-[700px]:ml-auto min-[700px]:mr-2 min-[700px]:mt-0 min-[700px]:w-fit min-[700px]:items-center min-[700px]:rounded-full"
->
+<form action="/search" method="GET" class="bg-light-gray w-full dark:bg-semi-gray flex px-4 items-center rounded-full">
   <input
     type="text"
     placeholder="Search"
     name="query"
-    class="bg-white dark:bg-semi-gray rounded-full p-2 outline-none"
+    class="bg-light-gray dark:bg-semi-gray rounded-full p-2 outline-none"
     value={$page.url.pathname === "/search" ? $page.url.searchParams.get("query") : ""}
+    bind:this={searchInput}
   />
-  <button type="submit" aria-label="Search" class="ml-auto min-[700px]:rounded-full">
-    <div class="h-5">
+  <button type="submit" aria-label="Search" class="ml-auto rounded-full">
+    <div class="h-4 w-4">
       <FaSearch />
     </div>
   </button>

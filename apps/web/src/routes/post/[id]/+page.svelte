@@ -3,12 +3,11 @@
 
   import Comments from "$lib/components/Comments.svelte";
   import Image from "$lib/components/Image.svelte";
-  import UserList from "$lib/components/UserList.svelte";
+  import LikeButton from "$lib/components/LikeButton.svelte";
 
   export let data;
 
-  const { postId, title, description, createdAt, postImage, username, userImage, likes } = data.post;
-  const filteredOtherPosts = data.otherPosts.filter(post => post.postId !== postId);
+  const { postId, title, description, createdAt, postImage, likes, username, userImage } = data.post;
 </script>
 
 <svelte:head>
@@ -26,54 +25,21 @@
   <meta name="twitter:image:alt" content="Post Image" />
 </svelte:head>
 
-<article class="h-screen w-full items-center overflow-hidden overflow-y-auto xl:flex-row xl:items-start">
-  <aside class="mt-[30px] w-full pl-2 pr-4 sm:pl-[60px] md:pr-14">
-    <section class="border-light-gray dark:border-semi-gray mb-4 h-fit w-full rounded-md border-2 p-8 dark:bg-black xl:mb-0">
-      <h1 class="text-4xl font-bold">{title}</h1>
-      <p class="mt-4 w-[200px] sm:w-full">{description}</p>
-      <p class="border-b-semi-gray mb-2 border-b-[1px] pb-2 sm:max-w-full">{getRelativeTime(createdAt)}</p>
-      <div class="border-b-semi-gray flex items-center border-b-[1px] pb-2">
-        <a href="/people/{username}">
-          <Image height={30} width={30} src={userImage} alt={username} loading="eager" class="mr-10px hidden h-[30px] rounded-full md:inline" />
-        </a>
-        <p>Posted by {username}</p>
-      </div>
-    </section>
-    <section class="flex flex-col justify-between md:flex-row">
-      <div class="bg-light-gray dark:border-semi-gray mt-4 h-fit w-fit rounded-md border-2 p-8 dark:bg-black">
-        <Image
-          height={450}
-          width={450}
-          src={postImage}
-          alt={title}
-          class="border-primary rounded-md border-2 object-cover md:h-[450px] md:w-[450px]"
-        />
-      </div>
-      <div class="mt-4 w-full md:ml-4">
-        <UserList title="People who liked this post" users={likes} />
-      </div>
-    </section>
-    <Comments class="border-light-gray dark:border-semi-gray h-fit w-full rounded-md border-2 p-8 mt-4 dark:bg-black" {postId} />
-  </aside>
-  <section class="mt-[30px] w-full pl-2 pr-4 sm:pl-[60px] md:pr-14">
-    <div class="border-light-gray dark:border-semi-gray h-fit w-full rounded-md border-2 p-8 dark:bg-black xl:mb-0">
-      <h1 class="text-4xl font-bold">Other Posts</h1>
+<article class="h-screen w-full p-8 items-center bg-white overflow-hidden overflow-y-auto dark:bg-black">
+  <a href="/people/{username}" class="flex">
+    <Image height={50} width={50} src={userImage} alt={username} loading="eager" class="h-[50px] rounded-full" />
+    <div class="flex flex-col ml-2 justify-center">
+      <span class="font-bold">
+        {username}
+      </span>
+      <span class="text-sm text-gray-500">
+        {getRelativeTime(createdAt)}
+      </span>
     </div>
-  </section>
-  <section class="marquee relative h-full w-[180%] overflow-x-hidden">
-    <div class="track absolute w-[180%] whitespace-nowrap pb-4 pt-10 will-change-transform">
-      {#each filteredOtherPosts as post}
-        <a href="/post/{post.postId}" class="inline-block aspect-square h-[400px] w-[400px] pl-10 duration-200 hover:scale-105">
-          <Image
-            height={500}
-            width={500}
-            loading="lazy"
-            src={post.postImage}
-            alt={post.title}
-            class="aspect-square h-[400px] w-[400px] rounded-md object-cover"
-          />
-        </a>
-      {/each}
-    </div>
-  </section>
+  </a>
+  <h1 class="text-4xl font-bold mt-4">{title}</h1>
+  <p class="my-4 w-[200px] sm:w-full">{description}</p>
+  <Image height={450} width={450} src={postImage} alt={title} class="rounded-md border-2 mb-4 border-light-gray dark:border-semi-gray w-full" />
+  <LikeButton {likes} {postId} alwaysShow />
+  <Comments class="my-4 w-full mb-20" {postId} />
 </article>

@@ -1,20 +1,8 @@
-import { error, redirect, type Actions } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 
 import type { Post, User } from "$lib/types";
 
 import queryClient from "$lib/utils/queryClient";
-
-export const actions: Actions = {
-  async logout({ cookies }) {
-    cookies.delete("auth_token", {
-      httpOnly: true,
-      sameSite: true,
-      path: "/",
-    });
-
-    throw redirect(303, "/auth");
-  },
-};
 
 export async function load({ params: { name } }) {
   const [posts, users] = await Promise.all([

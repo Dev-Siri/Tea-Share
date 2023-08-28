@@ -105,15 +105,15 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.5.3
         version: 0.5.3(prettier-plugin-svelte@3.0.3)(prettier@3.0.2)
+      sv-tooltip:
+        specifier: ^0.1.5
+        version: 0.1.5
       svelte:
         specifier: ^4.2.0
         version: 4.2.0
       svelte-check:
         specifier: ^3.5.0
         version: 3.5.0(@babel/core@7.22.10)(postcss@8.4.28)(svelte@4.2.0)
-      svelte-toggle:
-        specifier: ^4.0.0
-        version: 4.0.0
       svoast:
         specifier: ^2.3.0
         version: 2.3.0(svelte@4.2.0)
@@ -6143,6 +6143,10 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
+  /sv-tooltip@0.1.5:
+    resolution: {integrity: sha512-fdynXLW//7Fe9UApBGg0eFmi+BICra0oHCPS4x+NmEp76iYwPD2Xh67iXks7HPBuP/pDCdvBH8mESWDUD3j3lA==}
+    dev: true
+
   /svelte-check@3.5.0(@babel/core@7.22.10)(postcss@8.4.28)(svelte@4.2.0):
     resolution: {integrity: sha512-KHujbn4k17xKYLmtCwv0sKKM7uiHTYcQvXnvrCcNU6a7hcszh99zFTIoiu/Sp/ewAw5aJmillJ1Cs8gKLmcX4A==}
     hasBin: true
@@ -6251,10 +6255,6 @@ packages:
       strip-indent: 3.0.0
       svelte: 4.2.0
       typescript: 5.1.6
-    dev: true
-
-  /svelte-toggle@4.0.0:
-    resolution: {integrity: sha512-teFYwmRJfls+FM689zMDKF3TFFzYCU1YvMuleGDf2AKFJGsM1RV4+3+zX3q+aBTbIpa2PG7470hoDuCcyvUX6g==}
     dev: true
 
   /svelte@4.2.0:

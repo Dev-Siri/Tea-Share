@@ -12,7 +12,7 @@ export default defineConfig({
     sveltekit(),
     SvelteKitPWA({
       strategies: "generateSW",
-      manifestFilename: "/manifest.webmanifest",
+      manifestFilename: "./public/manifest.webmanifest",
       srcDir: "src",
     })
   ]

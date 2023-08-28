@@ -1,11 +1,8 @@
 <script lang="ts">
-  import { enhance } from "$app/forms";
   import { page } from "$app/stores";
-  import IoMdLogOut from "svelte-icons/io/IoMdLogOut.svelte";
 
   import type { Post } from "$lib/types";
 
-  import user from "$lib/stores/user";
   import { getHandle } from "$lib/utils/globals";
 
   import Image from "$lib/components/Image.svelte";
@@ -16,7 +13,7 @@
   let currentPage = 1;
   let paginatedPosts = data.posts;
 
-  const { username, userImage, userId } = data.user;
+  const { username, userImage } = data.user;
 
   const loadMorePosts = async (event: UIEvent & { currentTarget: EventTarget & HTMLElement }) => {
     const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
@@ -55,26 +52,15 @@
   <meta name="twitter:image:alt" content={username} />
 </svelte:head>
 
-<article class="grid h-screen place-items-center overflow-y-auto pb-32" on:scroll={loadMorePosts}>
-  <section
-    class="border-light-gray dark:border-semi-gray mt-10 flex w-[80%] flex-col items-center rounded-md border-2 bg-white p-12 dark:bg-black sm:ml-5 md:ml-0 md:w-[30%] md:flex-row md:items-start lg:w-1/2"
-  >
+<article class="h-screen overflow-y-auto pb-32" on:scroll={loadMorePosts}>
+  <section class="flex w-full text-center items-center border-b dark:border-semi-gray border-light-gray flex-col bg-white p-10 dark:bg-black">
     <Image src={userImage} alt={username} height={130} width={130} class="h-[130px] rounded-full" />
-    <div class="mt-4 text-center md:ml-8 md:mt-5 md:text-start">
+    <div class="mt-4">
       <h1 class="text-4xl font-bold">{username}</h1>
       <h2 class="text-xl text-gray-400">{getHandle(username)}</h2>
     </div>
-    {#if userId === $user.userId}
-      <form method="POST" action="?/logout" class="mt-auto ml-auto" use:enhance>
-        <button type="submit" class="bg-light-gray dark:bg-semi-gray p-3 rounded-full">
-          <div class="h-7">
-            <IoMdLogOut />
-          </div>
-        </button>
-      </form>
-    {/if}
   </section>
-  <section class="mt-6 w-[90%]">
+  <section>
     {#each paginatedPosts as post, index}
       <PostCard {post} lazyLoadImage={!!index} />
     {/each}

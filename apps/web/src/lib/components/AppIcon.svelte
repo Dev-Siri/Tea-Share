@@ -1,7 +1,7 @@
 <script lang="ts">
   export let height = 269;
   export let width = 274;
-  let className: string = "";
+  let className = "";
 
   export { className as class };
 </script>

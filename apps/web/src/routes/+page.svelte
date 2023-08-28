@@ -2,14 +2,11 @@
   import type { Post } from "$lib/types";
 
   import PostCard from "$lib/components/PostCard.svelte";
-  import UserList from "$lib/components/UserList.svelte";
 
   export let data;
 
-  const { posts, users } = data;
-
   let currentPage = 1;
-  let paginatedPosts = posts;
+  let paginatedPosts = data.posts;
 
   async function loadMorePosts(event: UIEvent & { currentTarget: EventTarget & HTMLElement }) {
     const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
@@ -32,13 +29,8 @@
   }
 </script>
 
-<aside class="flex w-full h-screen min-[1002px]:pr-4">
-  <section role="list" on:scroll={loadMorePosts} class="h-screen w-full overflow-y-auto overflow-hidden px-4 pb-10 pt-4 min-[1002px]:w-[70%]">
-    {#each paginatedPosts as post, index}
-      <PostCard {post} lazyLoadImage={!!index} />
-    {/each}
-  </section>
-  <section class="hidden h-[91vh] py-4 min-[1002px]:block min-[1002px]:w-[30%]">
-    <UserList title="Suggested Accounts" {users} />
-  </section>
-</aside>
+<div role="list" on:scroll={loadMorePosts} class="h-full sm:h-screen w-full overflow-y-auto overflow-hidden pb-10">
+  {#each paginatedPosts as post, index}
+    <PostCard {post} lazyLoadImage={!!index} />
+  {/each}
+</div>

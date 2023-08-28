@@ -35,16 +35,8 @@
   <meta name="twitter:title" content="People" />
 </svelte:head>
 
-<aside
-  class="border-light-gray mt-4 h-screen w-screen dark:border-semi-gray overflow-y-auto rounded-xl border-2 bg-white dark:bg-black"
-  on:scroll={loadMoreUsers}
->
-  <section class="fixed flex h-[8%] w-full items-center bg-white p-2 dark:bg-black">
-    <h1 class="ml-4 text-xl font-medium min-[500px]:block">People</h1>
-  </section>
-  <section role="list" class="mt-14">
-    {#each users as { username, userImage }}
-      <UserListItem {username} {userImage} />
-    {/each}
-  </section>
+<aside class="h-screen overflow-y-auto" on:scroll={loadMoreUsers}>
+  {#each users as { username, userImage }}
+    <UserListItem {username} {userImage} />
+  {/each}
 </aside>

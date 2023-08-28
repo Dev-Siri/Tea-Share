@@ -10,37 +10,11 @@ body {
 }
 
 *::-webkit-scrollbar {
-  @apply w-2;
-}
-
-*::-webkit-scrollbar-track {
-  @apply rounded-lg;
-}
-
-*::-webkit-scrollbar-thumb {
-  @apply h-14 rounded-lg border-4 border-transparent bg-gray-400 bg-clip-content dark:bg-semi-gray;
+  @apply hidden;
 }
 
 ::selection {
   background: rgba(0, 153, 255, 0.247);
-}
-
-.track {
-  animation: marquee 15s linear infinite;
-}
-
-.track:hover {
-  animation-play-state: paused;
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
-  }
 }
 
 @layer base {
@@ -70,19 +44,11 @@ body {
 
   .input {
     @apply ml-1 mt-5 w-full rounded-md
-    border-px border-light-gray p-4 outline-none duration-200 focus:border-primary dark:border-semi-gray dark:bg-semi-gray dark:text-white;
+    border border-light-gray p-4 outline-none duration-200 focus:border-primary dark:border-semi-gray dark:bg-semi-gray dark:text-white;
   }
 
   .btn {
     @apply flex cursor-pointer items-center justify-center rounded-md border-px
     border-primary bg-primary p-10px text-center text-white duration-200 hover:bg-primary-dark;
   }
-}
-
-#user-dropdown + #user-dropdown-menu {
-  @apply hidden;
-}
-
-#user-dropdown:checked + #user-dropdown-menu {
-  @apply block;
 }
