@@ -9,7 +9,7 @@ import (
 var scrpytInstance *scrypt.App
 
 func InitHash() error {
-	base64SignerKey, base64SaltSeparator := env.GetBase65Keys()
+	base64SignerKey, base64SaltSeparator := env.GetBase64Keys()
 
 	app, err := scrypt.New(
 		base64SignerKey,

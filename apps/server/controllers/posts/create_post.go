@@ -19,16 +19,6 @@ func CreatePost(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	if len(post.Title) < 4 {
-		ctx.Error("Title too short", fasthttp.StatusBadRequest)
-		return
-	}
-
-	if len(post.Title) > 255 {
-		ctx.Error("Title too long", fasthttp.StatusBadRequest)
-		return
-	}
-
 	isValid, message := utils.IsValidUserID(post.UserID)
 
 	if !isValid {
@@ -36,20 +26,26 @@ func CreatePost(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	uploadedImageUrl, imageUploadError := db.UploadDataURL(
-		post.PostImage,
-		"posts/"+uuid.NewString(),
-	)
+	postImage := ""
 
-	if imageUploadError != nil {
-		ctx.Error("Failed to upload post image", fasthttp.StatusInternalServerError)
-		return
+	if post.PostImage != "" {
+		uploadedImageUrl, imageUploadError := db.UploadDataURL(
+			post.PostImage,
+			"posts/"+uuid.NewString(),
+		)
+
+		if imageUploadError != nil {
+			ctx.Error("Failed to upload post image", fasthttp.StatusInternalServerError)
+			return
+		}
+
+		postImage = uploadedImageUrl
 	}
 
 	_, dbInsertError := db.Database.Query(`
-		INSERT INTO Posts(post_id, title, description, post_image, created_at, user_id)
-		VALUES ( ?, ?, ?, ?, ?, ? )
-	;`, uuid.NewString(), post.Title, post.Description, uploadedImageUrl, time.Now().UTC(), post.UserID)
+		INSERT INTO Posts(post_id, caption, post_image, created_at, user_id)
+		VALUES ( ?, ?, ?, ?, ? )
+	;`, uuid.NewString(), post.Caption, utils.NewNullString(postImage), time.Now().UTC(), post.UserID)
 
 	if dbInsertError != nil {
 		ctx.Error("Failed to create post", fasthttp.StatusInternalServerError)

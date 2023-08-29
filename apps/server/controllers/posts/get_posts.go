@@ -53,11 +53,10 @@ func GetPosts(ctx *fasthttp.RequestCtx) {
 
 		if postDecodeError := rows.Scan(
 			&post.PostID,
-			&post.Title,
-			&post.Description,
 			&post.PostImage,
 			&post.CreatedAt,
 			&post.UserID,
+			&post.Caption,
 			&post.Username,
 			&post.UserImage,
 			&likesJSON,

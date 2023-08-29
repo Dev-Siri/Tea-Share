@@ -1,3 +1,5 @@
+// ! EXPERIMENTAL
+// ! NOT IN USE BY THE APP YET
 package email
 
 import (

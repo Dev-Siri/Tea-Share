@@ -109,11 +109,11 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 			LEFT JOIN Likes l ON l.post_id = p.post_id
 			LEFT JOIN Users u ON u.user_id = p.user_id
 			LEFT JOIN Users lu ON lu.user_id = l.user_id
-			WHERE title LIKE ? OR description LIKE ?
+			WHERE caption LIKE ?
 			GROUP BY p.post_id
 			ORDER BY p.created_at DESC
 			LIMIT ? OFFSET ?
-		`, likeQuery, likeQuery, limit, page)
+		`, likeQuery, limit, page)
 
 		postsFetchError = err
 		rows = queriedRows
@@ -134,8 +134,7 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 
 		if postsDecodeError := rows.Scan(
 			&post.PostID,
-			&post.Title,
-			&post.Description,
+			&post.Caption,
 			&post.PostImage,
 			&post.CreatedAt,
 			&post.UserID,
