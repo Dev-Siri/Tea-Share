@@ -134,10 +134,10 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 
 		if postsDecodeError := rows.Scan(
 			&post.PostID,
-			&post.Caption,
 			&post.PostImage,
 			&post.CreatedAt,
 			&post.UserID,
+			&post.Caption,
 			&post.Username,
 			&post.UserImage,
 			&likesJSON,
