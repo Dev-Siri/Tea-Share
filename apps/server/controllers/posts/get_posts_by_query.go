@@ -130,6 +130,8 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 
 	for rows.Next() {
 		var post models.Post
+		var postImage sql.NullString
+
 		var likesJSON []uint8
 
 		if postsDecodeError := rows.Scan(
@@ -145,6 +147,8 @@ func GetPostsBySearchTerm(ctx *fasthttp.RequestCtx) {
 			ctx.Error("Failed to decode posts", fasthttp.StatusInternalServerError)
 			return
 		}
+
+		post.PostImage = postImage.String
 
 		likes, likesParseError := utils.ParseLikes(likesJSON)
 

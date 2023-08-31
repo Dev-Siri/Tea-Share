@@ -1,6 +1,7 @@
 package post_controllers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"tea-share/db"
 	"tea-share/models"
@@ -49,11 +50,13 @@ func GetPosts(ctx *fasthttp.RequestCtx) {
 
 	for rows.Next() {
 		var post models.Post
+		var postImage sql.NullString
+
 		var likesJSON []uint8
 
 		if postDecodeError := rows.Scan(
 			&post.PostID,
-			&post.PostImage,
+			&postImage,
 			&post.CreatedAt,
 			&post.UserID,
 			&post.Caption,
@@ -64,6 +67,8 @@ func GetPosts(ctx *fasthttp.RequestCtx) {
 			ctx.Error("Failed to decode posts", fasthttp.StatusInternalServerError)
 			return
 		}
+
+		post.PostImage = postImage.String
 
 		likes, likesParseError := utils.ParseLikes(likesJSON)
 

@@ -5,7 +5,7 @@ import "time"
 type Post struct {
 	PostID    string    `json:"postId"`
 	Caption   string    `json:"caption"`
-	PostImage string    `json:"postImage"`
+	PostImage string    `json:"postImage,omitempty"`
 	CreatedAt time.Time `json:"createdAt"`
 	Likes     []Like    `json:"likes"`
 	UserID    string    `json:"userId"`
