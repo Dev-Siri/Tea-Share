@@ -8,8 +8,8 @@ import "package:tea_share/services/theme_service.dart";
 import "package:tea_share/services/users_service.dart";
 import "package:tea_share/utils/formatting.dart";
 import "package:tea_share/widgets/error_message.dart";
-import "package:tea_share/widgets/post_grid.dart";
-import "package:tea_share/widgets/skeletons/posts_grid_skeleton.dart";
+import "package:tea_share/widgets/post_card.dart";
+import "package:tea_share/widgets/skeletons/posts_skeleton.dart";
 import "package:tea_share/widgets/top_bar.dart";
 
 class Profile extends StatefulWidget {
@@ -23,11 +23,10 @@ int page = 1;
 
 class _ProfileState extends State<Profile> with Formatting {
   final ScrollController _postsGridController = ScrollController();
+  final List<PostModel> _posts = [];
 
   String _profileImage = "";
   String _username = "";
-
-  List<PostModel> _posts = [];
   bool _isLoading = true;
 
   String? _errorMessage;
@@ -61,7 +60,7 @@ class _ProfileState extends State<Profile> with Formatting {
 
   Future<void> _setupUser() async {
     final UserModel? user = await context.read<UserService>().user;
-  
+
     if (user != null) {
       setState(() {
         _profileImage = user.userImage;
@@ -81,11 +80,11 @@ class _ProfileState extends State<Profile> with Formatting {
   
     setState(() {
       if (mounted && postsResponse.successful && postsResponse.posts != null) {
-        _posts = [..._posts, ...postsResponse.posts!];
+        _posts.addAll(postsResponse.posts!);
       } else {
         _errorMessage = postsResponse.errorMessage;
       }
-      
+
       _isLoading = false;
     });
   }
@@ -93,9 +92,13 @@ class _ProfileState extends State<Profile> with Formatting {
   @override
   Widget build(BuildContext context) {
     if (_errorMessage != null) {
-      return ErrorMessage(
-        icon: Icons.error,
-        message: _errorMessage!
+      return Scaffold(
+        backgroundColor: context.watch<DarkThemeService>().darkTheme ? Colors.black : Colors.white,
+        appBar: const TopBar(showBackButton: true),
+        body: ErrorMessage(
+          icon: Icons.error,
+          message: _errorMessage!
+        ),
       );
     }
 
@@ -143,7 +146,7 @@ class _ProfileState extends State<Profile> with Formatting {
             ),
           ),
           if (_isLoading)
-            const PostsGridSkeleton()
+            const PostsSkeleton()
           else if (_posts.isEmpty)
             const Padding(
               padding: EdgeInsets.only(top: 120),
@@ -155,13 +158,27 @@ class _ProfileState extends State<Profile> with Formatting {
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 8),
-                    child: Text('You have not posted anything yet.'),
+                    child: Text("You have not posted anything yet."),
                   ),
                 ],
               ),
             )
           else
-            PostGrid(posts: _posts),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                children: _posts.map((PostModel post) => PostCard(
+                  postId: post.postId,
+                  caption: post.caption,
+                  userId: post.userId,
+                  username: post.username,
+                  userImage: post.userImage,
+                  postImage: post.postImage,
+                  createdAt: post.createdAt,
+                  likes: post.likes
+                )).toList(),
+              ),
+            )
         ],
       ),
     );

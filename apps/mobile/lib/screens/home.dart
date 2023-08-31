@@ -56,8 +56,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             _posts.add(
               PostModel(
                 postId: post.postId,
-                title: post.title,
-                description: post.description,
+                caption: post.caption,
                 postImage: post.postImage,
                 username: post.username,
                 userImage: post.userImage,
@@ -119,8 +118,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             ),
             child: PostCard(
               postId: _posts[index].postId,
-              title: _posts[index].title,
-              description: _posts[index].description,
+              caption: _posts[index].caption,
               postImage: _posts[index].postImage,
               userId: _posts[index].userId,
               username: _posts[index].username,

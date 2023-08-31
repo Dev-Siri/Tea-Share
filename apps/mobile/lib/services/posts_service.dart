@@ -96,21 +96,23 @@ class PostService {
   }
 
   Future<PostsServiceResponse> createPost({
-    required String title,
-    required String description,
-    required XFile postImage,
+    required String caption,
+    required XFile? postImage,
     required String userId,
   }) async {
-    final String encodedImage = await compute(base64Encode, await postImage.readAsBytes());
-    final String imageDataUrl = "data:${postImage.mimeType};base64,$encodedImage";
+    String imageUrl = "";
+
+    if (postImage != null) {
+      final String encodedImage = await compute(base64Encode, await postImage.readAsBytes());
+      imageUrl = "data:${postImage.mimeType};base64,$encodedImage";
+    }
 
     final http.Response response = await http.post(
       Uri.parse(_postsUrl),
       headers: _headers,
       body: jsonEncode({
-        "title": title,
-        "description": description,
-        "postImage": imageDataUrl,
+        "caption": caption,
+        "postImage": imageUrl,
         "userId": userId,
       })
     );

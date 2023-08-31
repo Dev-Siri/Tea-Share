@@ -16,6 +16,7 @@ dependencies:
   flutter_expandable_fab: ^1.7.0
   cached_network_image: ^3.2.3
   shared_preferences: ^2.0.16
+  full_screen_image: ^2.0.0
   date_time_format: ^2.0.1
   cupertino_icons: ^1.0.5
   image_picker: ^0.8.6+1

@@ -189,8 +189,7 @@ class _SearchState extends State<Search> {
 
                       return PostCard(
                         postId: _posts[index].postId,
-                        title: _posts[index].title,
-                        description: _posts[index].description,
+                        caption: _posts[index].caption,
                         postImage: _posts[index].postImage,
                         userId: _posts[index].userId,
                         username: _posts[index].username,

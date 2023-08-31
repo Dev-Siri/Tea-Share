@@ -7,8 +7,8 @@ import "package:tea_share/services/posts_service.dart";
 import "package:tea_share/services/theme_service.dart";
 import "package:tea_share/utils/formatting.dart";
 import "package:tea_share/widgets/error_message.dart";
-import "package:tea_share/widgets/post_grid.dart";
-import "package:tea_share/widgets/skeletons/posts_grid_skeleton.dart";
+import "package:tea_share/widgets/post_card.dart";
+import "package:tea_share/widgets/skeletons/posts_skeleton.dart";
 import "package:tea_share/widgets/top_bar.dart";
 
 class OtherProfile extends StatefulWidget {
@@ -124,9 +124,23 @@ class _OtherProfileState extends State<OtherProfile> with Formatting {
             ),
           ),
           if (_isLoading)
-            const PostsGridSkeleton()
+            const PostsSkeleton()
           else if (_posts.isNotEmpty)
-            PostGrid(posts: _posts)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                children: _posts.map((PostModel post) => PostCard(
+                  postId: post.postId,
+                  caption: post.caption,
+                  userId: post.userId,
+                  username: post.username,
+                  userImage: post.userImage,
+                  postImage: post.postImage,
+                  createdAt: post.createdAt,
+                  likes: post.likes
+                )).toList(),
+              ),
+            )
           else
             Padding(
               padding: const EdgeInsets.only(top: 120),

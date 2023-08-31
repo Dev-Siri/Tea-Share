@@ -2,9 +2,8 @@ import "like_model.dart";
 
 class PostModel {
   final String postId;
-  final String title;
-  final String description;
-  final String postImage;
+  final String caption;
+  final String? postImage;
   final String userId;
   final String username;
   final String userImage;
@@ -13,8 +12,7 @@ class PostModel {
 
   const PostModel({
     required this.postId,
-    required this.title,
-    required this.description,
+    required this.caption,
     required this.userId,
     required this.username,
     required this.userImage,
@@ -25,9 +23,8 @@ class PostModel {
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
     postId: json["postId"] as String,
-    title: json["title"] as String,
-    description: json["description"] as String,
-    postImage: json["postImage"] as String,
+    caption: json["caption"] as String,
+    postImage: json["postImage"] as String?,
     userId: json["userId"] as String,
     username: json["username"] as String,
     userImage: json["userImage"] as String,
