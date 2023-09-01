@@ -77,10 +77,10 @@ class _ProfileState extends State<Profile> with Formatting {
       page: page,
       limit: 8,
     );
-  
+
     setState(() {
-      if (mounted && postsResponse.successful && postsResponse.posts != null) {
-        _posts.addAll(postsResponse.posts!);
+      if (mounted && postsResponse.successful && postsResponse.data != null) {
+        _posts.addAll(postsResponse.data!);
       } else {
         _errorMessage = postsResponse.errorMessage;
       }

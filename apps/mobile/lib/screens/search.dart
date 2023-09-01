@@ -83,8 +83,8 @@ class _SearchState extends State<Search> {
     );
 
      setState(() {
-       if (postsResponse.successful && postsResponse.posts != null) {
-         _posts = [..._posts, ...postsResponse.posts!];
+       if (postsResponse.successful && postsResponse.data != null) {
+         _posts = [..._posts, ...postsResponse.data!];
        } else {
          _errorMessage = postsResponse.errorMessage;
        }

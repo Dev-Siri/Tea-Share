@@ -5,19 +5,37 @@ import "package:flutter/foundation.dart";
 import "package:http/http.dart" as http;
 import "package:image_picker/image_picker.dart";
 import "package:tea_share/constants.dart";
+import "package:tea_share/models/comment_model.dart";
 import "package:tea_share/models/post_model.dart";
 
-class PostsServiceResponse {
+class PostsServiceResponse<T> {
   final bool successful;
-  
-  List<PostModel>? posts;
+
+  T? data;
   String? errorMessage;
 
   PostsServiceResponse({
     required this.successful,
-    this.posts,
+    this.data,
     this.errorMessage,
   });
+}
+
+class CommentsResponse {
+  final int total;
+  final List<CommentModel> comments;
+
+  const CommentsResponse({
+    required this.total,
+    required this.comments
+  });
+
+  factory CommentsResponse.fromJson(Map<String, dynamic> json) => CommentsResponse(
+    total: json["total"] as int,
+    comments: (json["comments"] as List<dynamic>)
+      .map((commentJson) => CommentModel.fromJson(commentJson))
+      .toList()
+  );
 }
 
 class PostService {
@@ -36,25 +54,50 @@ class PostService {
     return posts;
   }
 
-  Future<PostsServiceResponse> fetchPosts({ required int limit, required int page }) async {
+  CommentsResponse _decodeComments(http.Response response) {
+    final body = jsonDecode(response.body);
+    final CommentsResponse comments = CommentsResponse.fromJson(body);
+
+    return comments;
+  }
+
+  Future<PostsServiceResponse<List<PostModel>>> fetchPosts({ required int limit, required int page }) async {
     final http.Response response = await http.get(Uri.parse("$_postsUrl?page=$page&limit=$limit"));
 
     if (response.statusCode == 200) {
       final List<PostModel> posts = await compute(_decodePosts, response);
       
-      return PostsServiceResponse(
+      return PostsServiceResponse<List<PostModel>>(
         successful: true,
-        posts: posts
+        data: posts
       );
     }
     
-    return PostsServiceResponse(
+    return PostsServiceResponse<List<PostModel>>(
       successful: false,
       errorMessage: "${response.body}\nThe server responded with a status of ${response.statusCode}"
     );
   }
 
-  Future<PostsServiceResponse> fetchPostsByQuery({
+  Future<PostsServiceResponse<CommentsResponse>> fetchComments({ required int limit, required int page, required String postId }) async {
+    final http.Response response = await http.get(Uri.parse("$_postsUrl/$postId/comments?page=$page&limit=$limit"));
+
+    if (response.statusCode == 200) {
+      final CommentsResponse comments = await compute(_decodeComments, response);
+
+      return PostsServiceResponse(
+        successful: true,
+        data: comments
+      );
+    }
+
+    return PostsServiceResponse<CommentsResponse>(
+      successful: false,
+      errorMessage: "${response.body}\nThe server responded with a status of ${response.statusCode}"
+    );
+  }
+
+  Future<PostsServiceResponse<List<PostModel>>> fetchPostsByQuery({
     required String query,
     required int page,
     required int limit,
@@ -67,13 +110,13 @@ class PostService {
     if (response.statusCode == 200) {
       final List<PostModel> posts = await compute(_decodePosts, response);
 
-      return PostsServiceResponse(
+      return PostsServiceResponse<List<PostModel>>(
         successful: true,
-        posts: posts,
+        data: posts,
       );
     }
 
-    return PostsServiceResponse(
+    return PostsServiceResponse<List<PostModel>>(
       successful: false,
       errorMessage: "${response.body}\nThe Server responded with a status code of ${response.statusCode}"
     );
@@ -123,5 +166,24 @@ class PostService {
       successful: false,
       errorMessage: "${response.body}\nThe server responded with a status code of ${response.statusCode}"
     );
+  }
+
+  Future<PostsServiceResponse> addComment({
+    required String postId,
+    required String userId,
+    required String comment,
+  }) async {
+    final http.Response response = await http.post(
+      Uri.parse("$_postsUrl/$postId/comments?userId=$userId"),
+      body: jsonEncode({
+        "comment": comment
+      })
+    );
+
+    if (response.statusCode == 201) {
+      return PostsServiceResponse(successful: true);
+    }
+
+    return PostsServiceResponse(successful: false);
   }
 }

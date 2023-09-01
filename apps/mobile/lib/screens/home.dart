@@ -51,7 +51,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       setState(() {
         _isLoadingPosts = false;
 
-        for (PostModel post in response.posts!) {
+        for (PostModel post in response.data!) {
           Future.delayed(const Duration(milliseconds: 50), () {
             _posts.add(
               PostModel(
@@ -84,14 +84,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     if (_isLoadingPosts) {
       return const PostsSkeleton();
     }
-    
+
     if (_errorMessage != null) {
       return ErrorMessage(
         icon: Icons.error,
         message: _errorMessage!
       );
     }
-    
+
     return RefreshIndicator(
       onRefresh: _refreshPosts,
       child: AnimatedList(

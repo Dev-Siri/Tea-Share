@@ -59,12 +59,12 @@ class _OtherProfileState extends State<OtherProfile> with Formatting {
     );
 
     setState(() {
-      if (mounted && postsResponse.successful && postsResponse.posts != null) {
-        _posts = [..._posts, ...postsResponse.posts!];
+      if (mounted && postsResponse.successful && postsResponse.data != null) {
+        _posts = [..._posts, ...postsResponse.data!];
       } else {
         _errorMessage = postsResponse.errorMessage;
       }
-      
+
       _isLoading = false;
     });
   }
