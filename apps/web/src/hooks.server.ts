@@ -31,7 +31,8 @@ export async function handle({ event, resolve }) {
   }
 
   const response = await resolve(event, {
-    transformPageChunk: ({ html }) => html.replace("%app.theme%", event.url.pathname.endsWith("/embed") ? "embed-theme" : event.cookies.get("theme") || "light"),
+    transformPageChunk: ({ html }) =>
+      html.replace("%app.theme%", event.url.pathname.endsWith("/embed") ? "embed-theme" : event.cookies.get("theme") || "light"),
     filterSerializedResponseHeaders: () => true,
   });
 

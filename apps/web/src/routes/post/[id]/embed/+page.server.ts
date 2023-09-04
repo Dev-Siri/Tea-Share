@@ -22,6 +22,6 @@ export async function load({ params, url: { searchParams } }) {
     embedInfo: {
       theme: searchParams.get("theme") ?? "light",
       imageSize: searchParams.get("imageSize") ?? "100%",
-    }
+    },
   };
 }

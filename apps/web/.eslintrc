@@ -1,6 +1,11 @@
 {
   "root": true,
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:svelte/recommended", "@tea-share/packages/config/.eslintrc"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:svelte/recommended",
+    "./node_modules/@tea-share/packages/config/.eslintrc"
+  ],
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "parserOptions": {

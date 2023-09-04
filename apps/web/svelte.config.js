@@ -10,8 +10,8 @@ const config = {
       serviceWorker: "src/service-worker.ts",
     },
     serviceWorker: {
-      register: false
-    }
+      register: false,
+    },
   },
 };
 

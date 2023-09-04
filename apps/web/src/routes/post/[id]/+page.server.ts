@@ -38,15 +38,15 @@ export async function load({ params }) {
     queryClient<CommentsResponse>(`/posts/${params.id}/comments`, {
       searchParams: {
         page: 1,
-        limit: 4
-      }
-    })
+        limit: 4,
+      },
+    }),
   ]);
 
   if (!posts?.[0]) throw error(404, { message: "Not Found" });
 
   return {
     post: posts[0],
-    initialComments: comments
+    initialComments: comments,
   };
 }

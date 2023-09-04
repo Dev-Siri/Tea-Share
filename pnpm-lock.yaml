@@ -10,6 +10,12 @@ importers:
       prettier:
         specifier: ^3.0.2
         version: 3.0.2
+      prettier-plugin-svelte:
+        specifier: ^3.0.3
+        version: 3.0.3(prettier@3.0.2)(svelte@4.2.0)
+      prettier-plugin-tailwindcss:
+        specifier: ^0.5.4
+        version: 0.5.4(prettier-plugin-svelte@3.0.3)(prettier@3.0.2)
 
   apps/pfp-generator:
     dependencies:
@@ -99,12 +105,6 @@ importers:
       prettier:
         specifier: ^3.0.3
         version: 3.0.3
-      prettier-plugin-svelte:
-        specifier: ^3.0.3
-        version: 3.0.3(prettier@3.0.3)(svelte@4.2.0)
-      prettier-plugin-tailwindcss:
-        specifier: ^0.5.4
-        version: 0.5.4(prettier-plugin-svelte@3.0.3)(prettier@3.0.3)
       sv-tooltip:
         specifier: ^0.1.5
         version: 0.1.5
@@ -5607,17 +5607,17 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier-plugin-svelte@3.0.3(prettier@3.0.3)(svelte@4.2.0):
+  /prettier-plugin-svelte@3.0.3(prettier@3.0.2)(svelte@4.2.0):
     resolution: {integrity: sha512-dLhieh4obJEK1hnZ6koxF+tMUrZbV5YGvRpf2+OADyanjya5j0z1Llo8iGwiHmFWZVG/hLEw/AJD5chXd9r3XA==}
     peerDependencies:
       prettier: ^3.0.0
       svelte: ^3.2.0 || ^4.0.0-next.0
     dependencies:
-      prettier: 3.0.3
+      prettier: 3.0.2
       svelte: 4.2.0
     dev: true
 
-  /prettier-plugin-tailwindcss@0.5.4(prettier-plugin-svelte@3.0.3)(prettier@3.0.3):
+  /prettier-plugin-tailwindcss@0.5.4(prettier-plugin-svelte@3.0.3)(prettier@3.0.2):
     resolution: {integrity: sha512-QZzzB1bID6qPsKHTeA9qPo1APmmxfFrA5DD3LQ+vbTmAnY40eJI7t9Q1ocqel2EKMWNPLJqdTDWZj1hKYgqSgg==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
@@ -5669,8 +5669,8 @@ packages:
       prettier-plugin-twig-melody:
         optional: true
     dependencies:
-      prettier: 3.0.3
-      prettier-plugin-svelte: 3.0.3(prettier@3.0.3)(svelte@4.2.0)
+      prettier: 3.0.2
+      prettier-plugin-svelte: 3.0.3(prettier@3.0.2)(svelte@4.2.0)
     dev: true
 
   /prettier@3.0.2:

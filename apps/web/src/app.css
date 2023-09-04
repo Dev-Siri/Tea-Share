@@ -29,19 +29,19 @@ body {
 
   ::file-selector-button {
     font-family: "Inter", sans-serif;
-    @apply mr-2 cursor-pointer rounded-xl border-px border-none border-primary bg-primary p-3 text-white duration-200 hover:bg-primary-dark;
+    @apply border-px border-primary bg-primary hover:bg-primary-dark mr-2 cursor-pointer rounded-xl border-none p-3 text-white duration-200;
   }
 }
 
 @layer utilities {
   .input {
-    @apply ml-1 mt-5 w-full rounded-md border border-light-gray p-4 outline-none duration-200
-    focus:border-primary dark:border-semi-gray dark:bg-semi-gray dark:text-white;
+    @apply border-light-gray focus:border-primary dark:border-semi-gray dark:bg-semi-gray ml-1 mt-5 w-full rounded-md border
+    p-4 outline-none duration-200 dark:text-white;
   }
 
   .btn {
-    @apply flex cursor-pointer items-center justify-center rounded-full border-px
-    border-primary bg-primary p-10px px-4 text-center text-white duration-200 hover:bg-primary-dark;
+    @apply border-px border-primary bg-primary p-10px hover:bg-primary-dark flex
+    cursor-pointer items-center justify-center rounded-full px-4 text-center text-white duration-200;
   }
 }
 
@@ -70,11 +70,15 @@ body {
 }
 
 #main-view::view-transition-old(#main-view) {
-  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out, 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+  animation:
+    90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
 }
 
 #main-view::view-transition-new(#main-view) {
-  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in, 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+  animation:
+    210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
 }
 
 @media (prefers-reduced-motion) {

@@ -15,7 +15,7 @@ export const actions: Actions = {
       return fail(400, {
         ...postValidationResult,
         suppliedValues: {
-          caption: data["caption"]
+          caption: data["caption"],
         },
       });
 

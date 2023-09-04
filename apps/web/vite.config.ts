@@ -4,9 +4,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   define: {
-    "process.env.NODE_ENV": process.env["NODE_ENV"] === "production" 
-    ? '"production"'
-    : '"development"'
+    "process.env.NODE_ENV": process.env["NODE_ENV"] === "production" ? '"production"' : '"development"',
   },
   plugins: [
     sveltekit(),
@@ -14,6 +12,6 @@ export default defineConfig({
       strategies: "generateSW",
       manifestFilename: "./public/manifest.webmanifest",
       srcDir: "src",
-    })
-  ]
+    }),
+  ],
 });
