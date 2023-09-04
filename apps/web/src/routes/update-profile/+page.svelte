@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
-  import FaCamera from "svelte-icons/fa/FaCamera.svelte";
   import Circle from "svelte-loading-spinners/Circle.svelte";
+  import CameraIcon from "svelte-material-icons/Camera.svelte";
 
   import SuccessMessage from "$lib/components/SuccessMessage.svelte";
   import user from "$lib/stores/user";
@@ -30,9 +30,7 @@
         <img src={URL.createObjectURL(previewImage)} alt="Profile" class="cursor-pointer rounded-full h-36" />
       {:else}
         <div class="rounded-full cursor-pointer bg-black p-10 border-2 border-gray-600 w-fit items-center">
-          <div class="h-10">
-            <FaCamera />
-          </div>
+          <CameraIcon size={40} />
         </div>
       {/if}
     </label>

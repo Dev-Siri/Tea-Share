@@ -46,13 +46,13 @@
       <MdFreeBreakfast />
     </div>
   </a>
-  <article class="flex flex-col mt-auto justify-center items-center w-full lg:flex-row">
+  <article class="flex flex-col mt-auto justify-center items-center w-full lg:flex-row lg:justify-start">
     <Image src={$user.userImage} alt={$user.username} height={48} width={48} class="h-12 w-12 rounded-full" />
     <section class="ml-3">
       <h6 class="font-bold hidden lg:block">{$user.username}</h6>
       <p class="text-gray-500 text-xs hidden lg:block">{getHandle($user.username)}</p>
     </section>
-    <section class="flex flex-col gap-2 justify-center w-full items-center ml-auto mt-4 lg:mt-0 lg:flex-row">
+    <section class="w-full flex flex-col items-center gap-1 justify-end lg:flex-row">
       <ThemeToggle />
       <Logout />
     </section>

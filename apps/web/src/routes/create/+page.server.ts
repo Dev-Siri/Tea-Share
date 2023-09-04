@@ -15,20 +15,20 @@ export const actions: Actions = {
       return fail(400, {
         ...postValidationResult,
         suppliedValues: {
-          title: data["title"],
-          description: data["description"],
+          caption: data["caption"]
         },
       });
 
-    const { title, description, image } = postValidationResult.data;
+    const { caption, image } = postValidationResult.data;
 
-    const encodedImage = await encodeToBase64(image);
+    let encodedImage = "";
+
+    if (image.size) encodedImage = await encodeToBase64(image);
 
     await queryClient("/posts", {
       method: "POST",
       body: {
-        title,
-        description,
+        caption,
         postImage: encodedImage,
         userId: locals.user.userId,
       },

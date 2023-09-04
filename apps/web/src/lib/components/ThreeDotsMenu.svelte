@@ -11,7 +11,10 @@
 
   let menuOpen = false;
 
-  const toggleMenu = () => (menuOpen = true);
+  function toggleMenu(event: (MouseEvent | KeyboardEvent) & { currentTarget: EventTarget & HTMLElement }) {
+    event.stopPropagation();
+    menuOpen = true;
+  }
 </script>
 
 <div class="relative inline-block text-left">

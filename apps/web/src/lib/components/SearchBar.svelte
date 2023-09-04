@@ -11,6 +11,7 @@
       const { activeElement } = document;
       const isInputFocused = activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement;
 
+      // focuses search input only when the user isn't focusing other inputs.
       if (e.key === "/" && !isInputFocused) {
         e.preventDefault();
         searchInput.focus();

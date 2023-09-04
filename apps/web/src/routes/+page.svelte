@@ -10,7 +10,6 @@
 
   async function loadMorePosts(event: UIEvent & { currentTarget: EventTarget & HTMLElement }) {
     const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
-
     const didScrollToBottom = scrollHeight - scrollTop === clientHeight;
 
     if (didScrollToBottom) {

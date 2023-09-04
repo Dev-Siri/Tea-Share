@@ -53,16 +53,24 @@
 </svelte:head>
 
 <article class="h-screen overflow-y-auto pb-32" on:scroll={loadMorePosts}>
-  <section class="flex w-full text-center items-center border-b dark:border-semi-gray border-light-gray flex-col bg-white p-10 dark:bg-black">
-    <Image src={userImage} alt={username} height={130} width={130} class="h-[130px] rounded-full" />
-    <div class="mt-4">
+  <section class="flex w-full gap-4 items-center border-b dark:border-semi-gray border-light-gray bg-white p-10 dark:bg-black">
+    <Image src={userImage} alt={username} height={100} width={100} class="h-[100px] rounded-full" />
+    <div>
       <h1 class="text-4xl font-bold">{username}</h1>
       <h2 class="text-xl text-gray-400">{getHandle(username)}</h2>
     </div>
   </section>
-  <section>
-    {#each paginatedPosts as post, index}
-      <PostCard {post} lazyLoadImage={!!index} />
-    {/each}
+  <section class="h-full">
+    {#if paginatedPosts.length}
+      {#each paginatedPosts as post, index}
+        <PostCard {post} lazyLoadImage={!!index} />
+      {/each}
+    {:else}
+      <div class="h-2/3 flex items-center justify-center">
+        <p class="text-gray-500">
+          No posts by {username}
+        </p>
+      </div>
+    {/if}
   </section>
 </article>

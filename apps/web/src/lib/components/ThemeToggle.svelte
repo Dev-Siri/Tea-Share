@@ -1,7 +1,7 @@
 <script lang="ts">
   import SvelteToolTip from "sv-tooltip";
-  import FaMoon from "svelte-icons/fa/FaMoon.svelte";
-  import FaSun from "svelte-icons/fa/FaSun.svelte";
+  import MoonWaxingCrescentIcon from "svelte-material-icons/MoonWaxingCrescent.svelte";
+  import SunIcon from "svelte-material-icons/SunAngle.svelte";
 
   import theme from "$lib/stores/theme";
 
@@ -16,14 +16,12 @@
   }
 </script>
 
-<SvelteToolTip tip="{$theme.charAt(0).toUpperCase() + $theme.slice(1)} Theme" right class="bg-light-gray dark:bg-dark-gray">
+<SvelteToolTip tip="{$theme.charAt(0).toUpperCase()}{$theme.slice(1)} Theme" right class="bg-light-gray dark:bg-dark-gray">
   <button class="p-3 rounded-full hover:bg-light-gray dark:hover:bg-dark-gray" on:click={toggleTheme}>
-    <div class="h-5 w-5">
-      {#if $theme === "dark"}
-        <FaMoon />
-      {:else}
-        <FaSun />
-      {/if}
-    </div>
+    {#if $theme === "dark"}
+      <MoonWaxingCrescentIcon size={20} />
+    {:else}
+      <SunIcon size={20} />
+    {/if}
   </button>
 </SvelteToolTip>

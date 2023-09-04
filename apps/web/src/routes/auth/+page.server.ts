@@ -1,6 +1,6 @@
 import { dev } from "$app/environment";
 import { PRIVATE_GOOGLE_CLIENT_ID, PRIVATE_GOOGLE_CLIENT_SECRET } from "$env/static/private";
-import { Redirect, fail, redirect, type Actions } from "@sveltejs/kit";
+import { fail, redirect, type Actions, type Redirect } from "@sveltejs/kit";
 import { OAuth2Client } from "google-auth-library";
 import * as jwtDecode from "jwt-decode";
 
@@ -103,7 +103,6 @@ export const actions: Actions = {
 
       throw redirect(301, "/");
     } catch (error) {
-      console.log(error);
       if ((error as Redirect)?.status) throw error;
       if (error instanceof Error)
         return fail(500, {

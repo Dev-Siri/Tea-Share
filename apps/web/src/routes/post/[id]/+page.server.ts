@@ -1,6 +1,6 @@
 import { error, fail } from "@sveltejs/kit";
 
-import type { Post } from "$lib/types";
+import type { CommentsResponse, Post } from "$lib/types";
 
 import validateComment from "$lib/server/validation/comment/validateComment";
 import queryClient from "$lib/utils/queryClient";
@@ -28,14 +28,25 @@ export const actions = {
 };
 
 export async function load({ params }) {
-  const posts = await queryClient<Post[] | null>("/posts/search", {
-    searchParams: {
-      q: params.id,
-      type: "id",
-    },
-  });
+  const [posts, comments] = await Promise.all([
+    queryClient<Post[] | null>("/posts/search", {
+      searchParams: {
+        q: params.id,
+        type: "id",
+      },
+    }),
+    queryClient<CommentsResponse>(`/posts/${params.id}/comments`, {
+      searchParams: {
+        page: 1,
+        limit: 4
+      }
+    })
+  ]);
 
   if (!posts?.[0]) throw error(404, { message: "Not Found" });
 
-  return { post: posts[0] };
+  return {
+    post: posts[0],
+    initialComments: comments
+  };
 }

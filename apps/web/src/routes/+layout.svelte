@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from "$app/environment";
+  import { onNavigate } from "$app/navigation";
   import { onMount } from "svelte";
   import { Toasts } from "svoast";
   import { pwaInfo } from "virtual:pwa-info";
@@ -10,10 +11,9 @@
   import user from "$lib/stores/user";
 
   import BottomNavigationBar from "$lib/components/BottomNavigationBar.svelte";
-  import Logout from "$lib/components/Logout.svelte";
+  import Header from "$lib/components/Header.svelte";
   import SearchBar from "$lib/components/SearchBar.svelte";
   import Sidebar from "$lib/components/Sidebar.svelte";
-  import ThemeToggle from "$lib/components/ThemeToggle.svelte";
   import UserList from "$lib/components/UserList.svelte";
 
   export let data;
@@ -33,6 +33,17 @@
 
       useRegisterSW({ immediate: true });
     }
+  });
+
+  onNavigate(navigation => {
+    if (!document.startViewTransition) return;
+
+    return new Promise(resolve =>
+      document.startViewTransition(async () => {
+        resolve();
+        await navigation.complete;
+      })
+    );
   });
 
   $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : "";
@@ -56,20 +67,13 @@
       <Sidebar />
     </section>
   {/if}
-  <section class="w-screen sm:w-[90%] lg:w-1/2" class:w-full={!isLoggedIn}>
+  <section class={isLoggedIn ? "w-screen sm:w-[90%] lg:w-1/2" : "w-full"}>
     {#if isLoggedIn}
-      <header class="p-2 border-b border-b-light-gray bg-white dark:border-b-semi-gray dark:bg-black">
-        <h1 class="font-bold text-2xl hidden lg:block">Tea Share</h1>
-        <section class="block lg:hidden">
-          <SearchBar />
-        </section>
-        <section class="flex justify-end mt-2 lg:hidden">
-          <ThemeToggle />
-          <Logout />
-        </section>
-      </header>
+      <Header />
     {/if}
-    <slot />
+    <div id="main-view">
+      <slot />
+    </div>
   </section>
   {#if isLoggedIn}
     <section class="w-[26%] bg-white p-4 border-l border-l-light-gray dark:border-l-semi-gray dark:bg-black hidden lg:block">
@@ -82,6 +86,8 @@
     </section>
   {/if}
 </main>
-<BottomNavigationBar />
+{#if isLoggedIn}
+  <BottomNavigationBar />
+{/if}
 
 <Toasts position="bottom-right" />

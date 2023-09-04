@@ -34,21 +34,53 @@ body {
 }
 
 @layer utilities {
-  .dark-gradient {
-    background: radial-gradient(circle at top, #3f6be9, #000000);
-  }
-
-  .light-gradient {
-    background: radial-gradient(circle at top, #738cf2, #ffffff);
-  }
-
   .input {
-    @apply ml-1 mt-5 w-full rounded-md
-    border border-light-gray p-4 outline-none duration-200 focus:border-primary dark:border-semi-gray dark:bg-semi-gray dark:text-white;
+    @apply ml-1 mt-5 w-full rounded-md border border-light-gray p-4 outline-none duration-200
+    focus:border-primary dark:border-semi-gray dark:bg-semi-gray dark:text-white;
   }
 
   .btn {
-    @apply flex cursor-pointer items-center justify-center rounded-md border-px
-    border-primary bg-primary p-10px text-center text-white duration-200 hover:bg-primary-dark;
+    @apply flex cursor-pointer items-center justify-center rounded-full border-px
+    border-primary bg-primary p-10px px-4 text-center text-white duration-200 hover:bg-primary-dark;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-from-right {
+  from {
+    transform: translateX(30px);
+  }
+}
+
+@keyframes slide-to-left {
+  to {
+    transform: translateX(-30px);
+  }
+}
+
+#main-view::view-transition-old(#main-view) {
+  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out, 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+}
+
+#main-view::view-transition-new(#main-view) {
+  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in, 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+}
+
+@media (prefers-reduced-motion) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }
