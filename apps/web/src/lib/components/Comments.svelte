@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import { onDestroy, onMount, tick } from "svelte";
   import Circle from "svelte-loading-spinners/Circle.svelte";
   import TeaIcon from "svelte-material-icons/Tea.svelte";
 
@@ -9,8 +10,9 @@
   import { getRelativeTime } from "$lib/utils/globals";
   import queryClient from "$lib/utils/queryClient";
 
-  import { onDestroy, onMount, tick } from "svelte";
   import Image from "./Image.svelte";
+  import Button from "./ui/Button.svelte";
+  import Input from "./ui/Input.svelte";
 
   export let postId: string;
   export let comments: Comment[];
@@ -80,14 +82,14 @@
       };
     }}
   >
-    <input type="text" name="comment" placeholder="Add your comment..." class="input h-full" required />
-    <button type="submit" class="btn gap-2 h-full" aria-label="Comment">
+    <Input type="text" name="comment" placeholder="Add your comment..." class="mt-3" required />
+    <Button type="submit" aria-label="Comment" class="gap-1" variant={isCreatingComment ? "disabled" : "primary"} disabled={isCreatingComment}>
       <TeaIcon size={20} />
       <span>Take my cup of tea</span>
       {#if isCreatingComment}
         <Circle size={20} color="white" />
       {/if}
-    </button>
+    </Button>
   </form>
   <div role="list" class="flex flex-col gap-2 mt-2" on:scroll={fetchMoreComments}>
     {#if comments.length}

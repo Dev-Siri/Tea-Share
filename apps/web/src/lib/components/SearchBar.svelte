@@ -2,7 +2,9 @@
   import { page } from "$app/stores";
   import { onMount } from "svelte";
 
-  import FaSearch from "svelte-icons/fa/FaSearch.svelte";
+  import MagnifyIcon from "svelte-material-icons/Magnify.svelte";
+
+  import IconButton from "./ui/IconButton.svelte";
 
   let searchInput: HTMLInputElement;
 
@@ -33,9 +35,9 @@
     value={$page.url.pathname === "/search" ? $page.url.searchParams.get("query") : ""}
     bind:this={searchInput}
   />
-  <button type="submit" aria-label="Search" class="ml-auto rounded-full">
-    <div class="h-4 w-4">
-      <FaSearch />
-    </div>
-  </button>
+  <div class="flex justify-center ml-auto rounded-full">
+    <IconButton type="submit" aria-label="Search" iconOnly>
+      <MagnifyIcon size={20} />
+    </IconButton>
+  </div>
 </form>

@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { MaybePromise } from "@sveltejs/kit";
 
+  import IconButton from "./ui/IconButton.svelte";
+
   interface Option {
     name: string;
     Icon: ConstructorOfATypedSvelteComponent;
@@ -37,19 +39,18 @@
     >
       {#each options as { name, Icon, onClick }}
         <li>
-          <button
+          <IconButton
             on:click={() => {
               onClick();
               menuOpen = false;
             }}
             type="button"
-            class="flex items-center gap-2 px-4 py-2 w-full"
           >
-            <div class="h-5">
-              <Icon />
+            <div class="flex justify-center items-center gap-2 px-4 py-2 w-full">
+              <Icon size={20} />
+              {name}
             </div>
-            {name}
-          </button>
+          </IconButton>
         </li>
       {/each}
     </ul>

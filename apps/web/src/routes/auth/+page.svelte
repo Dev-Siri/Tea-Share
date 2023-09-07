@@ -3,9 +3,12 @@
   import FaCamera from "svelte-icons/fa/FaCamera.svelte";
   import Circle from "svelte-loading-spinners/Circle.svelte";
 
-  import Logo from "$lib/components/Logo.svelte";
-  import Google from "$lib/components/icons/Google.svelte";
   import { getHandle } from "$lib/utils/globals";
+
+  import Logo from "$lib/components/Logo.svelte";
+  import GoogleIcon from "$lib/components/icons/Google.svelte";
+  import Button from "$lib/components/ui/Button.svelte";
+  import Input from "$lib/components/ui/Input.svelte";
 
   export let form;
 
@@ -13,16 +16,19 @@
   let loading = false;
   let errorOccured = false;
   let previewImage: File | undefined;
-  let username: string = (form?.suppliedValues as {
-    username?: string;
-    email?: string;
-  })?.["username"] ?? "";
+  let username =
+    (
+      form?.suppliedValues as Partial<{
+        username: string;
+        email: string;
+      }>
+    )?.["username"] ?? "";
 
-  $: handle = getHandle(username.trim() || "Username");
+  $: handle = getHandle((username ?? "").trim() || "Username");
 
   const toggleMode = () => (isSignup = !isSignup);
   const selectImage = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => (previewImage = e?.currentTarget?.files?.[0]);
-  const updateUsername = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => (username = e?.currentTarget?.value);
+  const changeUsername = (event: Event) => (username = (event?.currentTarget as HTMLInputElement | null)?.value ?? "");
 </script>
 
 <svelte:head>
@@ -36,7 +42,7 @@
 
 <article class="p-6 overflow-y-auto h-screen">
   <Logo bigger />
-  <h1 class="ml-2 mt-3 text-3xl font-bold">{isSignup ? "Signup to join the community!" : "Welcome back! Login to continue."}</h1>
+  <h1 class="ml-2 my-3 text-3xl font-bold">{isSignup ? "Signup to join the community!" : "Welcome back! Login to continue."}</h1>
   <form
     method="POST"
     action={isSignup ? "?/signup" : "?/login"}
@@ -47,7 +53,7 @@
       return ({ update }) => {
         loading = false;
         update();
-      }
+      };
     }}
   >
     {#if isSignup}
@@ -64,7 +70,7 @@
           {/if}
         </label>
       </div>
-      <h2 class="font-bold text-center text-3xl mt-2">
+      <h2 class="font-bold text-center text-3xl">
         {username.trim() || "Username"}
       </h2>
       <h3 class="text-center text-gray-400 text-xl mt-2">
@@ -73,25 +79,15 @@
       <input type="file" name="image" aria-label="Profile Picture Upload" on:change={selectImage} id="profile-picture-upload" class="hidden" />
     {/if}
     {#if isSignup}
-      <input
-        class="input"
-        placeholder="Username"
-        name="username"
-        minlength="3"
-        maxlength="100"
-        on:input={updateUsername}
-        required
-      />
+      <Input class="mt-3" placeholder="Username" name="username" minlength={3} maxlength={100} on:input={changeUsername} required />
     {/if}
-    <input class="input" placeholder="Email" type="email" name="email" value={form?.suppliedValues?.["email"] ?? ""} required />
-    {#if
-      !form?.success && form?.errors?.["email"]
-    }
+    <Input class="mt-3" placeholder="Email" type="email" name="email" value={form?.suppliedValues?.["email"] ?? ""} required />
+    {#if !form?.success && form?.errors?.["email"]}
       <p class="error">
         {form.errors["email"]}
       </p>
     {/if}
-    <input class="input" placeholder="Password" type="password" name="password" required />
+    <Input class="mt-3" placeholder="Password" type="password" name="password" required />
     {#if !form?.success && form?.errors?.["password"]}
       <p class="error">
         {form.errors["password"]}
@@ -103,13 +99,13 @@
     {#if errorOccured}
       <p class="error">An error occured</p>
     {/if}
-    <div class="mt-[30px] mb-4 flex h-fit items-center">
-      <button disabled={loading} type="submit" class="btn w-36 ml-2 h-10 gap-2">
+    <div class="mt-[30px] ml-1 mb-4 flex h-fit items-center">
+      <Button disabled={loading} type="submit" class="gap-2 px-8" variant={loading ? "disabled" : "primary"}>
         {isSignup ? "Signup" : "Login"}
         {#if loading}
           <Circle size={20} color="white" />
         {/if}
-      </button>
+      </Button>
       <p class="ml-10px w-[390px] text-sm">
         {isSignup ? "Already an user? " : "Don't have an account? "}
         <span
@@ -135,7 +131,7 @@
       formnovalidate
       class="border-light-gray hover:bg-light-gray ml-2 mt-5 flex w-[250px] cursor-pointer items-center justify-center rounded-md border-2 bg-white p-3 duration-200"
     >
-      <Google />
+      <GoogleIcon />
       <p class="ml-10px text-black">Sign in with Google</p>
     </button>
     <!-- <p class="ml-10px w-[390px] my-5 text-sm">

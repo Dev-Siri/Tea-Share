@@ -5,6 +5,7 @@
   import type { Post } from "$lib/types";
 
   import user from "$lib/stores/user";
+  import Button from "./ui/Button.svelte";
 
   export let postId: string;
   export let likes: Post["likes"];
@@ -12,7 +13,7 @@
   let likeCount = likes.length;
   let isLiked = likes.some(({ username }) => username === $user.username);
 
-  async function likePost(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) {
+  async function likePost(event: MouseEvent) {
     event.stopPropagation();
     if (isLiked) return;
 
@@ -25,7 +26,7 @@
   }
 </script>
 
-<button type="button" on:click={likePost} disabled={isLiked} class="flex cursor-pointer items-center border-none text-xs dark:text-[#E8E8E8]">
+<Button variant="text" type="button" on:click={likePost} disabled={isLiked}>
   <span class="text-primary">
     {#if isLiked}
       <HeartIcon size={25} />
@@ -33,8 +34,8 @@
       <HeartOutlineIcon size={25} />
     {/if}
   </span>
-  <span class="ml-2 mr-4 text-base">
+  <span class="mr-4 text-base text-black dark:text-white">
     &nbsp;<span class="font-bold">{likeCount}</span>
     {likeCount < 2 ? "Like" : "Likes"}
   </span>
-</button>
+</Button>

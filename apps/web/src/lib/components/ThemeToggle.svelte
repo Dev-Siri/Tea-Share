@@ -1,9 +1,11 @@
 <script lang="ts">
   import SvelteToolTip from "sv-tooltip";
   import MoonWaxingCrescentIcon from "svelte-material-icons/MoonWaxingCrescent.svelte";
-  import SunIcon from "svelte-material-icons/SunAngle.svelte";
+  import WhiteBalanceSunnyIcon from "svelte-material-icons/WhiteBalanceSunny.svelte";
 
   import theme from "$lib/stores/theme";
+
+  import IconButton from "./ui/IconButton.svelte";
 
   async function toggleTheme() {
     const newTheme = $theme === "dark" ? "light" : "dark";
@@ -16,12 +18,12 @@
   }
 </script>
 
-<SvelteToolTip tip="{$theme.charAt(0).toUpperCase()}{$theme.slice(1)} Theme" right class="bg-light-gray dark:bg-dark-gray">
-  <button class="p-3 rounded-full hover:bg-light-gray dark:hover:bg-dark-gray" on:click={toggleTheme}>
+<SvelteToolTip tip="{$theme.charAt(0).toUpperCase()}{$theme.slice(1)} Theme" top>
+  <IconButton on:click={toggleTheme}>
     {#if $theme === "dark"}
       <MoonWaxingCrescentIcon size={20} />
     {:else}
-      <SunIcon size={20} />
+      <WhiteBalanceSunnyIcon size={20} />
     {/if}
-  </button>
+  </IconButton>
 </SvelteToolTip>

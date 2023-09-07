@@ -26,46 +26,29 @@ body {
     @apply box-border outline-1 outline-[#29d];
     scrollbar-width: none;
   }
-
-  ::file-selector-button {
-    font-family: "Inter", sans-serif;
-    @apply border-px border-primary bg-primary hover:bg-primary-dark mr-2 cursor-pointer rounded-xl border-none p-3 text-white duration-200;
-  }
-}
-
-@layer utilities {
-  .input {
-    @apply border-light-gray focus:border-primary dark:border-semi-gray dark:bg-semi-gray ml-1 mt-5 w-full rounded-md border
-    p-4 outline-none duration-200 dark:text-white;
-  }
-
-  .btn {
-    @apply border-px border-primary bg-primary p-10px hover:bg-primary-dark flex
-    cursor-pointer items-center justify-center rounded-full px-4 text-center text-white duration-200;
-  }
 }
 
 @keyframes fade-in {
   from {
-    opacity: 0;
+    @apply opacity-0;
   }
 }
 
 @keyframes fade-out {
   to {
-    opacity: 0;
+    @apply opacity-0;
   }
 }
 
 @keyframes slide-from-right {
   from {
-    transform: translateX(30px);
+    @apply translate-x-[30px];
   }
 }
 
 @keyframes slide-to-left {
   to {
-    transform: translateX(-30px);
+    @apply -translate-x-[30px];
   }
 }
 

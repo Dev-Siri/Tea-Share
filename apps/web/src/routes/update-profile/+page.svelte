@@ -4,6 +4,8 @@
   import CameraIcon from "svelte-material-icons/Camera.svelte";
 
   import SuccessMessage from "$lib/components/SuccessMessage.svelte";
+  import Button from "$lib/components/ui/Button.svelte";
+  import Input from "$lib/components/ui/Input.svelte";
   import user from "$lib/stores/user";
 
   export let form;
@@ -21,6 +23,11 @@
   class="p-6 overflow-y-auto h-screen"
   use:enhance={() => {
     loading = true;
+
+    return ({ update }) => {
+      loading = false;
+      update();
+    };
   }}
 >
   <h2 class="text-2xl font-bold">Update your Profile</h2>
@@ -36,8 +43,8 @@
     </label>
   </div>
   <input type="file" name="image" aria-label="Profile Picture Upload" on:change={selectImage} id="profile-picture-upload" class="hidden" />
-  <input name="username" value={$user.username} class="input" placeholder="Username" />
-  <input name="email" value={$user.email} class="input" placeholder="Email" type="email" />
+  <Input name="username" value={$user.username} class="input" placeholder="Username" />
+  <Input name="email" value={$user.email} class="input" placeholder="Email" type="email" />
   {#if form?.errorMessage}
     <p class="bg-red-200 w-full ml-1 rounded-md border-2 border-red-600 p-3 mt-4 text-red-800 font-bold text-center">
       {form.errorMessage}
@@ -46,10 +53,10 @@
   {#if form?.success}
     <SuccessMessage message="Your profile has been updated successfully" />
   {/if}
-  <button type="submit" class="btn ml-2 w-36 mt-5">
+  <Button type="submit" class="mt-5" variant={loading ? "disabled" : "primary"} disabled={loading}>
     Update Profile
     {#if loading}
       <Circle size={20} color="white" />
     {/if}
-  </button>
+  </Button>
 </form>

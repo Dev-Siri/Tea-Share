@@ -1,6 +1,7 @@
 <script lang="ts">
-  import FaArrowLeft from "svelte-icons/fa/FaArrowLeft.svelte";
+  import ArrowLeftIcon from "svelte-material-icons/ArrowLeft.svelte";
 
+  import Button from "$lib/components/ui/Button.svelte";
   import user from "$lib/stores/user";
 </script>
 
@@ -10,12 +11,10 @@
 
 <article class="p-10 pb-32 overflow-y-auto h-screen">
   {#if !$user}
-    <a href="/auth" class="btn gap-2 mb-3 w-52 flex items-center">
-      <div class="h-4">
-        <FaArrowLeft />
-      </div>
+    <Button component="a" href="/auth" class="w-fit gap-1">
+      <ArrowLeftIcon size={20} />
       Go back to auth page
-    </a>
+    </Button>
   {/if}
   <h1 class="text-5xl leading-relaxed font-bold">Terms of Service</h1>
   <p class="px-3">

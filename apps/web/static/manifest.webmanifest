@@ -4,8 +4,8 @@
   "name": "Tea Share",
   "short_name": "Tea Share",
   "start_url": "/",
-  "theme_color": "#594195",
-  "background_color": "#594195",
+  "theme_color": "#855dea",
+  "background_color": "#855dea",
   "display": "standalone",
   "icons": [
     {

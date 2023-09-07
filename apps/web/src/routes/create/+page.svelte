@@ -4,6 +4,8 @@
   import ImageIcon from "svelte-material-icons/Image.svelte";
   import TeaIcon from "svelte-material-icons/Tea.svelte";
 
+  import Button from "$lib/components/ui/Button.svelte";
+
   export let form;
 
   let loading = false;
@@ -61,13 +63,13 @@
         {#if !form?.success && form?.errors["image"]}
           <p class="p-2 text-red-300">{form.errors["image"]}</p>
         {/if}
-        <button type="submit" class="btn gap-2" disabled={loading}>
+        <Button type="submit" variant={loading ? "disabled" : "primary"} class="gap-2" disabled={loading}>
           <TeaIcon size={20} color="white" />
           Brew it!
           {#if loading}
             <Circle size={20} color="white" />
           {/if}
-        </button>
+        </Button>
       </div>
     </section>
   </form>

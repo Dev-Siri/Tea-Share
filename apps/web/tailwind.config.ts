@@ -6,20 +6,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "hsl(257, 77%, 64%)",
-        "primary-dark": "#6348a8",
-        "light-gray": "hsl(0, 0%, 90%)",
-        "semi-gray": "rgb(51, 51, 51)",
-        "dark-gray": "rgb(17, 17, 17)",
+        primary: "#7a68d3",
+        "primary-muted": "#5b4b8d",
+        "primary-dark": "#493a75",
+        "light-gray": "#e6e6e6",
+        "semi-gray": "#333333",
+        "dark-gray": "#111111",
       },
       margin: {
         "10px": "10px",
       },
       padding: {
         "10px": "10px",
-      },
-      borderWidth: {
-        px: "1px",
       },
     },
   },
