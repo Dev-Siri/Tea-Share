@@ -8,16 +8,16 @@ import validateUser from "$lib/server/validation/user/validateUser";
 export async function handle({ event, resolve }) {
   const authToken = event.cookies.get("auth_token");
   const unProtectedRoutes = ["/auth", "/reset-password", "/terms-of-service", "/embed"];
-  const OnUnprotectedRoutes = unProtectedRoutes.some(route => event.url.pathname.endsWith(route));
+  const onUnprotectedRoutes = unProtectedRoutes.some(route => event.url.pathname.endsWith(route));
 
-  if (!authToken && !OnUnprotectedRoutes) throw redirect(303, "/auth");
+  if (!authToken && !onUnprotectedRoutes) throw redirect(303, "/auth");
 
   try {
     if (authToken) {
       const user = jwtDecode.default<User>(authToken);
       const isUserValid = validateUser(user);
 
-      if (!isUserValid && !OnUnprotectedRoutes) throw redirect(303, "/auth");
+      if (!isUserValid && !onUnprotectedRoutes) throw redirect(303, "/auth");
 
       event.locals.user = user;
     }
