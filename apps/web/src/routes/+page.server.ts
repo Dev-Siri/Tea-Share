@@ -1,14 +1,8 @@
 import { redirect, type Actions } from "@sveltejs/kit";
 
 import type { Post } from "$lib/types";
-import type { Config } from "@sveltejs/adapter-vercel";
 
 import queryClient from "$lib/utils/queryClient";
-
-export const config: Config = {
-  runtime: "edge",
-  split: true,
-};
 
 export const actions: Actions = {
   async logout({ cookies }) {

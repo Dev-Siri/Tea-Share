@@ -11,5 +11,5 @@
   on:input
   on:change
   {...$$restProps}
-  class="bg-light-gray dark:bg-dark-gray ml-1 w-full rounded-full pl-5 p-4 outline-none duration-200 dark:text-white {className}"
+  class="bg-light-gray dark:bg-dark-gray w-full rounded-full pl-5 p-4 outline-none duration-200 dark:text-white {className}"
 />

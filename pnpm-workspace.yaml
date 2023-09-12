@@ -1,4 +1,0 @@
-packages:
-  - "apps/pfp-generator/**"
-  - "apps/web/**"
-  - "packages/**"

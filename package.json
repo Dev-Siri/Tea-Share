@@ -11,6 +11,11 @@
     "url": "git://github.com/Dev-Siri/Tea-Share",
     "type": "git"
   },
+  "workspaces": [
+    "apps/pfp-generator",
+    "apps/web",
+    "packages"
+  ],
   "license": "MIT",
   "author": "Dev-Siri",
   "devDependencies": {

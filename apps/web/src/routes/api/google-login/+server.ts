@@ -1,4 +1,3 @@
-import { dev } from "$app/environment";
 import { PRIVATE_GOOGLE_CLIENT_ID, PRIVATE_GOOGLE_CLIENT_SECRET } from "$env/static/private";
 import { redirect } from "@sveltejs/kit";
 import { OAuth2Client } from "google-auth-library";
@@ -6,6 +5,7 @@ import jwtDecode from "jwt-decode";
 
 import type { User } from "$lib/types";
 
+import { BASE_URL } from "$lib/env";
 import queryClient from "$lib/utils/queryClient";
 
 export interface GoogleUser {
@@ -29,7 +29,7 @@ interface AuthResponse {
 }
 
 export async function GET({ cookies, url, locals }) {
-  const redirectUrl = dev ? "http://localhost:5173/api/google-login" : "https://tea-share.vercel.app/api/google-login";
+  const redirectUrl = `${BASE_URL}/api/google-login`;
   const code = url.searchParams.get("code");
 
   if (!code) throw redirect(302, "/auth");

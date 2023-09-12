@@ -111,4 +111,4 @@ apps/pfp-generator/.vscode
 bin
 keys
 .data.old
-keys
+target
