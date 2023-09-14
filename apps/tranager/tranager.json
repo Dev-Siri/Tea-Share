@@ -1,0 +1,19 @@
+{
+  "source": "../",
+  "apps": [
+    {
+      "name": "web",
+      "commands": {
+        "build": "bun run build",
+        "dev": "bun dev"
+      }      
+    },
+    {
+      "name": "mobile",
+      "commands": {
+        "build": "flutter build apk",
+        "dev": "flutter run"
+      }
+    }
+  ]
+}

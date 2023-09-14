@@ -1,0 +1,1 @@
+pub const CONFIG_FILE: &'static str = "tranager.json";
