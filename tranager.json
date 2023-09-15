@@ -1,12 +1,20 @@
 {
-  "source": "../",
+  "version": "",
+  "source": "./apps",
   "apps": [
     {
       "name": "web",
       "commands": {
         "build": "bun run build",
         "dev": "bun dev"
-      }      
+      }
+    },
+    {
+      "name": "server",
+      "commands": {
+        "build": "go build -tags netgo -ldflags \"-extldflags '-static' -s -w\" -o bin/tea-share",
+        "dev": "air"
+      }
     },
     {
       "name": "mobile",

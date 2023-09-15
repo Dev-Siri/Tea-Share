@@ -1,21 +1,25 @@
 mod args;
+mod config;
 mod constants;
-mod utils {
-  pub mod messages;
+mod workflow {
+    pub mod build;
+    pub mod package;
 }
-mod core {
-  pub mod config;
-  pub mod runner;
+mod utils {
+    pub mod compression;
+    pub mod messages;
 }
 
-use crate::core::runner;
-use args::{TranagerArgs, BuildType};
+use args::{EntityType, TranagerArgs};
 use clap::Parser;
 
 fn main() {
-  let args = TranagerArgs::parse();
+    let args = TranagerArgs::parse();
 
-  match args.build {
-    BuildType::Build(build_args) => runner::build(build_args.app),
-  }
+    match args.entity_type {
+        EntityType::Build(build_args) => workflow::build::build(build_args.app),
+        EntityType::FlutterPackage(package_args) => {
+            workflow::package::flutter_package(package_args.app)
+        }
+    }
 }
