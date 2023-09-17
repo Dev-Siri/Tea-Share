@@ -11,13 +11,20 @@ pub struct TranagerArgs {
 pub enum EntityType {
     /// Builds an app defined in tranager.json
     Build(CompileArgs),
+    /// Run a dev environment. Supports multiple apps concurrently
+    Dev(DevArgs),
     /// Special packaging for Flutter projects. The build command in config is ignored.
     FlutterPackage(CompileArgs),
 }
 
 #[derive(Debug, Args)]
 pub struct CompileArgs {
-    #[arg(long)]
     /// Name of the app. Make sure its defined in tranager.json
     pub app: String,
+}
+
+#[derive(Debug, Args)]
+pub struct DevArgs {
+    /// One or more apps to run the dev environment of in parallel.
+    pub apps: Vec<String>,
 }

@@ -1,4 +1,4 @@
-use crate::{constants, utils};
+use crate::{constants, utils::messages};
 use serde::{Deserialize, Serialize};
 use std::fs;
 
@@ -35,10 +35,8 @@ pub fn get_app_config(app_name: &str) -> AppConfig {
         .into_iter()
         .filter(|app_config| app_config.name == app_name)
         .next()
-        .ok_or(utils::messages::error_message(
-            "App was not found in the config.",
-        ))
-        .expect(&utils::messages::error_message(
+        .ok_or(messages::error_message("App was not found in the config."))
+        .expect(&messages::error_message(
             "Failed to find the specified app in config.",
         ))
 }

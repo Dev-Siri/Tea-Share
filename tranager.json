@@ -1,6 +1,5 @@
 {
-  "version": "",
-  "source": "./apps",
+  "source": "apps",
   "apps": [
     {
       "name": "web",

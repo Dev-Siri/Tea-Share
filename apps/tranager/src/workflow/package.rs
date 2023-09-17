@@ -1,9 +1,11 @@
+use crate::{
+    config, constants,
+    utils::{compression, messages},
+};
 use std::{
     fs,
     process::{exit, Command},
 };
-
-use crate::{config, constants, utils};
 
 pub fn flutter_package(app: String) {
     let app_config = config::get_app_config(&app);
@@ -11,13 +13,13 @@ pub fn flutter_package(app: String) {
     if !app_config.commands.build.contains("flutter") {
         println!(
             "{}",
-            utils::messages::error_message("The app you selected is not a flutter project.")
+            messages::error_message("The app you selected is not a flutter project.")
         )
     }
 
     println!(
         "{}",
-        utils::messages::info_message("Building the standalone APK...")
+        messages::info_message("Building the standalone APK...")
     );
     let mut build_process = Command::new("sh");
     let config = config::get_config();
@@ -31,7 +33,7 @@ pub fn flutter_package(app: String) {
 
     let standalone_build_successful = build_process
         .status()
-        .expect(&utils::messages::error_message(
+        .expect(&messages::error_message(
             "Failed to get build status of the standalone APK build.",
         ))
         .success();
@@ -39,33 +41,38 @@ pub fn flutter_package(app: String) {
     if standalone_build_successful {
         println!(
             "{}",
-            utils::messages::success_message("Standalone APK built successfully.")
+            messages::success_message("Standalone APK built successfully.")
         );
     } else {
         println!(
             "{}",
-            utils::messages::error_message("Failed to build standalone APK.")
+            messages::error_message("Failed to build standalone APK.")
         )
     }
 
     let output_dir = format!("{}/build/app/outputs/apk/release", app_dir);
-    let release_directory_path = format!("{}_{}", constants::FLUTTER_PACKAGE_OUTPUT_DIR, app_dir);
+    let release_directory_path = format!(
+        "{}/{}_{}",
+        app_dir,
+        constants::FLUTTER_PACKAGE_OUTPUT_DIR,
+        app
+    );
 
     println!(
         "{}",
-        utils::messages::info_message(&format!(
+        messages::info_message(&format!(
             "Creating release directory at {}...",
             release_directory_path
         ))
     );
 
-    fs::create_dir(&release_directory_path).expect(&utils::messages::error_message(
+    fs::create_dir(&release_directory_path).expect(&messages::error_message(
         "Failed to write release directory.",
     ));
 
     println!(
         "{}",
-        utils::messages::info_message("Copying over standalone APK to the release directory...")
+        messages::info_message("Copying over standalone APK to the release directory...")
     );
 
     fs::copy(
@@ -76,11 +83,11 @@ pub fn flutter_package(app: String) {
             constants::FLUTTER_PACKAGE_SINGULAR_APK_NAME
         ),
     )
-    .expect(&utils::messages::error_message(
+    .expect(&messages::error_message(
         "Failed to copy over singular apk build to release directory.",
     ));
 
-    println!("{}", utils::messages::info_message("Building the app..."));
+    println!("{}", messages::info_message("Building the app..."));
 
     build_process = Command::new("sh");
     build_process
@@ -91,7 +98,7 @@ pub fn flutter_package(app: String) {
 
     let per_abi_build_successful = build_process
         .status()
-        .expect(&utils::messages::error_message(
+        .expect(&messages::error_message(
             "Failed to get build status of the per ABI APK builds.",
         ))
         .success();
@@ -99,12 +106,12 @@ pub fn flutter_package(app: String) {
     if per_abi_build_successful {
         println!(
             "{}",
-            utils::messages::success_message("Per ABI APKs built successfully.")
+            messages::success_message("Per ABI APKs built successfully.")
         );
     } else {
         println!(
             "{}",
-            utils::messages::error_message("Failed to build Per ABI APKs.")
+            messages::error_message("Failed to build Per ABI APKs.")
         );
         exit(1)
     }
@@ -115,26 +122,26 @@ pub fn flutter_package(app: String) {
         Err(_) => {
             println!(
                 "{}",
-                utils::messages::error_message("Failed to read flutter's build directory.")
+                messages::error_message("Failed to read flutter's build directory.")
             );
             exit(1);
         }
     };
 
     for file in per_abi_builds.into_iter() {
-        let current_apk = file.expect(&utils::messages::error_message(
+        let current_apk = file.expect(&messages::error_message(
             "Failed to read individual file in a per ABI build.",
         ));
         let current_apk_name = current_apk
             .file_name()
             .to_str()
-            .expect(&utils::messages::error_message(
+            .expect(&messages::error_message(
                 "Failed to convert OsString to &str.",
             ))
             .to_owned();
         println!(
             "{}",
-            utils::messages::info_message(&format!("Analyzing & Renaming `{}`", current_apk_name))
+            messages::info_message(&format!("Analyzing & Renaming `{}`", current_apk_name))
         );
 
         fs::rename(
@@ -147,16 +154,16 @@ pub fn flutter_package(app: String) {
                     .replace("-release", "")
             ),
         )
-        .expect(&utils::messages::error_message(
+        .expect(&messages::error_message(
             "Failed to rename release directory built APKs.",
         ));
     }
 
     println!(
         "{}",
-        utils::messages::info_message("Compressing ABI APK Builds...")
+        messages::info_message("Compressing ABI APK Builds...")
     );
-    utils::compression::compress_folder(
+    compression::compress_folder(
         &output_dir_clone,
         &format!(
             "{}/{}",
@@ -164,12 +171,12 @@ pub fn flutter_package(app: String) {
             constants::FLUTTER_PACKAGE_PER_ABI_TAR_NAME
         ),
     )
-    .expect(&utils::messages::error_message(
+    .expect(&messages::error_message(
         "Failed to compress seperate abi builds.",
     ));
 
     println!(
         "{}",
-        utils::messages::success_message("App packaged successfully.")
+        messages::success_message("App packaged successfully.")
     );
 }

@@ -3,6 +3,7 @@ mod config;
 mod constants;
 mod workflow {
     pub mod build;
+    pub mod dev;
     pub mod package;
 }
 mod utils {
@@ -18,6 +19,7 @@ fn main() {
 
     match args.entity_type {
         EntityType::Build(build_args) => workflow::build::build(build_args.app),
+        EntityType::Dev(dev_args) => workflow::dev::dev(dev_args.apps),
         EntityType::FlutterPackage(package_args) => {
             workflow::package::flutter_package(package_args.app)
         }
