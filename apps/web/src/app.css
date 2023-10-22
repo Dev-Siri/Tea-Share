@@ -10,11 +10,23 @@ body {
 }
 
 *::-webkit-scrollbar {
-  @apply hidden;
+  @apply w-4;
+}
+
+*::-webkit-scrollbar-track {
+  @apply rounded-lg;
+}
+
+*::-webkit-scrollbar-thumb {
+  @apply h-14 rounded-lg border-4 border-solid border-transparent bg-clip-content bg-[#888];
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#555];
 }
 
 ::selection {
-  background: rgba(0, 153, 255, 0.247);
+  @apply bg-[rgba(0,153,255,0.247)];
 }
 
 @layer base {

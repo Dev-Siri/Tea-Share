@@ -61,7 +61,7 @@
   <title>Home</title>
 </svelte:head>
 
-<main class="h-screen sm:h-full flex overflow-hidden duration-200">
+<main class="h-full flex overflow-hidden duration-200">
   {#if isLoggedIn}
     <section class="w-[16%] sm:w-[10%] h-screen lg:w-[24%] hidden sm:block">
       <Sidebar />
@@ -71,7 +71,7 @@
     {#if isLoggedIn}
       <Header />
     {/if}
-    <div id="main-view">
+    <div id="main-view" class="h-full pb-40">
       <slot />
     </div>
   </section>
