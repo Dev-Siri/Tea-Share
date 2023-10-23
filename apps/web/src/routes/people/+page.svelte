@@ -11,7 +11,7 @@
   const loadMoreUsers = async (event: UIEvent & { currentTarget: EventTarget & HTMLElement }) => {
     const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
 
-    const didScrollToBottom: boolean = scrollHeight - scrollTop === clientHeight;
+    const didScrollToBottom = scrollHeight - scrollTop === clientHeight;
 
     if (didScrollToBottom) {
       currentPage++;

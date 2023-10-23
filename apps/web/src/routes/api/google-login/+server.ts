@@ -1,4 +1,7 @@
-import { PRIVATE_GOOGLE_CLIENT_ID, PRIVATE_GOOGLE_CLIENT_SECRET } from "$env/static/private";
+import {
+  PRIVATE_GOOGLE_CLIENT_ID,
+  PRIVATE_GOOGLE_CLIENT_SECRET,
+} from "$env/static/private";
 import { redirect } from "@sveltejs/kit";
 import { OAuth2Client } from "google-auth-library";
 import jwtDecode from "jwt-decode";
@@ -34,14 +37,19 @@ export async function GET({ cookies, url, locals }) {
 
   if (!code) throw redirect(302, "/auth");
 
-  const oAuth2Client = new OAuth2Client(PRIVATE_GOOGLE_CLIENT_ID, PRIVATE_GOOGLE_CLIENT_SECRET, redirectUrl);
+  const oAuth2Client = new OAuth2Client(
+    PRIVATE_GOOGLE_CLIENT_ID,
+    PRIVATE_GOOGLE_CLIENT_SECRET,
+    redirectUrl,
+  );
   const { tokens } = await oAuth2Client.getToken(code);
 
   oAuth2Client.setCredentials(tokens);
 
   const { id_token } = oAuth2Client.credentials;
 
-  if (!id_token) throw new Error("The ID token for a Google login event was found missing.");
+  if (!id_token)
+    throw new Error("The ID token for a Google login event was found missing.");
 
   const { name, picture, email } = jwtDecode<GoogleUser>(id_token);
 

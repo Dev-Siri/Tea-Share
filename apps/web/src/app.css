@@ -18,7 +18,7 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-  @apply h-14 rounded-lg border-4 border-solid border-transparent bg-clip-content bg-[#888];
+  @apply h-14 rounded-lg border-4 border-solid border-transparent bg-[#888] bg-clip-content;
 }
 
 *::-webkit-scrollbar-thumb:hover {

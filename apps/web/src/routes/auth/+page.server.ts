@@ -1,5 +1,8 @@
 import { dev } from "$app/environment";
-import { PRIVATE_GOOGLE_CLIENT_ID, PRIVATE_GOOGLE_CLIENT_SECRET } from "$env/static/private";
+import {
+  PRIVATE_GOOGLE_CLIENT_ID,
+  PRIVATE_GOOGLE_CLIENT_SECRET,
+} from "$env/static/private";
 import { fail, redirect, type Actions, type Redirect } from "@sveltejs/kit";
 import { OAuth2Client } from "google-auth-library";
 import * as jwtDecode from "jwt-decode";
@@ -8,7 +11,10 @@ import type { User } from "$lib/types";
 
 import { BASE_URL } from "$lib/env";
 import { encodeToBase64 } from "$lib/server/encoding";
-import { validateLoginSchema, validateSignupSchema } from "$lib/server/validation/auth/validateAuth";
+import {
+  validateLoginSchema,
+  validateSignupSchema,
+} from "$lib/server/validation/auth/validateAuth";
 import validateUser from "$lib/server/validation/user/validateUser";
 import queryClient from "$lib/utils/queryClient";
 
@@ -78,7 +84,8 @@ export const actions: Actions = {
         },
       });
 
-    const { username, email, image, password } = signupFormValidationResult.data;
+    const { username, email, image, password } =
+      signupFormValidationResult.data;
 
     try {
       const imageBase64 = await encodeToBase64(image);
@@ -123,9 +130,15 @@ export const actions: Actions = {
     }
   },
   async googleLogin() {
-    const redirectUrl = dev ? `${BASE_URL}/api/google-login` : `${BASE_URL}/api/google-login`;
+    const redirectUrl = dev
+      ? `${BASE_URL}/api/google-login`
+      : `${BASE_URL}/api/google-login`;
 
-    const oAuth2Client = new OAuth2Client(PRIVATE_GOOGLE_CLIENT_ID, PRIVATE_GOOGLE_CLIENT_SECRET, redirectUrl);
+    const oAuth2Client = new OAuth2Client(
+      PRIVATE_GOOGLE_CLIENT_ID,
+      PRIVATE_GOOGLE_CLIENT_SECRET,
+      redirectUrl,
+    );
 
     const authorizedUrl = oAuth2Client.generateAuthUrl({
       access_type: "offline",

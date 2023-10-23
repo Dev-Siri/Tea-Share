@@ -13,9 +13,15 @@ export async function GET({ url: { searchParams }, fetch }) {
     let optimizedImage: Buffer;
 
     if (imageResponse.headers.get("Content-Type")?.includes("image/gif")) {
-      optimizedImage = await sharp(imageBuffer).resize(Number(height)).gif().toBuffer();
+      optimizedImage = await sharp(imageBuffer)
+        .resize(Number(height))
+        .gif()
+        .toBuffer();
     } else {
-      optimizedImage = await sharp(imageBuffer).resize(Number(height)).avif().toBuffer();
+      optimizedImage = await sharp(imageBuffer)
+        .resize(Number(height))
+        .avif()
+        .toBuffer();
     }
 
     return new Response(optimizedImage, {

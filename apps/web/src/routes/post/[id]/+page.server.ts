@@ -18,10 +18,13 @@ export const actions = {
         suppliedValues: { comment: data["comment"] },
       });
 
-    await queryClient(`/posts/${encodeURIComponent(id)}/comments?userId=${locals.user.userId}`, {
-      method: "POST",
-      body: { comment: commentValidationResult.data.comment },
-    });
+    await queryClient(
+      `/posts/${encodeURIComponent(id)}/comments?userId=${locals.user.userId}`,
+      {
+        method: "POST",
+        body: { comment: commentValidationResult.data.comment },
+      },
+    );
 
     return { success: true };
   },

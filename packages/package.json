@@ -1,12 +1,8 @@
 {
   "name": "@tea-share/packages",
   "version": "1.0.0",
-  "description": "Shared configuration files for Tea Share projects",
+  "description": "Shared configuration for Tea Share",
   "license": "MIT",
-  "private": true,
   "type": "module",
-  "files": [
-    "config",
-    "tsconfig"
-  ]
+  "private": true
 }

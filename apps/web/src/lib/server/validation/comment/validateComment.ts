@@ -13,7 +13,9 @@ type CommentValidationResponse =
       errors: Record<string, string>;
     };
 
-export default function validateComment<T>(commentData: T): CommentValidationResponse {
+export default function validateComment<T>(
+  commentData: T,
+): CommentValidationResponse {
   const commentValidationResult = commentSchema.safeParse(commentData);
 
   if (commentValidationResult.success) return commentValidationResult;

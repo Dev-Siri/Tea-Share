@@ -21,8 +21,13 @@
   theme.set(data.global.theme);
 
   $: user.set(data.global.user!);
-  $: if (browser) document.documentElement.classList.replace($theme === "dark" ? "light" : "dark", $theme);
-  $: isLoggedIn = $user?.userId && !data.global.transitionKey.endsWith("/embed");
+  $: if (browser)
+    document.documentElement.classList.replace(
+      $theme === "dark" ? "light" : "dark",
+      $theme
+    );
+  $: isLoggedIn =
+    $user?.userId && !data.global.transitionKey.endsWith("/embed");
 
   const description =
     "Tea Share is an online social networking platform where you can share images with everyone. Get the best experience of Tea Share by signing up today!";
@@ -35,10 +40,10 @@
     }
   });
 
-  onNavigate(navigation => {
+  onNavigate((navigation) => {
     if (!document.startViewTransition) return;
 
-    return new Promise(resolve =>
+    return new Promise((resolve) =>
       document.startViewTransition(async () => {
         resolve();
         await navigation.complete;
@@ -76,7 +81,9 @@
     </div>
   </section>
   {#if isLoggedIn}
-    <section class="w-[26%] bg-white p-4 border-l border-l-light-gray dark:border-l-semi-gray dark:bg-black hidden lg:block">
+    <section
+      class="w-[26%] bg-white p-4 border-l border-l-light-gray dark:border-l-semi-gray dark:bg-black hidden lg:block"
+    >
       <div class="w-full">
         <SearchBar />
       </div>

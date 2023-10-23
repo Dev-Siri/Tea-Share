@@ -13,7 +13,9 @@ type PostFormValidationResponse =
       errors: Record<string, string>;
     };
 
-export default function validatePostForm<T>(postFormData: T): PostFormValidationResponse {
+export default function validatePostForm<T>(
+  postFormData: T,
+): PostFormValidationResponse {
   const postValidationResult = postFormSchema.safeParse(postFormData);
 
   if (postValidationResult.success) return postValidationResult;

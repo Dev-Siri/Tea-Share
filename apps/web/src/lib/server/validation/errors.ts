@@ -11,6 +11,6 @@ export default function formatSchemaErrors(error: ZodError) {
       if (path && typeof path === "string") res[path] = message;
       return res;
     },
-    {} as Record<string, string>
+    {} as Record<string, string>,
   );
 }

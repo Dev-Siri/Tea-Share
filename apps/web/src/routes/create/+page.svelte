@@ -11,7 +11,9 @@
   let loading = false;
   let previewImage: File | undefined;
 
-  const selectImage = (event: Event & { currentTarget: EventTarget & HTMLInputElement }) => (previewImage = event?.currentTarget?.files?.[0]);
+  const selectImage = (
+    event: Event & { currentTarget: EventTarget & HTMLInputElement }
+  ) => (previewImage = event?.currentTarget?.files?.[0]);
 </script>
 
 <section class="h-full w-full overflow-y-scroll">
@@ -54,8 +56,19 @@
     {/if}
     <section class="flex items-center justify-between p-2 w-full">
       <div class="flex items-center pl-2">
-        <input class="h-0 w-0" type="file" name="image" accept="image/*" id="image-upload" aria-label="Post File Upload" on:change={selectImage} />
-        <label for="image-upload" class="cursor-pointer p-2 duration-200 rounded-full hover:bg-light-gray hover:dark:bg-dark-gray">
+        <input
+          class="h-0 w-0"
+          type="file"
+          name="image"
+          accept="image/*"
+          id="image-upload"
+          aria-label="Post File Upload"
+          on:change={selectImage}
+        />
+        <label
+          for="image-upload"
+          class="cursor-pointer p-2 duration-200 rounded-full hover:bg-light-gray hover:dark:bg-dark-gray"
+        >
           <ImageIcon size={20} color="white" />
         </label>
       </div>
@@ -63,7 +76,12 @@
         {#if !form?.success && form?.errors["image"]}
           <p class="p-2 text-red-300">{form.errors["image"]}</p>
         {/if}
-        <Button type="submit" variant={loading ? "disabled" : "primary"} class="gap-2" disabled={loading}>
+        <Button
+          type="submit"
+          variant={loading ? "disabled" : "primary"}
+          class="gap-2"
+          disabled={loading}
+        >
           <TeaIcon size={20} color="white" />
           Brew it!
           {#if loading}

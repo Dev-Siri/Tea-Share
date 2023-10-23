@@ -13,7 +13,12 @@ export const actions: Actions = {
     const email = formData.get("email");
     const image = formData.get("image");
 
-    if (email instanceof Blob || username instanceof Blob || !image || typeof image === "string")
+    if (
+      email instanceof Blob ||
+      username instanceof Blob ||
+      !image ||
+      typeof image === "string"
+    )
       return fail(400, {
         errorMessage: "The updated information you provided are invalid.",
       });
@@ -25,7 +30,11 @@ export const actions: Actions = {
       },
     });
 
-    if (!fetchedUsers?.[0]) return fail(500, { errorMessage: "Failed to fetch your information. Please try again later." });
+    if (!fetchedUsers?.[0])
+      return fail(500, {
+        errorMessage:
+          "Failed to fetch your information. Please try again later.",
+      });
 
     const encodedImage = encodeToBase64(image);
 

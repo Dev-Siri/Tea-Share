@@ -1,15 +1,31 @@
 import { PUBLIC_BACKEND_URL } from "$env/static/public";
 
-type Method = "GET" | "POST" | "PUT" | "DELETE" | "OPTIONS" | "HEAD" | "TRACE" | "CONNECT" | "PATCH";
+type Method =
+  | "GET"
+  | "POST"
+  | "PUT"
+  | "DELETE"
+  | "OPTIONS"
+  | "HEAD"
+  | "TRACE"
+  | "CONNECT"
+  | "PATCH";
 
 interface Options<S, B> {
   method: Method;
   body: B;
   searchParams: S;
-  customFetch(input: URL | RequestInfo, init?: RequestInit | undefined): Promise<Response>;
+  customFetch(
+    input: URL | RequestInfo,
+    init?: RequestInit | undefined,
+  ): Promise<Response>;
 }
 
-export default async function queryClient<T, S = Record<string, any>, B = Record<string, any>>(endpoint: string, options?: Partial<Options<S, B>>) {
+export default async function queryClient<
+  T,
+  S = Record<string, any>,
+  B = Record<string, any>,
+>(endpoint: string, options?: Partial<Options<S, B>>) {
   const { method = "GET", body, searchParams, customFetch } = options ?? {};
   const url = new URL(endpoint, PUBLIC_BACKEND_URL);
   const headers: Record<string, string> = {
@@ -17,8 +33,11 @@ export default async function queryClient<T, S = Record<string, any>, B = Record
   };
 
   if (searchParams)
-    Object.keys(searchParams).forEach(searchParamKey =>
-      url.searchParams.set(searchParamKey, searchParams[searchParamKey as keyof typeof searchParams])
+    Object.keys(searchParams).forEach((searchParamKey) =>
+      url.searchParams.set(
+        searchParamKey,
+        searchParams[searchParamKey as keyof typeof searchParams],
+      ),
     );
 
   try {
@@ -28,7 +47,9 @@ export default async function queryClient<T, S = Record<string, any>, B = Record
       headers,
     };
 
-    const response = customFetch ? await customFetch(url, opts) : await fetch(url, opts);
+    const response = customFetch
+      ? await customFetch(url, opts)
+      : await fetch(url, opts);
 
     if (!response.ok) throw new Error(await response.text());
 
@@ -42,11 +63,21 @@ export default async function queryClient<T, S = Record<string, any>, B = Record
     // Extra validation to make sure actual error objects are never printed in the browser.
     if (typeof window !== "undefined") throw error;
 
-    if (error instanceof TypeError) console.error("A network error was thrown with message:", error.message);
-    else if (error instanceof SyntaxError) console.error("Failed to parse JSON body:", error.message);
-    else if (typeof DOMException !== "undefined" && error instanceof DOMException && error.name === "AbortError")
+    if (error instanceof TypeError)
+      console.error("A network error was thrown with message:", error.message);
+    else if (error instanceof SyntaxError)
+      console.error("Failed to parse JSON body:", error.message);
+    else if (
+      typeof DOMException !== "undefined" &&
+      error instanceof DOMException &&
+      error.name === "AbortError"
+    )
       console.error("Request was aborted with message:", error.message);
-    else if (error instanceof Error) console.error("A new instance of `Error` was thrown with message:", error.message);
+    else if (error instanceof Error)
+      console.error(
+        "A new instance of `Error` was thrown with message:",
+        error.message,
+      );
     else console.error("An unknown error was thrown:", error);
 
     if (error instanceof Response)

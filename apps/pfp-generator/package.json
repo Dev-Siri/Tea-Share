@@ -25,9 +25,9 @@
     "next": "13.4.19"
   },
   "devDependencies": {
+    "@tea-share/packages": "workspace:*",
     "@types/react": "^18.2.20",
     "eslint-config-next": "13.4.19",
-    "packages": "*",
     "typescript": "^5.1.6",
     "vercel": "^31.4.0"
   }
