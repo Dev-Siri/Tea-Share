@@ -4,30 +4,30 @@
   "name": "Tea Share",
   "short_name": "Tea Share",
   "start_url": "/",
-  "theme_color": "#7a68d3",
-  "background_color": "#7a68d3",
+  "theme_color": "#594195",
+  "background_color": "#594195",
   "display": "standalone",
   "icons": [
     {
-      "src": "/images/pwa/manifest-icon-192.maskable.png",
+      "src": "apps/web/static/images/pwa/manifest-icon-192.maskable.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/pwa/manifest-icon-192.maskable.png",
+      "src": "apps/web/static/images/pwa/manifest-icon-192.maskable.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/images/pwa/manifest-icon-512.maskable.png",
+      "src": "apps/web/static/images/pwa/manifest-icon-512.maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/pwa/manifest-icon-512.maskable.png",
+      "src": "apps/web/static/images/pwa/manifest-icon-512.maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

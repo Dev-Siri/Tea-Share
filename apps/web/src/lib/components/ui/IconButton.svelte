@@ -11,7 +11,14 @@
   export let iconOnly = false;
 </script>
 
-<svelte:element this={component} on:click role={null} {...$$restProps} class="rounded-full duration-200" class:icon={!iconOnly}>
+<svelte:element
+  this={component}
+  on:click
+  role={null}
+  {...$$restProps}
+  class="rounded-full duration-200"
+  class:icon={!iconOnly}
+>
   <slot />
 </svelte:element>
 

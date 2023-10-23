@@ -51,11 +51,12 @@
     );
   });
 
-  $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : "";
+  $: webManifest = pwaInfo?.webManifest.linkTag ?? "";
 </script>
 
 <svelte:head>
   <meta name="description" content={description} />
+  <meta name="theme-color" content={$theme ? "white" : "black"} />
   <meta name="og:title" content="Home" />
   <meta name="og:description" content={description} />
   <meta name="og:image" content="{BASE_URL}/images/og.png" />
@@ -76,7 +77,7 @@
     {#if isLoggedIn}
       <Header />
     {/if}
-    <div id="main-view" class="h-full pb-40">
+    <div id="main-view" class="h-full pb-60">
       <slot />
     </div>
   </section>

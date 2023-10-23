@@ -8,7 +8,9 @@
   let currentPage = 1;
   let paginatedPosts = data.posts;
 
-  async function loadMorePosts(event: UIEvent & { currentTarget: EventTarget & HTMLElement }) {
+  async function loadMorePosts(
+    event: UIEvent & { currentTarget: EventTarget & HTMLElement }
+  ) {
     const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
     const didScrollToBottom = scrollHeight - scrollTop === clientHeight;
 
@@ -28,7 +30,11 @@
   }
 </script>
 
-<div role="list" on:scroll={loadMorePosts} class="h-full sm:h-screen w-full overflow-y-auto overflow-hidden pb-10">
+<div
+  role="list"
+  on:scroll={loadMorePosts}
+  class="h-full sm:h-screen w-full overflow-y-auto overflow-hidden pb-10"
+>
   {#each paginatedPosts as post, index}
     <PostCard {post} lazyLoadImage={!!index} />
   {/each}

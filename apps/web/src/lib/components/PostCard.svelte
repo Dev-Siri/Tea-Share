@@ -15,7 +15,8 @@
   export let post: Post;
   export let lazyLoadImage: boolean = true;
 
-  const { postId, caption, postImage, username, userImage, createdAt, likes } = post;
+  const { postId, caption, postImage, username, userImage, createdAt, likes } =
+    post;
 
   const postActions = [
     {
@@ -35,15 +36,33 @@
 
 <svelte:head>
   {#if !lazyLoadImage && postImage}
-    <link rel="preload" href="/api/image?url={encodeURIComponent(postImage)}&h=800" as="image" />
+    <link
+      rel="preload"
+      href="/api/image?url={encodeURIComponent(postImage)}&h=800"
+      as="image"
+    />
   {/if}
 </svelte:head>
 
-<article role="listitem" class="border-b-light-gray dark:border-b-semi-gray w-full border-b bg-white px-5 pb-5 pt-5 dark:bg-black">
-  <a href="/post/{postId}" class="cursor-pointer">
+<article
+  role="listitem"
+  class="border-b-light-gray dark:border-b-semi-gray w-full border-b bg-white px-5 pb-5 pt-5 dark:bg-black"
+>
+  <a
+    href="/post/{postId}"
+    class="cursor-pointer"
+    data-sveltekit-preload-data="tap"
+  >
     <section class="flex items-center">
       <a href="/people/{username}" class="flex">
-        <Image height={50} width={50} src={userImage} alt={username} loading={lazyLoadImage ? "lazy" : "eager"} class="h-[50px] rounded-full" />
+        <Image
+          height={50}
+          width={50}
+          src={userImage}
+          alt={username}
+          loading={lazyLoadImage ? "lazy" : "eager"}
+          class="h-[50px] rounded-full"
+        />
         <div class="flex flex-col ml-2 justify-center">
           <span>
             {username}
@@ -57,7 +76,9 @@
         <ThreeDotsMenu options={postActions} />
       </div>
     </section>
-    <h3 class="text-md my-5 w-full" style="view-transition-name: {postId}">{caption}</h3>
+    <h3 class="text-md my-5 w-full" style="view-transition-name: {postId}">
+      {caption}
+    </h3>
     {#if postImage}
       <Image
         src={postImage}

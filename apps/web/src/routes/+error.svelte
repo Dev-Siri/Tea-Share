@@ -4,7 +4,9 @@
   const isNotFound = $page.error?.message === "Not Found";
 </script>
 
-<article class="dark:bg-dark-gray -mt-16 flex h-screen w-full flex-col items-center justify-center dark:text-white">
+<article
+  class="dark:bg-dark-gray -mt-16 flex h-screen w-full flex-col items-center justify-center dark:text-white"
+>
   <h1 class="mb-4 mt-2 text-7xl font-bold">
     {#if isNotFound}
       404
