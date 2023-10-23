@@ -12,6 +12,7 @@
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write ."
   },
+  "trustedDependencies": ["sharp"],
   "devDependencies": {
     "@sveltejs/adapter-vercel": "^3.0.3",
     "@sveltejs/kit": "^1.24.0",
